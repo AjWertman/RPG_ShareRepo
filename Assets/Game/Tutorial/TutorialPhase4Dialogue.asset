@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1695028213075609242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: f8c26cd2-2b2f-42d2-bad4-f8e9d3e07ea4
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: 'Press the item button to give me a potion! That should top up my health
+    again. '
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 514
+    y: 236
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: EndTutorialDialogue
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
+  m_Name: TutorialPhase4Dialogue
+  m_EditorClassIdentifier: 
+  newNodeOffset: {x: 250, y: 0}
+  dialogueNodes:
+  - {fileID: 8912550963634368297}
+  - {fileID: -1695028213075609242}
+  isEssentialDialogue: 1
+--- !u!114 &8912550963634368297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 8c50e6ce-9f75-4d4b-b4e5-80ceae840330
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "Ouch! That hurt! I guess the monsters don\u2019t like me talking too much!"
+  children:
+  - f8c26cd2-2b2f-42d2-bad4-f8e9d3e07ea4
+  rect:
+    serializedVersion: 2
+    x: 263
+    y: 230
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []

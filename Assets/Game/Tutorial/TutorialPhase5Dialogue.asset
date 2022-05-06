@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
+  m_Name: TutorialPhase5Dialogue
+  m_EditorClassIdentifier: 
+  newNodeOffset: {x: 250, y: 0}
+  dialogueNodes:
+  - {fileID: 4151287156672135751}
+  isEssentialDialogue: 1
+--- !u!114 &4151287156672135751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: f5383426-488d-4918-acbf-dbee4234307f
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "That hit the spot! Alright. I\u2019ll leave the rest of the battle to you!
+    Don\u2019t get us killed! "
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 202
+    y: 104
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: EndTutorialDialogue
+  condition:
+    and: []

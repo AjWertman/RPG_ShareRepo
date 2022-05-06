@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
+  m_Name: TutorialPhase3Dialogue
+  m_EditorClassIdentifier: 
+  newNodeOffset: {x: 250, y: 0}
+  dialogueNodes:
+  - {fileID: 5875541630920678533}
+  - {fileID: 9006770328551513544}
+  - {fileID: 6008569278518273899}
+  isEssentialDialogue: 1
+--- !u!114 &5875541630920678533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 8c301e71-53d5-4aeb-a738-1a82bcc86028
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: Good work Carmilla! Spells use up our Soul Well!
+  children:
+  - f4674085-5d07-4849-942d-6e51588366d9
+  rect:
+    serializedVersion: 2
+    x: 163
+    y: 86
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &6008569278518273899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 36fa61ca-e53a-4149-889e-4b21abac7ab9
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "Be sure to use them to your advantage to efficiently wipe out the enemies.
+    Sometimes, just hitting things repeatedly just doesn\u2019t cut it!"
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 664
+    y: 86
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: EndTutorialDialogue
+  condition:
+    and: []
+--- !u!114 &9006770328551513544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: f4674085-5d07-4849-942d-6e51588366d9
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: " As we get stronger, we\u2019ll all learn a lot of different spells that
+    correspond to our Emblem."
+  children:
+  - 36fa61ca-e53a-4149-889e-4b21abac7ab9
+  rect:
+    serializedVersion: 2
+    x: 413
+    y: 86
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []

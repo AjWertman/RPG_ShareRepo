@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9088312846229098882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 1f611974-42ba-4120-8659-ce1bb64894b3
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "You have four options in combat. Fight, Spell, Item, and Run. Let\u2019s
+    use Fight first! Click on Fight then choose your target!\r"
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 1188
+    y: 163
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: EndTutorialDialogue
+  condition:
+    and: []
+--- !u!114 &-6981471087433996307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: a64d0416-6b00-4e34-a211-843f7bb2f9b5
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: 'Look at the top right corner Ren. This is the turn order of all the units
+    on the battlefield. '
+  children:
+  - 22974d9f-134e-433c-9db0-8782812ad93f
+  rect:
+    serializedVersion: 2
+    x: 187
+    y: 164
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-1821559148178437451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 980aa0b3-2312-4606-b9ce-546425898525
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "Let\u2019s go into combat next since it looks like you\u2019re up first
+    Ren!"
+  children:
+  - 5c50bebd-6fd4-4816-9972-e09334af5eee
+  rect:
+    serializedVersion: 2
+    x: 687
+    y: 163
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
+  m_Name: TutorialPhase1Dialogue
+  m_EditorClassIdentifier: 
+  newNodeOffset: {x: 250, y: 0}
+  dialogueNodes:
+  - {fileID: -6981471087433996307}
+  - {fileID: 7908119768956044204}
+  - {fileID: -1821559148178437451}
+  - {fileID: 4324929022211449563}
+  - {fileID: -9088312846229098882}
+  isEssentialDialogue: 1
+--- !u!114 &4324929022211449563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 5c50bebd-6fd4-4816-9972-e09334af5eee
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Ren
+  text: Alright what should I do first?
+  children:
+  - 1f611974-42ba-4120-8659-ce1bb64894b3
+  rect:
+    serializedVersion: 2
+    x: 938
+    y: 163
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &7908119768956044204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 22974d9f-134e-433c-9db0-8782812ad93f
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: Usually the ones that have the better speed stat have the better advantage
+    to strike first. Be sure to keep the turn order in mind!
+  children:
+  - 980aa0b3-2312-4606-b9ce-546425898525
+  rect:
+    serializedVersion: 2
+    x: 437
+    y: 163
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []

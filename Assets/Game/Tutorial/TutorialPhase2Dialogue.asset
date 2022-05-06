@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8254860643512286388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: e817ff46-1404-45eb-8d0b-fc9d97fc414b
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "Let\u2019s try it out with Carmilla!\r"
+  children:
+  - f4740aef-1c18-47ac-9a1e-a9b33922c374
+  rect:
+    serializedVersion: 2
+    x: 914
+    y: 158
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-6780121325288939698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 145b549b-2481-4e90-b95c-49958ee4f4b5
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "Next check out the blue bar under the health bar! That\u2019s our Soul Well
+    bar. It\u2019s what powers our spells!"
+  children:
+  - e817ff46-1404-45eb-8d0b-fc9d97fc414b
+  rect:
+    serializedVersion: 2
+    x: 664
+    y: 158
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-2680732974061597000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: f4740aef-1c18-47ac-9a1e-a9b33922c374
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Carmilla
+  text: "Um\u2026 hit my spell button and try to use one of my spells on the enemies...
+    I\u2019ll try to do my best\u2026"
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 1164
+    y: 158
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: EndTutorialDialogue
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
+  m_Name: TutorialPhase2Dialogue
+  m_EditorClassIdentifier: 
+  newNodeOffset: {x: 250, y: 0}
+  dialogueNodes:
+  - {fileID: 7644990051870702085}
+  - {fileID: 7388012763295182945}
+  - {fileID: -6780121325288939698}
+  - {fileID: -8254860643512286388}
+  - {fileID: -2680732974061597000}
+  isEssentialDialogue: 1
+--- !u!114 &7388012763295182945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: fd39ce28-f64c-4175-a2fe-d78e822b8645
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "Be careful though. Once all our health reaches 0, it\u2019s game over."
+  children:
+  - 145b549b-2481-4e90-b95c-49958ee4f4b5
+  rect:
+    serializedVersion: 2
+    x: 414
+    y: 158
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &7644990051870702085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: e386c95e-3452-4ce5-b79a-520f2419e945
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: "Nice! You did some damage to those monsters! Once a unit\u2019s health (green
+    bar) reaches 0, it\u2019s knocked out of the battle! You have to defeat all enemies
+    to win the battle! "
+  children:
+  - fd39ce28-f64c-4175-a2fe-d78e822b8645
+  rect:
+    serializedVersion: 2
+    x: 164
+    y: 158
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
