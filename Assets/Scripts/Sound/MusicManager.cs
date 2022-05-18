@@ -1,19 +1,14 @@
-﻿using System;
+﻿using AjsUtilityPackage;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
-    [SerializeField] Song[] mainPlaylist = null;
+    [SerializeField] List<Song> mainPlaylist = new List<Song>();
     AudioSource audioSource = null;
 
-    int songIndex = 0;
-
-    //List<GameObject> songInstances = new List<GameObject>();
-
-    //GameObject activeSong = null;
-    //GameObject overrideSong = null;
+    int currentSongIndex = 0;
 
     private void Awake()
     {
@@ -22,20 +17,22 @@ public class MusicManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (mainPlaylist.Length <= 0) return;
+        if (mainPlaylist.Count <= 0) return;
         StartMusicPlayer();
     }
 
     private void StartMusicPlayer()
-    {      
-        songIndex = (UnityEngine.Random.Range(0, mainPlaylist.Length));
+    {
+        int randomStartIndex = RandomGenerator.GetRandomNumber(0, mainPlaylist.Count - 1);
 
-        StartCoroutine(PlayNextSong(songIndex));
+        StartCoroutine(PlayNextSong(randomStartIndex));
     }
 
     private IEnumerator PlayNextSong(int songIndex)
     {
+        currentSongIndex = songIndex;
         Song nextSong = mainPlaylist[songIndex];
+
         AudioClip songClip = nextSong.GetSong();
         float songLength = songClip.length;
 
@@ -46,33 +43,28 @@ public class MusicManager : MonoBehaviour
 
         yield return new WaitForSeconds(songLength);
 
-        StartCoroutine(PlayNextSong(UpdatedSongIndex()));
+        int nextSongIndex = UpdatedSongIndex(songIndex);
+
+        StartCoroutine(PlayNextSong(nextSongIndex));
     }
 
-    private int UpdatedSongIndex()
+    private int UpdatedSongIndex(int songIndex)
     {
-        int playlistSize = mainPlaylist.Length - 1;
+        int playlistSize = mainPlaylist.Count - 1;
 
-        if(songIndex == playlistSize)
-        {
-            songIndex = 0;
-        }
-        else
-        {
-            songIndex += 1;
-        }
-
-        return songIndex;
+        if (songIndex == playlistSize) return 0;
+        else return songIndex + 1;
     }
 
     public void OverrideSong(AudioClip overrideSong)
     {
+        //Add fade out behavior
         audioSource.Stop();
-        StopAllCoroutines();
 
         audioSource.clip = overrideSong;
         audioSource.loop = true;
 
+        //Add Fade in behavior
         audioSource.Play();
     }
 
@@ -82,6 +74,6 @@ public class MusicManager : MonoBehaviour
 
         audioSource.loop = false;
 
-        StartCoroutine(PlayNextSong(songIndex));
+        StartCoroutine(PlayNextSong(currentSongIndex));
     }
 }

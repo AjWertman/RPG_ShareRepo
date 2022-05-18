@@ -3,31 +3,31 @@ using UnityEngine;
 
 public class Currency : MonoBehaviour
 {
-    [SerializeField] float leons = 0;
+    [SerializeField] float gold = 0;
 
     public event Action onCurrencyChange;
 
-    public float GetLeons()
+    public float GetGold()
     {
-        return leons;
+        return gold;
     }
 
-    public void SpendLeons(float amount)
+    public void SpendGold(float amount)
     {
-        if(!HasEnoughLeons(amount)) return;
-        leons -= amount;
+        if(!HasEnoughGold(amount)) return;
+        gold -= amount;
         onCurrencyChange();
     }
 
-    public void GainLeons(float amount)
+    public void GainGold(float amount)
     {
-        leons += amount;
+        gold += amount;
         onCurrencyChange();
     }
 
-    public bool HasEnoughLeons(float amount)
+    public bool HasEnoughGold(float amount)
     {
-        if(leons >= amount)
+        if(gold >= amount)
         {
             return true;
         }

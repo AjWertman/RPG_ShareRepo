@@ -22,7 +22,7 @@ public class Substitute : StaticSpell
     {
         base.InitalizeSpell(caster, target);
         SetupSubstitute(target);
-        StartCoroutine(target.GetMover().Retreat());
+        //StartCoroutine(target.GetMover().Retreat());
         target.GetComponent<Fighter>().SetHasSubsitute(true);
     }
 
@@ -49,7 +49,7 @@ public class Substitute : StaticSpell
 
     public override void DestroyStaticSpell()
     {
-        StartCoroutine(target.GetMover().ReturnToStart(true));
+        //StartCoroutine(target.GetMover().ReturnToStart(true));
 
         target.GetFighter().SetActiveSubstitute(null);
         target.GetComponent<Fighter>().SetHasSubsitute(false);
@@ -58,7 +58,7 @@ public class Substitute : StaticSpell
         Destroy(gameObject);
     }
 
-    private void SetUnitSoundFX(UnitSoundFX unitSoundFX)
+    private void SetUnitSoundFX(SoundFXManager unitSoundFX)
     {
         fighter.SetUnitSoundFX(unitSoundFX);
         mover.SetUnitSoundFX(unitSoundFX);
@@ -69,7 +69,7 @@ public class Substitute : StaticSpell
         isExecutingAttackBehavior = true;
         target = _target;
         fighter.SetTarget(target);
-        fighter.SetAbility(basicAttack, false);
+        fighter.SetAbility(basicAttack);
         StartCoroutine(SubstituteAttackBehavior());
     }
 
@@ -89,7 +89,7 @@ public class Substitute : StaticSpell
 
                 yield return new WaitForSeconds(basicAttack.moveDuration);
 
-                yield return mover.ReturnToStart(false);
+                //yield return mover.ReturnToStart(false);
 
                 fighter.ResetTarget();
 

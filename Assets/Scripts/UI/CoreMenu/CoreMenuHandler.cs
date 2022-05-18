@@ -84,7 +84,7 @@ public class CoreMenuHandler : MonoBehaviour
         characterSelectMenu.gameObject.SetActive(true);
     }
 
-    private void OpenCharacterMenu(Character character)
+    private void OpenCharacterMenu(Unit character)
     {
         characterSelectMenu.gameObject.SetActive(false);
 

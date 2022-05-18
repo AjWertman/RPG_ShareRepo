@@ -7,7 +7,7 @@ public class EnemyController : MonoBehaviour, ISaveable, IOverworld
 
     Animator animator = null;
     BattleZoneTrigger enemyTrigger = null;
-    UnitSoundFX unitSoundFX = null;
+    SoundFXManager unitSoundFX = null;
     Mover mover = null;
 
     GameObject player = null;
@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour, ISaveable, IOverworld
         animator = GetComponentInChildren<Animator>();
         mover = GetComponent<Mover>();
         enemyTrigger = GetComponentInChildren<BattleZoneTrigger>();
-        unitSoundFX = GetComponent<UnitSoundFX>();
+        unitSoundFX = GetComponent<SoundFXManager>();
     }
 
     private void Start()
@@ -93,7 +93,7 @@ public class EnemyController : MonoBehaviour, ISaveable, IOverworld
 
     private void CreateFootStepSound()
     {
-        unitSoundFX.CreateSoundFX(unitSoundFX.GetFootStepSound());
+        //unitSoundFX.CreateSoundFX(unitSoundFX.GetFootStepSound());
     }
 
     public object CaptureState()

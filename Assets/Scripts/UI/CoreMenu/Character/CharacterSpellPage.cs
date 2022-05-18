@@ -14,12 +14,9 @@ public class CharacterSpellPage : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI spellDescription = null;
 
-    public void SetupSpellPage(Character character)
+    public void SetupSpellPage(Unit character)
     {
-        emblemText.text = character.GetCharacterEmblem().ToString();
-        emblemImage.sprite = character.GetEmblemImage();
-        bookImage.sprite = character.GetBookImage();
-        affilitionText.text = character.GetAffiliation();
+        //affilitionText.text = character.GetAffiliation();
 
         PopulateSpellList(character.GetSpells());
         DeactivateSpellTooltip();

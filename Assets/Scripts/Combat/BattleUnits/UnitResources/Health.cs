@@ -10,7 +10,7 @@ public class Health : MonoBehaviour
     [SerializeField] UIHealthChange uiHealthChange = null;
 
     Animator animator = null;
-    UnitSoundFX unitSoundFX = null;
+    SoundFXManager unitSoundFX = null;
 
     float healthPercentage = 1f;
     bool isDead = false;
@@ -27,7 +27,7 @@ public class Health : MonoBehaviour
         animator = _animator;
     }
 
-    public void SetUnitSoundFX(UnitSoundFX _unitSoundFX)
+    public void SetUnitSoundFX(SoundFXManager _unitSoundFX)
     {
         unitSoundFX = _unitSoundFX;
     }
@@ -89,7 +89,7 @@ public class Health : MonoBehaviour
         else
         {
             animator.SetTrigger("takeDamage");
-            unitSoundFX.CreateSoundFX(unitSoundFX.GetHurtSound());
+            //unitSoundFX.CreateSoundFX(unitSoundFX.GetHurtSound());
         }
 
         yield return new WaitForSeconds(1f);
@@ -147,8 +147,8 @@ public class Health : MonoBehaviour
         if (!isDead)
         {
             isDead = true;
-            animator.SetTrigger("die");
-            unitSoundFX.CreateSoundFX(unitSoundFX.GetDieSound());
+            animator.Play("Die");
+            //unitSoundFX.CreateSoundFX(unitSoundFX.GetDieSound());
             GetComponent<BattleUnit>().DisableResourceSliders();
             HandleQuestCompletion();
         }

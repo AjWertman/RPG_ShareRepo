@@ -117,7 +117,7 @@ public class PlayerTeam : MonoBehaviour, ISaveable
 
     Progression progressionHandler = null;
 
-    List<Character> playerTeam = new List<Character>();
+    List<Unit> playerTeam = new List<Unit>();
 
     private void Awake()
     {
@@ -133,12 +133,12 @@ public class PlayerTeam : MonoBehaviour, ISaveable
     {
         foreach (TeamInfo teamInfo in teamInfos)
         {
-            Character newCharacter = GetCharacter(teamInfo.GetName());
-
+            Unit newCharacter = GetCharacter(teamInfo.GetName());
+            
             playerTeam.Add(newCharacter);
 
             teamInfo.SetStats(newCharacter.GetBaseStats());
-
+ 
             teamInfo.SetMaxHealth(CalculateMaxHealthPoints(teamInfo.GetStats().GetSpecificStatLevel(StatType.Stamina)));
             teamInfo.SetHealth(teamInfo.GetMaxHealth());
 
@@ -190,12 +190,12 @@ public class PlayerTeam : MonoBehaviour, ISaveable
         }
     }
 
-    public Character GetCharacter(string characterName)
+    public Unit GetCharacter(string characterName)
     {
-        return Resources.Load<Character>(characterName);
+        return Resources.Load<Unit>(characterName);
     }
 
-    public TeamInfo GetTeamInfo(Character characterToGet)
+    public TeamInfo GetTeamInfo(Unit characterToGet)
     {
         TeamInfo newInfo = null;
 
@@ -215,7 +215,7 @@ public class PlayerTeam : MonoBehaviour, ISaveable
         return teamInfos;
     }
     
-    public List<Character> GetPlayerTeam()
+    public List<Unit> GetPlayerTeam()
     {
         return playerTeam;
     }

@@ -11,10 +11,10 @@ public class CharacterSelectMenu : MonoBehaviour
 
     [SerializeField] Button backButton = null;
 
-    public event Action<Character> onCharacterSelect;
+    public event Action<Unit> onCharacterSelect;
     public event Action onBackToMainCoreMenu;
 
-    public void SetupCharacterSelectMenu(List<Character> characters)
+    public void SetupCharacterSelectMenu(List<Unit> characters)
     {
         backButton.onClick.AddListener(() => onBackToMainCoreMenu());
 
@@ -25,14 +25,14 @@ public class CharacterSelectMenu : MonoBehaviour
                 Destroy(button.gameObject);
             }
         }
-        foreach (Character character in characters)
+        foreach (Unit character in characters)
         {
-            GameObject buttonInstance = Instantiate(characterSelectButton, buttonContainer);
-            Button button = buttonInstance.GetComponent<Button>();
-            buttonInstance.GetComponentInChildren<TextMeshProUGUI>().text = character.GetName();
+            //GameObject buttonInstance = Instantiate(characterSelectButton, buttonContainer);
+            //Button button = buttonInstance.GetComponent<Button>();
+            //buttonInstance.GetComponentInChildren<TextMeshProUGUI>().text = character.GetName();
 
-            button.onClick.AddListener(() => onCharacterSelect(character));
-            button.onClick.AddListener(() => ForceDeactivateHighlight(buttonInstance.GetComponent<MenuItemHighlighter>()));
+            //button.onClick.AddListener(() => onCharacterSelect(character));
+            //button.onClick.AddListener(() => ForceDeactivateHighlight(buttonInstance.GetComponent<MenuItemHighlighter>()));
         }
     }
 

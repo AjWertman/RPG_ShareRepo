@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1889396930709211692}
   m_Father: {fileID: 0}
@@ -46,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamInfos:
-  - characterName: Carmilla
+  - characterName: Aj
     stats:
       stats:
       - statType: 0
@@ -79,72 +80,6 @@ MonoBehaviour:
     maxCharacterSoulWell: 0
     level: 1
     experiencePoints: 0
-  - characterName: Ren
-    stats:
-      stats:
-      - statType: 0
-        statLevel: 10
-        levelUpPercent: 65
-      - statType: 1
-        statLevel: 10
-        levelUpPercent: 75
-      - statType: 2
-        statLevel: 10
-        levelUpPercent: 55
-      - statType: 3
-        statLevel: 10
-        levelUpPercent: 40
-      - statType: 4
-        statLevel: 10
-        levelUpPercent: 45
-      - statType: 5
-        statLevel: 10
-        levelUpPercent: 35
-      - statType: 6
-        statLevel: 10
-        levelUpPercent: 45
-      - statType: 7
-        statLevel: 10
-        levelUpPercent: 25
-    characterHealth: 0
-    maxCharacterHealth: 0
-    characterSoulWell: 0
-    maxCharacterSoulWell: 0
-    level: 1
-    experiencePoints: 0
-  - characterName: Kibo
-    stats:
-      stats:
-      - statType: 0
-        statLevel: 10
-        levelUpPercent: 50
-      - statType: 1
-        statLevel: 10
-        levelUpPercent: 35
-      - statType: 2
-        statLevel: 10
-        levelUpPercent: 45
-      - statType: 3
-        statLevel: 10
-        levelUpPercent: 30
-      - statType: 4
-        statLevel: 10
-        levelUpPercent: 45
-      - statType: 5
-        statLevel: 10
-        levelUpPercent: 35
-      - statType: 6
-        statLevel: 10
-        levelUpPercent: 45
-      - statType: 7
-        statLevel: 10
-        levelUpPercent: 30
-    characterHealth: 0
-    maxCharacterHealth: 0
-    characterSoulWell: 0
-    maxCharacterSoulWell: 0
-    level: 1
-    experiencePoints: 0
 --- !u!114 &4204676130505864477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,75 +100,93 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5922470440831819306}
     m_Modifications:
-    - target: {fileID: 4865821831933757995, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 4865821831933757995, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_Name
       value: ProgressionHandler
       objectReference: {fileID: 0}
-    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: universalCharProgressions.Array.data[0].xpRequirement
       value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: universalCharProgressions.Array.data[1].xpRequirement
       value: 200
       objectReference: {fileID: 0}
-    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: universalCharProgressions.Array.data[2].xpRequirement
       value: 300
       objectReference: {fileID: 0}
-    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: universalCharProgressions.Array.data[3].xpRequirement
       value: 400
       objectReference: {fileID: 0}
-    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: universalCharProgressions.Array.data[4].xpRequirement
       value: 500
       objectReference: {fileID: 0}
-    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 5474423473583093201, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: universalCharProgressions.Array.data[5].xpRequirement
       value: 100000
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+    - target: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
@@ -241,6 +194,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
 --- !u!4 &1889396930709211692 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6424379229500454981, guid: 585d979a96efb6440b1c131eb2bfeecd,
+    type: 3}
   m_PrefabInstance: {fileID: 4836732548357255785}
   m_PrefabAsset: {fileID: 0}

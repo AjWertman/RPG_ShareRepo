@@ -7,13 +7,13 @@ public class BattleUnitManager : MonoBehaviour
     BattleUnit[] battleUnits = null;
 
     PlayerTeam playerTeamInfo = null;
-    List<Character> playerTeam = new List<Character>();
+    List<Unit> playerTeam = new List<Unit>();
     List<BattleUnit> playerUnits = new List<BattleUnit>();
     List<BattleUnit> allPlayerUnits = new List<BattleUnit>();
     List<BattleUnit> deadPlayerUnits = new List<BattleUnit>();
     int startingPlayerTeamSize = 0;
 
-    List<Character> enemyTeam = new List<Character>();
+    List<Unit> enemyTeam = new List<Unit>();
     List<BattleUnit> enemyUnits = new List<BattleUnit>();
     List<BattleUnit> deadEnemyUnits = new List<BattleUnit>();
     int startingEnemyTeamSize = 0;
@@ -21,7 +21,7 @@ public class BattleUnitManager : MonoBehaviour
     public event Action<bool> onTeamWipe;
     public event Action onUnitListUpdate;
     
-    public void SetUpUnits(PlayerTeam _playerTeamInfo, List<Character> _enemyTeam, List<Transform> playerPositions, List<Transform> enemyPositions)
+    public void SetUpUnits(PlayerTeam _playerTeamInfo, List<Unit> _enemyTeam, List<Transform> playerPositions, List<Transform> enemyPositions)
     {
         playerTeamInfo = _playerTeamInfo;
 
@@ -41,7 +41,7 @@ public class BattleUnitManager : MonoBehaviour
     {
         for (int i = 0; i < playerTeamSize; i++)
         {
-            Character currentCharacter = playerTeam[i];
+            Unit currentCharacter = playerTeam[i];
             GameObject newUnitInstance = Instantiate(currentCharacter.GetBattleUnit().gameObject, playerPositions[i].position, playerPositions[i].rotation);
             BattleUnit newUnit = newUnitInstance.GetComponent<BattleUnit>();
             TeamInfo teamInfo = playerTeamInfo.GetTeamInfo(currentCharacter);
@@ -63,7 +63,7 @@ public class BattleUnitManager : MonoBehaviour
     {
         for (int i = 0; i < enemyTeamSize; i++)
         {
-            Character currentCharacter = enemyTeam[i];
+            Unit currentCharacter = enemyTeam[i];
             GameObject newUnitInstance = Instantiate(currentCharacter.GetBattleUnit().gameObject, enemyPositions[i].position, enemyPositions[i].rotation);
             BattleUnit newUnit = newUnitInstance.GetComponent<BattleUnit>();
 
@@ -79,7 +79,7 @@ public class BattleUnitManager : MonoBehaviour
         }
     }
 
-    private void SetupUnitComponents(Character character, BattleUnit unit, bool isPlayer)
+    private void SetupUnitComponents(Unit character, BattleUnit unit, bool isPlayer)
     {
         unit.SetupBattleUnitComponents();
         unit.GetMover().SetStartingTransforms();

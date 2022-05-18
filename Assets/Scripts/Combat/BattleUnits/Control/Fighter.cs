@@ -14,10 +14,9 @@ public class Fighter : MonoBehaviour
     Transform buffContainer = null;
 
     Animator animator = null;
-    UnitSoundFX unitSoundFX = null;
+    SoundFXManager unitSoundFX = null;
 
     Ability selectedAbility = null;
-    bool isRenCopy = false;
 
     BattleUnit target = null;
     List<BattleUnit> allTargets = new List<BattleUnit>();
@@ -45,7 +44,7 @@ public class Fighter : MonoBehaviour
         buffContainer = buff;
     }
 
-    public void SetUnitSoundFX(UnitSoundFX _unitSoundFX)
+    public void SetUnitSoundFX(SoundFXManager _unitSoundFX)
     {
         unitSoundFX = _unitSoundFX;
     }
@@ -59,7 +58,9 @@ public class Fighter : MonoBehaviour
 
     public void Attack()
     {
-        animator.SetTrigger(selectedAbility.animatorTrigger);
+        //animator.SetFloat("attackSpeed", x);
+        animator.CrossFade(selectedAbility.animatorTrigger, .1f);
+        //animator.SetTrigger(selectedAbility.animatorTrigger);
     }
 
     public void Hit()
@@ -69,19 +70,19 @@ public class Fighter : MonoBehaviour
         if (selectedAbility.spellType == SpellType.Ranged)
         {
             CastRangedSpell(isCritical);
-            unitSoundFX.CreateSoundFX(unitSoundFX.GetMagicalAttackSound());
+            //unitSoundFX.CreateSoundFX(unitSoundFX.GetMagicalAttackSound());
         }
 
         else if(selectedAbility.spellType == SpellType.Melee)
         {
             CastMeleeAttack(isCritical);
-            unitSoundFX.CreateSoundFX(unitSoundFX.GetPhysAttackSound());
+            //unitSoundFX.CreateSoundFX(unitSoundFX.GetPhysAttackSound());
         }
 
         else if (selectedAbility.spellType == SpellType.Static)
         {
             CastStaticSpell();
-            unitSoundFX.CreateSoundFX(unitSoundFX.GetMagicalAttackSound());
+            //unitSoundFX.CreateSoundFX(unitSoundFX.GetMagicalAttackSound());
         }
 
         //if (selectedAbility.buffToApply != null)
@@ -102,8 +103,7 @@ public class Fighter : MonoBehaviour
                 CalculateChangeAmount(selectedAbility.baseAbilityAmount, isCritical),
                 GetComponent<BattleUnit>(),
                 target,
-                isCritical,
-                isRenCopy                
+                isCritical      
             );
         }
         else if(!selectedAbility.canTargetAll && selectedAbility.isHeal)
@@ -267,15 +267,7 @@ public class Fighter : MonoBehaviour
 
     public GameObject GetSpellPrefab()
     {
-        if (isRenCopy)
-        {
-            return selectedAbility.renSpellPrefab;
-        }
-        else
-        {
-            return selectedAbility.spellPrefab;
-        }
-
+        return selectedAbility.spellPrefab;
     }
 
     //private void ApplyBuff(StatBuff buffToApply, BattleUnit target)
@@ -367,10 +359,9 @@ public class Fighter : MonoBehaviour
         allTargets.Clear();
     }
 
-    public void SetAbility(Ability _selectedAbility, bool _isRenCopy)
+    public void SetAbility(Ability _selectedAbility)
     {
         selectedAbility = _selectedAbility;
-        isRenCopy = _isRenCopy;
 
         SetAttackRange(selectedAbility.spellType == SpellType.Melee);
     }

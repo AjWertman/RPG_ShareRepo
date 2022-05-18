@@ -10,9 +10,10 @@ public class BattleZoneTrigger : MonoBehaviour
     [Range(0,99)][SerializeField] int chanceToStartBattle = 10;
     [SerializeField] bool isEnemyTrigger = false;
 
-    List<Character> enemyTeam = new List<Character>();
+    List<Unit> enemyTeam = new List<Unit>();
 
     bool isInTrigger = false;
+    bool startedBattle = false;
 
     public event Action<bool> updateShouldBeDisabled;
 
@@ -90,7 +91,7 @@ public class BattleZoneTrigger : MonoBehaviour
         int randomNumber = UnityEngine.Random.Range(0, enemyClusters.Length - 1);
         EnemyCluster enemyCluster = enemyClusters[randomNumber];
 
-        foreach (Character enemy in enemyCluster.GetEnemies())
+        foreach (Unit enemy in enemyCluster.GetEnemies())
         {
             enemyTeam.Add(enemy);
         }
@@ -98,7 +99,7 @@ public class BattleZoneTrigger : MonoBehaviour
 
     private void ClearEnemyTeam()
     {
-        List<Character> enemyTeam = new List<Character>();
+        List<Unit> enemyTeam = new List<Unit>();
     }
 
     public void SetIsInTrigger(bool shouldSet)

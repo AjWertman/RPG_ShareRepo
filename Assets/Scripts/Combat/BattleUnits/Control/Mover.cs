@@ -9,7 +9,7 @@ public class Mover : MonoBehaviour, ISaveable
 
     Animator animator = null;
     NavMeshAgent navMeshAgent = null;
-    UnitSoundFX unitSoundFX = null;
+    SoundFXManager unitSoundFX = null;
 
     Vector3 startPosition = Vector3.zero;
     Quaternion startRotation = Quaternion.identity;
@@ -29,7 +29,7 @@ public class Mover : MonoBehaviour, ISaveable
         animator = _animator;
     }
 
-    public void SetUnitSoundFX(UnitSoundFX _unitSoundFX)
+    public void SetUnitSoundFX(SoundFXManager _unitSoundFX)
     {
         unitSoundFX = _unitSoundFX;
     }
@@ -41,42 +41,25 @@ public class Mover : MonoBehaviour, ISaveable
         startRotation = transform.localRotation;
     }
 
-    private void Update()
-    {
-        if(animator != null)
-        {
-            UpdateAnimator(isBattleUnit);
-        }
-    }
-
     public void MoveTo(Vector3 destination)
     {
         if (!isMover) return;
         navMeshAgent.SetDestination(destination);
     }
 
-    public IEnumerator JumpToPos(Vector3 jumpPosition, Quaternion _startingRotation, bool isForward)
+    public IEnumerator JumpToPos(Vector3 jumpPosition, Quaternion _startingRotation, bool isAttack)
     {
-        string animTrigger = "";
         bool hasCreatedJumpSound = false;
 
-        if (isForward)
-        {
-            animTrigger = "isAdvancing";
-        }
-        else
-        {
-            animTrigger = "isJumping";
-        }
+        animator.CrossFade("Jump", .1f);
 
         navMeshAgent.updateRotation = false;
-        UpdateStoppingDistance(true);
-        animator.SetBool(animTrigger, true);
+        UpdateStoppingDistance(!isAttack);
 
         if (!hasCreatedJumpSound)
         {
             hasCreatedJumpSound = true;
-            unitSoundFX.CreateSoundFX(unitSoundFX.GetJumpSound());
+            //unitSoundFX.CreateSoundFX(unitSoundFX.GetJumpSound());
         }
 
         MoveTo(jumpPosition);
@@ -84,12 +67,12 @@ public class Mover : MonoBehaviour, ISaveable
         yield return new WaitForSeconds(1f);
 
        
-        animator.SetBool(animTrigger, false);
+        animator.CrossFade("Idle", .05f);
 
         yield return new WaitForSeconds(.5f);
 
         transform.localRotation = _startingRotation;
-
+    
         if (navMeshAgent == null) yield break;
 
         UpdateStoppingDistance(false);
@@ -102,9 +85,9 @@ public class Mover : MonoBehaviour, ISaveable
         yield return JumpToPos(retreatTransform.position, startRotation, false);
     }
 
-    public IEnumerator ReturnToStart(bool isForward)
+    public IEnumerator ReturnToStart()
     {
-        yield return JumpToPos(startPosition, startRotation, isForward);
+        yield return JumpToPos(startPosition, startRotation, false);
     }
 
     public void UpdateStoppingDistance(bool isZero)
@@ -119,42 +102,19 @@ public class Mover : MonoBehaviour, ISaveable
         }
     }
 
-    private void UpdateAnimator(bool isBattleUnit)
-    {
-        Vector3 velocity = navMeshAgent.velocity;
-        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
-
-        float forwardSpeed = localVelocity.z;
-        if (isBattleUnit)
-        {
-            if (forwardSpeed > .08f)
-            {
-                animator.SetBool("isAdvancing", true);
-            }
-            else
-            {
-                animator.SetBool("isAdvancing", false);
-            }
-        }
-        else
-        {
-            //animator.SetFloat("forwardSpeed", forwardSpeed);
-        }
-    }
-
     public void FootR()
     {
-        unitSoundFX.CreateSoundFX(unitSoundFX.GetFootStepSound());
+        //unitSoundFX.CreateSoundFX(unitSoundFX.GetFootStepSound());
     }
 
     public void FootL()
     {
-        unitSoundFX.CreateSoundFX(unitSoundFX.GetFootStepSound());
+        //unitSoundFX.CreateSoundFX(unitSoundFX.GetFootStepSound());
     }
 
     public void StartJump()
     {
-        unitSoundFX.CreateSoundFX(unitSoundFX.GetJumpSound());
+        //unitSoundFX.CreateSoundFX(unitSoundFX.GetJumpSound());
     }
 
     public Vector3 GetStartPosition()

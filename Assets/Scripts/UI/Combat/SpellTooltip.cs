@@ -19,7 +19,6 @@ public class SpellTooltip : MonoBehaviour
         SetupColors(ability);
 
         abilityNameText.text = ability.abilityName;
-        emblemText.text = ability.emblem.ToString();
         descriptionText.text = ability.spellDescription;      
     }
 

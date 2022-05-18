@@ -31,7 +31,7 @@ public class CharacterMenu : MonoBehaviour
         DeactivateAllPages();
     }
 
-    public void SetupCharacterMenu(Character character, TeamInfo teamInfo)
+    public void SetupCharacterMenu(Unit character, TeamInfo teamInfo)
     {
         characterPage.SetupCharacterPage(character, teamInfo);
         spellsPage.SetupSpellPage(character);        

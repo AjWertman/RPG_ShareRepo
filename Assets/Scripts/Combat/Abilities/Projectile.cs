@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void SetUpProjectile(Ability abiltyToSet, float _damageAmount, BattleUnit casterToSet, BattleUnit targetToSet, bool _isCritical, bool isRenCopy)
+    public void SetUpProjectile(Ability abiltyToSet, float _damageAmount, BattleUnit casterToSet, BattleUnit targetToSet, bool _isCritical)
     {
         appliedDamage = false;
         selectedAbility = abiltyToSet;
@@ -46,7 +46,7 @@ public class Projectile : MonoBehaviour
         }
         
         isCritical = _isCritical;
-        hitFX = GetHitFX(selectedAbility, isRenCopy);
+        hitFX = GetHitFX(selectedAbility);
         if (selectedAbility.shouldExpand)
         {
             Vector3 currentScaleAmount = hitFX.transform.lossyScale;
@@ -58,12 +58,8 @@ public class Projectile : MonoBehaviour
         isSetup = true;
     }
 
-    private GameObject GetHitFX(Ability ability, bool renCopy)
+    private GameObject GetHitFX(Ability ability)
     {
-        if (renCopy)
-        {
-            return ability.renHitFXPrefab;
-        }
         return ability.hitFXPrefab;
     }
 

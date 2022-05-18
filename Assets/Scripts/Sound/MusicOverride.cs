@@ -2,15 +2,23 @@
 
 public class MusicOverride : MonoBehaviour
 {
+    //[SerializeField] Song[] overridePlayist = null????
     [SerializeField] Song overrideSong = null;
+
+    MusicManager musicManager = null;
+
+    private void Awake()
+    {
+        musicManager = FindObjectOfType<MusicManager>();
+    }
 
     public void OverrideMusic()
     {
-        FindObjectOfType<MusicManager>().OverrideSong(overrideSong.GetSong());
+        musicManager.OverrideSong(overrideSong.GetSong());
     }
 
     public void ClearOverride()
     {
-        FindObjectOfType<MusicManager>().ClearOverrideSong();
+        musicManager.ClearOverrideSong();
     }
 }

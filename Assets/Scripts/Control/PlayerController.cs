@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
     [SerializeField] GameObject camLookObject = null;
     [SerializeField] Checkpoint lastCheckpoint = null;
 
-    List<Character> playerTeam = new List<Character>();
+    List<Unit> playerTeam = new List<Unit>();
 
     [Header("Controls")]
     [SerializeField] KeyCode menuKeyCode = KeyCode.Escape;
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
     CharacterController characterController = null;
     PlayerConversant playerConversant = null;
     Vector3 direction = Vector3.zero;
-    UnitSoundFX unitSoundFX = null;
+    SoundFXManager unitSoundFX = null;
 
     FollowCamera followCamera = null;
 
@@ -43,11 +43,11 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
 
     private void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         playerConversant = GetComponent<PlayerConversant>();
         
-        unitSoundFX = GetComponent<UnitSoundFX>();
+        unitSoundFX = GetComponent<SoundFXManager>();
     }
 
     private void Start()
@@ -59,16 +59,11 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
 
         uiCanvas = FindObjectOfType<UICanvas>();
 
-        Cursor.SetCursor(cursorTexture, new Vector2(0, 0), CursorMode.ForceSoftware);
+        //Cursor.SetCursor(cursorTexture, new Vector2(0, 0), CursorMode.ForceSoftware);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            GetComponent<Currency>().GainLeons(400);
-        }
-
         if (!isBattling)
         {
             Move();
@@ -113,7 +108,7 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
 
         characterController.Move(Vector3.down.normalized * gravity * Time.deltaTime);
     }
-
+    
     private bool InteractWithUI()
     {
         if (uiCanvas.IsTutorialActive())
@@ -253,6 +248,7 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
     public void BattleStartBehavior()
     {
         isBattling = true;
+        animator.SetBool("isRunning", false);
         cameraObject.SetActive(false);
         owMeshObject.SetActive(false);
 
@@ -284,21 +280,32 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
         }
     }
 
+    //private void UpdateAnimator()
+    //{
+    //    Vector3 velocity = GetComponent<Rigidbody>().velocity;
+    //    Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+    //    float forwardSpeed = localVelocity.z;
+
+    //    animator.SetFloat("forwardSpeed", forwardSpeed);
+    //}
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<BattleZoneTrigger>())
+        BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
+        if (battleZoneTrigger != null)
         {
-            if (other.GetComponent<BattleZoneTrigger>().IsEnemyTrigger())
+            bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
+            if (isEnemyTrigger)
             {
                 if (!hasStartedBattle)
                 {
                     hasStartedBattle = true;
-                    StartCoroutine(other.GetComponent<BattleZoneTrigger>().StartBattle());
+                    StartCoroutine(battleZoneTrigger.StartBattle());
                 }
             }
             else
             {
-                contestedBattleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
+                contestedBattleZoneTrigger = battleZoneTrigger;
                 isInBattleTrigger = true;
             }
         }
@@ -306,9 +313,11 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<BattleZoneTrigger>())
+        BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
+        if (battleZoneTrigger != null)
         {
-            if (!other.GetComponent<BattleZoneTrigger>().IsEnemyTrigger())
+            bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
+            if (!isEnemyTrigger)
             {
                 contestedBattleZoneTrigger = null;
                 isInBattleTrigger = false;
@@ -318,7 +327,7 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
 
     private void FootStepBehavior()
     {
-        unitSoundFX.CreateSoundFX(unitSoundFX.GetFootStepSound());
+        //unitSoundFX.CreateSoundFX(unitSoundFX.GetFootStepSound());
         if (contestedBattleZoneTrigger != null)
         {
             contestedBattleZoneTrigger.BattleCheck();

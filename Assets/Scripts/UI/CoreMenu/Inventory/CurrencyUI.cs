@@ -20,6 +20,6 @@ public class CurrencyUI : MonoBehaviour
 
     public void UpdateCurrencyText()
     {
-        currencyText.text = ("Leons: " + currency.GetLeons().ToString());
+        currencyText.text = ("Leons: " + currency.GetGold().ToString());
     }
 }

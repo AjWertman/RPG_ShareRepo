@@ -25,7 +25,7 @@ public class BattleUnit : MonoBehaviour
     SoulWell soulWell = null;
     Mover mover = null;
     UnitIndicatorUI indicator = null;
-    UnitSoundFX unitSoundFX = null;
+    SoundFXManager unitSoundFX = null;
 
     Sprite faceImage = null;
 
@@ -56,7 +56,7 @@ public class BattleUnit : MonoBehaviour
         mover = GetComponent<Mover>();
 
         indicator = GetComponentInChildren<UnitIndicatorUI>();
-        unitSoundFX = GetComponent<UnitSoundFX>();
+        unitSoundFX = GetComponent<SoundFXManager>();
 
         health.onDeath += DestroyAllActiveSpells;
     }
@@ -142,7 +142,7 @@ public class BattleUnit : MonoBehaviour
         return unitIndicatorObject.activeSelf;
     }
 
-    public UnitSoundFX GetUnitSoundFX()
+    public SoundFXManager GetUnitSoundFX()
     {
         return unitSoundFX;
     }
@@ -188,7 +188,7 @@ public class BattleUnit : MonoBehaviour
 
     public void UseAbility(Ability selectedAbility)
     {
-        soulWell.SpendSoulWell(selectedAbility.soulWellCost);
+        soulWell.SpendSoulWell(selectedAbility.manaCost);
         fighter.Attack();
     }
 
@@ -206,6 +206,7 @@ public class BattleUnit : MonoBehaviour
     {
         if (!fighter.IsSilenced())
         {
+            if (spells.Length == 0 || spells == null) return basicAttack;
             int randomInt = Random.Range(0, spells.Length);
             return spells[randomInt];
         }

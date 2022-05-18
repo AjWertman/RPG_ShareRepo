@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyCluster", menuName = "Unit/Create New Enemy Cluster", order = 1)]
+[CreateAssetMenu(fileName = " New EnemyCluster", menuName = "Character/Create New Enemy Cluster", order = 1)]
 public class EnemyCluster : ScriptableObject
 {
     [Header("Max 4 enemies")]
-    [SerializeField] Character[] enemyCluster = null;
+    [SerializeField] Unit[] enemyCluster = null;
 
-    public Character[] GetEnemies()
+    public Unit[] GetEnemies()
     {
         return enemyCluster;
     }

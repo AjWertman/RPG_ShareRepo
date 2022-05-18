@@ -29,17 +29,15 @@ public class BattleHandler : MonoBehaviour
    
     PlayerTeam playerTeamInfo = null;
 
-    List<Character> playerTeam = new List<Character>();
+    List<Unit> playerTeam = new List<Unit>();
     int playerTeamSize = 0;
 
-    List<Character> enemyTeam = new List<Character>();
+    List<Unit> enemyTeam = new List<Unit>();
     int enemyTeamSize = 0;
 
     BattleUnit currentBattleUnit = null;
 
     BattleState battleState = BattleState.Null;
-
-    List<Ability> renCopySpellList = new List<Ability>();
 
     float playerXPAward = 0;
 
@@ -60,7 +58,7 @@ public class BattleHandler : MonoBehaviour
         }
     }
 
-    public IEnumerator SetupBattle(List<Character> _enemyTeam)
+    public IEnumerator SetupBattle(List<Unit> _enemyTeam)
     {
         battleCamInstance = Instantiate(battleCamPrefab, camTransform);
 
@@ -80,7 +78,6 @@ public class BattleHandler : MonoBehaviour
         battleUnitManager.SetUpUnits(playerTeamInfo, enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
         battleUnitManager.onTeamWipe += EndBattle;
         battleUnitManager.onUnitListUpdate += UpdateManagerLists;
-        renCopySpellList = new List<Ability>();
 
         battleUnitManager.HandlePlayerDeaths();
 
@@ -100,7 +97,7 @@ public class BattleHandler : MonoBehaviour
 
         battleUIManager.SetCurrentBattleUnit(currentBattleUnit);
 
-        GetComponent<MusicOverride>().OverrideMusic();
+        //GetComponent<MusicOverride>().OverrideMusic();
 
         if (isTutorial)
         {
@@ -127,9 +124,8 @@ public class BattleHandler : MonoBehaviour
 
     //BattleBehaviors///////////////////////////////////////////////////////////////////////////////////////////
 
-    public void OnPlayerMove(BattleUnit target, Ability selectedAbility, bool isRenCopy)
+    public void OnPlayerMove(BattleUnit target, Ability selectedAbility)
     {
-        print("Player move made");
         if (!currentBattleUnit.GetFighter().HasSubstitute())
         {
             if (CanPlayerCastSpell(target, selectedAbility))
@@ -144,9 +140,9 @@ public class BattleHandler : MonoBehaviour
                     currentBattleUnit.GetFighter().SetTarget(target);
                 }
 
-                currentBattleUnit.GetFighter().SetAbility(selectedAbility, isRenCopy);
+                currentBattleUnit.GetFighter().SetAbility(selectedAbility);
 
-                StartCoroutine(UseAbilityBehavior(selectedAbility, isRenCopy));
+                StartCoroutine(UseAbilityBehavior(selectedAbility));
             }
         }
         else
@@ -189,7 +185,7 @@ public class BattleHandler : MonoBehaviour
         return true;
     }
 
-    private IEnumerator UseAbilityBehavior(Ability selectedAbility, bool isRenCopy)
+    private IEnumerator UseAbilityBehavior(Ability selectedAbility)
     {
         currentBattleUnit.ActivateUnitIndicatorUI(false);
         if (IsBattling())
@@ -215,7 +211,10 @@ public class BattleHandler : MonoBehaviour
                             targetPosition = target.GetFighter().GetActiveSubstitute().GetFighter().GetMeleeTransform().position;
                         }
 
-                        currentBattleUnit.GetMover().MoveTo(targetPosition);
+                        //currentBattleUnit.GetMover().MoveTo(targetPosition);
+
+                        Quaternion currentRotation = transform.rotation;
+                        yield return currentBattleUnit.GetMover().JumpToPos(targetPosition, currentRotation,true);
                     }
                     else
                     {
@@ -235,7 +234,7 @@ public class BattleHandler : MonoBehaviour
                         }
 
                         currentBattleUnit.UseAbility(selectedAbility);
-                        AddToRenCopyList(selectedAbility,isRenCopy);
+                        //AddToRenCopyList(selectedAbility,isRenCopy);
 
                         yield return new WaitForSeconds(selectedAbility.moveDuration);
 
@@ -243,7 +242,7 @@ public class BattleHandler : MonoBehaviour
                         {
                             if (selectedAbility.spellType == SpellType.Melee)
                             {
-                                yield return currentBattleUnit.GetMover().ReturnToStart(false);
+                                yield return currentBattleUnit.GetMover().ReturnToStart();
                             }
                             else
                             {
@@ -311,16 +310,16 @@ public class BattleHandler : MonoBehaviour
             randomAbility = currentBattleUnit.GetBasicAttack();
         }
 
-        currentBattleUnit.GetFighter().SetAbility(randomAbility,false);
+        currentBattleUnit.GetFighter().SetAbility(randomAbility);
 
         yield return new WaitForSeconds(1.5f);
 
-        StartCoroutine(UseAbilityBehavior(randomAbility, false));
+        StartCoroutine(UseAbilityBehavior(randomAbility));
     }
 
     private bool CanAICastSpell(BattleUnit target, Ability selectedAbility)
     {
-        if (!currentBattleUnit.HasEnoughSoulWell(selectedAbility.soulWellCost))
+        if (!currentBattleUnit.HasEnoughSoulWell(selectedAbility.manaCost))
         {
             return false;
         }
@@ -364,35 +363,35 @@ public class BattleHandler : MonoBehaviour
         }
     }
 
-    private void AddToRenCopyList(Ability abilityToTest, bool isRenCopy)
-    {
-        if (isRenCopy)
-        {
-            return;
-        }
-        if (abilityToTest.CanBeRenCopied())
-        {
-            if (renCopySpellList.Count > 0)
-            {
-                foreach (Ability ability in renCopySpellList)
-                {
-                    if (ability == abilityToTest)
-                    {
-                        return;
-                    }
-                }
-            }
+    //private void AddToRenCopyList(Ability abilityToTest, bool isRenCopy)
+    //{
+    //    if (isRenCopy)
+    //    {
+    //        return;
+    //    }
+    //    if (abilityToTest.CanBeRenCopied())
+    //    {
+    //        if (renCopySpellList.Count > 0)
+    //        {
+    //            foreach (Ability ability in renCopySpellList)
+    //            {
+    //                if (ability == abilityToTest)
+    //                {
+    //                    return;
+    //                }
+    //            }
+    //        }
 
-            renCopySpellList.Add(abilityToTest);
+    //        renCopySpellList.Add(abilityToTest);
 
-            if (renCopySpellList.Count == 5)
-            {
-                renCopySpellList.Remove(renCopySpellList[0]);
-            }
+    //        if (renCopySpellList.Count == 5)
+    //        {
+    //            renCopySpellList.Remove(renCopySpellList[0]);
+    //        }
 
-            battleUIManager.UpdateRenCopyList(renCopySpellList);
-        }
-    }
+    //        battleUIManager.UpdateRenCopyList(renCopySpellList);
+    //    }
+    //}
 
     private void UpdateManagerLists()
     {
@@ -454,7 +453,6 @@ public class BattleHandler : MonoBehaviour
         {
             CalculateXPAwards();
 
-            StopCoroutine(UseAbilityBehavior(null,false));
             battleUIManager.DeactivateAllUI();
 
             yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
@@ -463,7 +461,6 @@ public class BattleHandler : MonoBehaviour
 
             yield return new WaitForSeconds(2f);
 
-            renCopySpellList.Clear();
             DestroyBattleUnits();
             DestroyDestroyableObjects();
             Destroy(battleCamInstance);

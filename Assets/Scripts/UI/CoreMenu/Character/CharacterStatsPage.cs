@@ -32,7 +32,7 @@ public class CharacterStatsPage : MonoBehaviour
     [SerializeField] Image characterImage = null;
     [SerializeField] StatPageUI[] statPageUIs = null;
 
-    public void SetupStatPageUI(Character character, TeamInfo teamInfo)
+    public void SetupStatPageUI(Unit character, TeamInfo teamInfo)
     {
         nameText.text = teamInfo.GetName();
         characterImage.sprite = character.GetFullBodyImage();

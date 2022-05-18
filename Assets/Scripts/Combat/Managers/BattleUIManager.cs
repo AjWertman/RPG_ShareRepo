@@ -52,7 +52,7 @@ public class BattleUIManager : MonoBehaviour
 
     List<Ability> renCopySpellList = new List<Ability>();
 
-    public event Action<BattleUnit, Ability, bool> onPlayerMove;
+    public event Action<BattleUnit, Ability> onPlayerMove;
     public event Action onEscape;
 
     //Initialization///////////////////////////////////////////////////////////////////////////////////////////
@@ -232,11 +232,11 @@ public class BattleUIManager : MonoBehaviour
             }
             else if (selectedAbility.canTargetAll)
             {
-                onPlayerMove(null, selectedAbility, isRenCopy);
+                onPlayerMove(null, selectedAbility);
             }
             else
             {
-                onPlayerMove(enemyUnits[0], selectedAbility, isRenCopy);
+                onPlayerMove(enemyUnits[0], selectedAbility);
             }
         }
         else if(type == TargetingType.PlayersOnly)
@@ -245,7 +245,7 @@ public class BattleUIManager : MonoBehaviour
         }
         else if (type == TargetingType.SelfOnly)
         {
-            onPlayerMove(currentBattleUnit, selectedAbility, false);
+            onPlayerMove(currentBattleUnit, selectedAbility);
         }
     }
 
@@ -371,7 +371,7 @@ public class BattleUIManager : MonoBehaviour
 
     private string CantCast(Ability ability)
     {
-        if (!currentBattleUnit.HasEnoughSoulWell(ability.soulWellCost))
+        if (!currentBattleUnit.HasEnoughSoulWell(ability.manaCost))
         {
             return "Does not have enough Soul Well";
         }
@@ -466,7 +466,7 @@ public class BattleUIManager : MonoBehaviour
 
         if (targetingType == TargetingType.SelfOnly)
         {
-            onPlayerMove(currentBattleUnit, selectedAbility, isRenCopy);
+            onPlayerMove(currentBattleUnit, selectedAbility);
             return;
         }
         else if (targetingType == TargetingType.EnemysOnly)
@@ -527,7 +527,7 @@ public class BattleUIManager : MonoBehaviour
         button.onClick.AddListener(() => SetTarget(targetButton.GetTarget()));
         button.onClick.AddListener(() => targetButton.GetTarget().ActivateUnitIndicatorUI(false));
         button.onClick.AddListener(() => DeactivateTargetSelectCanvas());
-        button.onClick.AddListener(() => onPlayerMove(selectedBattleUnit, selectedAbility, isRenCopy));
+        button.onClick.AddListener(() => onPlayerMove(selectedBattleUnit, selectedAbility));
         button.onClick.AddListener(() => DeactivateUnitResourcesUI());
     }
 

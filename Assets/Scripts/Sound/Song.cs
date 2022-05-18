@@ -1,13 +1,19 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 
-public class Song : MonoBehaviour
+[Serializable]
+public class Song
 {
     [SerializeField] string nameKey = "";
     [SerializeField] AudioClip song = null;
 
     [Range(0,1)][SerializeField] float volume = 1f;
+
+
+    public string GetSongName()
+    {
+        return nameKey;
+    }
 
     public AudioClip GetSong()
     {
@@ -18,32 +24,4 @@ public class Song : MonoBehaviour
     {
         return volume;
     }
-
-    //float songLength = 0;
-
-    //public event Action onSongEnd;
-
-    //bool isOverride = false;
-
-    //public void SetupSong(bool _isOverride)
-    //{
-    //    isOverride = _isOverride;
-    //    songLength = audioSource.clip.length;
-
-    //    if (isOverride)
-    //    {
-    //        audioSource.loop = true;
-    //    }
-    //}
-
-    //public IEnumerator BeginSongLifetime()
-    //{
-    //    yield return new WaitForSeconds(songLength);
-    //    onSongEnd();
-    //}
-
-    //private void OnDisable()
-    //{
-    //    StopCoroutine(BeginSongLifetime());
-    //}
 }
