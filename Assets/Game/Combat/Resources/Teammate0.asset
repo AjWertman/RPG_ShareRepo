@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Teammate0
   m_EditorClassIdentifier: 
   unitName: Teammate
-  unitPrefab: {fileID: 3885956733641782365, guid: 5457aec3f904cda42981c922fdab64f2,
-    type: 3}
+  characterMeshKey: 1
   baseStats:
     stats:
     - statType: 0

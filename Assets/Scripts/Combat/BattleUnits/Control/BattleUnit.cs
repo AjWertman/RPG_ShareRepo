@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BattleUnit : MonoBehaviour
 {
+    [SerializeField] GameObject placeholderMesh = null;
+
+
+
     [SerializeField] GameObject unitMesh = null;
     [SerializeField] GameObject unitIndicatorObject = null;
     [SerializeField] Transform particleExpander = null;
@@ -44,6 +48,14 @@ public class BattleUnit : MonoBehaviour
         newName = newName.Replace("(Clone)", "");
 
         unitName = newName;
+    }
+
+    public void SetNewMesh(GameObject newMesh)
+    {
+        newMesh.transform.parent = transform;
+        newMesh.transform.localPosition = Vector3.zero;
+        newMesh.transform.localRotation = Quaternion.identity;
+        newMesh.SetActive(true);
     }
 
     public void SetupBattleUnitComponents()
@@ -345,6 +357,47 @@ public class BattleUnit : MonoBehaviour
             return false;
         }
     }
+    public Stats GetStats()
+    {
+        return stats;
+    }
+
+    public GameObject GetPlaceholderMesh()
+    {
+        return placeholderMesh;
+    }
+
+    private void UpdateAllStats(bool initialHealthUpdate)
+    {
+        UpdateFighterStats();
+        UpdateHealthStats(initialHealthUpdate);
+        UpdateManaStats();
+    }
+
+    private void UpdateFighterStats()
+    {
+        fighter.UpdateAttributes
+            (
+            stats.GetSpecificStatLevel(StatType.Strength),
+            stats.GetSpecificStatLevel(StatType.Skill),
+            stats.GetSpecificStatLevel(StatType.Luck)
+            );
+    }
+
+    private void UpdateHealthStats(bool initialUpdate)
+    {
+        health.UpdateAttributes
+            (
+            stats.GetSpecificStatLevel(StatType.Stamina),
+            stats.GetSpecificStatLevel(StatType.Armor),
+            stats.GetSpecificStatLevel(StatType.Resistance)
+            );
+    }
+
+    private void UpdateManaStats()
+    {
+        soulWell.UpdateAttributes(stats.GetSpecificStatLevel(StatType.Spirit));
+    }
 
     public void ActivateUnitResourceUI(bool shouldActivate)
     {
@@ -443,38 +496,6 @@ public class BattleUnit : MonoBehaviour
     
     //Stats///////////////////////////////////////////////////////////////////////////////////////////
 
-    private void UpdateAllStats(bool initialHealthUpdate)
-    {
-        UpdateFighterStats();
-        UpdateHealthStats(initialHealthUpdate);
-        UpdateManaStats();
-    }  
-
-    private void UpdateFighterStats()
-    {
-        fighter.UpdateAttributes
-            (
-            stats.GetSpecificStatLevel(StatType.Strength),
-            stats.GetSpecificStatLevel(StatType.Skill),
-            stats.GetSpecificStatLevel(StatType.Luck)
-            );
-    }
-
-    private void UpdateHealthStats(bool initialUpdate)
-    {
-        health.UpdateAttributes
-            (
-            stats.GetSpecificStatLevel(StatType.Stamina),
-            stats.GetSpecificStatLevel(StatType.Armor),
-            stats.GetSpecificStatLevel(StatType.Resistance)
-            );
-    }
-
-    private void UpdateManaStats()
-    {
-        soulWell.UpdateAttributes(stats.GetSpecificStatLevel(StatType.Spirit));
-    }
-
     //private void ResetStat(StatAbrv affectedStat, int effectAmount)
     //{
     //    ManipulateStats(affectedStat, effectAmount);
@@ -517,9 +538,4 @@ public class BattleUnit : MonoBehaviour
 
     //    UpdateAllStats(false);
     //}
-
-    public Stats GetStats()
-    {
-        return stats;
-    }
 }

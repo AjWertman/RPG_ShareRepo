@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Enemy0
   m_EditorClassIdentifier: 
   unitName: Enemy 0
-  unitPrefab: {fileID: 3885956733641782365, guid: 4e8b5faf952682741b24e5fb3d2fac8d,
-    type: 3}
+  characterMeshKey: 2
   baseStats:
     stats:
     - statType: 0

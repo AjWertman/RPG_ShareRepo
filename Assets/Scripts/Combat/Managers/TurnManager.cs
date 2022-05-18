@@ -6,7 +6,7 @@ public enum UnitTurnState { NoOne, Player, Enemy }
 
 public class TurnManager : MonoBehaviour
 {
-    BattleUnit[] battleUnits = null;
+    List<BattleUnit> battleUnits = new List<BattleUnit>();
     List<BattleUnit> playerUnits = new List<BattleUnit>();
     List<BattleUnit> enemyUnits = new List<BattleUnit>();
 
@@ -19,7 +19,7 @@ public class TurnManager : MonoBehaviour
 
     int turn = 0;
 
-    public void SetUpTurns(BattleUnit[] activeUnits, List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits)
+    public void SetUpTurns(List<BattleUnit> activeUnits, List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits)
     {
         turn = 0;
 

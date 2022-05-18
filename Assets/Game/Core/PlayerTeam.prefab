@@ -49,6 +49,15 @@ MonoBehaviour:
   teamInfos:
   - characterName: Aj
     stats:
+      stats: []
+    characterHealth: 0
+    maxCharacterHealth: 0
+    characterSoulWell: 0
+    maxCharacterSoulWell: 0
+    level: 0
+    experiencePoints: 0
+  - characterName: Teammate0
+    stats:
       stats:
       - statType: 0
         statLevel: 10

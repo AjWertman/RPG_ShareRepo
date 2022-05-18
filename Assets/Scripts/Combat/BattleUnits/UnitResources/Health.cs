@@ -88,7 +88,7 @@ public class Health : MonoBehaviour
         }
         else
         {
-            animator.SetTrigger("takeDamage");
+            animator.Play("TakeDamage");
             //unitSoundFX.CreateSoundFX(unitSoundFX.GetHurtSound());
         }
 

@@ -4,9 +4,9 @@
 public class Unit : ScriptableObject
 {
     [SerializeField] string unitName = "";
+    [SerializeField] CharacterMeshKey characterMeshKey = CharacterMeshKey.Aj;
 
-    [Header("Combat Design")]
-    [SerializeField] BattleUnit unitPrefab = null;
+    [Header("Combat")]
     [SerializeField] Stats baseStats;
     [SerializeField] Ability basicAttack = null;
     [SerializeField] Ability[] spells = null;
@@ -22,9 +22,9 @@ public class Unit : ScriptableObject
         return unitName;
     }
 
-    public BattleUnit GetBattleUnit()
+    public CharacterMeshKey GetCharacterMeshKey()
     {
-        return unitPrefab;
+        return characterMeshKey;
     }
 
     public Sprite GetBackgroundImage()

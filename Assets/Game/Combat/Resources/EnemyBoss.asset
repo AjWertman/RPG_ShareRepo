@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: EnemyBoss
   m_EditorClassIdentifier: 
   unitName: Boss
-  unitPrefab: {fileID: 3885956733641782365, guid: 8f749b1ee13aa5848bc7306ccb7e4414,
-    type: 3}
+  characterMeshKey: 4
   baseStats:
     stats:
     - statType: 0

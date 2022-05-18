@@ -64,10 +64,10 @@ public class Mover : MonoBehaviour, ISaveable
 
         MoveTo(jumpPosition);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.75f);
 
        
-        animator.CrossFade("Idle", .05f);
+        animator.CrossFade("Idle", .1f);
 
         yield return new WaitForSeconds(.5f);
 
