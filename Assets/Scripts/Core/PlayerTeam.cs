@@ -8,11 +8,7 @@ public class TeamInfo
 
     [Header("Resources")]
     [SerializeField] Stats stats;
-
-    [SerializeField] float characterHealth = 0f;
-    [SerializeField] float maxCharacterHealth = 0f;
-    [SerializeField] float characterSoulWell = 0f;
-    [SerializeField] float maxCharacterSoulWell = 0f;
+    [SerializeField] BattleUnitResources battleUnitResources = null;
 
     [Header("Progression")]
     [SerializeField] int level = 1;
@@ -28,24 +24,9 @@ public class TeamInfo
         stats.SetStats(_stats.GetStats());
     }
 
-    public void SetHealth(float _characterHealth)
+    public void SetBattleUnitResources(BattleUnitResources _battleUnitResources)
     {
-        characterHealth = _characterHealth;
-    }
-
-    public void SetMaxHealth(float _maxHealth)
-    {
-        maxCharacterHealth = _maxHealth ;
-    }
-
-    public void SetSoulWell(float _soulWell)
-    {
-        characterSoulWell = _soulWell;
-    }
-
-    public void SetMaxSoulWell(float _maxSoulWell)
-    {
-        maxCharacterSoulWell = _maxSoulWell;
+        battleUnitResources = _battleUnitResources;
     }
 
     public string GetName()
@@ -58,24 +39,9 @@ public class TeamInfo
         return stats;
     }
 
-    public float GetHealth()
+    public BattleUnitResources GetBattleUnitResources()
     {
-        return characterHealth;
-    }
-
-    public float GetMaxHealth()
-    {
-        return maxCharacterHealth;
-    }
-
-    public float GetSoulWell()
-    {
-        return characterSoulWell;
-    }
-
-    public float GetMaxSoulWell()
-    {
-        return maxCharacterSoulWell;
+        return battleUnitResources;
     }
 
     public int GetLevel()
@@ -133,28 +99,28 @@ public class PlayerTeam : MonoBehaviour, ISaveable
     {
         foreach (TeamInfo teamInfo in teamInfos)
         {
-            Unit newCharacter = GetCharacter(teamInfo.GetName());
+            Unit newCharacter = GetCharacter(teamInfo.GetName());       
             
             playerTeam.Add(newCharacter);
 
             teamInfo.SetStats(newCharacter.GetBaseStats());
- 
-            teamInfo.SetMaxHealth(CalculateMaxHealthPoints(teamInfo.GetStats().GetSpecificStatLevel(StatType.Stamina)));
-            teamInfo.SetHealth(teamInfo.GetMaxHealth());
 
-            teamInfo.SetMaxSoulWell(CalculateMaxSoulWell(teamInfo.GetStats().GetSpecificStatLevel(StatType.Spirit)));
-            teamInfo.SetSoulWell(teamInfo.GetMaxSoulWell());
+            float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.GetStats().GetSpecificStatLevel(StatType.Stamina));
+            float maxManaPoints = CalculateMaxMana(teamInfo.GetStats().GetSpecificStatLevel(StatType.Spirit));
+
+            BattleUnitResources battleUnitResources = new BattleUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxManaPoints);
+
+            teamInfo.SetBattleUnitResources(battleUnitResources);
         }
     }
 
-    public void UpdateTeamInfo(string name, float health, float soulWell)
+    public void UpdateTeamInfo(string _name, BattleUnitResources _battleUnitResources)
     {
         foreach (TeamInfo teamInfo in teamInfos)
         {
-            if (GetCharacter(teamInfo.GetName()) == GetCharacter(name))
+            if (GetCharacter(teamInfo.GetName()) == GetCharacter(_name))
             {
-                teamInfo.SetHealth(health);
-                teamInfo.SetSoulWell(soulWell);
+                teamInfo.SetBattleUnitResources(_battleUnitResources);
             }
         }
     }
@@ -185,8 +151,12 @@ public class PlayerTeam : MonoBehaviour, ISaveable
     {
         foreach (TeamInfo teamInfo in teamInfos)
         {
-            teamInfo.SetHealth(teamInfo.GetMaxHealth());
-            teamInfo.SetSoulWell(teamInfo.GetMaxSoulWell());
+            BattleUnitResources battleUnitResources = teamInfo.GetBattleUnitResources();
+            float maxHealthPoints = battleUnitResources.GetMaxHealthPoints();
+            float maxManaPoints = battleUnitResources.GetMaxManaPoints();
+
+            battleUnitResources.SetHealthPoints(maxHealthPoints);
+            battleUnitResources.SetMaxManaPoints(maxManaPoints);
         }
     }
 
@@ -231,15 +201,15 @@ public class PlayerTeam : MonoBehaviour, ISaveable
         return maxHealthPoints;
     }
 
-    private float CalculateMaxSoulWell(float soulWell)
+    private float CalculateMaxMana(float mana)
     {
-        float maxSoulWell = 100f;
+        float maxMana = 100f;
 
-        float nonBaseSoulWell = soulWell - 10f;
+        float nonBaseMana = mana - 10f;
 
-        maxSoulWell += 10f * nonBaseSoulWell;
+        maxMana += 10f * nonBaseMana;
 
-        return maxSoulWell;
+        return maxMana;
     }
 
     public object CaptureState()

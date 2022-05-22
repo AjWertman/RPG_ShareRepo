@@ -10,15 +10,8 @@ public class ResourceSlider : MonoBehaviour
         slider = GetComponent<Slider>();
     }
 
-    public void UpdateSliderValue(float value,bool isHealthSlider, bool? hasSoulWell)
+    public void UpdateSliderValue(float value)
     {
-        if (!isHealthSlider && hasSoulWell == false)
-        {
-            gameObject.SetActive(false);
-        }
-        else
-        {
-            slider.value = value;
-        }       
+        slider.value = value;
     }
 }

@@ -26,8 +26,6 @@ public class EnemyController : MonoBehaviour, ISaveable, IOverworld
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        mover.SetAnimator(animator, false);
-
         enemyTrigger.updateShouldBeDisabled += SetShouldBeDisabled;
     }
 

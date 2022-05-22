@@ -8,7 +8,7 @@ public class TargetButton : MonoBehaviour
     public void SetupTargetButton(BattleUnit unitToSet)
     {
         assignedTarget = unitToSet;
-        GetComponentInChildren<TextMeshProUGUI>().text = assignedTarget.GetName();
+        GetComponentInChildren<TextMeshProUGUI>().text = assignedTarget.GetBattleUnitInfo().GetUnitName();
         GetComponent<BattleUnitIndicatorTrigger>().SetupTrigger(assignedTarget);
     }
 

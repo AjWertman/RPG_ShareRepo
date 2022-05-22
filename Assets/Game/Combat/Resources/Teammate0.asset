@@ -12,33 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
   m_Name: Teammate0
   m_EditorClassIdentifier: 
-  unitName: Teammate
+  unitName: Teammate0
   characterMeshKey: 1
   baseStats:
     stats:
     - statType: 0
-      statLevel: 15
+      statLevel: 50
       levelUpPercent: 0
     - statType: 1
-      statLevel: 15
+      statLevel: 38
       levelUpPercent: 0
     - statType: 2
-      statLevel: 15
+      statLevel: 42
       levelUpPercent: 0
     - statType: 3
-      statLevel: 15
+      statLevel: 46
       levelUpPercent: 0
     - statType: 4
-      statLevel: 15
+      statLevel: 42
       levelUpPercent: 0
     - statType: 5
-      statLevel: 15
+      statLevel: 46
       levelUpPercent: 0
     - statType: 6
-      statLevel: 15
+      statLevel: 48
       levelUpPercent: 0
     - statType: 7
-      statLevel: 15
+      statLevel: 46
       levelUpPercent: 0
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   spells: []

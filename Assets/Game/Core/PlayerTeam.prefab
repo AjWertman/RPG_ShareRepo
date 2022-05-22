@@ -47,15 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamInfos:
-  - characterName: Aj
-    stats:
-      stats: []
-    characterHealth: 0
-    maxCharacterHealth: 0
-    characterSoulWell: 0
-    maxCharacterSoulWell: 0
-    level: 0
-    experiencePoints: 0
   - characterName: Teammate0
     stats:
       stats:
@@ -83,10 +74,79 @@ MonoBehaviour:
       - statType: 7
         statLevel: 10
         levelUpPercent: 20
-    characterHealth: 0
-    maxCharacterHealth: 0
-    characterSoulWell: 0
-    maxCharacterSoulWell: 0
+    battleUnitResources:
+      healthPoints: 0
+      maxHealthPoints: 0
+      manaPoints: 0
+      maxManaPoints: 0
+    level: 1
+    experiencePoints: 0
+  - characterName: Aj
+    stats:
+      stats:
+      - statType: 0
+        statLevel: 10
+        levelUpPercent: 40
+      - statType: 1
+        statLevel: 10
+        levelUpPercent: 55
+      - statType: 2
+        statLevel: 10
+        levelUpPercent: 25
+      - statType: 3
+        statLevel: 10
+        levelUpPercent: 60
+      - statType: 4
+        statLevel: 10
+        levelUpPercent: 25
+      - statType: 5
+        statLevel: 10
+        levelUpPercent: 30
+      - statType: 6
+        statLevel: 10
+        levelUpPercent: 35
+      - statType: 7
+        statLevel: 10
+        levelUpPercent: 20
+    battleUnitResources:
+      healthPoints: 0
+      maxHealthPoints: 0
+      manaPoints: 0
+      maxManaPoints: 0
+    level: 0
+    experiencePoints: 0
+  - characterName: Teammate1
+    stats:
+      stats:
+      - statType: 0
+        statLevel: 10
+        levelUpPercent: 40
+      - statType: 1
+        statLevel: 10
+        levelUpPercent: 55
+      - statType: 2
+        statLevel: 10
+        levelUpPercent: 25
+      - statType: 3
+        statLevel: 10
+        levelUpPercent: 60
+      - statType: 4
+        statLevel: 10
+        levelUpPercent: 25
+      - statType: 5
+        statLevel: 10
+        levelUpPercent: 30
+      - statType: 6
+        statLevel: 10
+        levelUpPercent: 35
+      - statType: 7
+        statLevel: 10
+        levelUpPercent: 20
+    battleUnitResources:
+      healthPoints: 0
+      maxHealthPoints: 0
+      manaPoints: 0
+      maxManaPoints: 0
     level: 1
     experiencePoints: 0
 --- !u!114 &4204676130505864477

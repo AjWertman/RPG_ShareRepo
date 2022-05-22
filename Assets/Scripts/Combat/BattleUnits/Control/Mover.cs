@@ -6,6 +6,7 @@ public class Mover : MonoBehaviour, ISaveable
 {
     [SerializeField] Transform retreatTransform = null;
     [SerializeField] bool isMover = true;
+    [SerializeField] bool isBattleUnit = false;
 
     Animator animator = null;
     NavMeshAgent navMeshAgent = null;
@@ -16,17 +17,10 @@ public class Mover : MonoBehaviour, ISaveable
 
     float startStoppingDistance = 0;
 
-    bool isBattleUnit = true;
-
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-    }
-
-    public void SetAnimator(Animator _animator, bool _isBattleUnit)
-    {
-        isBattleUnit = _isBattleUnit;
-        animator = _animator;
     }
 
     public void SetUnitSoundFX(SoundFXManager _unitSoundFX)

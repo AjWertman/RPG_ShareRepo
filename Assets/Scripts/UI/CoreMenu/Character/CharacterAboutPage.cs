@@ -20,7 +20,7 @@ public class CharacterAboutPage : MonoBehaviour
 
     public void SetupCharacterPage(Unit character, TeamInfo teamInfo)
     {
-        ChangeNameTexts(character.GetName());
+        ChangeNameTexts(character.GetUnitName());
         characterImage.sprite = character.GetFullBodyImage();
         //descriptionText.text = character.GetSummary();
         ChangeExtraInfoTexts(character, teamInfo);

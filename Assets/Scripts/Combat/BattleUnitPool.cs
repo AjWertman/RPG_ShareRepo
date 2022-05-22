@@ -21,8 +21,6 @@ public class BattleUnitPool : MonoBehaviour
             GameObject battleUnitInstance = Instantiate(battleUnitPrefab, transform);
             BattleUnit battleUnit = battleUnitInstance.GetComponent<BattleUnit>();
 
-            battleUnit.SetupBattleUnitComponents();
-
             battleUnits.Add(battleUnit, false);
             battleUnit.GetPlaceholderMesh().SetActive(false);
             battleUnitInstance.gameObject.SetActive(false);
@@ -48,11 +46,31 @@ public class BattleUnitPool : MonoBehaviour
 
     public void ResetBattleUnitPool()
     {
+        List<BattleUnit> unitsToReset = new List<BattleUnit>();
+
         foreach (BattleUnit battleUnit in battleUnits.Keys)
         {
+            battleUnit.transform.parent = transform;
             battleUnit.transform.localPosition = Vector3.zero;
+            battleUnit.ResetBattleUnit();
             battleUnit.gameObject.SetActive(false);
+            unitsToReset.Add(battleUnit);
+        }
+
+        foreach (BattleUnit battleUnit in unitsToReset)
+        {
             battleUnits[battleUnit] = false;
+        }
+    }
+
+    public IEnumerable<BattleUnit> GetActiveBattleUnits()
+    {
+        foreach(BattleUnit battleUnit in battleUnits.Keys)
+        {
+            if (battleUnits[battleUnit])
+            {
+                yield return battleUnit;
+            }
         }
     }
 }

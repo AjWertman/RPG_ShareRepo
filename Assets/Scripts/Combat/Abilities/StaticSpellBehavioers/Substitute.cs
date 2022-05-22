@@ -33,18 +33,17 @@ public class Substitute : StaticSpell
         fighter = GetComponent<Fighter>();
         mover = GetComponent<Mover>();
 
-        fighter.SetAnimator(animator);
-        mover.SetAnimator(animator, true);
+        //fighter.SetAnimator(animator);
+        //mover.SetAnimator(animator, true);
 
-        basicAttack = target.GetBasicAttack();
+        //basicAttack = target.GetBasicAttack();
 
-        Stats stats = target.GetStats();
+        //Stats stats = target.GetStats();
 
-        fighter.UpdateAttributes(stats.GetSpecificStatLevel(StatType.Strength), 0, stats.GetSpecificStatLevel(StatType.Luck));
+        //fighter.UpdateAttributes(stats.GetSpecificStatLevel(StatType.Strength), 0, stats.GetSpecificStatLevel(StatType.Luck));
         GetComponent<NavMeshAgent>().stoppingDistance = target.GetComponent<NavMeshAgent>().stoppingDistance;
         mover.SetStartingTransforms();
         fighter.SetAttackRange(true);
-        SetUnitSoundFX(target.GetUnitSoundFX());
     }
 
     public override void DestroyStaticSpell()

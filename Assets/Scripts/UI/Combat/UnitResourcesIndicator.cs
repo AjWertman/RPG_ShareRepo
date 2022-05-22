@@ -11,16 +11,17 @@ public class UnitResourcesIndicator : MonoBehaviour
     [SerializeField] TextMeshProUGUI nameText = null;
     [SerializeField] Image faceImage = null;
     [SerializeField] TextMeshProUGUI healthText = null;
-    [SerializeField] TextMeshProUGUI soulWellText = null;
+    [SerializeField] TextMeshProUGUI manaText = null;
 
-    public void SetupResourceIndicator(BattleUnit unit)
+    public void SetupResourceIndicator(BattleUnit _unit)
     {
-        SetBackgroundColor(unit.IsPlayer());
+        BattleUnitInfo battleUnitInfo = _unit.GetBattleUnitInfo();
+        SetBackgroundColor(battleUnitInfo.IsPlayer());
 
-        nameText.text = unit.GetName();
-        faceImage.sprite = unit.GetFaceImage();
-        healthText.text = ("Health: " + unit.GetUnitHealth() + "/" + unit.GetUnitMaxHealth());
-        soulWellText.text = ("Soul Well: " + unit.GetUnitSoulWell() + "/" + unit.GetUnitMaxSoulWell());
+        nameText.text = battleUnitInfo.GetUnitName();
+        faceImage.sprite = _unit.GetFaceImage();
+        healthText.text = ("Health: " + _unit.GetUnitHealth() + "/" + _unit.GetUnitMaxHealth());
+        manaText.text = ("Mana: " + _unit.GetUnitMana() + "/" + _unit.GetUnitMaxMana());
     }
 
     private void SetBackgroundColor(bool isPlayer)

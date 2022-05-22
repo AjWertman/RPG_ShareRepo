@@ -13,32 +13,32 @@ MonoBehaviour:
   m_Name: Enemy1
   m_EditorClassIdentifier: 
   unitName: Enemy 1
-  characterMeshKey: 3
+  characterMeshKey: 4
   baseStats:
     stats:
     - statType: 0
-      statLevel: 10
+      statLevel: 36
       levelUpPercent: 0
     - statType: 1
-      statLevel: 10
+      statLevel: 33
       levelUpPercent: 0
     - statType: 2
-      statLevel: 10
+      statLevel: 37
       levelUpPercent: 0
     - statType: 3
-      statLevel: 10
+      statLevel: 42
       levelUpPercent: 0
     - statType: 4
-      statLevel: 10
+      statLevel: 30
       levelUpPercent: 0
     - statType: 5
-      statLevel: 10
+      statLevel: 34
       levelUpPercent: 0
     - statType: 6
-      statLevel: 10
+      statLevel: 33
       levelUpPercent: 0
     - statType: 7
-      statLevel: 10
+      statLevel: 29
       levelUpPercent: 0
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   spells: []

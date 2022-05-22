@@ -46,13 +46,12 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         playerConversant = GetComponent<PlayerConversant>();
-        
+        playerTeamInfo = FindObjectOfType<PlayerTeam>();
         unitSoundFX = GetComponent<SoundFXManager>();
     }
 
     private void Start()
     {
-        playerTeamInfo = FindObjectOfType<PlayerTeam>();
         playerTeam = playerTeamInfo.GetPlayerTeam();
 
         followCamera = FindObjectOfType<FollowCamera>();

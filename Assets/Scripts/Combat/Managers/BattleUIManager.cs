@@ -71,7 +71,7 @@ public class BattleUIManager : MonoBehaviour
     public void DeactivateAllUI()
     {
         DeactivatePlayerMoveCanvas();
-        DeactivateSpellSelectCanvas();
+        DeactivateAbilitySelectCanvas();
         DeactivateTargetSelectCanvas();
         DeactivateSpellTooltip();
 
@@ -176,7 +176,7 @@ public class BattleUIManager : MonoBehaviour
         attackButton.onClick.AddListener(() => OnPlayerMoveButton());
 
         spellSelectButton.onClick.AddListener(() => DeactivatePlayerMoveCanvas());
-        spellSelectButton.onClick.AddListener(() => ActivateSpellSelectCanvas());
+        spellSelectButton.onClick.AddListener(() => ActivateAbilitySelectCanvas());
 
         itemButton.onClick.AddListener(() => SetAbility(itemButton.GetComponent<AbilityButton>().GetAssignedAbility(), false));
         itemButton.onClick.AddListener(() => DeactivatePlayerMoveCanvas());
@@ -187,7 +187,7 @@ public class BattleUIManager : MonoBehaviour
 
     private void SetupSpellSelectUI()
     {
-        spellToPlayerMoveButton.onClick.AddListener(() => DeactivateSpellSelectCanvas());
+        spellToPlayerMoveButton.onClick.AddListener(() => DeactivateAbilitySelectCanvas());
         spellToPlayerMoveButton.onClick.AddListener(() => ActivatePlayerMoveCanvas());
     }
 
@@ -203,7 +203,8 @@ public class BattleUIManager : MonoBehaviour
     //PlayerMove///////////////////////////////////////////////////////////////////////////////////////////
     public void ActivatePlayerMoveCanvas()
     {
-        attackButton.GetComponent<AbilityButton>().SetAssignedAbility(currentBattleUnit.GetBasicAttack());
+        Ability basicAttack = currentBattleUnit.GetBattleUnitInfo().GetBasicAttack();
+        attackButton.GetComponent<AbilityButton>().SetAssignedAbility(basicAttack);
 
         if (!GetComponent<TutorialUIHandler>())
         {
@@ -280,12 +281,14 @@ public class BattleUIManager : MonoBehaviour
 
     //SpellSelect///////////////////////////////////////////////////////////////////////////////////////////
 
-    public void PopulateSpellList(Ability[] abilities)
+    public void PopulateAbilitiesList(Ability[] abilities)
     {
         ClearSpellList();
+
+        int unitLevel = currentBattleUnit.GetBattleUnitInfo().GetUnitLevel();
         foreach (Ability ability in abilities)
         {
-            if (currentBattleUnit.GetUnitLevel() < ability.requiredLevel) continue;
+            if (unitLevel < ability.requiredLevel) continue;
 
             GameObject newButtonInstance = Instantiate(abilityButtonObject, contentRectTransform);
             Button button = newButtonInstance.GetComponent<Button>();
@@ -308,7 +311,7 @@ public class BattleUIManager : MonoBehaviour
             if (ability.spellType != SpellType.RenCopy)
             {
                 button.onClick.AddListener(() => SetAbility(abilityButton.GetAssignedAbility(), false));
-                button.onClick.AddListener(() => DeactivateSpellSelectCanvas());
+                button.onClick.AddListener(() => DeactivateAbilitySelectCanvas());
                 button.onClick.AddListener(() => OnPlayerMoveButton());   
             }
             else
@@ -353,7 +356,7 @@ public class BattleUIManager : MonoBehaviour
             abilityButton.onPointerExit += DeactivateSpellTooltip;
 
             button.onClick.AddListener(() => SetAbility(abilityButton.GetAssignedAbility(),true));
-            button.onClick.AddListener(() => DeactivateSpellSelectCanvas());
+            button.onClick.AddListener(() => DeactivateAbilitySelectCanvas());
             button.onClick.AddListener(() => DeactivateSpellTooltip());
             button.onClick.AddListener(()=> OnPlayerMoveButton());
 
@@ -371,9 +374,9 @@ public class BattleUIManager : MonoBehaviour
 
     private string CantCast(Ability ability)
     {
-        if (!currentBattleUnit.HasEnoughSoulWell(ability.manaCost))
+        if (!currentBattleUnit.HasEnoughMana(ability.manaCost))
         {
-            return "Does not have enough Soul Well";
+            return "Does not have enough Mana";
         }
 
         if(ability.spellType == SpellType.RenCopy)
@@ -409,13 +412,14 @@ public class BattleUIManager : MonoBehaviour
         return "";
     }
 
-    public void ActivateSpellSelectCanvas()
+    public void ActivateAbilitySelectCanvas()
     {
-        PopulateSpellList(currentBattleUnit.GetSpells());
+        Ability[] abilities = currentBattleUnit.GetBattleUnitInfo().GetAbilities();
+        PopulateAbilitiesList(abilities);
         spellSelectCanvas.SetActive(true);
     }
 
-    public void DeactivateSpellSelectCanvas()
+    public void DeactivateAbilitySelectCanvas()
     {
         spellSelectCanvas.SetActive(false);
     }

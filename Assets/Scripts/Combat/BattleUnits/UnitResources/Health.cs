@@ -10,7 +10,6 @@ public class Health : MonoBehaviour
     [SerializeField] UIHealthChange uiHealthChange = null;
 
     Animator animator = null;
-    SoundFXManager unitSoundFX = null;
 
     float healthPercentage = 1f;
     bool isDead = false;
@@ -22,14 +21,9 @@ public class Health : MonoBehaviour
     public event Action onHealthChange;
     public event Action<BattleUnit> onDeath;
 
-    public void SetAnimator(Animator _animator)
+    private void Awake()
     {
-        animator = _animator;
-    }
-
-    public void SetUnitSoundFX(SoundFXManager _unitSoundFX)
-    {
-        unitSoundFX = _unitSoundFX;
+        animator = GetComponent<Animator>();
     }
 
     public void UpdateAttributes(float _stamina, float _armor, float _resistance)
@@ -66,7 +60,7 @@ public class Health : MonoBehaviour
             float healthPercentage = healthPoints/currentMaxHealthPoints;
             healthPoints = maxHealthPoints * healthPercentage;
         }
-
+      
         SetHealthPercentage();
     }
 

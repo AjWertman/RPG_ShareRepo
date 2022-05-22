@@ -4,12 +4,13 @@
 public class Unit : ScriptableObject
 {
     [SerializeField] string unitName = "";
+    [SerializeField] int baseLevel = 1;
     [SerializeField] CharacterMeshKey characterMeshKey = CharacterMeshKey.Aj;
 
     [Header("Combat")]
     [SerializeField] Stats baseStats;
     [SerializeField] Ability basicAttack = null;
-    [SerializeField] Ability[] spells = null;
+    [SerializeField] Ability[] abilities = null;
     [SerializeField] float xpAward = 100;
 
     [Header("UI Design")]
@@ -17,9 +18,14 @@ public class Unit : ScriptableObject
     [SerializeField] Sprite faceImage = null;
     [SerializeField] Sprite fullBodyImage = null;
 
-    public string GetName()
+    public string GetUnitName()
     {
         return unitName;
+    }
+    
+    public int GetBaseLevel()
+    {
+        return baseLevel;
     }
 
     public CharacterMeshKey GetCharacterMeshKey()
@@ -52,9 +58,9 @@ public class Unit : ScriptableObject
         return basicAttack;
     }
 
-    public Ability[] GetSpells()
+    public Ability[] GetAbilities()
     {
-        return spells;
+        return abilities;
     }    
 
     public float GetXPAward()

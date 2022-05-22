@@ -16,7 +16,7 @@ public class TurnOrderUIItem : MonoBehaviour
         index = _index;
         unit = _unit;
         facePic = unit.GetFaceImage();
-        isPlayer = unit.IsPlayer();
+        isPlayer = unit.GetBattleUnitInfo().IsPlayer();
 
         SetSize(index);
         SetImage(facePic);

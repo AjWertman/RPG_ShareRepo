@@ -40,7 +40,9 @@ public class TurnManager : MonoBehaviour
             turnOrder.Add(unitToSet);
         }
 
-        turnOrder.Sort((a, b) => b.GetStats().GetSpecificStatLevel(StatType.Speed).CompareTo(a.GetStats().GetSpecificStatLevel(StatType.Speed)));
+        turnOrder.Sort((a, b) => 
+        b.GetBattleUnitInfo().GetStats().GetSpecificStatLevel(StatType.Speed)
+        .CompareTo(a.GetBattleUnitInfo().GetStats().GetSpecificStatLevel(StatType.Speed)));
     }
 
     public void AdvanceTurn()

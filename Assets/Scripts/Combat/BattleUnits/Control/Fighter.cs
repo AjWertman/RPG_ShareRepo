@@ -34,9 +34,9 @@ public class Fighter : MonoBehaviour
     float skill = 0f;
     float luck = 0f;
 
-    public void SetAnimator(Animator _animator)
+    private void Awake()
     {
-        animator = _animator;
+        animator = GetComponent<Animator>();
     }
 
     public void SetSpellContainers(Transform buff, Transform staticSpell)

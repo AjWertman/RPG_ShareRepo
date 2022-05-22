@@ -10,39 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
-  m_Name: Enemy0
+  m_Name: Teammate1
   m_EditorClassIdentifier: 
-  unitName: Enemy 0
-  characterMeshKey: 3
+  unitName: Teammate1
+  characterMeshKey: 2
   baseStats:
     stats:
     - statType: 0
-      statLevel: 10
+      statLevel: 67
       levelUpPercent: 0
     - statType: 1
-      statLevel: 10
+      statLevel: 82
       levelUpPercent: 0
     - statType: 2
-      statLevel: 10
+      statLevel: 57
       levelUpPercent: 0
     - statType: 3
-      statLevel: 10
+      statLevel: 57
       levelUpPercent: 0
     - statType: 4
-      statLevel: 10
+      statLevel: 62
       levelUpPercent: 0
     - statType: 5
-      statLevel: 10
+      statLevel: 62
       levelUpPercent: 0
     - statType: 6
-      statLevel: 10
+      statLevel: 64
       levelUpPercent: 0
     - statType: 7
-      statLevel: 10
+      statLevel: 61
       levelUpPercent: 0
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   spells: []
   xpAward: 100
-  backgroundImage: {fileID: 21300000, guid: 31af4c11b0228d142b71af2d3940bbcb, type: 3}
-  faceImage: {fileID: 21300000, guid: 31af4c11b0228d142b71af2d3940bbcb, type: 3}
-  fullBodyImage: {fileID: 21300000, guid: 31af4c11b0228d142b71af2d3940bbcb, type: 3}
+  backgroundImage: {fileID: 21300000, guid: c16d3e5511c9e1341b0bd70dcb31fb81, type: 3}
+  faceImage: {fileID: 21300000, guid: c16d3e5511c9e1341b0bd70dcb31fb81, type: 3}
+  fullBodyImage: {fileID: 21300000, guid: c16d3e5511c9e1341b0bd70dcb31fb81, type: 3}

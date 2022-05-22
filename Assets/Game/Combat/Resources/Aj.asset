@@ -13,33 +13,32 @@ MonoBehaviour:
   m_Name: Aj
   m_EditorClassIdentifier: 
   unitName: Aj
-  unitPrefab: {fileID: 3885956733641782365, guid: 82772f77b4c0cc3459edf7e0a73e8b3d,
-    type: 3}
+  characterMeshKey: 0
   baseStats:
     stats:
     - statType: 0
-      statLevel: 15
+      statLevel: 96
       levelUpPercent: 0
     - statType: 1
-      statLevel: 15
+      statLevel: 98
       levelUpPercent: 0
     - statType: 2
-      statLevel: 15
+      statLevel: 95
       levelUpPercent: 0
     - statType: 3
-      statLevel: 15
+      statLevel: 97
       levelUpPercent: 0
     - statType: 4
-      statLevel: 15
+      statLevel: 96
       levelUpPercent: 0
     - statType: 5
-      statLevel: 15
+      statLevel: 95
       levelUpPercent: 0
     - statType: 6
-      statLevel: 15
+      statLevel: 16
       levelUpPercent: 0
     - statType: 7
-      statLevel: 15
+      statLevel: 94
       levelUpPercent: 0
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   spells: []

@@ -28,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7618461162906002835}
   m_Father: {fileID: 0}
@@ -80,7 +81,7 @@ MonoBehaviour:
   nameText: {fileID: 2051059080636912338}
   faceImage: {fileID: 7735458427731916188}
   healthText: {fileID: 2417343321707891817}
-  soulWellText: {fileID: 3068781101414166055}
+  manaText: {fileID: 3068781101414166055}
 --- !u!1 &1199077286428159400
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +94,7 @@ GameObject:
   - component: {fileID: 738425574308355086}
   - component: {fileID: 3068781101414166055}
   m_Layer: 0
-  m_Name: SoulWellText
+  m_Name: ManaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,6 +110,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5498512421778700751}
   m_RootOrder: 1
@@ -146,10 +148,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Soul Well: 1000/1000'
+  m_text: 'Mana: 1000/1000'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f70a30cea1084d547bd9f898310d5468, type: 2}
-  m_sharedMaterial: {fileID: 1066919105862766378, guid: f70a30cea1084d547bd9f898310d5468, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -242,6 +244,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5696119031052706010}
   - {fileID: 5498512421778700751}
@@ -309,6 +312,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 456839298472010049}
   - {fileID: 228598718637655065}
@@ -432,6 +436,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5498512421778700751}
   m_RootOrder: 0
@@ -471,8 +476,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Health: 1000/1000'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f70a30cea1084d547bd9f898310d5468, type: 2}
-  m_sharedMaterial: {fileID: 1066919105862766378, guid: f70a30cea1084d547bd9f898310d5468, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -566,6 +571,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7618461162906002835}
   m_RootOrder: 0
@@ -605,8 +611,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sand Monster
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f70a30cea1084d547bd9f898310d5468, type: 2}
-  m_sharedMaterial: {fileID: 1066919105862766378, guid: f70a30cea1084d547bd9f898310d5468, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -701,6 +707,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 228598718637655065}
   m_RootOrder: 0
@@ -795,6 +802,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6269272819660563460}
   - {fileID: 8076308432654632334}

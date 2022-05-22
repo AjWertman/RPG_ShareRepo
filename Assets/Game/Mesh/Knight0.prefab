@@ -2556,7 +2556,7 @@ PrefabInstance:
     - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}
       propertyPath: characterMeshKey
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5319519476176398369, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}

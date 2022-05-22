@@ -1,23 +1,20 @@
-﻿using System;
+﻿using AjsUtilityPackage;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleUnitManager : MonoBehaviour
 {
-
     List<BattleUnit> battleUnits = new List<BattleUnit>();
 
     PlayerTeam playerTeamInfo = null;
     List<Unit> playerTeam = new List<Unit>();
     List<BattleUnit> playerUnits = new List<BattleUnit>();
-    List<BattleUnit> allPlayerUnits = new List<BattleUnit>();
     List<BattleUnit> deadPlayerUnits = new List<BattleUnit>();
-    int startingPlayerTeamSize = 0;
 
     List<Unit> enemyTeam = new List<Unit>();
     List<BattleUnit> enemyUnits = new List<BattleUnit>();
     List<BattleUnit> deadEnemyUnits = new List<BattleUnit>();
-    int startingEnemyTeamSize = 0;
 
     BattleUnitPool battleUnitPool = null;
     CharacterMeshPool characterMeshPool = null;
@@ -25,117 +22,115 @@ public class BattleUnitManager : MonoBehaviour
     public event Action<bool> onTeamWipe;
     public event Action onUnitListUpdate;
 
+    int startingPlayerTeamSize = 0;
+    int startingEnemyTeamSize = 0;
+
     private void Awake()
     {
         battleUnitPool = FindObjectOfType<BattleUnitPool>();
         characterMeshPool = FindObjectOfType<CharacterMeshPool>();
     }
 
-    public void SetUpUnits(PlayerTeam _playerTeamInfo, List<Unit> _enemyTeam, List<Transform> playerPositions, List<Transform> enemyPositions)
+    public void SetUpUnits(PlayerTeam _playerTeamInfo, List<Unit> _enemyTeam, List<Transform> _playerPositions, List<Transform> _enemyPositions)
     {
         playerTeamInfo = _playerTeamInfo;
 
         playerTeam = playerTeamInfo.GetPlayerTeam();
         enemyTeam = _enemyTeam;
 
-        SetUpPlayerUnits(playerTeam.Count, playerPositions);
-        SetUpEnemyUnits(enemyTeam.Count, enemyPositions);
-
         startingPlayerTeamSize = playerTeam.Count;
         startingEnemyTeamSize = enemyTeam.Count;
+
+        SetupUnitTeam(playerTeam, _playerPositions, true);
+        SetupUnitTeam(enemyTeam, _enemyPositions, false);
     }
 
-    private void SetUpPlayerUnits(int playerTeamSize, List<Transform> playerPositions)
+    public void SetupUnitTeam(List<Unit> _team, List<Transform> _teamPositions, bool _isPlayerTeam)
     {
-        for (int i = 0; i < playerTeamSize; i++)
+        for (int i = 0; i < _team.Count; i++)
         {
-            Unit unit = playerTeam[i];
-            TeamInfo teamInfo = playerTeamInfo.GetTeamInfo(unit);
+            Unit unit = _team[i];
             BattleUnit battleUnit = battleUnitPool.GetBattleUnit();
-            AddBattleUnitToLists(battleUnit, true);
 
-            SetBattleUnitTransform(battleUnit, playerPositions[i]);
-
-            SetupUnitComponents(unit, battleUnit, true);
-
-            battleUnit.SetName(unit.GetName());
-            battleUnit.SetNewMesh(characterMeshPool.GetMesh(unit.GetCharacterMeshKey()));
-            battleUnit.SetStats(unit.GetBaseStats());
-            battleUnit.SetSpells(unit.GetBasicAttack(), unit.GetSpells());
-
-            battleUnit.SetResources(teamInfo.GetHealth(), teamInfo.GetMaxHealth(), teamInfo.GetSoulWell(), teamInfo.GetMaxSoulWell());
-            battleUnit.SetUnitLevel(teamInfo.GetLevel());
-           
-            battleUnit.gameObject.SetActive(true);
+            AddBattleUnitToLists(battleUnit, _isPlayerTeam);
+            SetupBattleUnit(unit, battleUnit, _teamPositions[i], _isPlayerTeam);
         }
     }
 
-    private void SetUpEnemyUnits(int enemyTeamSize, List<Transform> enemyPositions)
+    private void SetupBattleUnit(Unit _unit, BattleUnit _battleUnit, Transform _teamPosition, bool _isPlayerTeam)
     {
-        for (int i = 0; i < enemyTeamSize; i++)
+        SetBattleUnitTransform(_battleUnit, _teamPosition);
+
+        BattleUnitInfo newUnitInfo = CreateNewBattleUnitInfo(_unit, _isPlayerTeam);
+        BattleUnitResources newUnitResources = null;
+        
+        GameObject newMesh = characterMeshPool.GetMesh(_unit.GetCharacterMeshKey());
+
+        if (_isPlayerTeam)
         {
-            Unit unit = enemyTeam[i];
-            BattleUnit battleUnit = battleUnitPool.GetBattleUnit();
-            AddBattleUnitToLists(battleUnit, false);
-
-            SetBattleUnitTransform(battleUnit, enemyPositions[i]);
-
-            SetupUnitComponents(unit, battleUnit, false);
-
-            battleUnit.SetName(unit.GetName());
-            battleUnit.SetNewMesh(characterMeshPool.GetMesh(unit.GetCharacterMeshKey()));
-            battleUnit.SetStats(unit.GetBaseStats());
-            battleUnit.SetSpells(unit.GetBasicAttack(), unit.GetSpells());
-            battleUnit.SetUnitXPAward(unit.GetXPAward());
-            battleUnit.CalculateResources();
-
-            battleUnit.gameObject.SetActive(true);
+            TeamInfo teamInfo = playerTeamInfo.GetTeamInfo(_unit);
+            newUnitInfo.SetUnitLevel(teamInfo.GetLevel());
+            newUnitResources = teamInfo.GetBattleUnitResources();
         }
+        else
+        {
+            //Create a xp award script on enemy
+            //battleUnit.SetUnitXPAward(unit.GetXPAward());
+        }
+
+        _battleUnit.InitalizeBattleUnit(newUnitInfo, newUnitResources, _isPlayerTeam, newMesh);
+
+        //Clear listeners on reset
+        _battleUnit.GetHealth().onDeath += OnUnitDeath;
+
+        _battleUnit.gameObject.SetActive(true);
+    }
+
+
+    private BattleUnitInfo CreateNewBattleUnitInfo(Unit _unit, bool _isPlayerTeam)
+    {
+        BattleUnitInfo newUnitInfo = new BattleUnitInfo();
+
+        string unitName = _unit.GetUnitName();
+        int baseLevel = _unit.GetBaseLevel();
+        Stats startingStats = _unit.GetBaseStats();
+        Ability basicAttack = _unit.GetBasicAttack();
+        Ability[] abilities = _unit.GetAbilities();
+
+        newUnitInfo.SetBattleUnitInfo(unitName, baseLevel, _isPlayerTeam, startingStats, basicAttack, abilities);
+
+        return newUnitInfo;
     }
 
     private void SetupUnitComponents(Unit character, BattleUnit unit, bool isPlayer)
     {
-        unit.SetupBattleUnitComponents();
-        unit.GetMover().SetStartingTransforms();
-
-        unit.SetIsPlayer(isPlayer);
-        unit.SetFaceImage(character.GetFaceImage());
-        unit.SetAnimators();
-        unit.SetupIndicator();
-        unit.SetUnitSoundFX();
-        //unit.SetActiveSpellContainers();
-        unit.SetUpResourceSliders();
-
-        unit.SetStats(character.GetBaseStats());
-        unit.SetSpells(character.GetBasicAttack(), character.GetSpells());
-
-        unit.GetComponent<Health>().onDeath += OnUnitDeath;
+        //unit.SetFaceImage(character.GetFaceImage());     
+        //unit.SetActiveSpellContainers();       
     }
 
-    private void SetBattleUnitTransform(BattleUnit battleUnit, Transform newTransform)
+    private void SetBattleUnitTransform(BattleUnit _battleUnit, Transform _newTransform)
     {
-        battleUnit.transform.position = newTransform.position;
-        battleUnit.transform.rotation = newTransform.rotation;
+        _battleUnit.transform.position = _newTransform.position;
+        _battleUnit.transform.rotation = _newTransform.rotation;
     }
 
-    private void AddBattleUnitToLists(BattleUnit battleUnit, bool isPlayer)
+    private void AddBattleUnitToLists(BattleUnit _battleUnit, bool _isPlayer)
     {
-        if (isPlayer)
+        if (_isPlayer)
         {
-            playerUnits.Add(battleUnit);
-            allPlayerUnits.Add(battleUnit);
+            playerUnits.Add(_battleUnit);
         }
         else
         {
-            enemyUnits.Add(battleUnit);
+            enemyUnits.Add(_battleUnit);
         }
 
-        battleUnits.Add(battleUnit);
+        battleUnits.Add(_battleUnit);
     }
 
     public void HandlePlayerDeaths()
     {
-        foreach (BattleUnit unit in allPlayerUnits)
+        foreach (BattleUnit unit in GetAllPlayerUnits())
         {
             if (unit.DeathCheck())
             {
@@ -144,71 +139,97 @@ public class BattleUnitManager : MonoBehaviour
         }
     }
 
-    public List<BattleUnit> GetBattleUnits()
+    private void OnUnitDeath(BattleUnit _deadUnit)
     {
-        return battleUnits;
-    }
-
-    public List<BattleUnit> GetAllPlayerUnits()
-    {
-        return allPlayerUnits;
-    }
-
-    public List<BattleUnit> GetPlayerUnits()
-    {
-        return playerUnits;
-    }
-
-    public List<BattleUnit> GetDeadPlayerUnits()
-    {
-        return deadPlayerUnits;
-    }
-
-    public List<BattleUnit> GetEnemyUnits()
-    {
-        return enemyUnits;
-    }
-
-    public List<BattleUnit> GetDeadEnemyUnits()
-    {
-        return deadEnemyUnits;
-    }
-
-    private void OnUnitDeath(BattleUnit deadUnit)
-    {
-        if (deadUnit.IsPlayer())
+        bool isPlayer = _deadUnit.GetBattleUnitInfo().IsPlayer();
+        if (isPlayer)
         {
-            playerUnits.Remove(deadUnit);
-            deadPlayerUnits.Add(deadUnit);            
+            playerUnits.Remove(_deadUnit);
+            deadPlayerUnits.Add(_deadUnit);
         }
         else
         {
-            enemyUnits.Remove(deadUnit);
-            deadEnemyUnits.Add(deadUnit);
+            enemyUnits.Remove(_deadUnit);
+            deadEnemyUnits.Add(_deadUnit);
         }
 
-        if(deadPlayerUnits.Count == startingPlayerTeamSize)
-        {
-            onTeamWipe(false);
-        }
-        else if(deadEnemyUnits.Count == startingEnemyTeamSize)
-        {
-            onTeamWipe(true);
-        }
+        TeamWipeCheck();
 
         onUnitListUpdate();
     }
 
+    private void TeamWipeCheck()
+    {
+        if (deadPlayerUnits.Count == startingPlayerTeamSize)
+        {
+            onTeamWipe(false);
+        }
+        else if (deadEnemyUnits.Count == startingEnemyTeamSize)
+        {
+            onTeamWipe(true);
+        }
+    }
+
+    public void ResetUnitManager()
+    {
+        characterMeshPool.ResetCharacterMeshPool();
+        battleUnitPool.ResetBattleUnitPool();
+        ResetLists();
+    }
+
+    private void ResetLists()
+    {
+        battleUnits.Clear();
+
+        playerTeam.Clear();
+        playerUnits.Clear();
+        deadPlayerUnits.Clear();
+
+        enemyTeam.Clear();
+        enemyUnits.Clear();
+        deadEnemyUnits.Clear();
+    }
+
+    public List<BattleUnit> GetBattleUnits()
+    {
+        return battleUnits;
+    }
+    public List<BattleUnit> GetPlayerUnits()
+    {
+        return playerUnits;
+    }
+    public List<BattleUnit> GetDeadPlayerUnits()
+    {
+        return deadPlayerUnits;
+    }
+    public IEnumerable<BattleUnit> GetAllPlayerUnits()
+    {
+        foreach (BattleUnit playerUnit in playerUnits)
+        {
+            yield return playerUnit;
+        }
+        foreach (BattleUnit playerUnit in deadPlayerUnits)
+        {
+            yield return playerUnit;
+        }
+    }
+    public List<BattleUnit> GetEnemyUnits()
+    {
+        return enemyUnits;
+    }
+    public List<BattleUnit> GetDeadEnemyUnits()
+    {
+        return deadEnemyUnits;
+    }
     public BattleUnit GetRandomPlayerUnit()
     {
-        int randomInt = UnityEngine.Random.Range(0, playerUnits.Count);
+        int randomInt = RandomGenerator.GetRandomNumber(0, playerUnits.Count-1);
 
         return playerUnits[randomInt];
     }
-
     public BattleUnit GetRandomEnemyUnit()
     {
-        int randomInt = UnityEngine.Random.Range(0, enemyUnits.Count);
+        int randomInt = RandomGenerator.GetRandomNumber(0, enemyUnits.Count - 1);
 
         return enemyUnits[randomInt];
     }

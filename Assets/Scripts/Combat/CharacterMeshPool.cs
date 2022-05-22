@@ -4,12 +4,14 @@ using UnityEngine;
 public class CharacterMeshPool : MonoBehaviour
 {
     [SerializeField] GameObject[] playerMeshPrefabs = null;
-    [SerializeField] GameObject[] uniqueEnemyMeshPrefabs = null;
 
     [Range(1, 4)] [SerializeField] int amountOfGenericsToCreate = 4;
     [SerializeField] GameObject[] genericEnemyMeshPrefabs = null;
 
     Dictionary<CharacterMeshKey, GameObject> uniqueMeshes = new Dictionary<CharacterMeshKey, GameObject>();
+
+    //Reset each zone for the "Zone enemies"
+    [SerializeField] GameObject[] uniqueEnemyMeshPrefabs = null;
     Dictionary<CharacterMeshKey, List<GameObject>> genericMeshes = new Dictionary<CharacterMeshKey, List<GameObject>>();
 
     private void Awake()
@@ -88,7 +90,7 @@ public class CharacterMeshPool : MonoBehaviour
             foreach (GameObject genericMesh in genericMeshes[characterMeshKey])
             {
                 if (genericMesh.activeSelf) continue;
-
+                
                 newMesh = genericMesh;
                 break;
             }
@@ -97,8 +99,33 @@ public class CharacterMeshPool : MonoBehaviour
         return newMesh;
     }
 
+    public void ResetCharacterMeshPool()
+    {
+        foreach(GameObject mesh in GetAllMeshes())
+        {
+            mesh.transform.parent = transform;
+            mesh.transform.localPosition = Vector3.zero;
+            mesh.gameObject.SetActive(false);
+        }
+    }
+
     private bool IsUniqueMesh(CharacterMeshKey characterMeshKey)
     {
         return uniqueMeshes.ContainsKey(characterMeshKey);
+    }
+
+    private IEnumerable<GameObject> GetAllMeshes()
+    {
+        foreach(GameObject mesh in uniqueMeshes.Values)
+        {
+            yield return mesh;
+        }
+        foreach (List<GameObject> meshList in genericMeshes.Values)
+        {
+            foreach(GameObject mesh in meshList)
+            {
+                yield return mesh;
+            }
+        }
     }
 }

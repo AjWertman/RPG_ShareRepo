@@ -1,152 +1,156 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleUnit : MonoBehaviour
 {
+    [SerializeField] BattleUnitInfo battleUnitInfo = null;
+    [SerializeField] BattleUnitResources battleUnitResources = null;
+
     [SerializeField] GameObject placeholderMesh = null;
-
-
-
     [SerializeField] GameObject unitMesh = null;
     [SerializeField] GameObject unitIndicatorObject = null;
-    [SerializeField] Transform particleExpander = null;
-   
+
     [SerializeField] GameObject healthSlider = null;
-    [SerializeField] GameObject soulWellSlider = null;
-    [SerializeField] bool hasSoulWell = true;
+    [SerializeField] GameObject manaSlider = null;
 
-    [SerializeField] int unitLevel = 1;
-    [SerializeField] Stats stats;
-
-    float xpAward = 100f;
-
-    string unitName = "";
+    [SerializeField] Transform particleExpander = null;
 
     Animator animator = null;
     Fighter fighter = null;
     Health health = null;
-    SoulWell soulWell = null;
+    Mana mana = null;
     Mover mover = null;
     UnitIndicatorUI indicator = null;
-    SoundFXManager unitSoundFX = null;
 
+    //Refactor
+    List<GameObject> activeSpellObjects = new List<GameObject>();
+    float xpAward = 100f;
+
+    //Make dictionary<BattleUnit, Sprite> for uimanager
     Sprite faceImage = null;
 
-    Stats startingStats;
-    Ability basicAttack = null;
-    Ability[] spells = null;
-
-    bool isPlayer = true;
-
-    List<GameObject> activeSpellObjects = new List<GameObject>();
-
-    //Initialization///////////////////////////////////////////////////////////////////////////////////////////
-
-    public void SetName(string newName)
+    private void Awake()
     {
-        newName = newName.Replace("(Clone)", "");
+        animator = GetComponent<Animator>();
 
-        unitName = newName;
-    }
-
-    public void SetNewMesh(GameObject newMesh)
-    {
-        newMesh.transform.parent = transform;
-        newMesh.transform.localPosition = Vector3.zero;
-        newMesh.transform.localRotation = Quaternion.identity;
-        newMesh.SetActive(true);
-    }
-
-    public void SetupBattleUnitComponents()
-    {
-        animator = GetComponentInChildren<Animator>();
-      
         fighter = GetComponent<Fighter>();
         health = GetComponent<Health>();
-        soulWell = GetComponent<SoulWell>();
+        mana = GetComponent<Mana>();
         mover = GetComponent<Mover>();
-
         indicator = GetComponentInChildren<UnitIndicatorUI>();
-        unitSoundFX = GetComponent<SoundFXManager>();
 
+        health.onHealthChange += UpdateHealthUI;
+        mana.onManaChange += UpdateManaUI;
         health.onDeath += DestroyAllActiveSpells;
     }
 
-    public void SetIsPlayer(bool _isPlayer)
+    public void InitalizeBattleUnit(BattleUnitInfo _battleUnitInfo, BattleUnitResources _battleUnitResources, 
+        bool _isPlayer, GameObject _unitMesh)
     {
-        isPlayer = _isPlayer;
+        SetName(_battleUnitInfo.GetUnitName());
+        SetupIndicator(_isPlayer);
+        SetMesh(_unitMesh);
+        SetBattleUnitInfo(_battleUnitInfo);
+        UpdateComponentStats(true);
+        //Refactor
+        if (_isPlayer)
+        {
+            SetBattleUnitResources(_battleUnitResources);
+        }
+        else
+        {
+            CalculateResources();
+        }
+
+
+        mover.SetStartingTransforms();       
     }
 
-    public void SetFaceImage(Sprite image)
+    public void SetName(string _name)
     {
-        faceImage = image;
+        string filteredName = _name.Replace("(Clone)", "");
+        name = filteredName;
     }
 
-    public Sprite GetFaceImage()
+    public void SetMesh(GameObject _unitMesh)
     {
-        return faceImage;   
+        _unitMesh.transform.parent = transform;
+        _unitMesh.transform.localPosition = Vector3.zero;
+        _unitMesh.transform.localRotation = Quaternion.identity;
+        _unitMesh.SetActive(true);
     }
 
-    public void SetStats(Stats _stats)
+    public void SetBattleUnitInfo(BattleUnitInfo _battleUnitInfo)
     {
-        stats.SetStats(_stats.GetStats());
-        startingStats = stats;
-        UpdateAllStats(true);
+        battleUnitInfo = _battleUnitInfo;
     }
 
-    public void SetUnitLevel(int level)
+    public void SetBattleUnitResources(BattleUnitResources _battleUnitResources)
     {
-        unitLevel = level;
+        battleUnitResources = _battleUnitResources;
+
+        float healthPoints = _battleUnitResources.GetHealthPoints();
+        float maxHealthPoints = _battleUnitResources.GetMaxHealthPoints();
+        float manaPoints = _battleUnitResources.GetManaPoints();
+        float maxManaPoints = _battleUnitResources.GetMaxManaPoints();
+        health.SetUnitHealth(healthPoints, maxHealthPoints);
+        mana.SetMana(manaPoints, maxManaPoints);
     }
 
-    public void SetUnitXPAward(float _xpAward)
+    public void SetupIndicator(bool _isPlayer)
     {
-        xpAward = _xpAward;
+        indicator.SetupUI(_isPlayer);
+        ActivateUnitIndicatorUI(false);
     }
 
-    public void SetSpells(Ability _basicAttack, Ability[] _spells)
+    public void UpdateStats(Stats _updatedStats)
     {
-        basicAttack = _basicAttack;
-        spells = _spells;
+        battleUnitInfo.SetStats(_updatedStats);
+        UpdateComponentStats(false);
     }
 
     public void CalculateResources()
     {
         health.CalculateMaxHealthPoints(true);
-        soulWell.CalculateSoulWell(true, hasSoulWell);
+        mana.CalculateMana(true);
+
+        //Refactor
+        BattleUnitResources bUR = new BattleUnitResources(health.GetHealthAmount(), health.GetMaxHealthAmount(), mana.GetMana(), mana.GetMaxMana());
+        SetBattleUnitResources(bUR);
     }
 
-    public void SetResources(float _healthPoints, float _maxHealthPoints, float _soulWell, float _maxSoulWell)
+    public void UpdateComponentStats(bool initialHealthUpdate)
     {
-        health.SetUnitHealth(_healthPoints, _maxHealthPoints);
-        soulWell.SetSoulWell(_soulWell, _maxSoulWell);
+        UpdateFighterStats();
+        UpdateHealthStats(initialHealthUpdate);
+        UpdateManaStats();
     }
 
-    public void SetUpResourceSliders()
+
+    public void ResetBattleUnit()
     {
-        health.onHealthChange += UpdateHealthUI;
-        soulWell.onSoulWellChange += UpdateSoulWellUI;
+        battleUnitInfo.ResetBattleUnitInfo();
+        battleUnitResources.ResetBattleUnitResources();
     }
 
-    public void SetAnimators()
+    public BattleUnitInfo GetBattleUnitInfo()
     {
-        health.SetAnimator(animator);
-        fighter.SetAnimator(animator);
-        mover.SetAnimator(animator, true);
+        return battleUnitInfo;
     }
 
-    public void SetUnitSoundFX()
+    public BattleUnitResources GetBattleUnitResources()
     {
-        health.SetUnitSoundFX(unitSoundFX);
-        fighter.SetUnitSoundFX(unitSoundFX);
-        mover.SetUnitSoundFX(unitSoundFX);
+        return battleUnitResources;
     }
 
-    public void SetupIndicator()
+    public Health GetHealth()
     {
-        indicator.SetupUI(isPlayer);
-        ActivateUnitIndicatorUI(false);
+        return health;
+    }
+
+    public GameObject GetUnitMesh()
+    {
+        return unitMesh;
     }
 
     public bool IsIndicatorActive()
@@ -154,30 +158,29 @@ public class BattleUnit : MonoBehaviour
         return unitIndicatorObject.activeSelf;
     }
 
-    public SoundFXManager GetUnitSoundFX()
+    //Refactor
+    public Sprite GetFaceImage()
     {
-        return unitSoundFX;
+        return faceImage;
+    }
+       
+    public void SetFaceImage(Sprite _faceImage)
+    {
+        faceImage = _faceImage;
     }
 
-    public string GetName()
+    public void SetUnitXPAward(float _xpAward)
     {
-        return unitName;
-    }
-
-    public int GetUnitLevel()
-    {
-        return unitLevel;
+        xpAward = _xpAward;
     }
 
     public float GetXPAward()
     {
         return xpAward;
     }
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public GameObject GetUnitMesh()
-    {
-        return unitMesh;
-    }
+
 
     public Transform GetParticleExpander()
     {
@@ -200,33 +203,28 @@ public class BattleUnit : MonoBehaviour
 
     public void UseAbility(Ability selectedAbility)
     {
-        soulWell.SpendSoulWell(selectedAbility.manaCost);
+        mana.SpendMana(selectedAbility.manaCost);
         fighter.Attack();
     }
 
-    public Ability GetBasicAttack()
-    {
-        return basicAttack;
-    }
 
-    public Ability[] GetSpells()
-    {
-        return spells;
-    }
 
     public Ability GetRandomAbility()
     {
+        Ability basicAttack = battleUnitInfo.GetBasicAttack();
+        Ability[] abilities = battleUnitInfo.GetAbilities();
+
         if (!fighter.IsSilenced())
         {
-            if (spells.Length == 0 || spells == null) return basicAttack;
-            int randomInt = Random.Range(0, spells.Length);
-            return spells[randomInt];
+            if (abilities.Length == 0 || abilities == null) return basicAttack;
+            int randomInt = Random.Range(0, abilities.Length);
+            return abilities[randomInt];
         }
         else
         {
             List<Ability> physicalAbilities = new List<Ability>();
-            
-            foreach(Ability ability in spells)
+
+            foreach (Ability ability in abilities)
             {
                 if(ability.abilityType == AbilityType.Physical)
                 {
@@ -236,17 +234,12 @@ public class BattleUnit : MonoBehaviour
 
             if(physicalAbilities.Count <= 0)
             {
-                return basicAttack;
+                return battleUnitInfo.GetBasicAttack();
             }
 
             int randomInt = Random.Range(0, physicalAbilities.Count);
             return physicalAbilities[randomInt];
         }       
-    }
-
-    public bool IsPlayer()
-    {
-        return isPlayer;
     }
 
     public void ActivateUnitIndicatorUI(bool shouldActivate)
@@ -267,30 +260,30 @@ public class BattleUnit : MonoBehaviour
         StartCoroutine(health.RestoreHealth(restoreAmount, isCritical));      
     }
 
-    public void SpendSoulWell(float soulWellCost)
+    public void SpendMana(float manaCost)
     {
-        soulWell.SpendSoulWell(soulWellCost);
+        mana.SpendMana(manaCost);
     }
 
-    public void RestoreSoulWell(float restoreAmount)
+    public void RestoreMana(float restoreAmount)
     {
-        soulWell.RestoreSoulWell(restoreAmount);
+        mana.RestoreMana(restoreAmount);
     }
 
     private void UpdateHealthUI()
     {
-        healthSlider.GetComponent<ResourceSlider>().UpdateSliderValue(health.GetHealthPercentage(), true, null);
+        healthSlider.GetComponent<ResourceSlider>().UpdateSliderValue(health.GetHealthPercentage());
     }
 
-    private void UpdateSoulWellUI()
+    private void UpdateManaUI()
     {
-        soulWellSlider.GetComponent<ResourceSlider>().UpdateSliderValue(soulWell.GetSoulWellPercentage(),false, hasSoulWell);
+        manaSlider.GetComponent<ResourceSlider>().UpdateSliderValue(mana.GetManaPercentage());
     }
 
     public void DisableResourceSliders()
     {
         healthSlider.SetActive(false);
-        soulWellSlider.SetActive(false);
+        manaSlider.SetActive(false);
     }
 
     public float GetUnitHealth()
@@ -336,19 +329,19 @@ public class BattleUnit : MonoBehaviour
         return activeSpellObjects;
     }
 
-    public float GetUnitSoulWell()
+    public float GetUnitMana()
     {
-        return soulWell.GetSoulWell();
+        return mana.GetMana();
     }
 
-    public float GetUnitMaxSoulWell()
+    public float GetUnitMaxMana()
     {
-        return soulWell.GetMaxSoulWell();
+        return mana.GetMaxMana();
     }
 
-    public bool HasEnoughSoulWell(float amountToTest)
+    public bool HasEnoughMana(float amountToTest)
     {
-        if (soulWell.GetSoulWell() >= amountToTest)
+        if (mana.GetMana() >= amountToTest)
         {
             return true;
         }
@@ -357,25 +350,16 @@ public class BattleUnit : MonoBehaviour
             return false;
         }
     }
-    public Stats GetStats()
-    {
-        return stats;
-    }
+
 
     public GameObject GetPlaceholderMesh()
     {
         return placeholderMesh;
     }
 
-    private void UpdateAllStats(bool initialHealthUpdate)
-    {
-        UpdateFighterStats();
-        UpdateHealthStats(initialHealthUpdate);
-        UpdateManaStats();
-    }
-
     private void UpdateFighterStats()
     {
+        Stats stats = battleUnitInfo.GetStats();
         fighter.UpdateAttributes
             (
             stats.GetSpecificStatLevel(StatType.Strength),
@@ -386,6 +370,7 @@ public class BattleUnit : MonoBehaviour
 
     private void UpdateHealthStats(bool initialUpdate)
     {
+        Stats stats = battleUnitInfo.GetStats();
         health.UpdateAttributes
             (
             stats.GetSpecificStatLevel(StatType.Stamina),
@@ -396,7 +381,8 @@ public class BattleUnit : MonoBehaviour
 
     private void UpdateManaStats()
     {
-        soulWell.UpdateAttributes(stats.GetSpecificStatLevel(StatType.Spirit));
+        Stats stats = battleUnitInfo.GetStats();
+        mana.UpdateAttributes(stats.GetSpecificStatLevel(StatType.Spirit));
     }
 
     public void ActivateUnitResourceUI(bool shouldActivate)
@@ -517,7 +503,7 @@ public class BattleUnit : MonoBehaviour
     //    }
     //    else if (affectedStat == StatAbrv.Int)
     //    {
-    //        stats.SetSoulWell(stats.GetSoulWell() + effectAmount);
+    //        stats.SetMana(stats.GetMana() + effectAmount);
     //    }
     //    else if (affectedStat == StatAbrv.Armr)
     //    {

@@ -38,7 +38,8 @@ public class Stat
 [System.Serializable]
 public class Stats
 {
-    [SerializeField] Stat[] stats;
+    [SerializeField] Stat[] stats = null;
+    int baseStatLevel = 10;
 
     public void SetStats(Stat[] statsToSet)
     {
@@ -84,5 +85,13 @@ public class Stats
         }
 
         return specificStat.GetStatLevel();
+    }
+
+    public void ResetStats()
+    {
+        foreach(Stat stat in stats)
+        {
+            stat.SetStatLevel(baseStatLevel);
+        }
     }
 }

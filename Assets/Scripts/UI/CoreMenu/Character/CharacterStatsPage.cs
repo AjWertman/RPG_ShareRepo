@@ -47,7 +47,7 @@ public class CharacterStatsPage : MonoBehaviour
             }
             else if(statPageUI.GetStatType() == StatType.Spirit)
             {
-                UpdateCharacterPageSoulWellUI(teamInfo);
+                UpdateCharacterPageManaUI(teamInfo);
             }
             else
             {
@@ -66,24 +66,28 @@ public class CharacterStatsPage : MonoBehaviour
     {
         StatPageUI statPageUI = GetHealthUI();
 
-        float health = teamInfo.GetHealth();
-        float maxHealth = teamInfo.GetMaxHealth();
+        BattleUnitResources battleUnitResources = teamInfo.GetBattleUnitResources();
+
+        float health = battleUnitResources.GetHealthPoints();
+        float maxHealth = battleUnitResources.GetMaxHealthPoints();
 
         float sliderAmount = health / maxHealth;
         statPageUI.GetSlider().value = sliderAmount;
         statPageUI.GetAmountText().text = health.ToString() + "/" + maxHealth.ToString();
     }
 
-    public void UpdateCharacterPageSoulWellUI(TeamInfo teamInfo)
+    public void UpdateCharacterPageManaUI(TeamInfo teamInfo)
     {
-        StatPageUI statPageUI = GetSoulWellUI();
+        StatPageUI statPageUI = GetManaUI();
 
-        float soulWell = teamInfo.GetSoulWell();
-        float maxSoulWell = teamInfo.GetMaxSoulWell();
+        BattleUnitResources battleUnitResources = teamInfo.GetBattleUnitResources();
 
-        float sliderAmount = soulWell / maxSoulWell;
+        float mana = battleUnitResources.GetManaPoints();
+        float maxMana = battleUnitResources.GetMaxManaPoints();
+
+        float sliderAmount = mana / maxMana;
         statPageUI.GetSlider().value = sliderAmount;
-        statPageUI.GetAmountText().text = soulWell.ToString() + "/" + maxSoulWell.ToString();
+        statPageUI.GetAmountText().text = mana.ToString() + "/" + maxMana.ToString();
     }
 
     public StatPageUI GetHealthUI()
@@ -99,7 +103,7 @@ public class CharacterStatsPage : MonoBehaviour
         return null;
     }
 
-    public StatPageUI GetSoulWellUI()
+    public StatPageUI GetManaUI()
     {
         foreach (StatPageUI ui in statPageUIs)
         {

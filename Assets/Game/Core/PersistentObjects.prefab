@@ -210,46 +210,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3608358155602870797}
     m_Modifications:
-    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
-        type: 3}
-      propertyPath: teamInfos.Array.data[0].stats.stats.Array.data[0].levelUpPercent
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
-        type: 3}
-      propertyPath: teamInfos.Array.data[0].stats.stats.Array.data[1].levelUpPercent
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
-        type: 3}
-      propertyPath: teamInfos.Array.data[0].stats.stats.Array.data[2].levelUpPercent
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
-        type: 3}
-      propertyPath: teamInfos.Array.data[0].stats.stats.Array.data[3].levelUpPercent
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
-        type: 3}
-      propertyPath: teamInfos.Array.data[0].stats.stats.Array.data[4].levelUpPercent
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
-        type: 3}
-      propertyPath: teamInfos.Array.data[0].stats.stats.Array.data[5].levelUpPercent
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
-        type: 3}
-      propertyPath: teamInfos.Array.data[0].stats.stats.Array.data[6].levelUpPercent
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
-        type: 3}
-      propertyPath: teamInfos.Array.data[0].stats.stats.Array.data[7].levelUpPercent
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 641351199502469048, guid: 2490d746a77a4f34fb664df72eaabfaf,
         type: 3}
       propertyPath: statsTemplate.Array.size

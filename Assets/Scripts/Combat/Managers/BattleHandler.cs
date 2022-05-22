@@ -7,10 +7,6 @@ public enum BattleState { Null, Battling}
 
 public class BattleHandler : MonoBehaviour
 {
-    [SerializeField] GameObject battleUIManagerGO = null;
-    [SerializeField] GameObject battleUnitManagerGO = null;
-    [SerializeField] GameObject turnManagerGO = null;
-
     [SerializeField] GameObject deathScreenPrefab = null;
 
     [SerializeField] GameObject battleCamPrefab = null;
@@ -23,8 +19,6 @@ public class BattleHandler : MonoBehaviour
     BattleUIManager battleUIManager = null;
     BattleUnitManager battleUnitManager = null;
     TurnManager turnManager = null;
-
-    List<GameObject> managerInstances = new List<GameObject>();
     //Managers//
    
     PlayerTeam playerTeamInfo = null;
@@ -60,35 +54,17 @@ public class BattleHandler : MonoBehaviour
 
     public IEnumerator SetupBattle(List<Unit> _enemyTeam)
     {
+        battleState = BattleState.Null;
+        //Create combat cam that moves to position
         battleCamInstance = Instantiate(battleCamPrefab, camTransform);
 
-        SpawnManagers();
-        SetUpManagers();
-
-        battleState = BattleState.Null;
-
         playerTeam = playerTeamInfo.GetPlayerTeam();
-        enemyTeam = _enemyTeam;
-
         playerTeamSize = playerTeam.Count - 1;
+
+        enemyTeam = _enemyTeam;
         enemyTeamSize = enemyTeam.Count - 1;
 
-        battlePositionManager.SetUpBattlePositions(playerTeamSize, enemyTeamSize);
-
-        battleUnitManager.SetUpUnits(playerTeamInfo, enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
-        battleUnitManager.onTeamWipe += EndBattle;
-        battleUnitManager.onUnitListUpdate += UpdateManagerLists;
-
-        battleUnitManager.HandlePlayerDeaths();
-
-        turnManager.SetUpTurns(battleUnitManager.GetBattleUnits(), battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
-        turnManager.onTurnChange += UpdateUIManagerCurrentUnit;
-
-        battleUIManager.SetUpBattleUI(battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
-        battleUIManager.SetupTurnOrderUI(turnManager.GetTurnOrder());
-        battleUIManager.SetUILookAts(camTransform);
-        battleUIManager.onPlayerMove += OnPlayerMove;
-        battleUIManager.onEscape += Escape;
+        SetUpManagers();
 
         battleState = BattleState.Battling;
 
@@ -107,19 +83,29 @@ public class BattleHandler : MonoBehaviour
         yield return null;
     }
 
-    private void SpawnManagers()
-    {
-        managerInstances.Add(Instantiate(battleUnitManagerGO, transform));
-        managerInstances.Add(Instantiate(battleUIManagerGO, transform));
-        managerInstances.Add(Instantiate(turnManagerGO, transform));
-    }
-
     private void SetUpManagers()
     {
         battlePositionManager = GetComponentInChildren<BattlePositionManager>();
         battleUIManager = GetComponentInChildren<BattleUIManager>();
         battleUnitManager = GetComponentInChildren<BattleUnitManager>();
-        turnManager = GetComponentInChildren<TurnManager>();    
+        turnManager = GetComponentInChildren<TurnManager>();
+
+        battlePositionManager.SetUpBattlePositions(playerTeamSize, enemyTeamSize);
+
+        battleUnitManager.SetUpUnits(playerTeamInfo, enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
+        battleUnitManager.onTeamWipe += EndBattle;
+        battleUnitManager.onUnitListUpdate += UpdateManagerLists;
+
+        battleUnitManager.HandlePlayerDeaths();
+
+        turnManager.SetUpTurns(battleUnitManager.GetBattleUnits(), battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
+        turnManager.onTurnChange += UpdateUIManagerCurrentUnit;
+
+        battleUIManager.SetUpBattleUI(battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
+        battleUIManager.SetupTurnOrderUI(turnManager.GetTurnOrder());
+        battleUIManager.SetUILookAts(camTransform);
+        battleUIManager.onPlayerMove += OnPlayerMove;
+        battleUIManager.onEscape += Escape;
     }
 
     //BattleBehaviors///////////////////////////////////////////////////////////////////////////////////////////
@@ -155,6 +141,7 @@ public class BattleHandler : MonoBehaviour
     }
     private bool CanPlayerCastSpell(BattleUnit target, Ability selectedAbility)
     {
+        string targetName = target.GetBattleUnitInfo().GetUnitName();
         if (selectedAbility.spellType == SpellType.Static)
         {
             StaticSpellType staticSpellType = selectedAbility.spellPrefab.GetComponent<StaticSpell>().GetStaticSpellType();
@@ -162,22 +149,22 @@ public class BattleHandler : MonoBehaviour
 
             if (staticSpellType == StaticSpellType.PhysicalReflector && target.GetFighter().GetPhysicalReflectionDamage() > 0)
             {
-                StartCoroutine(battleUIManager.CantCastSpellUI(target.GetName() + " Is Already Reflecting Physical Damage"));
+                StartCoroutine(battleUIManager.CantCastSpellUI(targetName + " Is Already Reflecting Physical Damage"));
                 return false;
             }
             else if (staticSpellType == StaticSpellType.SpellReflector && target.GetFighter().IsReflectingSpells())
             {
-                StartCoroutine(battleUIManager.CantCastSpellUI(target.GetName() + " Is Already Reflecting Spells"));
+                StartCoroutine(battleUIManager.CantCastSpellUI(targetName + " Is Already Reflecting Spells"));
                 return false;
             }
             else if (staticSpellType == StaticSpellType.Silence && target.GetFighter().IsSilenced())
             {
-                StartCoroutine(battleUIManager.CantCastSpellUI(target.GetName() + " Is Already Silenced"));
+                StartCoroutine(battleUIManager.CantCastSpellUI(targetName + " Is Already Silenced"));
                 return false;
             }
             else if (staticSpellType == StaticSpellType.Substitute && target.GetFighter().HasSubstitute())
             {
-                StartCoroutine(battleUIManager.CantCastSpellUI(target.GetName() + " Already Has An Active Substitute"));
+                StartCoroutine(battleUIManager.CantCastSpellUI(targetName + " Already Has An Active Substitute"));
                 return false;
             }
         }
@@ -298,16 +285,13 @@ public class BattleHandler : MonoBehaviour
 
             if (!CanAICastSpell(currentBattleUnit.GetFighter().GetTarget(), randomAbility))
             {
-                randomAbility = currentBattleUnit.GetBasicAttack();
+                randomAbility = currentBattleUnit.GetBattleUnitInfo().GetBasicAttack();
                 currentBattleUnit.GetFighter().SetTarget(battleUnitManager.GetRandomPlayerUnit());
             }
         }
         else
         {
-            BattleUnit kibo = battleUnitManager.GetAllPlayerUnits()[2];
-
-            currentBattleUnit.GetFighter().SetTarget(kibo);
-            randomAbility = currentBattleUnit.GetBasicAttack();
+            //Tutorial stuff
         }
 
         currentBattleUnit.GetFighter().SetAbility(randomAbility);
@@ -319,7 +303,7 @@ public class BattleHandler : MonoBehaviour
 
     private bool CanAICastSpell(BattleUnit target, Ability selectedAbility)
     {
-        if (!currentBattleUnit.HasEnoughSoulWell(selectedAbility.manaCost))
+        if (!currentBattleUnit.HasEnoughMana(selectedAbility.manaCost))
         {
             return false;
         }
@@ -461,17 +445,20 @@ public class BattleHandler : MonoBehaviour
 
             yield return new WaitForSeconds(2f);
 
-            DestroyBattleUnits();
-            DestroyDestroyableObjects();
+            battleUnitManager.ResetUnitManager();
+
+            //Spell pool 
+            //DestroyDestroyableObjects();
+
             Destroy(battleCamInstance);
 
             yield return new WaitForSeconds(2f);
-            
-            DestroyManagers();
+
+            ///ResetManagers();
 
             //FindObjectOfType<SavingWrapper>().Save();     
 
-            GetComponent<MusicOverride>().ClearOverride();
+            //GetComponent<MusicOverride>().ClearOverride();
 
             foreach (OverworldEntity overworld in FindObjectsOfType<OverworldEntity>())
             {
@@ -493,17 +480,29 @@ public class BattleHandler : MonoBehaviour
         }
     }
 
-    private void UpdateTeamInfos(List<BattleUnit> playerUnits)
+    private void ResetManagers()
     {
-        foreach (BattleUnit battleUnit in playerUnits)
+        //ResetUnit
+        //ResetTurn
+        //ResetUI
+        //ResetPositions?
+    }
+
+    private void UpdateTeamInfos(List<BattleUnit> _playerUnits)
+    {
+        foreach (BattleUnit battleUnit in _playerUnits)
         {
+            string unitName = battleUnit.GetBattleUnitInfo().GetUnitName();
+            BattleUnitResources battleUnitResources = battleUnit.GetBattleUnitResources();
+
             if (!battleUnit.IsDead())
             {
-                playerTeamInfo.UpdateTeamInfo(battleUnit.GetName(), battleUnit.GetUnitHealth(), battleUnit.GetUnitSoulWell());
+                playerTeamInfo.UpdateTeamInfo(unitName, battleUnitResources);
             }
             else
             {
-                playerTeamInfo.UpdateTeamInfo(battleUnit.GetName(), 1f, battleUnit.GetUnitSoulWell());
+                battleUnitResources.SetHealthPoints(1f);
+                playerTeamInfo.UpdateTeamInfo(unitName, battleUnitResources);
             }
         }
     }
@@ -530,36 +529,6 @@ public class BattleHandler : MonoBehaviour
         }
 
         return returnableList;
-    }
-
-    private void DestroyDestroyableObjects()
-    {
-        DestroyAfterBattle[] destroyables = FindObjectsOfType<DestroyAfterBattle>();
-        if (destroyables != null)
-        {
-            foreach (DestroyAfterBattle destroyable in destroyables)
-            {
-                destroyable.DestroyGameObject();
-            }
-        }
-    }
-
-    private void DestroyBattleUnits()
-    {
-        foreach (BattleUnit unit in FindObjectsOfType<BattleUnit>())
-        {
-            Destroy(unit.gameObject);
-        }
-    }
-
-    private void DestroyManagers()
-    {
-        foreach (GameObject manager in managerInstances)
-        {
-            Destroy(manager);
-        }
-
-        managerInstances.Clear();
     }
 
     public void OverrideUIManager(BattleUIManager overrideManager)

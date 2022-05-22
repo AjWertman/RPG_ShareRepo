@@ -18,7 +18,7 @@ public class CharacterSpellPage : MonoBehaviour
     {
         //affilitionText.text = character.GetAffiliation();
 
-        PopulateSpellList(character.GetSpells());
+        PopulateSpellList(character.GetAbilities());
         DeactivateSpellTooltip();
     }
 

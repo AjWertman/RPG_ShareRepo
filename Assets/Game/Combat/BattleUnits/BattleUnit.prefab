@@ -209,16 +209,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 941839d2438e89d49926bfe1a43d9b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleUnitInfo:
+    unitName: 
+    unitLevel: 0
+    stats:
+      stats:
+      - statType: 0
+        statLevel: 10
+        levelUpPercent: 0
+      - statType: 1
+        statLevel: 10
+        levelUpPercent: 0
+      - statType: 2
+        statLevel: 10
+        levelUpPercent: 0
+      - statType: 3
+        statLevel: 10
+        levelUpPercent: 0
+      - statType: 4
+        statLevel: 10
+        levelUpPercent: 0
+      - statType: 5
+        statLevel: 10
+        levelUpPercent: 0
+      - statType: 6
+        statLevel: 10
+        levelUpPercent: 0
+      - statType: 7
+        statLevel: 10
+        levelUpPercent: 0
+  battleUnitResources:
+    healthPoints: 0
+    maxHealthPoints: 0
+    manaPoints: 0
+    maxManaPoints: 0
   placeholderMesh: {fileID: 6748943401726445997}
   unitMesh: {fileID: 147306841240242802}
   unitIndicatorObject: {fileID: 5493582893293701485}
-  particleExpander: {fileID: 1345751147774076357}
   healthSlider: {fileID: 3792955878733929182}
-  soulWellSlider: {fileID: 2224660546502224477}
-  hasSoulWell: 1
-  unitLevel: 1
-  stats:
-    stats: []
+  manaSlider: {fileID: 2224660546502224477}
+  particleExpander: {fileID: 1345751147774076357}
 --- !u!114 &4170302240818230691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,8 +276,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0f65bfcf0c321249909b90829c2fa74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soulWell: 0
-  maxSoulWell: 100
+  mana: 0
+  maxMana: 100
 --- !u!114 &509161126029126438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,6 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   retreatTransform: {fileID: 4806116191025221250}
   isMover: 1
+  isBattleUnit: 1
 --- !u!114 &-3233447754243240660
 MonoBehaviour:
   m_ObjectHideFlags: 0

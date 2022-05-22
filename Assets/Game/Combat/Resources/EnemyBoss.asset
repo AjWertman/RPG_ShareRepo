@@ -13,32 +13,32 @@ MonoBehaviour:
   m_Name: EnemyBoss
   m_EditorClassIdentifier: 
   unitName: Boss
-  characterMeshKey: 4
+  characterMeshKey: 5
   baseStats:
     stats:
     - statType: 0
-      statLevel: 10
+      statLevel: 15
       levelUpPercent: 0
     - statType: 1
-      statLevel: 10
+      statLevel: 79
       levelUpPercent: 0
     - statType: 2
-      statLevel: 10
+      statLevel: 92
       levelUpPercent: 0
     - statType: 3
-      statLevel: 10
+      statLevel: 79
       levelUpPercent: 0
     - statType: 4
-      statLevel: 10
+      statLevel: 85
       levelUpPercent: 0
     - statType: 5
-      statLevel: 10
+      statLevel: 91
       levelUpPercent: 0
     - statType: 6
-      statLevel: 10
+      statLevel: 85
       levelUpPercent: 0
     - statType: 7
-      statLevel: 10
+      statLevel: 80
       levelUpPercent: 0
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   spells: []
