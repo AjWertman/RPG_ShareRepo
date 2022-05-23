@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class BattleUnit : MonoBehaviour
 {
-    [SerializeField] BattleUnitInfo battleUnitInfo = null;
-    [SerializeField] BattleUnitResources battleUnitResources = null;
+    [SerializeField] BattleUnitInfo battleUnitInfo = new BattleUnitInfo();
+    [SerializeField] BattleUnitResources battleUnitResources = new BattleUnitResources();
+    [SerializeField] Stats startingStats;
 
     [SerializeField] GameObject placeholderMesh = null;
     [SerializeField] GameObject unitMesh = null;
@@ -21,7 +22,7 @@ public class BattleUnit : MonoBehaviour
     Mana mana = null;
     Mover mover = null;
     UnitIndicatorUI indicator = null;
-
+   
     //Refactor
     List<GameObject> activeSpellObjects = new List<GameObject>();
     float xpAward = 100f;
@@ -44,13 +45,14 @@ public class BattleUnit : MonoBehaviour
         health.onDeath += DestroyAllActiveSpells;
     }
 
-    public void InitalizeBattleUnit(BattleUnitInfo _battleUnitInfo, BattleUnitResources _battleUnitResources, 
+    public void SetupBattleUnit(BattleUnitInfo _battleUnitInfo, BattleUnitResources _battleUnitResources, 
         bool _isPlayer, GameObject _unitMesh)
     {
         SetName(_battleUnitInfo.GetUnitName());
         SetupIndicator(_isPlayer);
         SetMesh(_unitMesh);
-        SetBattleUnitInfo(_battleUnitInfo);
+        battleUnitInfo.SetBattleUnitInfo(_battleUnitInfo);
+        startingStats.SetStats(battleUnitInfo.GetStats().GetAllStats());
         UpdateComponentStats(true);
         //Refactor
         if (_isPlayer)
@@ -80,21 +82,11 @@ public class BattleUnit : MonoBehaviour
         _unitMesh.SetActive(true);
     }
 
-    public void SetBattleUnitInfo(BattleUnitInfo _battleUnitInfo)
-    {
-        battleUnitInfo = _battleUnitInfo;
-    }
-
     public void SetBattleUnitResources(BattleUnitResources _battleUnitResources)
     {
-        battleUnitResources = _battleUnitResources;
-
-        float healthPoints = _battleUnitResources.GetHealthPoints();
-        float maxHealthPoints = _battleUnitResources.GetMaxHealthPoints();
-        float manaPoints = _battleUnitResources.GetManaPoints();
-        float maxManaPoints = _battleUnitResources.GetMaxManaPoints();
-        health.SetUnitHealth(healthPoints, maxHealthPoints);
-        mana.SetMana(manaPoints, maxManaPoints);
+        battleUnitResources.SetBattleUnitResources(_battleUnitResources);
+        health.SetUnitHealth(battleUnitResources.GetHealthPoints(), battleUnitResources.GetMaxHealthPoints());
+        mana.SetMana(battleUnitResources.GetManaPoints(), battleUnitResources.GetMaxManaPoints());
     }
 
     public void SetupIndicator(bool _isPlayer)
@@ -105,7 +97,7 @@ public class BattleUnit : MonoBehaviour
 
     public void UpdateStats(Stats _updatedStats)
     {
-        battleUnitInfo.SetStats(_updatedStats);
+        battleUnitInfo.GetStats().SetStats(_updatedStats.GetAllStats());
         UpdateComponentStats(false);
     }
 
@@ -115,8 +107,14 @@ public class BattleUnit : MonoBehaviour
         mana.CalculateMana(true);
 
         //Refactor
-        BattleUnitResources bUR = new BattleUnitResources(health.GetHealthAmount(), health.GetMaxHealthAmount(), mana.GetMana(), mana.GetMaxMana());
-        SetBattleUnitResources(bUR);
+        float healthPoints = health.GetHealthAmount();
+        float maxHealthPoints = health.GetMaxHealthAmount();
+        float manaPoints = mana.GetMana();
+        float maxManaPoints = mana.GetMaxMana();
+        BattleUnitResources newBattleUnitResources = new BattleUnitResources();
+        newBattleUnitResources.SetBattleUnitResources(healthPoints, maxHealthPoints, manaPoints, maxManaPoints);
+
+        SetBattleUnitResources(newBattleUnitResources);
     }
 
     public void UpdateComponentStats(bool initialHealthUpdate)
@@ -126,11 +124,11 @@ public class BattleUnit : MonoBehaviour
         UpdateManaStats();
     }
 
-
     public void ResetBattleUnit()
     {
         battleUnitInfo.ResetBattleUnitInfo();
         battleUnitResources.ResetBattleUnitResources();
+        startingStats.ResetStats();
     }
 
     public BattleUnitInfo GetBattleUnitInfo()
@@ -143,9 +141,35 @@ public class BattleUnit : MonoBehaviour
         return battleUnitResources;
     }
 
+    public Mover GetMover()
+    {
+        return mover;
+    }
+
+    public Fighter GetFighter()
+    {
+        return fighter;
+    }
+
     public Health GetHealth()
     {
         return health;
+    }
+
+    public Stat GetStat(StatType _statType)
+    {
+        Stat statToGet = null;
+        Stats stats = battleUnitInfo.GetStats();
+        foreach(Stat stat in stats.GetAllStats())
+        {
+            if(stat.GetStatType() == _statType)
+            {
+                statToGet = stat;
+                break;
+            }
+        }
+
+        return statToGet;
     }
 
     public GameObject GetUnitMesh()
@@ -181,25 +205,11 @@ public class BattleUnit : MonoBehaviour
     /// //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
     public Transform GetParticleExpander()
     {
         return particleExpander;
     }
 
-    //Movement///////////////////////////////////////////////////////////////////////////////////////////
-
-    public Mover GetMover()
-    {
-        return mover;
-    }
-
-    //Combat///////////////////////////////////////////////////////////////////////////////////////////
-
-    public Fighter GetFighter()
-    {
-        return fighter;
-    }
 
     public void UseAbility(Ability selectedAbility)
     {

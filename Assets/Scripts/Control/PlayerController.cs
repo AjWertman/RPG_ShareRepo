@@ -7,12 +7,11 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour, ISaveable, IOverworld
 {
     [Header("Core")]
+    [SerializeField] GameObject stefsObject;
     [SerializeField] GameObject owMeshObject = null;
     [SerializeField] GameObject cameraObject = null;
     [SerializeField] GameObject camLookObject = null;
     [SerializeField] Checkpoint lastCheckpoint = null;
-
-    List<Unit> playerTeam = new List<Unit>();
 
     [Header("Controls")]
     [SerializeField] KeyCode menuKeyCode = KeyCode.Escape;
@@ -52,8 +51,6 @@ public class PlayerController : MonoBehaviour, ISaveable, IOverworld
 
     private void Start()
     {
-        playerTeam = playerTeamInfo.GetPlayerTeam();
-
         followCamera = FindObjectOfType<FollowCamera>();
 
         uiCanvas = FindObjectOfType<UICanvas>();

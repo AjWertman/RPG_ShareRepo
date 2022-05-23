@@ -19,11 +19,11 @@ public class TurnManager : MonoBehaviour
 
     int turn = 0;
 
-    public void SetUpTurns(List<BattleUnit> activeUnits, List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits)
+    public void SetUpTurns(List<BattleUnit> _activeUnits, List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits)
     {
         turn = 0;
 
-        battleUnits = activeUnits;
+        battleUnits = _activeUnits;
         playerUnits = _playerUnits;
         enemyUnits = _enemyUnits;
 
@@ -40,9 +40,7 @@ public class TurnManager : MonoBehaviour
             turnOrder.Add(unitToSet);
         }
 
-        turnOrder.Sort((a, b) => 
-        b.GetBattleUnitInfo().GetStats().GetSpecificStatLevel(StatType.Speed)
-        .CompareTo(a.GetBattleUnitInfo().GetStats().GetSpecificStatLevel(StatType.Speed)));
+        turnOrder.Sort((a, b) => b.GetStat(StatType.Speed).GetStatLevel().CompareTo(a.GetStat(StatType.Speed).GetStatLevel()));
     }
 
     public void AdvanceTurn()
@@ -82,6 +80,19 @@ public class TurnManager : MonoBehaviour
         }
 
         AdvanceTurn();
+    }
+
+    public void ResetTurnManager()
+    { 
+        battleUnits.Clear();
+        playerUnits.Clear();
+        enemyUnits.Clear();
+        turnOrder.Clear();
+
+        turn = 0;
+
+        unitTurnState = UnitTurnState.NoOne;
+        firstUnitTurnState = UnitTurnState.NoOne;
     }
 
     public BattleUnit GetBattleUnitTurn()

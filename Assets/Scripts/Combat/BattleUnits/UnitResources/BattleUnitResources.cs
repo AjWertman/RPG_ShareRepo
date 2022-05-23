@@ -10,12 +10,20 @@ public class BattleUnitResources
     [SerializeField] float manaPoints = 0f;
     [SerializeField] float maxManaPoints = 0f;
 
-    public BattleUnitResources(float _healthPoints, float _maxHealthPoints, float _manaPoints, float _maxManaPoints)
+    public void SetBattleUnitResources(float _healthPoints, float _maxHealthPoints, float _manaPoints, float _maxManaPoints)
     {
         healthPoints = _healthPoints;
         maxHealthPoints = _maxHealthPoints;
         manaPoints = _manaPoints;
         maxManaPoints = _maxManaPoints;
+    }
+
+    public void SetBattleUnitResources(BattleUnitResources _battleUnitResources)
+    {
+        healthPoints = _battleUnitResources.GetHealthPoints();
+        maxHealthPoints = _battleUnitResources.GetMaxHealthPoints();
+        manaPoints = _battleUnitResources.GetManaPoints();
+        maxManaPoints = _battleUnitResources.GetMaxManaPoints();
     }
 
     public void SetHealthPoints(float _healthPoints)

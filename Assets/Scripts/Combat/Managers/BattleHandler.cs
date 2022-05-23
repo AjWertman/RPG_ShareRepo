@@ -14,6 +14,8 @@ public class BattleHandler : MonoBehaviour
 
     GameObject battleCamInstance = null;
 
+    BattleManagersPool battleManagersPool = null;
+
     //Managers//
     BattlePositionManager battlePositionManager = null;
     BattleUIManager battleUIManager = null;
@@ -40,7 +42,16 @@ public class BattleHandler : MonoBehaviour
     public event Action onBattleSetup;
     public event Action onAdvanceTutorial;
 
+    IEnumerator currentAction = null;
+
+    bool isBattleOver = true;
+
     //Initialization///////////////////////////////////////////////////////////////////////////////////////////
+
+    private void Awake()
+    {
+        battleManagersPool = FindObjectOfType<BattleManagersPool>();
+    }
 
     private void Start()
     {
@@ -55,16 +66,12 @@ public class BattleHandler : MonoBehaviour
     public IEnumerator SetupBattle(List<Unit> _enemyTeam)
     {
         battleState = BattleState.Null;
+        isBattleOver = false;
         //Create combat cam that moves to position
         battleCamInstance = Instantiate(battleCamPrefab, camTransform);
 
-        playerTeam = playerTeamInfo.GetPlayerTeam();
-        playerTeamSize = playerTeam.Count - 1;
-
-        enemyTeam = _enemyTeam;
-        enemyTeamSize = enemyTeam.Count - 1;
-
-        SetUpManagers();
+        SetupTeams(_enemyTeam);
+        SetupManagers();
 
         battleState = BattleState.Battling;
 
@@ -83,29 +90,83 @@ public class BattleHandler : MonoBehaviour
         yield return null;
     }
 
-    private void SetUpManagers()
+    private void SetupTeams(List<Unit> _enemyTeam)
     {
-        battlePositionManager = GetComponentInChildren<BattlePositionManager>();
-        battleUIManager = GetComponentInChildren<BattleUIManager>();
-        battleUnitManager = GetComponentInChildren<BattleUnitManager>();
-        turnManager = GetComponentInChildren<TurnManager>();
+        foreach(Unit player in playerTeamInfo.GetPlayerTeam())
+        {
+            playerTeam.Add(player);
+        }
+        playerTeamSize = playerTeam.Count - 1;
 
-        battlePositionManager.SetUpBattlePositions(playerTeamSize, enemyTeamSize);
+        foreach (Unit enemy in _enemyTeam)
+        {
+            enemyTeam.Add(enemy);
+        }
+        enemyTeamSize = enemyTeam.Count - 1;
+    }
 
-        battleUnitManager.SetUpUnits(playerTeamInfo, enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
+    private void SetupManagers()
+    {
+        battleManagersPool.transform.parent = transform;
+        battleManagersPool.transform.localPosition = Vector3.zero;
+        battleManagersPool.transform.localEulerAngles = Vector3.zero;
+        battleManagersPool.ActivateManagersPool();
+
+        battlePositionManager = battleManagersPool.GetBattlePositionManager();
+        battleUnitManager = battleManagersPool.GetBattleUnitManager();
+        turnManager = battleManagersPool.GetTurnManager();
+        battleUIManager = battleManagersPool.GetBattleUIManager();
+
+        SetupPositionManager();
+        SetupUnitManager();
+        SetupTurnManager();
+        SetupUIManager();
+    }
+
+    public void SetupPositionManager()
+    {
+        battlePositionManager.SetUpBattlePositionManager(playerTeamSize, enemyTeamSize);
+    }
+
+    public void SetupUnitManager()
+    {
+        battleUnitManager.SetUpUnits(playerTeam, enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
         battleUnitManager.onTeamWipe += EndBattle;
         battleUnitManager.onUnitListUpdate += UpdateManagerLists;
 
         battleUnitManager.HandlePlayerDeaths();
+    }
 
+    public void SetupTurnManager()
+    {
         turnManager.SetUpTurns(battleUnitManager.GetBattleUnits(), battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
         turnManager.onTurnChange += UpdateUIManagerCurrentUnit;
-
+    }
+    public void SetupUIManager()
+    {
         battleUIManager.SetUpBattleUI(battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
         battleUIManager.SetupTurnOrderUI(turnManager.GetTurnOrder());
         battleUIManager.SetUILookAts(camTransform);
         battleUIManager.onPlayerMove += OnPlayerMove;
         battleUIManager.onEscape += Escape;
+    }
+
+    private void ResetManagers()
+    {
+        battleManagersPool.ResetManagersPool();
+
+        battleUnitManager.onTeamWipe -= EndBattle;
+        battleUnitManager.onUnitListUpdate -= UpdateManagerLists;
+
+        battleUIManager.onPlayerMove -= OnPlayerMove;
+        battleUIManager.onEscape -= Escape;
+
+        turnManager.onTurnChange -= UpdateUIManagerCurrentUnit;
+
+        battlePositionManager = null;
+        battleUnitManager = null;
+        battleUIManager = null;
+        turnManager = null;
     }
 
     //BattleBehaviors///////////////////////////////////////////////////////////////////////////////////////////
@@ -170,6 +231,12 @@ public class BattleHandler : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void UseAbility(Ability selectedAbility)
+    {
+        currentAction = UseAbilityBehavior(selectedAbility);
+        StartCoroutine(currentAction);
     }
 
     private IEnumerator UseAbilityBehavior(Ability selectedAbility)
@@ -323,6 +390,8 @@ public class BattleHandler : MonoBehaviour
 
     private void AdvanceTurn()
     {
+        if (isBattleOver) return;
+        currentAction = null;
         turnManager.AdvanceTurn();
         currentBattleUnit = turnManager.GetBattleUnitTurn();
         
@@ -433,19 +502,26 @@ public class BattleHandler : MonoBehaviour
 
     private IEnumerator EndBattleBehavior(bool won)
     {
+        isBattleOver = true;
+        StopCurrentAttack();
+        playerTeam.Clear();
+        playerTeamSize = 0;
+        enemyTeam.Clear();
+        enemyTeamSize = 0;
+
         if (won)
         {
             CalculateXPAwards();
 
-            battleUIManager.DeactivateAllUI();
+            //battleUIManager.DeactivateAllUI();
 
             yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
 
-            UpdateTeamInfos(GetPlayerTeam());
+            UpdateTeamResources(GetPlayerTeam());
 
             yield return new WaitForSeconds(2f);
 
-            battleUnitManager.ResetUnitManager();
+            ResetManagers();
 
             //Spell pool 
             //DestroyDestroyableObjects();
@@ -453,8 +529,6 @@ public class BattleHandler : MonoBehaviour
             Destroy(battleCamInstance);
 
             yield return new WaitForSeconds(2f);
-
-            ///ResetManagers();
 
             //FindObjectOfType<SavingWrapper>().Save();     
 
@@ -480,30 +554,27 @@ public class BattleHandler : MonoBehaviour
         }
     }
 
-    private void ResetManagers()
+    private void StopCurrentAttack()
     {
-        //ResetUnit
-        //ResetTurn
-        //ResetUI
-        //ResetPositions?
+        if(currentAction != null)
+        {
+            StopCoroutine(currentAction);
+        }
     }
 
-    private void UpdateTeamInfos(List<BattleUnit> _playerUnits)
+    private void UpdateTeamResources(List<BattleUnit> _playerUnits)
     {
         foreach (BattleUnit battleUnit in _playerUnits)
         {
             string unitName = battleUnit.GetBattleUnitInfo().GetUnitName();
             BattleUnitResources battleUnitResources = battleUnit.GetBattleUnitResources();
 
-            if (!battleUnit.IsDead())
-            {
-                playerTeamInfo.UpdateTeamInfo(unitName, battleUnitResources);
-            }
-            else
+            if (battleUnit.IsDead())
             {
                 battleUnitResources.SetHealthPoints(1f);
-                playerTeamInfo.UpdateTeamInfo(unitName, battleUnitResources);
             }
+
+            playerTeamInfo.UpdateTeamInfo(unitName, battleUnitResources);
         }
     }
 

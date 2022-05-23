@@ -1,13 +1,12 @@
-﻿using AjsUtilityPackage;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using AjsUtilityPackage;
 
 public class BattleUnitManager : MonoBehaviour
 {
     List<BattleUnit> battleUnits = new List<BattleUnit>();
 
-    PlayerTeam playerTeamInfo = null;
     List<Unit> playerTeam = new List<Unit>();
     List<BattleUnit> playerUnits = new List<BattleUnit>();
     List<BattleUnit> deadPlayerUnits = new List<BattleUnit>();
@@ -16,6 +15,7 @@ public class BattleUnitManager : MonoBehaviour
     List<BattleUnit> enemyUnits = new List<BattleUnit>();
     List<BattleUnit> deadEnemyUnits = new List<BattleUnit>();
 
+    PlayerTeam playerTeamInfo = null;
     BattleUnitPool battleUnitPool = null;
     CharacterMeshPool characterMeshPool = null;
     
@@ -25,17 +25,17 @@ public class BattleUnitManager : MonoBehaviour
     int startingPlayerTeamSize = 0;
     int startingEnemyTeamSize = 0;
 
-    private void Awake()
+    public void InitalizeUnitManager()
     {
+        playerTeamInfo = FindObjectOfType<PlayerTeam>();
         battleUnitPool = FindObjectOfType<BattleUnitPool>();
         characterMeshPool = FindObjectOfType<CharacterMeshPool>();
+        SetupOnDeathEvents();
     }
 
-    public void SetUpUnits(PlayerTeam _playerTeamInfo, List<Unit> _enemyTeam, List<Transform> _playerPositions, List<Transform> _enemyPositions)
+    public void SetUpUnits(List<Unit> _playerTeam, List<Unit> _enemyTeam, List<Transform> _playerPositions, List<Transform> _enemyPositions)
     {
-        playerTeamInfo = _playerTeamInfo;
-
-        playerTeam = playerTeamInfo.GetPlayerTeam();
+        playerTeam = _playerTeam;
         enemyTeam = _enemyTeam;
 
         startingPlayerTeamSize = playerTeam.Count;
@@ -50,27 +50,32 @@ public class BattleUnitManager : MonoBehaviour
         for (int i = 0; i < _team.Count; i++)
         {
             Unit unit = _team[i];
-            BattleUnit battleUnit = battleUnitPool.GetBattleUnit();
+            BattleUnit battleUnit = SetupNewBattleUnit(unit, _teamPositions[i], _isPlayerTeam);
 
-            AddBattleUnitToLists(battleUnit, _isPlayerTeam);
-            SetupBattleUnit(unit, battleUnit, _teamPositions[i], _isPlayerTeam);
+            AddBattleUnitToLists(battleUnit, _isPlayerTeam);          
         }
     }
 
-    private void SetupBattleUnit(Unit _unit, BattleUnit _battleUnit, Transform _teamPosition, bool _isPlayerTeam)
+    private BattleUnit SetupNewBattleUnit(Unit _unit, Transform _teamPosition, bool _isPlayerTeam)
     {
-        SetBattleUnitTransform(_battleUnit, _teamPosition);
+        BattleUnit battleUnit = battleUnitPool.GetAvailableBattleUnit();
 
-        BattleUnitInfo newUnitInfo = CreateNewBattleUnitInfo(_unit, _isPlayerTeam);
-        BattleUnitResources newUnitResources = null;
+        SetBattleUnitTransform(battleUnit, _teamPosition);
+
+        BattleUnitInfo battleUnitInfo = battleUnit.GetBattleUnitInfo();
+        battleUnitInfo.SetBattleUnitInfo(_unit.GetUnitName(), _unit.GetBaseLevel(),
+            _isPlayerTeam, _unit.GetBaseStats(), _unit.GetBasicAttack(), _unit.GetAbilities());
+
+        BattleUnitResources battleUnitResources = battleUnit.GetBattleUnitResources();
         
         GameObject newMesh = characterMeshPool.GetMesh(_unit.GetCharacterMeshKey());
 
         if (_isPlayerTeam)
         {
             TeamInfo teamInfo = playerTeamInfo.GetTeamInfo(_unit);
-            newUnitInfo.SetUnitLevel(teamInfo.GetLevel());
-            newUnitResources = teamInfo.GetBattleUnitResources();
+            battleUnitInfo.SetUnitLevel(teamInfo.GetLevel());
+
+            battleUnitResources.SetBattleUnitResources(teamInfo.GetBattleUnitResources());
         }
         else
         {
@@ -78,34 +83,10 @@ public class BattleUnitManager : MonoBehaviour
             //battleUnit.SetUnitXPAward(unit.GetXPAward());
         }
 
-        _battleUnit.InitalizeBattleUnit(newUnitInfo, newUnitResources, _isPlayerTeam, newMesh);
+        battleUnit.SetupBattleUnit(battleUnitInfo, battleUnitResources, _isPlayerTeam, newMesh);
+        battleUnit.gameObject.SetActive(true);
 
-        //Clear listeners on reset
-        _battleUnit.GetHealth().onDeath += OnUnitDeath;
-
-        _battleUnit.gameObject.SetActive(true);
-    }
-
-
-    private BattleUnitInfo CreateNewBattleUnitInfo(Unit _unit, bool _isPlayerTeam)
-    {
-        BattleUnitInfo newUnitInfo = new BattleUnitInfo();
-
-        string unitName = _unit.GetUnitName();
-        int baseLevel = _unit.GetBaseLevel();
-        Stats startingStats = _unit.GetBaseStats();
-        Ability basicAttack = _unit.GetBasicAttack();
-        Ability[] abilities = _unit.GetAbilities();
-
-        newUnitInfo.SetBattleUnitInfo(unitName, baseLevel, _isPlayerTeam, startingStats, basicAttack, abilities);
-
-        return newUnitInfo;
-    }
-
-    private void SetupUnitComponents(Unit character, BattleUnit unit, bool isPlayer)
-    {
-        //unit.SetFaceImage(character.GetFaceImage());     
-        //unit.SetActiveSpellContainers();       
+        return battleUnit;
     }
 
     private void SetBattleUnitTransform(BattleUnit _battleUnit, Transform _newTransform)
@@ -188,6 +169,14 @@ public class BattleUnitManager : MonoBehaviour
         enemyTeam.Clear();
         enemyUnits.Clear();
         deadEnemyUnits.Clear();
+    }
+
+    private void SetupOnDeathEvents()
+    {
+        foreach (BattleUnit battleUnit in battleUnitPool.GetAllBattleUnits())
+        {
+            battleUnit.GetComponent<Health>().onDeath += OnUnitDeath;
+        }
     }
 
     public List<BattleUnit> GetBattleUnits()

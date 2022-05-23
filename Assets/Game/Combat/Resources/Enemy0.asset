@@ -13,35 +13,36 @@ MonoBehaviour:
   m_Name: Enemy0
   m_EditorClassIdentifier: 
   unitName: Enemy 0
+  baseLevel: 1
   characterMeshKey: 3
   baseStats:
     stats:
     - statType: 0
       statLevel: 10
-      levelUpPercent: 0
+      levelUpPercent: 2
     - statType: 1
       statLevel: 10
-      levelUpPercent: 0
+      levelUpPercent: 2
     - statType: 2
       statLevel: 10
-      levelUpPercent: 0
+      levelUpPercent: 2
     - statType: 3
       statLevel: 10
-      levelUpPercent: 0
+      levelUpPercent: 2
     - statType: 4
       statLevel: 10
-      levelUpPercent: 0
+      levelUpPercent: 2
     - statType: 5
       statLevel: 10
-      levelUpPercent: 0
+      levelUpPercent: 2
     - statType: 6
       statLevel: 10
-      levelUpPercent: 0
+      levelUpPercent: 2
     - statType: 7
       statLevel: 10
-      levelUpPercent: 0
+      levelUpPercent: 2
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
-  spells: []
+  abilities: []
   xpAward: 100
   backgroundImage: {fileID: 21300000, guid: 31af4c11b0228d142b71af2d3940bbcb, type: 3}
   faceImage: {fileID: 21300000, guid: 31af4c11b0228d142b71af2d3940bbcb, type: 3}

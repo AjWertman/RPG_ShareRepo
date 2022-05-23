@@ -1,7 +1,7 @@
 
 
 // Make unit a serializable class, with playable character and enemy being scriptable objects. Inside use battle unit class
-//Rename BattleUnit to UnitController
+//Rename BattleUnit to BattleController
 //Move spell launch/recieve transforms to character mesh
 //Update all parameters to _var
 //Create battleUnit, spell, etc pool, and use the mesh from the Unit SO, also use animator controller override variable

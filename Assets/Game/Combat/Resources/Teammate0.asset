@@ -13,35 +13,36 @@ MonoBehaviour:
   m_Name: Teammate0
   m_EditorClassIdentifier: 
   unitName: Teammate0
+  baseLevel: 1
   characterMeshKey: 1
   baseStats:
     stats:
     - statType: 0
-      statLevel: 50
-      levelUpPercent: 0
+      statLevel: 10
+      levelUpPercent: 2
     - statType: 1
-      statLevel: 38
-      levelUpPercent: 0
+      statLevel: 100
+      levelUpPercent: 2
     - statType: 2
-      statLevel: 42
-      levelUpPercent: 0
+      statLevel: 99
+      levelUpPercent: 2
     - statType: 3
-      statLevel: 46
-      levelUpPercent: 0
+      statLevel: 99
+      levelUpPercent: 2
     - statType: 4
-      statLevel: 42
-      levelUpPercent: 0
+      statLevel: 93
+      levelUpPercent: 2
     - statType: 5
-      statLevel: 46
-      levelUpPercent: 0
+      statLevel: 10
+      levelUpPercent: 2
     - statType: 6
-      statLevel: 48
-      levelUpPercent: 0
+      statLevel: 12
+      levelUpPercent: 2
     - statType: 7
-      statLevel: 46
-      levelUpPercent: 0
+      statLevel: 100
+      levelUpPercent: 2
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
-  spells: []
+  abilities: []
   xpAward: 100
   backgroundImage: {fileID: 21300000, guid: c16d3e5511c9e1341b0bd70dcb31fb81, type: 3}
   faceImage: {fileID: 21300000, guid: c16d3e5511c9e1341b0bd70dcb31fb81, type: 3}

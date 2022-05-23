@@ -7,65 +7,67 @@ public class BattlePositionManager : MonoBehaviour
     [SerializeField] GameObject enemyBattlePosition = null;
 
     List<Transform> playerPositions = new List<Transform>();
+    Transform currentPlayerPositionsParent = null;
+
     List<Transform> enemyPositions = new List<Transform>();
+    Transform currentEnemyPositionsParent = null;
 
-    public void SetUpBattlePositions(int playerTeamSize, int enemyTeamSize)
+    public void SetUpBattlePositionManager(int _playerTeamSize, int _enemyTeamSize)
     {
-        SetUpPlayerBattlePositions(playerTeamSize);
-
-        SetUpEnemyBattlePositions(enemyTeamSize);
+        SetUpBattlePositions(playerBattlePosition, _playerTeamSize, true);
+        SetUpBattlePositions(enemyBattlePosition, _enemyTeamSize, false);
     }
 
-    private void SetUpPlayerBattlePositions(int playerTeamSize)
+    private void SetUpBattlePositions(GameObject _allPositionsParent, int _teamSize, bool _isPlayerTeam)
     {
         int index = 0;
 
-        Transform currentPositionsObject = null;
+        Transform currentPositionsParent = null;
 
-        foreach (Transform positionsObject in playerBattlePosition.transform)
+        foreach (Transform positionsParent in _allPositionsParent.transform)
         {
-            if (index == playerTeamSize)
+            if (index == _teamSize)
             {
-                currentPositionsObject = positionsObject;
-                currentPositionsObject.gameObject.SetActive(true);
+                currentPositionsParent = positionsParent;
+                currentPositionsParent.gameObject.SetActive(true);
+                break;
             }
 
             index++;
         }
 
-        if (currentPositionsObject != null)
+        AssignPositionsToTeam(currentPositionsParent, _isPlayerTeam);
+    }
+
+    private void AssignPositionsToTeam(Transform _newPositionsParent, bool _isPlayerTeam)
+    {
+        List<Transform> teamPositions = new List<Transform>();
+
+        foreach (Transform position in _newPositionsParent)
         {
-            foreach (Transform position in currentPositionsObject.transform)
-            {
-                playerPositions.Add(position);
-            }
+            teamPositions.Add(position);
+        }
+
+        if (_isPlayerTeam)
+        {
+            currentPlayerPositionsParent = _newPositionsParent;
+            playerPositions = teamPositions;
+        }
+        else
+        {
+            currentEnemyPositionsParent = _newPositionsParent;
+            enemyPositions = teamPositions;
         }
     }
 
-    private void SetUpEnemyBattlePositions(int enemyTeamSize)
+    public void ResetPositionManager()
     {
-        int index = 0;
-
-        Transform currentPositionsObject = null;
-
-        foreach (Transform positionsObject in enemyBattlePosition.transform)
-        {
-            if (index == enemyTeamSize)
-            {
-                currentPositionsObject = positionsObject;
-                currentPositionsObject.gameObject.SetActive(true);
-            }
-
-            index++;
-        }
-
-        if (currentPositionsObject != null)
-        {
-            foreach (Transform position in currentPositionsObject.transform)
-            {              
-                enemyPositions.Add(position);
-            }
-        }
+        playerPositions.Clear();
+        enemyPositions.Clear();
+        currentPlayerPositionsParent.gameObject.SetActive(false);
+        currentPlayerPositionsParent = null;
+        currentEnemyPositionsParent.gameObject.SetActive(false);
+        currentEnemyPositionsParent = null;
     }
 
     public List<Transform> GetPlayerPosList()

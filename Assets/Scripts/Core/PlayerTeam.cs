@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AjsUtilityPackage;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -8,7 +9,7 @@ public class TeamInfo
 
     [Header("Resources")]
     [SerializeField] Stats stats;
-    [SerializeField] BattleUnitResources battleUnitResources = null;
+    [SerializeField] BattleUnitResources battleUnitResources = new BattleUnitResources();
 
     [Header("Progression")]
     [SerializeField] int level = 1;
@@ -21,12 +22,7 @@ public class TeamInfo
 
     public void SetStats(Stats _stats)
     {
-        stats.SetStats(_stats.GetStats());
-    }
-
-    public void SetBattleUnitResources(BattleUnitResources _battleUnitResources)
-    {
-        battleUnitResources = _battleUnitResources;
+        stats.SetStats(_stats.GetAllStats());
     }
 
     public string GetName()
@@ -52,9 +48,9 @@ public class TeamInfo
     public void LevelUp()
     {
         level++;
-        foreach(Stat stat in stats.GetStats())
+        foreach(Stat stat in stats.GetAllStats())
         {
-            if(stat.GetLevelUpPercent() >= GetRandomPercentage())
+            if(stat.GetLevelUpPercent() >= RandomGenerator.GetRandomNumber(0,99))
             {
                 stat.IncreaseLevel();
             }
@@ -70,16 +66,12 @@ public class TeamInfo
     {
         experiencePoints += xpToGain;
     }
-
-    private int GetRandomPercentage()
-    {
-        return Random.Range(0, 100);
-    }
 }
 
 public class PlayerTeam : MonoBehaviour, ISaveable
 {
     [SerializeField] TeamInfo[] teamInfos;
+    [SerializeField] Stat[] statsTemplate;
 
     Progression progressionHandler = null;
 
@@ -88,11 +80,7 @@ public class PlayerTeam : MonoBehaviour, ISaveable
     private void Awake()
     {
         progressionHandler = GetComponentInChildren<Progression>();
-    }
-
-    private void OnEnable()
-    {
-        PopulateTeamInfos();     
+        PopulateTeamInfos();
     }
 
     private void PopulateTeamInfos()
@@ -108,19 +96,19 @@ public class PlayerTeam : MonoBehaviour, ISaveable
             float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.GetStats().GetSpecificStatLevel(StatType.Stamina));
             float maxManaPoints = CalculateMaxMana(teamInfo.GetStats().GetSpecificStatLevel(StatType.Spirit));
 
-            BattleUnitResources battleUnitResources = new BattleUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxManaPoints);
-
-            teamInfo.SetBattleUnitResources(battleUnitResources);
+            BattleUnitResources battleUnitResources = teamInfo.GetBattleUnitResources();
+            battleUnitResources.SetBattleUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxManaPoints);
         }
     }
 
     public void UpdateTeamInfo(string _name, BattleUnitResources _battleUnitResources)
     {
         foreach (TeamInfo teamInfo in teamInfos)
-        {
-            if (GetCharacter(teamInfo.GetName()) == GetCharacter(_name))
+        {          
+            if (teamInfo.GetName() == _name)
             {
-                teamInfo.SetBattleUnitResources(_battleUnitResources);
+                BattleUnitResources battleUnitResources = teamInfo.GetBattleUnitResources();
+                battleUnitResources.SetBattleUnitResources(_battleUnitResources);
             }
         }
     }

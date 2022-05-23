@@ -20,7 +20,6 @@ public class UniversalCharProgression
 public class Progression : MonoBehaviour
 {
     [SerializeField] UniversalCharProgression[] universalCharProgressions;
-    [SerializeField] Stat[] statsTemplate = null;
 
     public int GetLevel(float xp)
     {

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BattleUIManager : MonoBehaviour
@@ -47,10 +46,10 @@ public class BattleUIManager : MonoBehaviour
     List<TurnOrderUIItem> turnOrderUIItems = new List<TurnOrderUIItem>(); 
 
     Ability selectedAbility = null;
-    bool isRenCopy = false;
+    bool isCopy = false;
     BattleUnit selectedBattleUnit = null;
 
-    List<Ability> renCopySpellList = new List<Ability>();
+    List<Ability> copySpellList = new List<Ability>();
 
     public event Action<BattleUnit, Ability> onPlayerMove;
     public event Action onEscape;
@@ -74,17 +73,16 @@ public class BattleUIManager : MonoBehaviour
         DeactivateAbilitySelectCanvas();
         DeactivateTargetSelectCanvas();
         DeactivateSpellTooltip();
-
-        hudObject.SetActive(false);
     }
 
-    public void SetupTurnOrderUI(List<BattleUnit> turnOrder)
+    //Create pool here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public void SetupTurnOrderUI(List<BattleUnit> _turnOrder)
     {
-        for (int i = 0; i < turnOrder.Count; i++)
+        for (int i = 0; i < _turnOrder.Count; i++)
         {
             GameObject turnOrderInstance = Instantiate(turnOrderUIItem, turnOrderUI);
             TurnOrderUIItem turnOrderItem = turnOrderInstance.GetComponent<TurnOrderUIItem>();
-            BattleUnit currentUnit = turnOrder[i];
+            BattleUnit currentUnit = _turnOrder[i];
             turnOrderItem.SetupTurnOrderUI(i, currentUnit);
 
             turnOrderUIItems.Add(turnOrderItem);
@@ -113,6 +111,7 @@ public class BattleUIManager : MonoBehaviour
         turnOrderUIItems.Add(lastTOItem);
         lastTOItem.SetupTurnOrderUI(turnOrderUIItems.Count - 1, firstUnit);
     }
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     private void HandleDeadUnits()
     {
@@ -150,9 +149,9 @@ public class BattleUIManager : MonoBehaviour
         }
     }
 
-    public void ActivateUnitResourcesUI(BattleUnit unit)
+    public void ActivateUnitResourcesUI(BattleUnit _battleUnit)
     {     
-        unitResourcesIndicator.SetupResourceIndicator(unit);     
+        unitResourcesIndicator.SetupResourceIndicator(_battleUnit);     
         unitResourcesIndicator.gameObject.SetActive(true);
     }
 
@@ -168,6 +167,7 @@ public class BattleUIManager : MonoBehaviour
             lookAtCam.LookAtCamTransform(lookTransform);      
         }
     }
+
 
     private void SetupPlayerMoveUI()
     {
@@ -260,14 +260,14 @@ public class BattleUIManager : MonoBehaviour
         onEscape();
     }
 
-    public void SetCurrentBattleUnit(BattleUnit currentUnit)
+    public void SetCurrentBattleUnit(BattleUnit _currentUnit)
     {
-        currentBattleUnit = currentUnit;
+        currentBattleUnit = _currentUnit;
     }
 
-    public IEnumerator CantCastSpellUI(string reason)
+    public IEnumerator CantCastSpellUI(string _reason)
     {  
-        cantCastCanvas.GetComponentInChildren<TextMeshProUGUI>().text = reason;
+        cantCastCanvas.GetComponentInChildren<TextMeshProUGUI>().text = _reason;
         cantCastCanvas.SetActive(true);
 
         DeactivateTargetSelectCanvas();
@@ -281,12 +281,12 @@ public class BattleUIManager : MonoBehaviour
 
     //SpellSelect///////////////////////////////////////////////////////////////////////////////////////////
 
-    public void PopulateAbilitiesList(Ability[] abilities)
+    public void PopulateAbilitiesList(Ability[] _abilities)
     {
         ClearSpellList();
 
         int unitLevel = currentBattleUnit.GetBattleUnitInfo().GetUnitLevel();
-        foreach (Ability ability in abilities)
+        foreach (Ability ability in _abilities)
         {
             if (unitLevel < ability.requiredLevel) continue;
 
@@ -316,7 +316,7 @@ public class BattleUIManager : MonoBehaviour
             }
             else
             {
-                if (renCopySpellList.Count > 0)
+                if (copySpellList.Count > 0)
                 {
                     button.interactable = true;
                     button.onClick.AddListener(PopulateRenCopySpellList);
@@ -337,7 +337,7 @@ public class BattleUIManager : MonoBehaviour
     public void PopulateRenCopySpellList()
     {       
         ClearSpellList();
-        foreach(Ability ability in renCopySpellList)
+        foreach(Ability ability in copySpellList)
         {
             GameObject newButtonInstance = Instantiate(abilityButtonObject, contentRectTransform);
             Button button = newButtonInstance.GetComponent<Button>();
@@ -366,10 +366,10 @@ public class BattleUIManager : MonoBehaviour
         }
     }
 
-    public void SetAbility(Ability abilityToSet, bool _isRenCopy)
+    public void SetAbility(Ability _abilityToSet, bool _isCopy)
     {      
-        selectedAbility = abilityToSet;
-        isRenCopy = _isRenCopy;
+        selectedAbility = _abilityToSet;
+        isCopy = _isCopy;
     }
 
     private string CantCast(Ability ability)
@@ -381,7 +381,7 @@ public class BattleUIManager : MonoBehaviour
 
         if(ability.spellType == SpellType.RenCopy)
         {
-            if(renCopySpellList.Count== 0)
+            if(copySpellList.Count== 0)
             {
                 return "No copyable spells cast";
             }
@@ -424,14 +424,14 @@ public class BattleUIManager : MonoBehaviour
         spellSelectCanvas.SetActive(false);
     }
 
-    private void ActivateSpellTooltip(Ability ability, string cantCastReason)
+    private void ActivateSpellTooltip(Ability _ability, string _cantCastReason)
     {
-        if (ability.abilityType == AbilityType.Physical) return;
-        spellTooltip.SetupTooltip(ability);
+        if (_ability.abilityType == AbilityType.Physical) return;
+        spellTooltip.SetupTooltip(_ability);
         spellTooltip.gameObject.SetActive(true);
 
-        if (cantCastReason == "") return;
-        spellTooltip.SetupCantCast(cantCastReason);
+        if (_cantCastReason == "") return;
+        spellTooltip.SetupCantCast(_cantCastReason);
     }
 
     private void DeactivateSpellTooltip()
@@ -444,14 +444,14 @@ public class BattleUIManager : MonoBehaviour
         ClearRenList();
         foreach(Ability renCopy in renList)
         {
-            renCopySpellList.Add(renCopy);
+            copySpellList.Add(renCopy);
         }
     }
 
     public void ClearRenList()
     {
-        if (renCopySpellList.Count <= 0) return;
-        renCopySpellList.Clear();    
+        if (copySpellList.Count <= 0) return;
+        copySpellList.Clear();    
     }
 
     public void ClearSpellList()
@@ -526,13 +526,13 @@ public class BattleUIManager : MonoBehaviour
         }
     }
 
-    private void OnTargetButtonClick(Button button, TargetButton targetButton)
+    private void OnTargetButtonClick(Button _button, TargetButton _targetButton)
     {
-        button.onClick.AddListener(() => SetTarget(targetButton.GetTarget()));
-        button.onClick.AddListener(() => targetButton.GetTarget().ActivateUnitIndicatorUI(false));
-        button.onClick.AddListener(() => DeactivateTargetSelectCanvas());
-        button.onClick.AddListener(() => onPlayerMove(selectedBattleUnit, selectedAbility));
-        button.onClick.AddListener(() => DeactivateUnitResourcesUI());
+        _button.onClick.AddListener(() => SetTarget(_targetButton.GetTarget()));
+        _button.onClick.AddListener(() => _targetButton.GetTarget().ActivateUnitIndicatorUI(false));
+        _button.onClick.AddListener(() => DeactivateTargetSelectCanvas());
+        _button.onClick.AddListener(() => onPlayerMove(selectedBattleUnit, selectedAbility));
+        _button.onClick.AddListener(() => DeactivateUnitResourcesUI());
     }
 
     public void DeactivateTargetSelectCanvas()
@@ -548,9 +548,9 @@ public class BattleUIManager : MonoBehaviour
         }
     }
 
-    private void OnGroupButtonSelect(bool isPlayer)
+    private void OnGroupButtonSelect(bool _isPlayer)
     {
-        if (isPlayer)
+        if (_isPlayer)
         {
             playerGroupButton.interactable = false;
             enemyGroupButton.interactable = true;
@@ -564,9 +564,9 @@ public class BattleUIManager : MonoBehaviour
         }
     }
 
-    public void SetTarget(BattleUnit battleUnitToSet)
+    public void SetTarget(BattleUnit _battleUnit)
     {
-        selectedBattleUnit = battleUnitToSet;
+        selectedBattleUnit = _battleUnit;
     }
 
     public void UpdateUnitLists(List<BattleUnit> _playerUnits, List<BattleUnit> _deadPlayerUnits, List<BattleUnit> _enemyUnits, List<BattleUnit> _deadEnemyUnits)
@@ -576,5 +576,18 @@ public class BattleUIManager : MonoBehaviour
 
         enemyUnits = _enemyUnits;
         deadEnemyUnits = _deadEnemyUnits;
-    }   
+    }
+
+    public void ResetUIManager()
+    {
+        playerUnits.Clear();
+        deadPlayerUnits.Clear();
+        enemyUnits.Clear();
+        deadEnemyUnits.Clear();
+        currentBattleUnit = null;
+        selectedAbility = null;
+        isCopy = false;
+        selectedBattleUnit = null;
+        copySpellList.Clear();
+    }
 }
