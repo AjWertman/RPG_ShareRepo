@@ -1,28 +1,31 @@
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TurnOrderUIItem : MonoBehaviour
+public class TurnOrderUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] Image background = null;
     [SerializeField] Image faceImage = null;
 
     int index = 0;
-    BattleUnit unit = null;
+    BattleUnit battleUnit = null;
     Sprite facePic = null;
     bool isPlayer = false;
 
-    public void SetupTurnOrderUI(int _index, BattleUnit _unit)
+    public event Action<BattleUnit> onPointerEnter;
+    public event Action onPointerExit;
+
+    public void SetupTurnOrderUI(int _index, BattleUnit _battleUnit)
     {
         index = _index;
-        unit = _unit;
-        facePic = unit.GetFaceImage();
-        isPlayer = unit.GetBattleUnitInfo().IsPlayer();
+        battleUnit = _battleUnit;
+        facePic = battleUnit.GetBattleUnitInfo().GetFaceImage();
+        isPlayer = battleUnit.GetBattleUnitInfo().IsPlayer();
 
         SetSize(index);
         SetImage(facePic);
         SetBackgroundColor(isPlayer);
-
-        GetComponent<BattleUnitIndicatorTrigger>().SetupTrigger(unit);
     }
 
     public void SetSize(int index)
@@ -42,7 +45,7 @@ public class TurnOrderUIItem : MonoBehaviour
 
     public BattleUnit GetBattleUnit()
     {
-        return unit;
+        return battleUnit;
     }
 
     public void SetImage(Sprite facePic)
@@ -64,12 +67,6 @@ public class TurnOrderUIItem : MonoBehaviour
         }
     }
 
-    public void DecrementIndex()
-    {
-        index--;
-        SetSize(index);
-    }
-
     public int GetIndex()
     {
         return index;
@@ -83,5 +80,16 @@ public class TurnOrderUIItem : MonoBehaviour
     public bool IsPlayer()
     {
         return isPlayer;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (battleUnit == null) return;
+        onPointerEnter(battleUnit);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        onPointerExit();
     }
 }

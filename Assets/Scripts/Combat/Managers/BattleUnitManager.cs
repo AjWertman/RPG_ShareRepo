@@ -66,6 +66,8 @@ public class BattleUnitManager : MonoBehaviour
         battleUnitInfo.SetBattleUnitInfo(_unit.GetUnitName(), _unit.GetBaseLevel(),
             _isPlayerTeam, _unit.GetBaseStats(), _unit.GetBasicAttack(), _unit.GetAbilities());
 
+        battleUnitInfo.SetFaceImage(_unit.GetFaceImage());
+
         BattleUnitResources battleUnitResources = battleUnit.GetBattleUnitResources();
         
         GameObject newMesh = characterMeshPool.GetMesh(_unit.GetCharacterMeshKey());

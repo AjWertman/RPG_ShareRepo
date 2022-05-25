@@ -27,9 +27,6 @@ public class BattleUnit : MonoBehaviour
     List<GameObject> activeSpellObjects = new List<GameObject>();
     float xpAward = 100f;
 
-    //Make dictionary<BattleUnit, Sprite> for uimanager
-    Sprite faceImage = null;
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -54,7 +51,8 @@ public class BattleUnit : MonoBehaviour
         battleUnitInfo.SetBattleUnitInfo(_battleUnitInfo);
         startingStats.SetStats(battleUnitInfo.GetStats().GetAllStats());
         UpdateComponentStats(true);
-        //Refactor
+
+        //Refactor?
         if (_isPlayer)
         {
             SetBattleUnitResources(_battleUnitResources);
@@ -63,7 +61,7 @@ public class BattleUnit : MonoBehaviour
         {
             CalculateResources();
         }
-
+        ///
 
         mover.SetStartingTransforms();       
     }
@@ -172,6 +170,91 @@ public class BattleUnit : MonoBehaviour
         return statToGet;
     }
 
+    public List<Ability> GetKnownAbilities()
+    {
+        List<Ability> useableAbilities = new List<Ability>();
+        int currentLevel = battleUnitInfo.GetUnitLevel();
+
+        foreach(Ability ability in battleUnitInfo.GetAbilities())
+        {
+            if(currentLevel >= ability.requiredLevel)
+            {
+                useableAbilities.Add(ability);
+            }
+        }
+
+        return useableAbilities;
+    }
+
+    public string GetCantUseAbilityReason(BattleUnit _target, Ability _ability)
+    {
+        string cantUseAbilityReason = "";
+
+        if (!HasEnoughMana(_ability.manaCost))
+        {
+            cantUseAbilityReason = "Not have enough Mana";
+        }
+
+        else if (_ability.spellType == SpellType.Copy)
+        {
+            //if (copySpellList.Count == 0)
+            //{
+            //    cantUseAbilityReason = "No copyable spells cast";
+            //}
+        }
+
+        else if (_ability.targetingType == TargetingType.SelfOnly)
+        {
+            if (_ability.spellType == SpellType.Static)
+            {
+                StaticSpell staticSpell = _ability.spellPrefab.GetComponent<StaticSpell>();
+                if (staticSpell.GetStaticSpellType() == StaticSpellType.PhysicalReflector)
+                {
+                    if (fighter.GetPhysicalReflectionDamage() > 0)
+                    {
+                        cantUseAbilityReason = "Spell already active";
+                    }
+                }
+                else if (staticSpell.GetStaticSpellType() == StaticSpellType.SpellReflector)
+                {
+                    if (fighter.IsReflectingSpells())
+                    {
+                        cantUseAbilityReason = "Spell already active";
+                    }
+                }
+            }
+        }
+
+        else if (_ability.spellType == SpellType.Static && _target != null)
+        {
+            string targetName = _target.GetBattleUnitInfo().GetUnitName();
+
+            Fighter targetFighter = _target.GetFighter();
+
+            StaticSpellType staticSpellType = _ability.spellPrefab.GetComponent<StaticSpell>().GetStaticSpellType();
+
+            if (staticSpellType == StaticSpellType.PhysicalReflector && targetFighter.GetPhysicalReflectionDamage() > 0)
+            {
+                cantUseAbilityReason = (targetName + " Is Already Reflecting Physical Damage");
+            }
+            else if (staticSpellType == StaticSpellType.SpellReflector && targetFighter.IsReflectingSpells())
+            {
+                cantUseAbilityReason = (targetName + " Is Already Reflecting Spells");
+            }
+            else if (staticSpellType == StaticSpellType.Silence && targetFighter.IsSilenced())
+            {
+                cantUseAbilityReason = (targetName + " Is Already Silenced");
+            }
+            else if (staticSpellType == StaticSpellType.Substitute && targetFighter.HasSubstitute())
+            {
+                cantUseAbilityReason = (targetName + " Already Has An Active Substitute");
+            }
+        }
+
+        return cantUseAbilityReason;
+    }
+
+
     public GameObject GetUnitMesh()
     {
         return unitMesh;
@@ -180,17 +263,6 @@ public class BattleUnit : MonoBehaviour
     public bool IsIndicatorActive()
     {
         return unitIndicatorObject.activeSelf;
-    }
-
-    //Refactor
-    public Sprite GetFaceImage()
-    {
-        return faceImage;
-    }
-       
-    public void SetFaceImage(Sprite _faceImage)
-    {
-        faceImage = _faceImage;
     }
 
     public void SetUnitXPAward(float _xpAward)
@@ -393,11 +465,6 @@ public class BattleUnit : MonoBehaviour
     {
         Stats stats = battleUnitInfo.GetStats();
         mana.UpdateAttributes(stats.GetSpecificStatLevel(StatType.Spirit));
-    }
-
-    public void ActivateUnitResourceUI(bool shouldActivate)
-    {
-        ////////////////////////////////////////////////////////////////////fillin/////////////////////////////////////////////////////
     }
 
     //Buffs///////////////////////////////////////////////////////////////////////////////////////////

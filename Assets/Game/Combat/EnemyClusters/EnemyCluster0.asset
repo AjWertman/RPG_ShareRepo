@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyCluster:
   - {fileID: 11400000, guid: d28dafea7a8855a4382a29e89b638228, type: 2}
+  - {fileID: 11400000, guid: d28dafea7a8855a4382a29e89b638228, type: 2}

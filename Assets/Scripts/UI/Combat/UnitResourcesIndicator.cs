@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -13,20 +11,37 @@ public class UnitResourcesIndicator : MonoBehaviour
     [SerializeField] TextMeshProUGUI healthText = null;
     [SerializeField] TextMeshProUGUI manaText = null;
 
-    public void SetupResourceIndicator(BattleUnit _unit)
+    public void SetupResourceIndicator(BattleUnit _battleUnit)
     {
-        BattleUnitInfo battleUnitInfo = _unit.GetBattleUnitInfo();
-        SetBackgroundColor(battleUnitInfo.IsPlayer());
+        if(_battleUnit != null)
+        {
+            BattleUnitInfo battleUnitInfo = _battleUnit.GetBattleUnitInfo();
+            SetBackgroundColor(battleUnitInfo.IsPlayer());
 
-        nameText.text = battleUnitInfo.GetUnitName();
-        faceImage.sprite = _unit.GetFaceImage();
-        healthText.text = ("Health: " + _unit.GetUnitHealth() + "/" + _unit.GetUnitMaxHealth());
-        manaText.text = ("Mana: " + _unit.GetUnitMana() + "/" + _unit.GetUnitMaxMana());
+            nameText.text = battleUnitInfo.GetUnitName();
+            faceImage.sprite = battleUnitInfo.GetFaceImage();
+            healthText.text = ("Health: " + _battleUnit.GetUnitHealth() + "/" + _battleUnit.GetUnitMaxHealth());
+            manaText.text = ("Mana: " + _battleUnit.GetUnitMana() + "/" + _battleUnit.GetUnitMaxMana());
+        }
+        else
+        {
+            ResetResourcesIndicator();
+        }
     }
 
-    private void SetBackgroundColor(bool isPlayer)
+    public void ResetResourcesIndicator()
     {
-        if (isPlayer)
+        background.color = Color.white;
+
+        nameText.text = "";
+        faceImage.sprite = null;
+        healthText.text = ("Health: 999/999");
+        manaText.text = ("Mana: 999/999");
+    }
+
+    private void SetBackgroundColor(bool _isPlayer)
+    {
+        if (_isPlayer)
         {
             Color playerColor = new Color(0, 0, 1, .35f);
             background.color = playerColor;

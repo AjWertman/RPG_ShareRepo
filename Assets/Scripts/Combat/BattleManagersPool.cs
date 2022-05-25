@@ -31,6 +31,7 @@ public class BattleManagersPool : MonoBehaviour
 
         GameObject uiInstance = Instantiate(battleUIManagerPrefab, transform);
         battleUIManager = uiInstance.GetComponent<BattleUIManager>();
+        battleUIManager.InitalizeBattleUIManager();
 
         GameObject turnInstance = Instantiate(turnManagerPrefab, transform);
         turnManager = turnInstance.GetComponent<TurnManager>();

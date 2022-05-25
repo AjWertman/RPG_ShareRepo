@@ -31,7 +31,7 @@ public class BattleHandler : MonoBehaviour
     List<Unit> enemyTeam = new List<Unit>();
     int enemyTeamSize = 0;
 
-    BattleUnit currentBattleUnit = null;
+    BattleUnit currentBattleUnitTurn = null;
 
     BattleState battleState = BattleState.Null;
 
@@ -75,10 +75,11 @@ public class BattleHandler : MonoBehaviour
 
         battleState = BattleState.Battling;
 
-        currentBattleUnit = turnManager.GetBattleUnitTurn();
-        currentBattleUnit.ActivateUnitIndicatorUI(true);
+        SetCurrentBattleUnitTurn();
 
-        battleUIManager.SetCurrentBattleUnit(currentBattleUnit);
+        currentBattleUnitTurn.ActivateUnitIndicatorUI(true);
+
+        battleUIManager.SetCurrentBattleUnitTurn(currentBattleUnitTurn);
 
         //GetComponent<MusicOverride>().OverrideMusic();
 
@@ -140,12 +141,11 @@ public class BattleHandler : MonoBehaviour
     public void SetupTurnManager()
     {
         turnManager.SetUpTurns(battleUnitManager.GetBattleUnits(), battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
-        turnManager.onTurnChange += UpdateUIManagerCurrentUnit;
+        turnManager.onTurnChange += SetCurrentBattleUnitTurn;
     }
     public void SetupUIManager()
     {
-        battleUIManager.SetUpBattleUI(battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
-        battleUIManager.SetupTurnOrderUI(turnManager.GetTurnOrder());
+        battleUIManager.SetupUIManager(battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits(), turnManager.GetTurnOrder());
         battleUIManager.SetUILookAts(camTransform);
         battleUIManager.onPlayerMove += OnPlayerMove;
         battleUIManager.onEscape += Escape;
@@ -161,7 +161,7 @@ public class BattleHandler : MonoBehaviour
         battleUIManager.onPlayerMove -= OnPlayerMove;
         battleUIManager.onEscape -= Escape;
 
-        turnManager.onTurnChange -= UpdateUIManagerCurrentUnit;
+        turnManager.onTurnChange -= SetCurrentBattleUnitTurn;
 
         battlePositionManager = null;
         battleUnitManager = null;
@@ -169,68 +169,52 @@ public class BattleHandler : MonoBehaviour
         turnManager = null;
     }
 
+
+    public void SetCurrentBattleUnitTurn()
+    {
+        currentBattleUnitTurn = turnManager.GetBattleUnitTurn();
+        battleUIManager.SetCurrentBattleUnitTurn(currentBattleUnitTurn);
+    }
     //BattleBehaviors///////////////////////////////////////////////////////////////////////////////////////////
 
-    public void OnPlayerMove(BattleUnit target, Ability selectedAbility)
+    public void OnPlayerMove(BattleUnit _target, Ability _selectedAbility)
     {
-        if (!currentBattleUnit.GetFighter().HasSubstitute())
+        battleUIManager.DeactivateAllMenus();
+
+        string cantUseAbilityReason = currentBattleUnitTurn.GetCantUseAbilityReason(_target, _selectedAbility);
+
+        if (cantUseAbilityReason == "")
         {
-            if (CanPlayerCastSpell(target, selectedAbility))
+            if (!currentBattleUnitTurn.GetFighter().HasSubstitute())
             {
-                if (selectedAbility.canTargetAll)
+                if (_selectedAbility.canTargetAll)
                 {
-                    currentBattleUnit.GetFighter().SetAllTargets(battleUnitManager.GetEnemyUnits());
+                    currentBattleUnitTurn.GetFighter().SetAllTargets(battleUnitManager.GetEnemyUnits());
                 }
                 else
                 {
-                    battleUIManager.DeactivateTargetSelectCanvas();
-                    currentBattleUnit.GetFighter().SetTarget(target);
+
+                    currentBattleUnitTurn.GetFighter().SetTarget(_target);
                 }
 
-                currentBattleUnit.GetFighter().SetAbility(selectedAbility);
+                currentBattleUnitTurn.GetFighter().SetAbility(_selectedAbility);
 
-                StartCoroutine(UseAbilityBehavior(selectedAbility));
+                StartCoroutine(UseAbilityBehavior(_selectedAbility));
+            }
+            else
+            {
+                Substitute activeSubstitute = currentBattleUnitTurn.GetFighter().GetActiveSubstitute();
+                activeSubstitute.onSubstituteTurnEnd += AdvanceTurn;
+
+                activeSubstitute.StartExecutingAttackBehavior(_target);
             }
         }
         else
         {
-            Substitute activeSubstitute = currentBattleUnit.GetFighter().GetActiveSubstitute();
-            activeSubstitute.onSubstituteTurnEnd += AdvanceTurn;
-
-            activeSubstitute.StartExecutingAttackBehavior(target);
-        }     
-    }
-    private bool CanPlayerCastSpell(BattleUnit target, Ability selectedAbility)
-    {
-        string targetName = target.GetBattleUnitInfo().GetUnitName();
-        if (selectedAbility.spellType == SpellType.Static)
-        {
-            StaticSpellType staticSpellType = selectedAbility.spellPrefab.GetComponent<StaticSpell>().GetStaticSpellType();
-            print(staticSpellType);
-
-            if (staticSpellType == StaticSpellType.PhysicalReflector && target.GetFighter().GetPhysicalReflectionDamage() > 0)
-            {
-                StartCoroutine(battleUIManager.CantCastSpellUI(targetName + " Is Already Reflecting Physical Damage"));
-                return false;
-            }
-            else if (staticSpellType == StaticSpellType.SpellReflector && target.GetFighter().IsReflectingSpells())
-            {
-                StartCoroutine(battleUIManager.CantCastSpellUI(targetName + " Is Already Reflecting Spells"));
-                return false;
-            }
-            else if (staticSpellType == StaticSpellType.Silence && target.GetFighter().IsSilenced())
-            {
-                StartCoroutine(battleUIManager.CantCastSpellUI(targetName + " Is Already Silenced"));
-                return false;
-            }
-            else if (staticSpellType == StaticSpellType.Substitute && target.GetFighter().HasSubstitute())
-            {
-                StartCoroutine(battleUIManager.CantCastSpellUI(targetName + " Already Has An Active Substitute"));
-                return false;
-            }
+            StartCoroutine(battleUIManager.GetBattleHUD().ActivateCantUseAbilityUI(cantUseAbilityReason));
+            battleUIManager.ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
         }
-
-        return true;
+           
     }
 
     public void UseAbility(Ability selectedAbility)
@@ -241,34 +225,35 @@ public class BattleHandler : MonoBehaviour
 
     private IEnumerator UseAbilityBehavior(Ability selectedAbility)
     {
-        currentBattleUnit.ActivateUnitIndicatorUI(false);
+        currentBattleUnitTurn.ActivateUnitIndicatorUI(false);
         if (IsBattling())
         {
             while (turnManager.IsUnitTurn())
             {
-                if (currentBattleUnit.GetFighter().HasTarget())
+                if (currentBattleUnitTurn.GetFighter().HasTarget())
                 {
-                    BattleUnit target = currentBattleUnit.GetFighter().GetTarget();
+                    BattleUnit target = currentBattleUnitTurn.GetFighter().GetTarget();
+                    Fighter targetFighter = target.GetFighter();
 
-                    bool targetHasSubstitute = target.GetFighter().HasSubstitute();
+                    bool targetHasSubstitute = targetFighter.HasSubstitute();
 
-                    if (!currentBattleUnit.GetFighter().IsInRange())
+                    if (!currentBattleUnitTurn.GetFighter().IsInRange())
                     {
                         Vector3 targetPosition = Vector3.zero;
                         yield return null;
                         if (!targetHasSubstitute)
                         {
-                            targetPosition = target.GetFighter().GetMeleeTransform().position;
+                            targetPosition = targetFighter.GetMeleeTransform().position;
                         }
                         else
                         {
-                            targetPosition = target.GetFighter().GetActiveSubstitute().GetFighter().GetMeleeTransform().position;
+                            targetPosition = targetFighter.GetActiveSubstitute().GetFighter().GetMeleeTransform().position;
                         }
 
                         //currentBattleUnit.GetMover().MoveTo(targetPosition);
 
                         Quaternion currentRotation = transform.rotation;
-                        yield return currentBattleUnit.GetMover().JumpToPos(targetPosition, currentRotation,true);
+                        yield return currentBattleUnitTurn.GetMover().JumpToPos(targetPosition, currentRotation,true);
                     }
                     else
                     {
@@ -281,34 +266,34 @@ public class BattleHandler : MonoBehaviour
                             }
                             else
                             {
-                                lookTransform = target.GetFighter().GetActiveSubstitute().transform;
+                                lookTransform = targetFighter.GetActiveSubstitute().transform;
                             }
 
-                            currentBattleUnit.GetFighter().LookAtTransform(lookTransform);
+                            currentBattleUnitTurn.GetFighter().LookAtTransform(lookTransform);
                         }
 
-                        currentBattleUnit.UseAbility(selectedAbility);
+                        currentBattleUnitTurn.UseAbility(selectedAbility);
                         //AddToRenCopyList(selectedAbility,isRenCopy);
 
                         yield return new WaitForSeconds(selectedAbility.moveDuration);
 
-                        if (!currentBattleUnit.IsDead())
+                        if (!currentBattleUnitTurn.IsDead())
                         {
                             if (selectedAbility.spellType == SpellType.Melee)
                             {
-                                yield return currentBattleUnit.GetMover().ReturnToStart();
+                                yield return currentBattleUnitTurn.GetMover().ReturnToStart();
                             }
                             else
                             {
-                                currentBattleUnit.transform.rotation = currentBattleUnit.GetMover().GetStartRotation();
+                                currentBattleUnitTurn.transform.rotation = currentBattleUnitTurn.GetMover().GetStartRotation();
                             }
                         }
                       
                         //currentBattleUnit.DecrementSpellLifetimes();
                         yield return new WaitForSeconds(1.5f);
 
-                        currentBattleUnit.GetFighter().ResetTarget();
-                        currentBattleUnit.GetFighter().ResetAbility();
+                        currentBattleUnitTurn.GetFighter().ResetTarget();
+                        currentBattleUnitTurn.GetFighter().ResetAbility();
 
                         if (isTutorial)
                         {
@@ -330,30 +315,30 @@ public class BattleHandler : MonoBehaviour
 
     public IEnumerator AIUseAbility()
     {
-        Ability randomAbility = currentBattleUnit.GetRandomAbility();
+        Ability randomAbility = currentBattleUnitTurn.GetRandomAbility();
 
         if (!isTutorial)
         {
-            if (randomAbility.targetingType == TargetingType.EnemysOnly)
+            if (randomAbility.targetingType == TargetingType.EnemiesOnly)
             {
                 if (randomAbility.canTargetAll)
                 {
-                    currentBattleUnit.GetFighter().SetAllTargets(battleUnitManager.GetPlayerUnits());
+                    currentBattleUnitTurn.GetFighter().SetAllTargets(battleUnitManager.GetPlayerUnits());
                 }
                 else
                 {
-                    currentBattleUnit.GetFighter().SetTarget(battleUnitManager.GetRandomPlayerUnit());
+                    currentBattleUnitTurn.GetFighter().SetTarget(battleUnitManager.GetRandomPlayerUnit());
                 }
             }
             else if (randomAbility.targetingType == TargetingType.SelfOnly)
             {
-                currentBattleUnit.GetFighter().SetTarget(currentBattleUnit);
+                currentBattleUnitTurn.GetFighter().SetTarget(currentBattleUnitTurn);
             }
 
-            if (!CanAICastSpell(currentBattleUnit.GetFighter().GetTarget(), randomAbility))
+            if (!CanAICastSpell(currentBattleUnitTurn.GetFighter().GetTarget(), randomAbility))
             {
-                randomAbility = currentBattleUnit.GetBattleUnitInfo().GetBasicAttack();
-                currentBattleUnit.GetFighter().SetTarget(battleUnitManager.GetRandomPlayerUnit());
+                randomAbility = currentBattleUnitTurn.GetBattleUnitInfo().GetBasicAttack();
+                currentBattleUnitTurn.GetFighter().SetTarget(battleUnitManager.GetRandomPlayerUnit());
             }
         }
         else
@@ -361,7 +346,7 @@ public class BattleHandler : MonoBehaviour
             //Tutorial stuff
         }
 
-        currentBattleUnit.GetFighter().SetAbility(randomAbility);
+        currentBattleUnitTurn.GetFighter().SetAbility(randomAbility);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -370,7 +355,7 @@ public class BattleHandler : MonoBehaviour
 
     private bool CanAICastSpell(BattleUnit target, Ability selectedAbility)
     {
-        if (!currentBattleUnit.HasEnoughMana(selectedAbility.manaCost))
+        if (!currentBattleUnitTurn.HasEnoughMana(selectedAbility.manaCost))
         {
             return false;
         }
@@ -393,12 +378,12 @@ public class BattleHandler : MonoBehaviour
         if (isBattleOver) return;
         currentAction = null;
         turnManager.AdvanceTurn();
-        currentBattleUnit = turnManager.GetBattleUnitTurn();
-        
+        SetCurrentBattleUnitTurn();
+    
         if (battleState == BattleState.Battling)
         {
-            battleUIManager.RotateTurnOrder();
-            currentBattleUnit.ActivateUnitIndicatorUI(true);
+            battleUIManager.ExecuteNextTurn(turnManager.GetTurn());
+            currentBattleUnitTurn.ActivateUnitIndicatorUI(true);
             ExecuteNextTurn();
         }
     }
@@ -408,7 +393,7 @@ public class BattleHandler : MonoBehaviour
         if (isTutorial) return;
         if (turnManager.IsPlayerTurn())
         {
-            battleUIManager.ActivatePlayerMoveCanvas();
+            battleUIManager.ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
         }
         else
         {
@@ -448,18 +433,13 @@ public class BattleHandler : MonoBehaviour
 
     private void UpdateManagerLists()
     {
-        battleUIManager.UpdateUnitLists
+        battleUIManager.UpdateBattleUnitLists
             (
             battleUnitManager.GetPlayerUnits(),
             battleUnitManager.GetDeadPlayerUnits(),
             battleUnitManager.GetEnemyUnits(),
             battleUnitManager.GetDeadEnemyUnits()
             );
-    }
-
-    private void UpdateUIManagerCurrentUnit()
-    {
-        battleUIManager.SetCurrentBattleUnit(turnManager.GetBattleUnitTurn());
     }
 
     private bool IsBattling()
@@ -602,16 +582,17 @@ public class BattleHandler : MonoBehaviour
         return returnableList;
     }
 
-    public void OverrideUIManager(BattleUIManager overrideManager)
-    {
-        battleUIManager = overrideManager;
+    //Tutorial???
+    //public void OverrideUIManager(BattleUIManager overrideManager)
+    //{
+    //    battleUIManager = overrideManager;
 
-        battleUIManager.SetUpBattleUI(battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
-        battleUIManager.SetupTurnOrderUI(turnManager.GetTurnOrder());
-        battleUIManager.SetUILookAts(camTransform);
-        battleUIManager.onPlayerMove += OnPlayerMove;
-        battleUIManager.onEscape += Escape;
-    }
+    //    battleUIManager.SetUpBattleUI(battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
+    //    battleUIManager.SetupTurnOrderUI(turnManager.GetTurnOrder());
+    //    battleUIManager.SetUILookAts(camTransform);
+    //    battleUIManager.onPlayerMove += OnPlayerMove;
+    //    battleUIManager.onEscape += Escape;
+    //}
 
     public bool IsTutorial()
     {

@@ -15,6 +15,9 @@ public class BattleUnitInfo
 
     bool isPlayer = true;
 
+    //Refactor
+    [SerializeField] Sprite faceImage = null;
+
     public void SetBattleUnitInfo(string _unitName, int _unitLevel, bool _isPlayer,
         Stats _stats, Ability _basicAttack, Ability[] _abilities)
     {
@@ -58,6 +61,16 @@ public class BattleUnitInfo
     public Stats GetStats()
     {
         return stats;
+    }
+
+    public void SetFaceImage(Sprite _faceImage)
+    {
+        faceImage = _faceImage;
+    }
+
+    public Sprite GetFaceImage()
+    {
+        return faceImage;
     }
 
     public Ability GetBasicAttack()

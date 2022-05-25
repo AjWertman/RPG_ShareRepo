@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 public enum AbilityType { Physical, Magical}
-public enum SpellType { Melee, Ranged, Static, RenCopy}
-public enum TargetingType { EnemysOnly, PlayersOnly, SelfOnly, Everyone}
+public enum SpellType { Melee, Ranged, Static, Copy}
+public enum TargetingType { EnemiesOnly, PlayersOnly, SelfOnly, Everyone}
 
 [CreateAssetMenu(fileName = "Ability", menuName = "Ability/Create New Ability", order = 1)]
 public class Ability : ScriptableObject

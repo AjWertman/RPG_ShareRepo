@@ -10,6 +10,7 @@
 //Add music and sound fx
 //Decide on story - Time Soldiers? 
 //Update Main menu
+//Update combat UI To be under 1 canvas
 //Expand combat
 //Screen or minimap effect when in enemy territory
 //Create experience - Level design, enemy triggers , dialogue, quest, boss fight.

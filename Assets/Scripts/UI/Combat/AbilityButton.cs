@@ -1,35 +1,51 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Ability assignedAbility = null;
-    string cantCastReason = "";
+    Ability assignedAbility = null;
 
-    public event Action<Ability,string> onPointerEnter;
+    Button button = null;
+    Image buttonImage = null;
+    TextMeshProUGUI buttonText = null;
+
+    public event Action<Ability> onSelect;
+    public event Action<Ability> onPointerEnter;
     public event Action onPointerExit;
 
-    public void SetAssignedAbility(Ability abilityToSet)
+    private void Awake()
     {
-        assignedAbility = abilityToSet;
+        button = GetComponent<Button>();
+        buttonText = GetComponentInChildren<TextMeshProUGUI>();
+        button.onClick.AddListener(()=> onSelect(assignedAbility));
     }
 
-    public Ability GetAssignedAbility()
+    public void SetAssignedAbility(Ability _abilityToSet)
     {
-        return assignedAbility;
+        button.interactable = true;
+        assignedAbility = _abilityToSet;
+        button.image.color = assignedAbility.buttonColor;
+        buttonText.text = assignedAbility.abilityName;
+        buttonText.color = assignedAbility.textColor;
     }
 
-    public void SetCantCastReason(string reason)
+    public void ResetAbilityButton()
     {
-        cantCastReason = reason;
+        button.interactable = false;
+        assignedAbility = null;
+        button.image.color = Color.white;
+        buttonText.text = "Ability";
+        buttonText.color = Color.black;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (assignedAbility == null) return;
         if (assignedAbility.abilityType == AbilityType.Physical) return;
-        onPointerEnter(assignedAbility, cantCastReason);
+        onPointerEnter(assignedAbility);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -37,5 +53,15 @@ public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (assignedAbility == null) return;
         if (assignedAbility.abilityType == AbilityType.Physical) return;
         onPointerExit();
+    }
+
+    public Ability GetAssignedAbility()
+    {
+        return assignedAbility;
+    }
+
+    public Button GetButton()
+    {
+        return button;
     }
 }
