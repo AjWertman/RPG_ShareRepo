@@ -10,16 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: BasicAttack
+  m_Name: TargetAll
   m_EditorClassIdentifier: 
-  abilityName: Attack
+  abilityName: TargetAll
   requiredLevel: 1
-  abilityType: 0
-  animatorTrigger: BasicAttack
+  abilityType: 1
+  animatorTrigger: cast
   moveDuration: 1.5
   baseAbilityAmount: 40
   manaCost: 0
-  spellDescription: Basic attack of a character
+  spellDescription: 'I can target everyone
+
+'
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}

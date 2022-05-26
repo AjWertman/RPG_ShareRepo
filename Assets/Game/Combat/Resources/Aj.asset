@@ -42,7 +42,8 @@ MonoBehaviour:
       statLevel: 69
       levelUpPercent: 2
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
-  abilities: []
+  abilities:
+  - {fileID: 11400000, guid: 9773ff6d5a8deb145ae2d6a81e8e1b67, type: 2}
   xpAward: 100
   backgroundImage: {fileID: 21300000, guid: ba7b3ed94bec5c64ab4ee22be5e0f9fa, type: 3}
   faceImage: {fileID: 21300000, guid: ba7b3ed94bec5c64ab4ee22be5e0f9fa, type: 3}

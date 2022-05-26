@@ -376,13 +376,14 @@ public class BattleHandler : MonoBehaviour
     private void AdvanceTurn()
     {
         if (isBattleOver) return;
+
         currentAction = null;
         turnManager.AdvanceTurn();
         SetCurrentBattleUnitTurn();
-    
+         
         if (battleState == BattleState.Battling)
         {
-            battleUIManager.ExecuteNextTurn(turnManager.GetTurn());
+            battleUIManager.GetBattleHUD().UpdateTurnOrderUIItems(turnManager.GetTurnOrder(), turnManager.GetTurn());
             currentBattleUnitTurn.ActivateUnitIndicatorUI(true);
             ExecuteNextTurn();
         }

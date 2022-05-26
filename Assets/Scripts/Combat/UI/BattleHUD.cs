@@ -42,21 +42,11 @@ public class BattleHUD : MonoBehaviour
         }
     }
 
-    private void OnTurnOrderHighlight(BattleUnit _battleUnit)
+    public void UpdateTurnOrderUIItems(List<BattleUnit> _currentTurnOrder, int _currentTurn)
     {
-        onTurnOrderHighlight(_battleUnit);
-    }
-
-    private void OnTurnOrderUnhighlight()
-    {
-        onTurnOrderUnhighlight();
-    }
-
-    public void SetupBattleHUD(List<BattleUnit> _turnOrder)
-    {
-        currentTurnOrder = _turnOrder;
-
-        SetupTurnOrderUIItems(0);
+        List<BattleUnit> aliveUnits = GetAliveUnits(_currentTurnOrder);
+        SetCurrentTurnOrder(aliveUnits);
+        SetupTurnOrderUIItems(_currentTurn);
     }
 
     public void SetupTurnOrderUIItems(int _currentTurn)
@@ -80,6 +70,21 @@ public class BattleHUD : MonoBehaviour
 
         bool isBattleUnitNull = (_battleUnit == null);
         unitResourcesIndicator.gameObject.SetActive(!isBattleUnitNull);
+    }
+
+    public void SetCurrentTurnOrder(List<BattleUnit> _turnOrder)
+    {
+        currentTurnOrder = _turnOrder;
+    }
+
+    private void OnTurnOrderHighlight(BattleUnit _battleUnit)
+    {
+        onTurnOrderHighlight(_battleUnit);
+    }
+
+    private void OnTurnOrderUnhighlight()
+    {
+        onTurnOrderUnhighlight();
     }
 
     public IEnumerator ActivateCantUseAbilityUI(string _reason)
@@ -112,6 +117,22 @@ public class BattleHUD : MonoBehaviour
 
         return uiTurnOrder;
     }
+    
+    public List<BattleUnit> GetAliveUnits(List<BattleUnit> _allBattleUnits)
+    {
+        List<BattleUnit> aliveUnits = new List<BattleUnit>();
+
+        foreach (BattleUnit battleUnit in _allBattleUnits)
+        {
+            if (!battleUnit.IsDead())
+            {
+                aliveUnits.Add(battleUnit);
+            }
+
+        }
+
+        return aliveUnits;
+    }
 
     public int UpdateTurnOrderIndex(int _currentIndex)
     {
@@ -125,7 +146,6 @@ public class BattleHUD : MonoBehaviour
         return updatedIndex;
     }
 
-
     /// <summary>
     /// ///////////////////////////////////
     /// </summary>
@@ -136,43 +156,6 @@ public class BattleHUD : MonoBehaviour
         foreach (TurnOrderUIItem turnOrderUIItem in turnOrderUIItems)
         {
             //turnOrderUIItem.DecrementIndex();
-        }
-    }
-
-    //Figure out doing this before rotating
-    private void HandleDeadUnits()
-    {
-        List<TurnOrderUIItem> uiItemsToRemove = new List<TurnOrderUIItem>();
-
-        foreach (TurnOrderUIItem turnOrderUIItem in turnOrderUIItems)
-        {
-            if (turnOrderUIItem.GetBattleUnit().IsDead())
-            {
-                uiItemsToRemove.Add(turnOrderUIItem);
-            }
-        }
-
-        foreach (TurnOrderUIItem itemToRemove in uiItemsToRemove)
-        {
-            int indexToRemove = itemToRemove.GetIndex();
-            turnOrderUIItems.Remove(itemToRemove);
-            Destroy(itemToRemove.gameObject);
-
-            for (int i = 0; i < turnOrderUIItems.Count; i++)
-            {
-                if (i > indexToRemove)
-                {
-                    //turnOrderUIItems[i].DecrementIndex();
-                }
-            }
-        }
-    }
-
-    private IEnumerable<TurnOrderUIItem> GetAllTurnOrderUIItems()
-    {
-        foreach (TurnOrderUIItem turnOrderUIItem in turnOrderUIItems)
-        {
-            yield return turnOrderUIItem;
         }
     }
 

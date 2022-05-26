@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BattleUIMenuKey { None, PlayerMoveSelect, AbilitySelect, TargetSelect}
+public enum BattleUIMenuKey { None, PlayerMoveSelect, AbilitySelect, ItemSelect, TargetSelect}
 
 public class BattleUIManager : MonoBehaviour
 {
@@ -50,7 +50,7 @@ public class BattleUIManager : MonoBehaviour
         targetSelectMenu.onTargetSelect += OnTargetSelect;
         targetSelectMenu.onTargetHighlight += HighlightTarget;
         targetSelectMenu.onTargetUnhighlight += UnhighlightTarget;
-        targetSelectMenu.onBack += ActivateBattleUIMenu;
+        targetSelectMenu.onBackButton += ActivateBattleUIMenu;
 
         battleHUD.onTurnOrderHighlight += HighlightTarget;
         battleHUD.onTurnOrderUnhighlight += UnhighlightTarget;
@@ -59,7 +59,7 @@ public class BattleUIManager : MonoBehaviour
     public void SetupUIManager(List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits, List<BattleUnit> _turnOrder)
     {
         UpdateBattleUnitLists(_playerUnits, new List<BattleUnit>(), _enemyUnits, new List<BattleUnit>());
-        battleHUD.SetupBattleHUD(_turnOrder);
+        battleHUD.UpdateTurnOrderUIItems(_turnOrder, 0);
     }
 
     public void ActivateBattleUIMenu(BattleUIMenuKey _battleUIMenu)
@@ -93,7 +93,6 @@ public class BattleUIManager : MonoBehaviour
         {
             case PlayerMoveType.Attack:
 
-                //Remove AbilityButton from Attack button
                 Ability basicAttack = currentBattleUnitTurn.GetBattleUnitInfo().GetBasicAttack();
                 OnAbilitySelect(basicAttack);
                 break;
@@ -104,7 +103,8 @@ public class BattleUIManager : MonoBehaviour
                 break;
 
             case PlayerMoveType.ItemSelect:
-                //item select
+
+                ActivateBattleUIMenu(BattleUIMenuKey.ItemSelect);
                 break;
 
             case PlayerMoveType.Escape:
@@ -148,7 +148,7 @@ public class BattleUIManager : MonoBehaviour
         }
         else
         {
-            targetSelectMenu.ResetTargetSelectMenu();
+            targetSelectMenu.ResetTargetButtons();
         }
 
         targetSelectMenu.gameObject.SetActive(_shouldActivate);
@@ -158,7 +158,16 @@ public class BattleUIManager : MonoBehaviour
     {
         selectedAbility = _ability;
 
-        List<BattleUnit> targetTeam = targetSelectMenu.GetTargets(selectedAbility.targetingType);
+        List<BattleUnit> targetTeam = new List<BattleUnit>();
+
+        if (selectedAbility.targetingType == TargetingType.PlayersOnly)
+        {
+            targetTeam = playerUnits;
+        }
+        else
+        {
+            targetTeam = enemyUnits;
+        }
 
         if(targetTeam.Count > 1)
         {
@@ -311,41 +320,5 @@ public class BattleUIManager : MonoBehaviour
     //    {
     //        onPlayerMove(currentBattleUnit, selectedAbility);
     //    }
-    //}
-
-    //TargetSelect///////////////////////////////////////////////////////////////////////////////////////////
-
-    //public void ActivateTargetSelectCanvas()
-    //{
-    //    TargetingType targetingType = selectedAbility.targetingType;
-
-    //    if (targetingType == TargetingType.SelfOnly)
-    //    {
-    //        onPlayerMove(currentBattleUnit, selectedAbility);
-    //        return;
-    //    }
-    //    else if (targetingType == TargetingType.EnemysOnly)
-    //    {
-    //        playerGroupButton.gameObject.SetActive(false);
-    //        enemyGroupButton.gameObject.SetActive(true);
-
-    //        OnGroupButtonSelect(false);
-    //    }
-    //    else if (targetingType == TargetingType.PlayersOnly)
-    //    {
-    //        enemyGroupButton.gameObject.SetActive(false);
-    //        playerGroupButton.gameObject.SetActive(true);
-
-    //        OnGroupButtonSelect(true);
-    //    }
-    //    else if (targetingType == TargetingType.Everyone)
-    //    {
-    //        enemyGroupButton.gameObject.SetActive(true);
-    //        playerGroupButton.gameObject.SetActive(true);
-
-    //        OnGroupButtonSelect(false);
-    //    }
-
-    //    targetSelectCanvas.SetActive(true);
     //}
 }

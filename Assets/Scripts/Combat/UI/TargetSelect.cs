@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum TargetSelectKey { None, Players, Enemies, All}
 
 public class TargetSelect : MonoBehaviour
 {
@@ -26,16 +25,18 @@ public class TargetSelect : MonoBehaviour
     public event Action<BattleUnit> onTargetSelect;
     public event Action<BattleUnit> onTargetHighlight;
     public event Action onTargetUnhighlight;
-    public event Action<BattleUIMenuKey> onBack;
+    public event Action<BattleUIMenuKey> onBackButton;
 
     public void InitalizeTargetSelectMenu()
     {
         CreateTargetButtonsPool();
 
-        //enemyGroupButton.onClick.AddListener(() => OnGroupButtonSelect(false));
-        //playerGroupButton.onClick.AddListener(() => OnGroupButtonSelect(true));
+        enemyGroupButton.onClick.AddListener(() => OnGroupButtonSelect(false));
+        playerGroupButton.onClick.AddListener(() => OnGroupButtonSelect(true));
 
-        backButton.onClick.AddListener(() => onBack(previousPageKey));
+        backButton.onClick.AddListener(OnBackButton);
+
+        DeactivateGroupButtons();
     }
 
     private void CreateTargetButtonsPool()
@@ -57,6 +58,7 @@ public class TargetSelect : MonoBehaviour
 
     private void OnTargetSelect(BattleUnit _battleUnit)
     {
+        ResetTargetButtons();
         onTargetSelect(_battleUnit);
     }
 
@@ -73,15 +75,18 @@ public class TargetSelect : MonoBehaviour
     public void SetupTargetSelectMenu(BattleUIMenuKey _previousMenuKey, TargetingType _targetingType)
     {
         previousPageKey = _previousMenuKey;
-        PopulateTargetButtons(_targetingType);
+
+        SetupGroupButtons(_targetingType);
+
+        bool isPlayerTarget = (_targetingType == TargetingType.PlayersOnly);
+        PopulateTargetButtons(isPlayerTarget);
     }
 
-    public void PopulateTargetButtons(TargetingType _targetingType)
+    public void PopulateTargetButtons(bool _isPlayer)
     {
         ResetTargetButtons();
-        //set group button
 
-        foreach(BattleUnit target in GetTargets(_targetingType))
+        foreach (BattleUnit target in GetTargets(_isPlayer))
         {
             TargetButton targetButton = GetAvailableTargetButton();
             targetButton.SetupTargetButton(target);
@@ -90,21 +95,55 @@ public class TargetSelect : MonoBehaviour
         }
     }
 
-    //private void OnGroupButtonSelect(bool _isPlayer)
-    //{
-    //    if (_isPlayer)
-    //    {
-    //        playerGroupButton.interactable = false;
-    //        enemyGroupButton.interactable = true;
-    //        PopulatePlayerButtons();
-    //    }
-    //    else
-    //    {
-    //        enemyGroupButton.interactable = false;
-    //        playerGroupButton.interactable = true;
-    //        PopulateEnemyButtons();
-    //    }
-    //}
+    public void SetupGroupButtons(TargetingType _targetingType)
+    {
+        DeactivateGroupButtons();
+        switch (_targetingType)
+        {
+            case TargetingType.PlayersOnly:
+
+                playerGroupButton.gameObject.SetActive(true);
+                playerGroupButton.interactable = false;
+
+                enemyGroupButton.gameObject.SetActive(false);
+                break;
+
+            case TargetingType.EnemiesOnly:
+
+                enemyGroupButton.gameObject.SetActive(true);
+                enemyGroupButton.interactable = false;
+
+                playerGroupButton.gameObject.SetActive(false);
+                break;
+
+            case TargetingType.Everyone:
+
+                //have a bool to decide whether spell is friendly or not and start with that button.
+                //IE:Player has a holy spell that would be used to heal living beings, however, it does extra damage to undead
+                enemyGroupButton.gameObject.SetActive(true);
+                enemyGroupButton.interactable = false;
+
+                playerGroupButton.gameObject.SetActive(true);
+                playerGroupButton.interactable = true;
+                break;
+        }
+    }
+
+    private void OnGroupButtonSelect(bool _isPlayer)
+    {
+        if (_isPlayer)
+        {
+            playerGroupButton.interactable = false;
+            enemyGroupButton.interactable = true;
+            PopulateTargetButtons(true);
+        }
+        else
+        {
+            enemyGroupButton.interactable = false;
+            playerGroupButton.interactable = true;
+            PopulateTargetButtons(false);
+        }
+    }
 
     public void UpdateBattleUnitLists(List<BattleUnit> _playerUnits, List<BattleUnit> _deadPlayerUnits, List<BattleUnit> _enemyUnits, List<BattleUnit> _deadEnemyUnits)
     {
@@ -126,7 +165,7 @@ public class TargetSelect : MonoBehaviour
         ResetTargetButtons();
     }
 
-    private void ResetTargetButtons()
+    public void ResetTargetButtons()
     {
         List<TargetButton> activeTargetButtons = GetActiveTargetButtons();
         if (activeTargetButtons.Count <= 0) return;
@@ -146,38 +185,48 @@ public class TargetSelect : MonoBehaviour
         }
     }
 
-    public List<BattleUnit> GetTargets(TargetingType _targetingType)
+    private void DeactivateGroupButtons()
     {
-        List<BattleUnit> targetableBattleUnits = new List<BattleUnit>();
+        playerGroupButton.interactable = false;
+        enemyGroupButton.interactable = false;
+        playerGroupButton.gameObject.SetActive(false);
+        enemyGroupButton.gameObject.SetActive(false);
+    }
 
-        TargetSelectKey targetsType = GetTargetsType(_targetingType);
+    public void OnBackButton()
+    {
+        onBackButton(previousPageKey);
+    }
 
-        if (targetsType == TargetSelectKey.Players)
+    public List<BattleUnit> GetTargets(bool _isPlayer)
+    {
+        List<BattleUnit> targets = new List<BattleUnit>();
+
+        foreach(BattleUnit battleUnit in GetTeamList(_isPlayer))
+        {        
+            if (!battleUnit.IsDead())
+            {
+                targets.Add(battleUnit);
+            }
+        }
+              
+        return targets;
+    }
+
+    public List<BattleUnit> GetTeamList(bool _isPlayer)
+    {
+        List<BattleUnit> teamList = new List<BattleUnit>();  
+
+        if (_isPlayer)
         {
-            targetableBattleUnits = playerUnits;
+            teamList = playerUnits;
         }
         else
         {
-            targetableBattleUnits = enemyUnits;
+            teamList = enemyUnits;
         }
 
-        return targetableBattleUnits;
-    }
-
-    private TargetSelectKey GetTargetsType(TargetingType _targetingType)
-    {
-        TargetSelectKey targetsType = TargetSelectKey.None;
-
-        if (_targetingType == TargetingType.Everyone || _targetingType == TargetingType.EnemiesOnly)
-        {
-            targetsType = TargetSelectKey.Enemies;
-        }
-        else if (_targetingType == TargetingType.PlayersOnly)
-        {
-            targetsType = TargetSelectKey.Players;
-        }
-
-        return targetsType;
+        return teamList;
     }
 
     private TargetButton GetAvailableTargetButton()
@@ -211,4 +260,37 @@ public class TargetSelect : MonoBehaviour
 
         return activeTargetButtons;
     }
+    //public void ActivateTargetSelectCanvas()
+    //{
+    //    TargetingType targetingType = selectedAbility.targetingType;
+
+    //    if (targetingType == TargetingType.SelfOnly)
+    //    {
+    //        onPlayerMove(currentBattleUnit, selectedAbility);
+    //        return;
+    //    }
+    //    else if (targetingType == TargetingType.EnemysOnly)
+    //    {
+    //        playerGroupButton.gameObject.SetActive(false);
+    //        enemyGroupButton.gameObject.SetActive(true);
+
+    //        OnGroupButtonSelect(false);
+    //    }
+    //    else if (targetingType == TargetingType.PlayersOnly)
+    //    {
+    //        enemyGroupButton.gameObject.SetActive(false);
+    //        playerGroupButton.gameObject.SetActive(true);
+
+    //        OnGroupButtonSelect(true);
+    //    }
+    //    else if (targetingType == TargetingType.Everyone)
+    //    {
+    //        enemyGroupButton.gameObject.SetActive(true);
+    //        playerGroupButton.gameObject.SetActive(true);
+
+    //        OnGroupButtonSelect(false);
+    //    }
+
+    //    targetSelectCanvas.SetActive(true);
+    //}
 }
