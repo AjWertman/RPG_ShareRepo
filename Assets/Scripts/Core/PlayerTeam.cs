@@ -22,7 +22,7 @@ public class TeamInfo
 
     public void SetStats(Stats _stats)
     {
-        stats.SetStats(_stats.GetAllStats());
+        stats.SetStats(_stats);
     }
 
     public string GetName()

@@ -58,7 +58,6 @@ public class BattleHUD : MonoBehaviour
             BattleUnit battleUnit = uiTurnOrder[i];
             TurnOrderUIItem currentTurnOrderUIItem = turnOrderUIItems[i];
 
-            //setup turn order  ui items
             currentTurnOrderUIItem.SetupTurnOrderUI(i, battleUnit);
             currentTurnOrderUIItem.gameObject.SetActive(true);
         }
@@ -85,6 +84,14 @@ public class BattleHUD : MonoBehaviour
     private void OnTurnOrderUnhighlight()
     {
         onTurnOrderUnhighlight();
+    }
+    
+    public void ResetTurnOrderUIItems()
+    {
+        foreach (TurnOrderUIItem turnOrderUIItem in turnOrderUIItems)
+        {
+            turnOrderUIItem.ResetTurnOrderUIItem();
+        }
     }
 
     public IEnumerator ActivateCantUseAbilityUI(string _reason)
@@ -117,7 +124,7 @@ public class BattleHUD : MonoBehaviour
 
         return uiTurnOrder;
     }
-    
+
     public List<BattleUnit> GetAliveUnits(List<BattleUnit> _allBattleUnits)
     {
         List<BattleUnit> aliveUnits = new List<BattleUnit>();
@@ -145,46 +152,4 @@ public class BattleHUD : MonoBehaviour
 
         return updatedIndex;
     }
-
-    /// <summary>
-    /// ///////////////////////////////////
-    /// </summary>
-    /// 
-
-    private void DecrementTurnOrderIndex()
-    {
-        foreach (TurnOrderUIItem turnOrderUIItem in turnOrderUIItems)
-        {
-            //turnOrderUIItem.DecrementIndex();
-        }
-    }
-
-    /// <summary>
-    /// ///////////////
-    /// </summary>
-    /// <param name="_turnOrder"></param>
-    /// 
-    ////////////////////////////////////Handle Deaths!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //public void RotateTurnOrder()
-    //{
-    //    HandleDeadUnits();
-    //    DestroyOldCreateNew();
-    //    turnOrderUIItems[0].SetSize(0);
-    //}
-
-    //private void DestroyOldCreateNew()
-    //{
-    //    TurnOrderUIItem firstTOItem = turnOrderUIItems[0];
-    //    BattleUnit firstUnit = firstTOItem.GetBattleUnit();
-
-    //    turnOrderUIItems.Remove(firstTOItem);
-    //    Destroy(firstTOItem.gameObject);
-    //    DecrementTurnOrderIndex();
-
-    //    GameObject lastTOObject = Instantiate(turnOrderUIItem, turnOrderUI);
-    //    TurnOrderUIItem lastTOItem = lastTOObject.GetComponent<TurnOrderUIItem>();
-
-    //    turnOrderUIItems.Add(lastTOItem);
-    //    lastTOItem.SetupTurnOrderUI(turnOrderUIItems.Count - 1, firstUnit);
-    //}
 }

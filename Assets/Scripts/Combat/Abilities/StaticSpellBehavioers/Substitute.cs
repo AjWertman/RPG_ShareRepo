@@ -54,13 +54,6 @@ public class Substitute : StaticSpell
         target.GetComponent<Fighter>().SetHasSubsitute(false);
         Instantiate(smokeDeathPrefab, transform.position, Quaternion.identity);
         StopCoroutine(SubstituteAttackBehavior());
-        Destroy(gameObject);
-    }
-
-    private void SetUnitSoundFX(SoundFXManager unitSoundFX)
-    {
-        fighter.SetUnitSoundFX(unitSoundFX);
-        mover.SetUnitSoundFX(unitSoundFX);
     }
 
     public void StartExecutingAttackBehavior(BattleUnit _target)

@@ -18,28 +18,28 @@ MonoBehaviour:
   baseStats:
     stats:
     - statType: 0
-      statLevel: 69
+      statLevel: 100
       levelUpPercent: 2
     - statType: 1
-      statLevel: 69
+      statLevel: 100
       levelUpPercent: 2
     - statType: 2
-      statLevel: 69
+      statLevel: 100
       levelUpPercent: 2
     - statType: 3
-      statLevel: 69
+      statLevel: 100
       levelUpPercent: 2
     - statType: 4
-      statLevel: 69
+      statLevel: 100
       levelUpPercent: 2
     - statType: 5
-      statLevel: 69
+      statLevel: 100
       levelUpPercent: 2
     - statType: 6
-      statLevel: 10
+      statLevel: 100
       levelUpPercent: 2
     - statType: 7
-      statLevel: 69
+      statLevel: 100
       levelUpPercent: 2
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   abilities:

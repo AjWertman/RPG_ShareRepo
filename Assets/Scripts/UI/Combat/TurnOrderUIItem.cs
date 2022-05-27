@@ -8,6 +8,8 @@ public class TurnOrderUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] Image background = null;
     [SerializeField] Image faceImage = null;
 
+    [SerializeField] Sprite defaultFaceImage = null;
+
     int index = 0;
     BattleUnit battleUnit = null;
     Sprite facePic = null;
@@ -26,6 +28,18 @@ public class TurnOrderUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetSize(index);
         SetImage(facePic);
         SetBackgroundColor(isPlayer);
+    }
+
+    public void ResetTurnOrderUIItem()
+    {
+        index = 0;
+        battleUnit = null;
+        facePic = null;
+        isPlayer = false;
+
+        SetSize(1);
+        SetImage(defaultFaceImage);
+        SetBackgroundColor(null);
     }
 
     public void SetSize(int index)
@@ -53,18 +67,19 @@ public class TurnOrderUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExit
         faceImage.sprite = facePic;
     }
 
-    public void SetBackgroundColor(bool isPlayer)
-    {       
-        if (isPlayer)
+    public void SetBackgroundColor(bool? _isPlayer)
+    {
+        Color newColor = Color.white;
+        if (_isPlayer == true)
         {
-            Color playerColor = new Color(0, 0, 1, .35f);
-            background.color = playerColor;
+            newColor = new Color(0, 0, 1, .35f);
         }
-        else
+        else if(_isPlayer == false)
         {
-            Color enemyColor = new Color(1, 0, 0, .35f);
-            background.color = enemyColor;
+            newColor = new Color(1, 0, 0, .35f);
         }
+
+        background.color = newColor;
     }
 
     public int GetIndex()

@@ -14,7 +14,6 @@ public class Fighter : MonoBehaviour
     Transform buffContainer = null;
 
     Animator animator = null;
-    SoundFXManager unitSoundFX = null;
 
     Ability selectedAbility = null;
 
@@ -39,14 +38,22 @@ public class Fighter : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    public void ResetFighter()
+    {
+        activeSubstitute = null;
+        
+        ResetTarget();
+        ResetAbility();
+        UpdateAttributes(10f, 10f, 10f);
+        physicalReflectionDamage = 0;
+        isReflectingSpells = false;
+        isSilenced = false;
+        hasSubstitute = false;
+    }
+
     public void SetSpellContainers(Transform buff, Transform staticSpell)
     {
         buffContainer = buff;
-    }
-
-    public void SetUnitSoundFX(SoundFXManager _unitSoundFX)
-    {
-        unitSoundFX = _unitSoundFX;
     }
 
     public void UpdateAttributes(float _strength, float _skill, float _luck)

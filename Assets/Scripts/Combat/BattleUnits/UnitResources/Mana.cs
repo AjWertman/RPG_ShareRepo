@@ -12,6 +12,14 @@ public class Mana : MonoBehaviour
 
     public event Action onManaChange;
 
+    public void ResetMana()
+    {
+        mana = 0f;
+        maxMana = 0f;
+        manaPercentage = 0f;
+        UpdateAttributes(10f);
+    }
+
     public void UpdateAttributes(float _intellect)
     {
         intellect = _intellect;

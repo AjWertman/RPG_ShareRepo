@@ -9,9 +9,24 @@ public class Stats
     [SerializeField] Stat[] stats = null;
     int baseStatLevel = 10;
 
-    public void SetStats(Stat[] statsToSet)
+    public void SetStats(Stats _stats)
     {
-        stats = statsToSet;
+        foreach(Stat stat in stats)
+        {
+            int newStatLevel = (int)_stats.GetSpecificStatLevel(stat.GetStatType());
+            stat.SetStatLevel(newStatLevel);
+        }
+    }
+
+    public void SetStat(StatType _statToSet, int newAmount)
+    {
+        foreach(Stat stat in stats)
+        {
+            if(_statToSet == stat.GetStatType())
+            { 
+                stat.SetStatLevel(newAmount);
+            }
+        }
     }
 
     public Stat[] GetAllStats()
@@ -19,17 +34,6 @@ public class Stats
         return stats;
     }
 
-    public void SetStat(Stat statToSet, int newAmount)
-    {
-        foreach(Stat stat in stats)
-        {
-            if(statToSet.GetStatType() == stat.GetStatType())
-            { 
-                stat.SetStatLevel(newAmount);
-            }
-        }
-    }
-    
     public Stat GetStat(StatType statType)
     {
         foreach (Stat stat in stats)

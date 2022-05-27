@@ -171,7 +171,6 @@ public class BattleUIManager : MonoBehaviour
 
         if(targetTeam.Count > 1)
         {
-            targetSelectMenu.SetupTargetSelectMenu(activeMenuKey, selectedAbility.targetingType);
             ActivateBattleUIMenu(BattleUIMenuKey.TargetSelect);
         }
         else
@@ -200,6 +199,7 @@ public class BattleUIManager : MonoBehaviour
 
         highlightedTarget.ActivateUnitIndicatorUI(true);
         battleHUD.SetupUnitResourcesIndicator(highlightedTarget);
+        //Resources above head
     }
 
     public void UnhighlightTarget()
@@ -262,6 +262,10 @@ public class BattleUIManager : MonoBehaviour
         isCopy = false;
 
         targetBattleUnit = null;
+
+        abilitySelectMenu.ResetAbilitySelectMenu();
+        targetSelectMenu.ResetTargetSelectMenu();
+        battleHUD.ResetTurnOrderUIItems();
     }
 
     public BattleHUD GetBattleHUD()
@@ -283,8 +287,6 @@ public class BattleUIManager : MonoBehaviour
         return isObsolete;
     }
 
-    /// <summary>
-
     public void SetUILookAts(Transform lookTransform)
     {
         foreach (LookAtCam lookAtCam in FindObjectsOfType<LookAtCam>())
@@ -292,33 +294,4 @@ public class BattleUIManager : MonoBehaviour
             lookAtCam.LookAtCamTransform(lookTransform);      
         }
     }
-
-    //public void OnPlayerMoveButton()
-    //{
-    //    TargetingType type = selectedAbility.targetingType;
-
-    //    if (type == TargetingType.EnemysOnly)
-    //    {
-    //        if (enemyUnits.Count > 1 && !selectedAbility.canTargetAll)
-    //        {
-    //            ActivateTargetSelectCanvas();
-    //        }
-    //        else if (selectedAbility.canTargetAll)
-    //        {
-    //            onPlayerMove(null, selectedAbility);
-    //        }
-    //        else
-    //        {
-    //            onPlayerMove(enemyUnits[0], selectedAbility);
-    //        }
-    //    }
-    //    else if (type == TargetingType.PlayersOnly)
-    //    {
-    //        //player implementation
-    //    }
-    //    else if (type == TargetingType.SelfOnly)
-    //    {
-    //        onPlayerMove(currentBattleUnit, selectedAbility);
-    //    }
-    //}
 }

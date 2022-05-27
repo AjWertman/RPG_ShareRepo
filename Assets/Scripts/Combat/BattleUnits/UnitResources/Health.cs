@@ -14,9 +14,12 @@ public class Health : MonoBehaviour
     float healthPercentage = 1f;
     bool isDead = false;
 
-    float stamina = 0f;
-    float armor = 0f;
-    float resistance = 0f;
+    float baseMaxHealthPoints = 0f;
+    float stamina = 10f;
+    float staminaHealthAmount = 10f;
+
+    float armor = 10f;
+    float resistance = 10f;
 
     public event Action onHealthChange;
     public event Action<BattleUnit> onDeath;
@@ -24,6 +27,16 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        baseMaxHealthPoints = stamina * staminaHealthAmount;
+    }
+
+    public void ResetHealth()
+    {
+        healthPoints = 0f;
+        maxHealthPoints = baseMaxHealthPoints;
+        healthPercentage = 1f;
+        isDead = false;
+        UpdateAttributes(10f, 10f, 10f);
     }
 
     public void UpdateAttributes(float _stamina, float _armor, float _resistance)
@@ -43,24 +56,21 @@ public class Health : MonoBehaviour
 
     public void CalculateMaxHealthPoints(bool initialUpdate)
     {
-        float currentMaxHealthPoints = maxHealthPoints;
-        float newMaxHealthPoints = maxHealthPoints;
-        float amountToAdd = stamina - 10;
-
-        newMaxHealthPoints +=  10f * amountToAdd;
+        float previousMaxHealthPoints = maxHealthPoints;
+        float newMaxHealthPoints = stamina * staminaHealthAmount;
 
         maxHealthPoints = newMaxHealthPoints;
-
+        
         if (initialUpdate)
         {
             healthPoints = maxHealthPoints;
         }
         else
         {
-            float healthPercentage = healthPoints/currentMaxHealthPoints;
+            float healthPercentage = healthPoints/previousMaxHealthPoints;
             healthPoints = maxHealthPoints * healthPercentage;
         }
-      
+
         SetHealthPercentage();
     }
 

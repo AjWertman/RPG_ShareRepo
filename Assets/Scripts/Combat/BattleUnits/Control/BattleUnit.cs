@@ -49,7 +49,8 @@ public class BattleUnit : MonoBehaviour
         SetupIndicator(_isPlayer);
         SetMesh(_unitMesh);
         battleUnitInfo.SetBattleUnitInfo(_battleUnitInfo);
-        startingStats.SetStats(battleUnitInfo.GetStats().GetAllStats());
+        startingStats.SetStats(battleUnitInfo.GetStats());
+
         UpdateComponentStats(true);
 
         //Refactor?
@@ -95,7 +96,7 @@ public class BattleUnit : MonoBehaviour
 
     public void UpdateStats(Stats _updatedStats)
     {
-        battleUnitInfo.GetStats().SetStats(_updatedStats.GetAllStats());
+        battleUnitInfo.GetStats().SetStats(_updatedStats);
         UpdateComponentStats(false);
     }
 
@@ -126,7 +127,15 @@ public class BattleUnit : MonoBehaviour
     {
         battleUnitInfo.ResetBattleUnitInfo();
         battleUnitResources.ResetBattleUnitResources();
+        ResetComponents();
         startingStats.ResetStats();
+    }
+
+    private void ResetComponents()
+    {
+        fighter.ResetFighter();
+        health.ResetHealth();
+        mana.ResetMana();
     }
 
     public BattleUnitInfo GetBattleUnitInfo()
@@ -288,8 +297,6 @@ public class BattleUnit : MonoBehaviour
         mana.SpendMana(selectedAbility.manaCost);
         fighter.Attack();
     }
-
-
 
     public Ability GetRandomAbility()
     {

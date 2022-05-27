@@ -86,7 +86,9 @@ public class TargetSelect : MonoBehaviour
     {
         ResetTargetButtons();
 
-        foreach (BattleUnit target in GetTargets(_isPlayer))
+        List<BattleUnit> targets = GetTargets(_isPlayer);
+
+        foreach (BattleUnit target in targets)
         {
             TargetButton targetButton = GetAvailableTargetButton();
             targetButton.SetupTargetButton(target);
@@ -203,7 +205,7 @@ public class TargetSelect : MonoBehaviour
         List<BattleUnit> targets = new List<BattleUnit>();
 
         foreach(BattleUnit battleUnit in GetTeamList(_isPlayer))
-        {        
+        {
             if (!battleUnit.IsDead())
             {
                 targets.Add(battleUnit);

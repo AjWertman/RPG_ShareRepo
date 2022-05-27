@@ -24,7 +24,7 @@ public class BattleUnitInfo
         unitName = _unitName;
         unitLevel = _unitLevel;
         isPlayer = _isPlayer;
-        stats.SetStats(_stats.GetAllStats());
+        stats.SetStats(_stats);
         SetAbilities(_basicAttack, _abilities);
     }
 
@@ -33,7 +33,7 @@ public class BattleUnitInfo
         unitName = _battleUnitInfo.GetUnitName();
         unitLevel = _battleUnitInfo.GetUnitLevel();
         isPlayer = _battleUnitInfo.IsPlayer();
-        stats.SetStats(_battleUnitInfo.GetStats().GetAllStats());
+        stats.SetStats(_battleUnitInfo.GetStats());
         SetAbilities(_battleUnitInfo.GetBasicAttack(), _battleUnitInfo.GetAbilities());
     }
 
