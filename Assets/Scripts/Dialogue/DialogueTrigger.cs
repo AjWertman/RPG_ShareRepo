@@ -1,16 +1,50 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 
-public class DialogueTrigger : MonoBehaviour
+namespace RPGProject.Dialogue
 {
-    [SerializeField] string action = null;
-    [SerializeField] UnityEvent onTrigger;
-
-    public void Trigger(string actionToTrigger)
+    public class DialogueTrigger : MonoBehaviour
     {
-        if(actionToTrigger == action)
+        [SerializeField] DialogueAction[] dialogueActions = null;
+
+        public void Trigger(string _action)
         {
-            onTrigger.Invoke();
+            DialogueAction dialogueAction = GetDialogueAction(_action);
+            dialogueAction.GetOnTrigger().Invoke();
+        }
+
+        private DialogueAction GetDialogueAction(string _action)
+        {
+            DialogueAction dialogueActionToGet = null;
+
+            foreach (DialogueAction dialogueAction in dialogueActions)
+            {
+                if (dialogueAction.GetAction() == _action)
+                {
+                    dialogueActionToGet = dialogueAction;
+                    break;
+                }
+            }
+
+            return dialogueActionToGet;
+        }
+    }
+
+    [Serializable]
+    public class DialogueAction
+    {
+        [SerializeField] string action = null;
+        [SerializeField] UnityEvent onTrigger;
+
+        public string GetAction()
+        {
+            return action;
+        }
+
+        public UnityEvent GetOnTrigger()
+        {
+            return onTrigger;
         }
     }
 }

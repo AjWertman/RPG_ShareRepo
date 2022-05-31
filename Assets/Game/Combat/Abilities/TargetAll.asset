@@ -18,7 +18,7 @@ MonoBehaviour:
   animatorTrigger: cast
   moveDuration: 1.5
   baseAbilityAmount: 40
-  manaCost: 0
+  manaCost: 48
   spellDescription: 'I can target everyone
 
 '

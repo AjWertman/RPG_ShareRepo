@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Attack
   requiredLevel: 1
-  abilityType: 0
   animatorTrigger: BasicAttack
-  moveDuration: 1.5
+  abilityLifetime: 1
   baseAbilityAmount: 40
   manaCost: 0
-  spellDescription: Basic attack of a character
+  description: 
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
-  spellPrefab: {fileID: 0}
+  abilityPrefab: {fileID: 0}
   hitFXPrefab: {fileID: 0}
-  spellType: 0
+  abilityResource: 0
+  abilityType: 0
   targetingType: 0
   isInstaHit: 0
   canTargetAll: 0

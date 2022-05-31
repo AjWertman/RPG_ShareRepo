@@ -1,4 +1,4 @@
-namespace RPGCharacterAnims.Lookups
+namespace ASSETPackANIMATIONS.Lookups
 {
 	/// <summary>
 	/// Enum to use with the "Weapon" parameter of the animator. To convert from a Weapon number,

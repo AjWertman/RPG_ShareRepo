@@ -2,30 +2,40 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneManagerScript : MonoBehaviour
+namespace RPGProject.Core
 {
-    [SerializeField] float fadeWaitTime = .5f;
-
-    public void LoadScene(int sceneIndex)
+    public class SceneManagerScript : MonoBehaviour
     {
-        StartCoroutine(LoadSceneCoroutine(sceneIndex));
-    }
+        [SerializeField] float fadeWaitTime = .5f;
 
-    public void LoadMainMenu()
-    {
-        StartCoroutine(LoadSceneCoroutine(0));
-    }
+        Fader fader = null;
 
-    public IEnumerator LoadSceneCoroutine(int sceneIndex)
-    {
-        //FindObjectOfType<SavingWrapper>().Save();
+        private void Awake()
+        {
+            fader = FindObjectOfType<Fader>();
+        }
 
-        yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
+        public void LoadScene(int _sceneIndex)
+        {
+            StartCoroutine(LoadSceneCoroutine(_sceneIndex));
+        }
 
-        yield return SceneManager.LoadSceneAsync(sceneIndex);
+        public void LoadMainMenu()
+        {
+            StartCoroutine(LoadSceneCoroutine(0));
+        }
 
-        //FindObjectOfType<SavingWrapper>().Load();
+        public IEnumerator LoadSceneCoroutine(int _sceneIndex)
+        {
+            //FindObjectOfType<SavingWrapper>().Save();
 
-        yield return FindObjectOfType<Fader>().FadeIn(.25f);
+            yield return fader.FadeOut(Color.white, .5f);
+
+            yield return SceneManager.LoadSceneAsync(_sceneIndex);
+
+            //FindObjectOfType<SavingWrapper>().Load();
+
+            yield return fader.FadeIn(.25f);
+        }
     }
 }

@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims.Extensions
+namespace ASSETPackANIMATIONS.Extensions
 {
     /// <summary>
     /// A set of helpers to use the RPG Character animation handler.

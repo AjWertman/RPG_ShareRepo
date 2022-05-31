@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Enemy 1
   baseLevel: 1
-  characterMeshKey: 4
+  characterMeshKey: 5
   baseStats:
     stats:
     - statType: 0

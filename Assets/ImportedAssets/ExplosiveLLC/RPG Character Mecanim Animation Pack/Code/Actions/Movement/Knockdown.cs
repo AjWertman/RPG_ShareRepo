@@ -1,7 +1,7 @@
-using RPGCharacterAnims.Extensions;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Extensions;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     public class Knockdown : MovementActionHandler<HitContext>
     {

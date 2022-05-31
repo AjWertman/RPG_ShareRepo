@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace RPGCharacterAnims.Extensions
+namespace ASSETPackANIMATIONS.Extensions
 {
     public static class CollectionExtensions
     {

@@ -1,117 +1,130 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Quest", menuName = "Quest/Create New Quest", order = 1)]
-public class Quest : ScriptableObject
+namespace RPGProject.Questing
 {
-    [System.Serializable]
+    [CreateAssetMenu(fileName = "Quest", menuName = "Quest/Create New Quest", order = 1)]
+    public class Quest : ScriptableObject
+    {        
+        [SerializeField] string questDescription = "";
+
+        [SerializeField] List<Objective> objectives = new List<Objective>();
+        [SerializeField] List<Reward> rewards = new List<Reward>();
+        [SerializeField] float xpAward = 100f;
+
+        public string GetTitle()
+        {
+            return name;
+        }
+
+        public string GetDescription()
+        {
+            return questDescription;
+        }
+
+        public Objective GetObjective(string _objectiveRef)
+        {
+            foreach (Objective objective in objectives)
+            {
+                if (objective.GetReference() == _objectiveRef)
+                {
+                    return objective;
+                }
+            }
+
+            return null;
+        }
+
+        public IEnumerable<Objective> GetObjectives()
+        {
+            return objectives;
+        }
+
+        public IEnumerable<Reward> GetRewards()
+        {
+            return rewards;
+        }
+
+        public float GetXPAward()
+        {
+            return xpAward;
+        }
+
+        public int GetObjectiveCount()
+        {
+            return objectives.Count;
+        }
+
+        public bool HasObjective(string _objectiveRef)
+        {
+            foreach (var objective in objectives)
+            {
+                if (objective.GetReference() == _objectiveRef)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static Quest GetByName(string _questName)
+        {
+            foreach (Quest quest in Resources.LoadAll<Quest>(""))
+            {
+                if (quest.name == _questName)
+                {
+                    return quest;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    [Serializable]
     public class Objective
     {
-        public string reference;
-        public int amountToComplete = 1;
-        public string description;
-        public string[] requiredObjectives;
+        [SerializeField] string reference;
+        [SerializeField] int amountToComplete = 1;
+        [SerializeField] string description;
+        [SerializeField] string[] requiredObjectives;
+
+        public string GetReference()
+        {
+            return reference;
+        }
+
+        public int GetAmountToComplete()
+        {
+            return amountToComplete;
+        }
+
+        public string GetDescription()
+        {
+            return description;
+        }
+
+        public string[] GetRequiredObjectives()
+        {
+            return requiredObjectives;
+        }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class Reward
     {
-        public int number;
-        //public InventoryItem item;
-    }
+        [SerializeField] int rewardAmount;
+        //[SerializeField] InventoryItem inventoryItem;
 
-    [SerializeField] string questDescription;
-
-    [SerializeField] List<Objective> objectives = new List<Objective>();
-    [SerializeField] List<Reward> rewards = new List<Reward>();
-    [SerializeField] float xpAward = 100f;
-
-    public string GetTitle()
-    {
-        return name;
-    }
-
-    public string GetDescription()
-    {
-        return questDescription;
-    }
-
-    public Objective GetObjective(string objRef)
-    {
-        foreach(Objective objective in objectives)
+        public int GetRewardAmount()
         {
-            if(objective.reference == objRef)
-            {
-                return objective;
-            }
+            return rewardAmount;
         }
 
-        return null;
-    }
-
-    public IEnumerable<Objective> GetObjectives()
-    {
-        return objectives;
-    }
-
-    public IEnumerable<Reward> GetRewards()
-    {
-        return rewards;
-    }
-
-    public float GetXPAward()
-    {
-        return xpAward;
-    }
-
-    public int GetObjectiveCount()
-    {
-        return objectives.Count;
-    }
-
-    public bool HasObjective(string objectiveRef)
-    {
-        foreach(var objective in objectives)
-        {
-            if(objective.reference == objectiveRef)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    //public bool HasRequiredAmountOfObjectives(string objectiveRef)
-    //{
-    //    foreach(Objective objective in objectives)
-    //    {
-    //        if(objective.reference == objectiveRef)
-    //        {
-    //            if ()
-    //            {
-    //                return true;
-    //            }
-    //            else
-    //            {
-                    
-    //                return false;
-    //            }
-    //        }
-    //    }
-
-    //    return false;
-    //}
-
-    public static Quest GetByName(string questName)
-    {
-        foreach(Quest quest in Resources.LoadAll<Quest>(""))
-        {
-            if (quest.name == questName)
-            {
-                return quest;
-            }
-        }
-
-        return null;
+        //public InventoryItem GetInventoryItem()
+        //{
+        //    return inventoryItem;
+        //}
     }
 }

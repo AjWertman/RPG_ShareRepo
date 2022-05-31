@@ -1,4 +1,7 @@
-﻿public interface IPredicateEvaluator
+﻿namespace RPGProject.Questing
 {
-    bool? Evaluate(string predicate, string[] parameters);
+    public interface IPredicateEvaluator
+    {
+        bool? Evaluate(string _predicate, string[] _parameters);
+    }
 }

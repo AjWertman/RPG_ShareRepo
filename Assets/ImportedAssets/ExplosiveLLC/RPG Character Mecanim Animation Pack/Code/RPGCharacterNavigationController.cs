@@ -1,7 +1,7 @@
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Lookups;
 using UnityEngine;
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
     [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
     [RequireComponent(typeof(RPGCharacterController))]

@@ -1,8 +1,8 @@
-using RPGCharacterAnims.Extensions;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Extensions;
+using ASSETPackANIMATIONS.Lookups;
 using UnityEngine;
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
 	/// <summary>
 	/// Static class which contains hardcoded animation constants and helper functions.

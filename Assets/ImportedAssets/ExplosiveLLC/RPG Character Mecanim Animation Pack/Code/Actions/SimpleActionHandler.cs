@@ -1,6 +1,6 @@
 using System;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     /// <summary>
     /// SimpleActionHandler is used when you need a handler with an off and on state. Its only

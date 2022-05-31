@@ -1,48 +1,61 @@
-﻿using System.Collections;
+﻿using RPGProject.Core;
+using System.Collections;
 using UnityEngine;
 
-public class SavingWrapper : MonoBehaviour
+namespace RPGProject.Saving
 {
-    const string defaultSaveFile = "save";
-
-    //private IEnumerator Start()
-    //{
-    //    yield return GetComponent<SavingSystem>().LoadLastScene(defaultSaveFile);
-    //}
-
-    public void Save()
+    public class SavingWrapper : MonoBehaviour
     {
-        GetComponent<SavingSystem>().Save(defaultSaveFile);
-    }
+        SavingSystem savingSystem = null;
+        Fader fader = null;
 
-    public void Load()
-    {
-        StartCoroutine(LoadBehavior());
-    }
+        const string defaultSaveFile = "save";
 
-    private IEnumerator LoadBehavior()
-    {
-        bool doesDataPathExist = DoesDataPathExist();
-
-        if (doesDataPathExist)
+        private void Awake()
         {
-            yield return FindObjectOfType<Fader>().FadeOut(Color.white, 1f);
-            GetComponent<SavingSystem>().Load(defaultSaveFile);
-            yield return FindObjectOfType<Fader>().FadeIn(.5f);
+            savingSystem = GetComponent<SavingSystem>();
+            fader = FindObjectOfType<Fader>();
         }
-        else
+
+        //private IEnumerator Start()
+        //{
+        //    yield return savingSystem.LoadLastScene(defaultSaveFile);
+        //}
+
+        public void Save()
         {
-            GetComponent<SavingSystem>().Load(defaultSaveFile);
+            savingSystem.Save(defaultSaveFile);
         }
-    }
 
-    public void DeleteSaveFile()
-    {
-        GetComponent<SavingSystem>().DeleteSaveFile(defaultSaveFile);
-    }
+        public void Load()
+        {
+            StartCoroutine(LoadBehavior());
+        }
 
-    public bool DoesDataPathExist()
-    {
-        return GetComponent<SavingSystem>().DoesDataPathExist(defaultSaveFile);
+        private IEnumerator LoadBehavior()
+        {
+            bool doesDataPathExist = DoesDataPathExist();
+
+            if (doesDataPathExist)
+            {
+                yield return fader.FadeOut(Color.white, 1f);
+                savingSystem.Load(defaultSaveFile);
+                yield return fader.FadeIn(.5f);
+            }
+            else
+            {
+                savingSystem.Load(defaultSaveFile);
+            }
+        }
+
+        public void DeleteSaveFile()
+        {
+            savingSystem.DeleteSaveFile(defaultSaveFile);
+        }
+
+        public bool DoesDataPathExist()
+        {
+            return savingSystem.DoesDataPathExist(defaultSaveFile);
+        }
     }
 }

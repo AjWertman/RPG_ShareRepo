@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace AjsUtilityPackage
+namespace RPGProject.Core
 {
     public class RandomGenerator : MonoBehaviour
     {
-        public static float GetRandomNumber(float min, float max)
+        public static float GetRandomNumber(float _min, float _max)
         {
-            return Random.Range(min, max);
+            return Random.Range(_min, _max);
         }
 
-        public static int GetRandomNumber(int min, int max)
+        public static int GetRandomNumber(int _min, int _max)
         {
-            return Random.Range(min, max + 1);
+            return Random.Range(_min, _max + 1);
         }
 
         public static bool GetRandomBool()
@@ -22,34 +22,34 @@ namespace AjsUtilityPackage
             return coinFlip == 0;
         }
 
-        public static string GetRandomString(string[] strings)
+        public static string GetRandomString(string[] _strings)
         {
-            return strings[GetRandomNumber(0, strings.Length - 1)];
+            return _strings[GetRandomNumber(0, _strings.Length - 1)];
         }
 
-        public static string GetRandomString(List<string> strings)
+        public static string GetRandomString(List<string> _strings)
         {
-            return strings[GetRandomNumber(0, strings.Count - 1)];
+            return _strings[GetRandomNumber(0, _strings.Count - 1)];
         }
 
-        public static GameObject GetRandomGameObject(GameObject[] gameObjects)
+        public static GameObject GetRandomGameObject(GameObject[] _gameObjects)
         {
-            return gameObjects[GetRandomNumber(0, gameObjects.Length - 1)];
+            return _gameObjects[GetRandomNumber(0, _gameObjects.Length - 1)];
         }
 
-        public static GameObject GetRandomGameObject(List<GameObject> gameObjects)
+        public static GameObject GetRandomGameObject(List<GameObject> _gameObjects)
         {
-            return gameObjects[GetRandomNumber(0, gameObjects.Count - 1)];
+            return _gameObjects[GetRandomNumber(0, _gameObjects.Count - 1)];
         }
 
-        public static object GetRandomObject(object[] objects)
+        public static object GetRandomObject(object[] _objects)
         {
-            return objects[GetRandomNumber(0, objects.Length - 1)];
+            return _objects[GetRandomNumber(0, _objects.Length - 1)];
         }
 
-        public static object GetRandomObject(List<object> objects)
+        public static object GetRandomObject(List<object> _objects)
         {
-            return objects[GetRandomNumber(0, objects.Count - 1)];
+            return _objects[GetRandomNumber(0, _objects.Count - 1)];
         }
 
         public static Color32 GetRandomColor()
@@ -60,14 +60,14 @@ namespace AjsUtilityPackage
             return new Color32(r, g, b, 255);
         }
 
-        public static Color32 GetRandomColor(float alpha)
+        public static Color32 GetRandomColor(float _alpha)
         {
             byte r = (byte)GetRandomNumber(0f, 255f);
             byte g = (byte)GetRandomNumber(0f, 255f);
             byte b = (byte)GetRandomNumber(0f, 255f);
 
-            alpha = Mathf.Clamp(alpha, 0f, 225f);
-            byte a = (byte)alpha; 
+            _alpha = Mathf.Clamp(_alpha, 0f, 225f);
+            byte a = (byte)_alpha; 
 
             return new Color32(r, g, b, a);
         }

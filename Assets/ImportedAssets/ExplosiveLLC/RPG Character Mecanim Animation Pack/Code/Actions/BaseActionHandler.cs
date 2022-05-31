@@ -1,6 +1,6 @@
 using System;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     /// <summary>
     /// This is the core implementation of IActionHandler, and all action handlers inherit it some

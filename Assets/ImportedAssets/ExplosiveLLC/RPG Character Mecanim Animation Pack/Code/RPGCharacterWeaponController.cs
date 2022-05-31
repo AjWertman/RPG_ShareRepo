@@ -1,10 +1,10 @@
 using System.Collections;
-using RPGCharacterAnims.Actions;
-using RPGCharacterAnims.Extensions;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Actions;
+using ASSETPackANIMATIONS.Extensions;
+using ASSETPackANIMATIONS.Lookups;
 using UnityEngine;
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
     public class RPGCharacterWeaponController : MonoBehaviour
     {

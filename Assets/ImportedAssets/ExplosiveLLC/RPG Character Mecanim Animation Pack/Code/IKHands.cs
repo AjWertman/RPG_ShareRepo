@@ -1,9 +1,9 @@
-﻿using RPGCharacterAnims.Extensions;
+﻿using ASSETPackANIMATIONS.Extensions;
 using System.Collections;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Lookups;
 using UnityEngine;
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
     public class IKHands : MonoBehaviour
     {

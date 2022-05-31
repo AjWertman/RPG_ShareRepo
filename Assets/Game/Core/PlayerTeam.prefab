@@ -152,28 +152,28 @@ MonoBehaviour:
   statsTemplate:
   - statType: 0
     statLevel: 10
-    levelUpPercent: 2
+    levelUpPercent: 0
   - statType: 1
     statLevel: 10
-    levelUpPercent: 2
+    levelUpPercent: 0
   - statType: 2
     statLevel: 10
-    levelUpPercent: 2
+    levelUpPercent: 0
   - statType: 3
     statLevel: 10
-    levelUpPercent: 2
+    levelUpPercent: 0
   - statType: 4
     statLevel: 10
-    levelUpPercent: 2
+    levelUpPercent: 0
   - statType: 5
     statLevel: 10
-    levelUpPercent: 2
+    levelUpPercent: 0
   - statType: 6
     statLevel: 10
-    levelUpPercent: 2
+    levelUpPercent: 0
   - statType: 7
     statLevel: 10
-    levelUpPercent: 2
+    levelUpPercent: 0
 --- !u!114 &4204676130505864477
 MonoBehaviour:
   m_ObjectHideFlags: 0

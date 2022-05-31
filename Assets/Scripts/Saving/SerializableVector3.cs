@@ -1,19 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-[System.Serializable]
-public class SerializableVector3
+namespace RPGProject.Saving
 {
-    float x, y, z;
-
-    public SerializableVector3(Vector3 vector3)
+    [Serializable]
+    public class SerializableVector3
     {
-        x = vector3.x;
-        y = vector3.y;
-        z = vector3.z;
-    }
+        float x, y, z;
 
-    public Vector3 ToVector3()
-    {
-        return new Vector3(x, y, z);
+        public SerializableVector3(Vector3 _vector3)
+        {
+            x = _vector3.x;
+            y = _vector3.y;
+            z = _vector3.z;
+        }
+
+        public Vector3 ToVector3()
+        {
+            return new Vector3(x, y, z);
+        }
     }
 }

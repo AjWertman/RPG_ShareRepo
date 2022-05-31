@@ -1,6 +1,6 @@
 using System;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     /// <summary>
     /// General action handler type. This is an interface so that implementations of action

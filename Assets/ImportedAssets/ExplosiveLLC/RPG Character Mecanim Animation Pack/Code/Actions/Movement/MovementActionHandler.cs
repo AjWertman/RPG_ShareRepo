@@ -1,4 +1,4 @@
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     /// <summary>
     /// MovementActionHandler is a special type of action handler meant for use with

@@ -1,8 +1,8 @@
-using RPGCharacterAnims.Extensions;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Extensions;
+using ASSETPackANIMATIONS.Lookups;
 using UnityEngine;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
 	public class SwitchWeaponContext
     {

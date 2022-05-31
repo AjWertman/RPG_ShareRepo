@@ -1,101 +1,142 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueUI : MonoBehaviour
+namespace RPGProject.Dialogue
 {
-    [SerializeField] TextMeshProUGUI conversantName = null;    
-    
-    [SerializeField] GameObject aiResponseRoot = null;
-    [SerializeField] TextMeshProUGUI dialogueText = null;
-    [SerializeField] Button nextButton = null;
-    
-    [SerializeField] Transform choiceRoot = null;
-    [SerializeField] GameObject choiceButtonPrefab = null;
-
-    [SerializeField] Button quitButton = null;
-
-    PlayerConversant playerConversant = null;
-
-    private void Start()
+    public class DialogueUI : MonoBehaviour
     {
-        playerConversant = GameObject.FindWithTag("Player").GetComponent<PlayerConversant>();
+        [SerializeField] TextMeshProUGUI conversantName = null;
 
-        playerConversant.onConversationUpdated += UpdateUIText;
-        quitButton.onClick.AddListener(() => playerConversant.Quit());
-    
-        UpdateUIText();
-    }
+        [SerializeField] GameObject aiResponseRoot = null;
+        [SerializeField] TextMeshProUGUI dialogueText = null;
+        [SerializeField] Button nextButton = null;
+        TextMeshProUGUI nextButtonText = null;
 
-    private void UpdateUIText()
-    {
-        gameObject.SetActive(playerConversant.IsChatting());
-       
-        if (!playerConversant.IsChatting())
+        [SerializeField] Transform choiceRoot = null;
+        [SerializeField] GameObject choiceButtonPrefab = null;
+
+        [SerializeField] Button quitButton = null;
+
+        PlayerConversant playerConversant = null;
+
+        List<DialogueButton> dialogueButtonsPool = new List<DialogueButton>();
+
+        private void Awake()
         {
-            return;
+            CreateDialogueButtonsPool();
         }
 
-        quitButton.interactable = !playerConversant.GetCurrentDialogue().IsEssentialDialogue();
-
-        SetConversantName();
-
-        aiResponseRoot.SetActive(!playerConversant.IsChoosing());
-        choiceRoot.gameObject.SetActive(playerConversant.IsChoosing());
-
-        if (playerConversant.IsChoosing())
+        private void Start()
         {
-            BuildChoiceList();
+            playerConversant = GameObject.FindWithTag("Player").GetComponent<PlayerConversant>();
+
+            nextButtonText = nextButton.GetComponentInChildren<TextMeshProUGUI>();
+
+            playerConversant.onConversationUpdated += UpdateUIText;
+            quitButton.onClick.AddListener(() => playerConversant.Quit());
+
+            UpdateUIText();
         }
-        else
-        {
-            dialogueText.text = playerConversant.GetText();
-            nextButton.onClick.RemoveAllListeners();
 
-            if (playerConversant.HasNext())
+        private void UpdateUIText()
+        {
+            gameObject.SetActive(playerConversant.IsChatting());
+
+            if (!playerConversant.IsChatting())
             {
-                nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "Next";
-                nextButton.onClick.AddListener(() => playerConversant.OnNextButton());
+                return;
+            }
+
+            quitButton.interactable = !playerConversant.GetCurrentDialogue().IsEssentialDialogue();
+
+            SetConversantName();
+
+            aiResponseRoot.SetActive(!playerConversant.IsChoosing());
+            choiceRoot.gameObject.SetActive(playerConversant.IsChoosing());
+
+            if (playerConversant.IsChoosing())
+            {
+                BuildChoiceList();
             }
             else
             {
-                nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ok";
-                nextButton.onClick.AddListener(() => playerConversant.Quit());
-            }       
-        }
-    }
+                dialogueText.text = playerConversant.GetText();
+                nextButton.onClick.RemoveAllListeners();
 
-    private void SetConversantName()
-    {
-        string overrideName = playerConversant.GetCurrentDialogueNode().GetOverrideName();
-
-        if (overrideName == "")
-        {
-            conversantName.text = playerConversant.GetCurrentConversantName();
-        }
-        else
-        {
-            conversantName.text = overrideName;
-        }
-    }
-
-    private void BuildChoiceList()
-    {
-        foreach (Transform child in choiceRoot.transform)
-        {
-            Destroy(child.gameObject);
+                if (playerConversant.HasNext())
+                {
+                    nextButtonText.text = "Next";
+                    nextButton.onClick.AddListener(() => playerConversant.OnNextButton());
+                }
+                else
+                {
+                    nextButtonText.text = "Ok";
+                    nextButton.onClick.AddListener(() => playerConversant.Quit());
+                }
+            }
         }
 
-        foreach (DialogueNode node in playerConversant.GetChoices())
+        private void SetConversantName()
         {
-            GameObject buttonInstance = Instantiate(choiceButtonPrefab, choiceRoot);
+            string overrideName = playerConversant.GetCurrentDialogueNode().GetOverrideName();
 
-            buttonInstance.GetComponentInChildren<TextMeshProUGUI>().text = node.GetNodeText();
-
-            buttonInstance.GetComponentInChildren<Button>().onClick.AddListener(() =>
+            if (overrideName == "")
             {
-                playerConversant.SelectChoice(node);
-            });
+                conversantName.text = playerConversant.GetCurrentConversantName();
+            }
+            else
+            {
+                conversantName.text = overrideName;
+            }
+        }
+
+        private void OnDialogueChoiceSelect(DialogueNode _dialogueNode)
+        {
+            playerConversant.SelectChoice(_dialogueNode);
+        }
+
+        private void BuildChoiceList()
+        {
+            ClearChoiceList();
+
+            int index = 0;
+
+            foreach (DialogueNode node in playerConversant.GetChoices())
+            {
+                DialogueButton newDialogueButton = dialogueButtonsPool[index];
+                newDialogueButton.SetupDialogueButton(node);
+
+                newDialogueButton.gameObject.SetActive(true);
+
+                index++;
+            }
+        }
+
+        private void CreateDialogueButtonsPool()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                GameObject buttonInstance = Instantiate(choiceButtonPrefab, choiceRoot);
+                DialogueButton dialogueButton = buttonInstance.GetComponent<DialogueButton>();
+
+                dialogueButton.InitalizeDialogueButton();
+                dialogueButton.onDialogueChoiceSelect += OnDialogueChoiceSelect;
+
+                dialogueButtonsPool.Add(dialogueButton);
+            }
+
+            ClearChoiceList();
+        }
+
+        private void ClearChoiceList()
+        {
+            foreach (DialogueButton dialogueButton in dialogueButtonsPool)
+            {
+                dialogueButton.ResetDialogueButton();
+                dialogueButton.gameObject.SetActive(false);
+            }
         }
     }
 }

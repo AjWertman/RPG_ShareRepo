@@ -1,31 +1,33 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Fader : MonoBehaviour
+namespace RPGProject.Core
 {
-    CanvasGroup canvasGroup = null;
-
-    private void Awake()
+    public class Fader : MonoBehaviour
     {
-        canvasGroup = GetComponentInChildren<CanvasGroup>();
-    }
+        CanvasGroup canvasGroup = null;
 
-    public IEnumerator FadeOut(Color fadeColor, float time)
-    {
-        while(canvasGroup.alpha < 1)
+        private void Awake()
         {
-            canvasGroup.alpha += Time.deltaTime / time;
-            yield return null;
+            canvasGroup = GetComponentInChildren<CanvasGroup>();
         }
-    }
 
-    public IEnumerator FadeIn(float time)
-    {
-        while (canvasGroup.alpha > 0)
+        public IEnumerator FadeOut(Color _fadeColor, float _time)
         {
-            canvasGroup.alpha -= Time.deltaTime / time;
-            yield return null;
+            while (canvasGroup.alpha < 1)
+            {
+                canvasGroup.alpha += Time.deltaTime / _time;
+                yield return null;
+            }
+        }
+
+        public IEnumerator FadeIn(float _time)
+        {
+            while (canvasGroup.alpha > 0)
+            {
+                canvasGroup.alpha -= Time.deltaTime / _time;
+                yield return null;
+            }
         }
     }
 }

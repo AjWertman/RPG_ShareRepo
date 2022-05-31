@@ -1,6 +1,6 @@
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims.Extensions
+namespace ASSETPackANIMATIONS.Extensions
 {
 	public static class WeaponExtensions
 	{

@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
-using RPGCharacterAnims.Actions;
-using RPGCharacterAnims.Extensions;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Actions;
+using ASSETPackANIMATIONS.Extensions;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
 	[HelpURL("https://docs.unity3d.com/Manual/class-InputManager.html")]
 

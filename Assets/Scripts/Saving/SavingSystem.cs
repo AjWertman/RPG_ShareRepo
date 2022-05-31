@@ -5,104 +5,107 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SavingSystem : MonoBehaviour
+namespace RPGProject.Saving
 {
-    public IEnumerator LoadLastScene(string saveFile)
+    public class SavingSystem : MonoBehaviour
     {
-        Dictionary<string, object> state = LoadFile(saveFile);
-
-        if (state.ContainsKey("lastSceneBuildIndex"))
+        public IEnumerator LoadLastScene(string _saveFile)
         {
-            int buildIndex = (int)state["lastSceneBuildIndex"];
+            Dictionary<string, object> state = LoadFile(_saveFile);
 
-            if (buildIndex != SceneManager.GetActiveScene().buildIndex)
+            if (state.ContainsKey("lastSceneBuildIndex"))
             {
-                yield return SceneManager.LoadSceneAsync(buildIndex);
+                int buildIndex = (int)state["lastSceneBuildIndex"];
+
+                if (buildIndex != SceneManager.GetActiveScene().buildIndex)
+                {
+                    yield return SceneManager.LoadSceneAsync(buildIndex);
+                }
+            }
+
+            RestoreState(state);
+        }
+
+        public void Save(string _saveFile)
+        {
+            Dictionary<string, object> state = LoadFile(_saveFile);
+            CaptureState(state);
+            SaveFile(_saveFile, state);
+        }
+
+        public void Load(string _saveFile)
+        {
+            RestoreState(LoadFile(_saveFile));
+        }
+
+        public void DeleteSaveFile(string _saveFile)
+        {
+            string path = GetPersistantDataPath(_saveFile);
+            File.Delete(path);
+        }
+
+        private void SaveFile(string _saveFile, object _state)
+        {
+            string path = GetPersistantDataPath(_saveFile);
+
+            using (FileStream stream = File.Open(path, FileMode.Create))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+                binaryFormatter.Serialize(stream, _state);
             }
         }
 
-        RestoreState(state);
-    }
-
-    public void Save(string saveFile)
-    {
-        Dictionary<string, object> state = LoadFile(saveFile);
-        CaptureState(state);
-        SaveFile(saveFile, state);
-    }
-
-    public void Load(string saveFile)
-    {   
-        RestoreState(LoadFile(saveFile));
-    }
-
-    public void DeleteSaveFile(string saveFile)
-    {
-        string path = GetPersistantDataPath(saveFile);
-        File.Delete(path);
-    }
-
-    private void SaveFile(string saveFile, object state)
-    {
-        string path = GetPersistantDataPath(saveFile);
-
-        using (FileStream stream = File.Open(path, FileMode.Create))
+        private Dictionary<string, object> LoadFile(string _saveFile)
         {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            string path = GetPersistantDataPath(_saveFile);
 
-            binaryFormatter.Serialize(stream, state);
-        }
-    }
-
-    private Dictionary<string, object> LoadFile(string saveFile)
-    {
-        string path = GetPersistantDataPath(saveFile);
-
-        if (!File.Exists(path))
-        {
-            return new Dictionary<string, object>();
-        }
-
-        using (FileStream stream = File.Open(path, FileMode.Open))
-        {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-
-            return (Dictionary<string, object>)binaryFormatter.Deserialize(stream);
-        }
-    }
-
-    private void CaptureState(Dictionary<string, object> state)
-    {
-        foreach (SaveableEntity saveableEntity in FindObjectsOfType<SaveableEntity>())
-        {
-            state[saveableEntity.GetUniqueIdentifier()] = saveableEntity.CaptureState();
-        }
-
-        state["lastSceneBuildIndex"] = SceneManager.GetActiveScene().buildIndex; 
-    }
-
-    private void RestoreState(Dictionary<string, object> state)
-    {
-        foreach (SaveableEntity saveableEntity in FindObjectsOfType<SaveableEntity>())
-        {
-            string id = saveableEntity.GetUniqueIdentifier();
-
-            if (state.ContainsKey(id))
+            if (!File.Exists(path))
             {
-                saveableEntity.RestoreState(state[id]);
+                return new Dictionary<string, object>();
+            }
+
+            using (FileStream stream = File.Open(path, FileMode.Open))
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+                return (Dictionary<string, object>)binaryFormatter.Deserialize(stream);
             }
         }
-    }
 
-    public string GetPersistantDataPath(string saveFile)
-    {
-        return Path.Combine(Application.persistentDataPath, saveFile + ".sav");
-    }
+        private void CaptureState(Dictionary<string, object> _state)
+        {
+            foreach (SaveableEntity saveableEntity in FindObjectsOfType<SaveableEntity>())
+            {
+                _state[saveableEntity.GetUniqueIdentifier()] = saveableEntity.CaptureState();
+            }
 
-    public bool DoesDataPathExist(string saveFile)
-    {
-        string path = GetPersistantDataPath(saveFile);
+            _state["lastSceneBuildIndex"] = SceneManager.GetActiveScene().buildIndex;
+        }
 
-        return File.Exists(path);
+        private void RestoreState(Dictionary<string, object> _state)
+        {
+            foreach (SaveableEntity saveableEntity in FindObjectsOfType<SaveableEntity>())
+            {
+                string id = saveableEntity.GetUniqueIdentifier();
+
+                if (_state.ContainsKey(id))
+                {
+                    saveableEntity.RestoreState(_state[id]);
+                }
+            }
+        }
+
+        public string GetPersistantDataPath(string _saveFile)
+        {
+            return Path.Combine(Application.persistentDataPath, _saveFile + ".sav");
+        }
+
+        public bool DoesDataPathExist(string _saveFile)
+        {
+            string path = GetPersistantDataPath(_saveFile);
+
+            return File.Exists(path);
+        }
     }
 }

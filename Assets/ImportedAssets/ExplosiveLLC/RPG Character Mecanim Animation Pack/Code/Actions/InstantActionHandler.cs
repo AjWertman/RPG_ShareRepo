@@ -1,4 +1,4 @@
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     /// <summary>
     /// InstantActionHandler is used when you need an action handler and it doesn't make sense that

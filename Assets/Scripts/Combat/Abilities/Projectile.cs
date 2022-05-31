@@ -1,114 +1,70 @@
-﻿using System;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+namespace RPGProject.Combat
 {
-    [SerializeField] float force = 10f;
-
-    Ability selectedAbility = null;
-    BattleUnit caster = null;
-    BattleUnit target = null;
-    Transform aimTransform = null;
-    
-    GameObject hitFX = null;
-
-    bool isSetup = false;
-
-    bool canHitCaster = false;
-    bool appliedDamage = false;
-    float damageAmount = 0;
-    bool isCritical = false;
-
-    private void Update()
+    public class Projectile : AbilityBehavior
     {
-        if (isSetup)
+        [SerializeField] float launchForce = 10f;
+
+        Transform aimTransform = null;
+
+        bool hasAppliedChangeAmount = false;
+        bool isSetup = false;
+
+        private void Update()
         {
-            transform.LookAt(aimTransform);
-            LaunchProjectile();
-        }
-    }
-
-    public void SetUpProjectile(Ability abiltyToSet, float _damageAmount, BattleUnit casterToSet, BattleUnit targetToSet, bool _isCritical)
-    {
-        appliedDamage = false;
-        selectedAbility = abiltyToSet;
-        damageAmount = _damageAmount;
-        caster = casterToSet;
-        target = targetToSet;
-
-        if (!target.GetComponent<BattleUnit>().GetFighter().HasSubstitute())
-        {
-            aimTransform = target.GetComponent<BattleUnit>().GetFighter().GetAimTransform();
-        }
-        else
-        {
-            aimTransform = target.GetComponent<BattleUnit>().GetFighter().GetActiveSubstitute().GetFighter().GetAimTransform();
-        }
-        
-        isCritical = _isCritical;
-        hitFX = GetHitFX(selectedAbility);
-        if (selectedAbility.shouldExpand)
-        {
-            Vector3 currentScaleAmount = hitFX.transform.lossyScale;
-            Vector3 newScaleAmount = target.GetParticleExpander().lossyScale;
-
-            currentScaleAmount = newScaleAmount;
-        }
-
-        isSetup = true;
-    }
-
-    private GameObject GetHitFX(Ability ability)
-    {
-        return ability.hitFXPrefab;
-    }
-
-    public void LaunchProjectile()
-    {
-        transform.Translate(Vector3.forward * force * Time.deltaTime);
-    }
-
-    public void ReflectProjectile()
-    {
-        isCritical = false;
-        target = caster;
-        aimTransform = target.GetComponent<BattleUnit>().GetFighter().GetAimTransform();
-        canHitCaster = true;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<BattleUnit>())
-        {
-            BattleUnit battleUnit = other.GetComponent<BattleUnit>();
-            if (battleUnit == target.GetComponent<BattleUnit>())
+            if (isSetup)
             {
-                Instantiate(hitFX, aimTransform.position, Quaternion.identity);
-
-                if (!appliedDamage)
-                {
-                   appliedDamage = true;
-                   battleUnit.DamageHealth(damageAmount, isCritical, selectedAbility.abilityType);
-                }
-
-                Destroy(gameObject);
+                transform.LookAt(aimTransform);
+                LaunchProjectile();
             }
         }
 
-        if (other.GetComponent<StaticSpell>())
+        public override void PerformSpellBehavior()
         {
-            StaticSpell staticSpell = other.GetComponent<StaticSpell>();
+            hasAppliedChangeAmount = false;
 
-            if (staticSpell.GetStaticSpellType() == StaticSpellType.SpellReflector)
+            aimTransform = target.GetCharacterMesh().GetAimTransform();
+
+            isSetup = true;
+        }
+
+        public void LaunchProjectile()
+        {
+            transform.Translate(Vector3.forward * launchForce * Time.deltaTime);
+        }
+
+        public void ReflectProjectile()
+        {
+            isCritical = false;
+            target = caster;
+            aimTransform = target.GetCharacterMesh().GetAimTransform();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            BattleUnit hitBattleUnit = other.GetComponent<BattleUnit>();
+            SpellReflector hitSpellReflector = other.GetComponent<SpellReflector>();
+
+            //Refactor put Hit FX somewhere
+
+            if (hitBattleUnit != null && hitBattleUnit == target)
+            {
+                if (!hasAppliedChangeAmount)
+                {
+                    hasAppliedChangeAmount = true;
+
+                    //Add heal check? Will there be healing projectiles?
+
+                    target.GetHealth().DamageHealth(changeAmount, isCritical, ability.GetAbilityResource());
+
+                    
+                    OnAbilityDeath();
+                }
+            }
+            else if(hitSpellReflector != null)
             {
                 ReflectProjectile();
-                staticSpell.DestroyStaticSpell();
-            }
-            if (staticSpell.GetStaticSpellType() == StaticSpellType.Substitute)
-            {
-                staticSpell.DestroyStaticSpell();
-                Instantiate(hitFX, aimTransform.position, Quaternion.identity);
-                Destroy(gameObject);
             }
         }
     }

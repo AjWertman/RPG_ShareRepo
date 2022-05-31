@@ -1,13 +1,29 @@
 ﻿using UnityEngine;
 
-public class QuestGiver : MonoBehaviour
+namespace RPGProject.Questing
 {
-    [SerializeField] Quest questToGive = null;
-
-    public void GiveQuest()
+    public class QuestGiver : MonoBehaviour
     {
-        PlayerQuestList questList = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerQuestList>();
+        [SerializeField] GameObject exclamationPointObject = null;
+        [SerializeField] Quest questToGive = null;
 
-        questList.AddQuest(questToGive);
+        private void Awake()
+        {
+            if (HasQuest())
+            {
+                exclamationPointObject.SetActive(true);
+            }
+        }
+
+        public void GiveQuest(PlayerQuestList _playerQuestList)
+        {
+            _playerQuestList.AddQuest(questToGive);
+            exclamationPointObject.SetActive(false);
+        }
+
+        public bool HasQuest()
+        {
+            return (questToGive != null);
+        }
     }
 }

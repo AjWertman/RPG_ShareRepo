@@ -1,6 +1,4 @@
 ﻿using Cinemachine;
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
@@ -47,26 +45,4 @@ public class FollowCamera : MonoBehaviour
     {
         canRotate = _canRotate;
     }
-
-    //private void OldUpdateMethod()
-    //{
-    //  if (Input.GetMouseButton(1))
-    //  {
-    //      followCamera.m_XAxis.m_InputAxisName = "Mouse X";
-    //      followCamera.m_YAxis.m_InputAxisName = "Mouse Y";
-    //      followCamera.m_RecenterToTargetHeading.m_enabled = false;
-    //      Cursor.lockState = CursorLockMode.Locked;
-    //      Cursor.visible = false; 
-    //  }
-    //else
-    //  {
-    //    followCamera.m_XAxis.m_InputAxisName = "";
-    //    followCamera.m_YAxis.m_InputAxisName = "";
-    //    followCamera.m_XAxis.m_InputAxisValue = 0;
-    //    followCamera.m_YAxis.m_InputAxisValue = 0;
-    //    followCamera.m_RecenterToTargetHeading.m_enabled = true;
-    //    Cursor.lockState = CursorLockMode.None;
-    //    Cursor.visible = true;
-    //  }
-    //}
 }

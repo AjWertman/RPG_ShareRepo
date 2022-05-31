@@ -1,6 +1,6 @@
 using System;
 
-namespace RPGCharacterAnims.Lookups
+namespace ASSETPackANIMATIONS.Lookups
 {
     public class WeaponGroupings
     {

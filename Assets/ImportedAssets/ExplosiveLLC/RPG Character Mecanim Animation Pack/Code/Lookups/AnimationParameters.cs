@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace RPGCharacterAnims.Lookups
+namespace ASSETPackANIMATIONS.Lookups
 {
     /* This contains all the hash based lookups for animations.
      *

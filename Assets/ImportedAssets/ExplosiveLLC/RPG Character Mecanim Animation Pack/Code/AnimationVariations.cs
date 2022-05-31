@@ -1,6 +1,6 @@
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
     /// <summary>
     /// This class contains all the variations for given action types.

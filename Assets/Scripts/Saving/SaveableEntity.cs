@@ -2,86 +2,89 @@
 using UnityEditor;
 using UnityEngine;
 
-[ExecuteAlways]
-public class SaveableEntity : MonoBehaviour
+namespace RPGProject.Saving
 {
-    [SerializeField] string uniqueIdentifier = "";
-    static Dictionary<string, SaveableEntity> globalIDLookup = new Dictionary<string, SaveableEntity>();
+    [ExecuteAlways]
+    public class SaveableEntity : MonoBehaviour
+    {
+        [SerializeField] string uniqueIdentifier = "";
+        static Dictionary<string, SaveableEntity> globalIDLookup = new Dictionary<string, SaveableEntity>();
 
 #if UNITY_EDITOR
-    private void Update()
-    {
-        if (Application.IsPlaying(gameObject)) return;
-        if (string.IsNullOrEmpty(gameObject.scene.path)) return;
-        
-        SerializedObject serializedObject = new SerializedObject(this);
-        SerializedProperty serializedProperty = serializedObject.FindProperty("uniqueIdentifier");
-        
-        if (string.IsNullOrEmpty(serializedProperty.stringValue) || !IsUnique(serializedProperty.stringValue))
+        private void Update()
         {
-            serializedProperty.stringValue = System.Guid.NewGuid().ToString();
-            serializedObject.ApplyModifiedProperties();
-        }
+            if (Application.IsPlaying(gameObject)) return;
+            if (string.IsNullOrEmpty(gameObject.scene.path)) return;
 
-        globalIDLookup[serializedProperty.stringValue] = this;
-    }
+            SerializedObject serializedObject = new SerializedObject(this);
+            SerializedProperty serializedProperty = serializedObject.FindProperty("uniqueIdentifier");
+
+            if (string.IsNullOrEmpty(serializedProperty.stringValue) || !IsUnique(serializedProperty.stringValue))
+            {
+                serializedProperty.stringValue = System.Guid.NewGuid().ToString();
+                serializedObject.ApplyModifiedProperties();
+            }
+
+            globalIDLookup[serializedProperty.stringValue] = this;
+        }
 #endif
 
-    private bool IsUnique(string stringToTest)
-    {
-        if (!globalIDLookup.ContainsKey(stringToTest))
+        private bool IsUnique(string _stringToTest)
         {
-            return true;
-        }
-
-        if (globalIDLookup[stringToTest] == this)
-        {
-            return true;
-        }
-
-        if(globalIDLookup[stringToTest] == null)
-        {
-            globalIDLookup.Remove(stringToTest);
-            return true;
-        }
-
-        if(globalIDLookup[stringToTest].GetUniqueIdentifier() != stringToTest)
-        {
-            globalIDLookup.Remove(stringToTest);
-            return true;
-        }
-
-        return false;
-    }
-
-    public string GetUniqueIdentifier()
-    {
-        return uniqueIdentifier;
-    }
-
-    public object CaptureState()
-    {
-        Dictionary<string, object> state = new Dictionary<string, object>();
-
-        foreach(ISaveable saveable in GetComponents<ISaveable>())
-        {
-            state[saveable.GetType().ToString()] = saveable.CaptureState();
-        }
-
-        return state;
-    }
-
-    public void RestoreState(object state)
-    {
-        Dictionary<string, object> stateDictionary = (Dictionary<string, object>)state;
-
-        foreach (ISaveable saveable in GetComponents<ISaveable>())
-        {
-            string typeString = saveable.GetType().ToString();
-
-            if (stateDictionary.ContainsKey(typeString))
+            if (!globalIDLookup.ContainsKey(_stringToTest))
             {
-                saveable.RestoreState(stateDictionary[typeString]);
+                return true;
+            }
+
+            if (globalIDLookup[_stringToTest] == this)
+            {
+                return true;
+            }
+
+            if (globalIDLookup[_stringToTest] == null)
+            {
+                globalIDLookup.Remove(_stringToTest);
+                return true;
+            }
+
+            if (globalIDLookup[_stringToTest].GetUniqueIdentifier() != _stringToTest)
+            {
+                globalIDLookup.Remove(_stringToTest);
+                return true;
+            }
+
+            return false;
+        }
+
+        public string GetUniqueIdentifier()
+        {
+            return uniqueIdentifier;
+        }
+
+        public object CaptureState()
+        {
+            Dictionary<string, object> state = new Dictionary<string, object>();
+
+            foreach (ISaveable saveable in GetComponents<ISaveable>())
+            {
+                state[saveable.GetType().ToString()] = saveable.CaptureState();
+            }
+
+            return state;
+        }
+
+        public void RestoreState(object _state)
+        {
+            Dictionary<string, object> stateDictionary = (Dictionary<string, object>)_state;
+
+            foreach (ISaveable saveable in GetComponents<ISaveable>())
+            {
+                string typeString = saveable.GetType().ToString();
+
+                if (stateDictionary.ContainsKey(typeString))
+                {
+                    saveable.RestoreState(stateDictionary[typeString]);
+                }
             }
         }
     }

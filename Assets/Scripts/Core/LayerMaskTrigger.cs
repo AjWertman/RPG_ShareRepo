@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace AjsUtilityPackage
+namespace RPGProject.Core
 {
     public class LayerMaskTrigger : MonoBehaviour
     {

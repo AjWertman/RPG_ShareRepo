@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     public class SlowTime : BaseActionHandler<float>
     {

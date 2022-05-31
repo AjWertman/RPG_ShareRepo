@@ -1,4 +1,4 @@
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     public class Cast : BaseActionHandler<CastContext>
     {

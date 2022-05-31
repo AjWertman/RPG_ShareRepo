@@ -1,4 +1,4 @@
-namespace RPGCharacterAnims.Lookups
+namespace ASSETPackANIMATIONS.Lookups
 {
     public enum BlockedHitType
     {

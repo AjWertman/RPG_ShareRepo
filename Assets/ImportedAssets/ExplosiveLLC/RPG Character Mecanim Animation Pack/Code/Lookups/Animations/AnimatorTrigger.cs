@@ -1,4 +1,4 @@
-namespace RPGCharacterAnims.Lookups
+namespace ASSETPackANIMATIONS.Lookups
 {
     /// <summary>
     /// Enum to use with the "TriggerNumber" parameter of the animator. Convert to (int) to set.

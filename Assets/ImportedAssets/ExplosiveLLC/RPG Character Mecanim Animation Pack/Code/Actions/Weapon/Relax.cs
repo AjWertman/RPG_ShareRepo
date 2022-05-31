@@ -1,7 +1,7 @@
-using RPGCharacterAnims.Lookups;
-using RPGCharacterAnims.Extensions;
+using ASSETPackANIMATIONS.Lookups;
+using ASSETPackANIMATIONS.Extensions;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     public class Relax : BaseActionHandler<bool?>
     {

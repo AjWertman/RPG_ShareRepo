@@ -1,37 +1,41 @@
 using System;
 using UnityEngine;
 
-public class Currency : MonoBehaviour
+namespace RPGProject.Inventory
 {
-    [SerializeField] float gold = 0;
-
-    public event Action onCurrencyChange;
-
-    public float GetGold()
+    public class Currency : MonoBehaviour
     {
-        return gold;
-    }
+        [SerializeField] float gold = 0;
 
-    public void SpendGold(float amount)
-    {
-        if(!HasEnoughGold(amount)) return;
-        gold -= amount;
-        onCurrencyChange();
-    }
+        public event Action onCurrencyChange;
 
-    public void GainGold(float amount)
-    {
-        gold += amount;
-        onCurrencyChange();
-    }
-
-    public bool HasEnoughGold(float amount)
-    {
-        if(gold >= amount)
+        public void SpendGold(float _amountToSpend)
         {
-            return true;
+            if (!HasEnoughGold(_amountToSpend)) return;
+            gold -= _amountToSpend;
+            onCurrencyChange();
         }
 
-        return false;
+        public void GainGold(float _amountToGain)
+        {
+            gold += _amountToGain;
+            onCurrencyChange();
+        }
+
+        public float GetGold()
+        {
+            return gold;
+        }
+
+        public bool HasEnoughGold(float _amountToTest)
+        {
+            if (gold >= _amountToTest)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
+
 }

@@ -1,119 +1,131 @@
-﻿using System;
+﻿using RPGProject.Core;
+using RPGProject.Saving;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerQuestList : MonoBehaviour, ISaveable, IPredicateEvaluator
+namespace RPGProject.Questing
 {
-    List<QuestStatus> questStatuses = new List<QuestStatus>();
-    List<QuestStatus> completedQuestStatuses = new List<QuestStatus>();
-
-    public event Action onListUpdate;
-    public event Action onQuestComplete;
-
-    public void AddQuest(Quest quest)
+    public class PlayerQuestList : MonoBehaviour, ISaveable, IPredicateEvaluator
     {
-        if (HasQuest(quest)) return;
+        List<QuestStatus> questStatuses = new List<QuestStatus>();
+        List<QuestStatus> completedQuestStatuses = new List<QuestStatus>();
 
-        QuestStatus newStatus = new QuestStatus(quest);
-        questStatuses.Add(newStatus);
+        PlayerTeam playerTeam = null;
 
-        onListUpdate();
-    }
+        public event Action onListUpdate;
+        public event Action onQuestComplete;
 
-    public void CompleteObjective(Quest quest, string objectiveToComplete)
-    {
-        QuestStatus status = GetQuestStatus(quest);
-
-        if (status == null) return;
-
-        status.CompleteObjective(objectiveToComplete);
-
-        if (status.IsComplete())
+        private void Awake()
         {
-            GiveReward(quest);
+            playerTeam = FindObjectOfType<PlayerTeam>();
         }
 
-        onListUpdate();
-    }
+        public void AddQuest(Quest _quest)
+        {
+            if (HasQuest(_quest)) return;
 
-    public bool HasQuest(Quest quest)
-    {
-        return GetQuestStatus(quest) != null;
-    }
+            QuestStatus newStatus = new QuestStatus(_quest);
+            questStatuses.Add(newStatus);
 
-    public IEnumerable<QuestStatus> GetQuestStatueses()
-    {
-        return questStatuses;
-    }
+            onListUpdate();
+        }
 
-    public QuestStatus GetQuestStatus(Quest quest)
-    {
-        foreach (QuestStatus status in questStatuses)
-        {          
-            if (status.GetQuest() == quest)
+        public void CompleteObjective(Quest _quest, string _objectiveToComplete)
+        {
+            QuestStatus status = GetQuestStatus(_quest);
+
+            if (status == null) return;
+
+            status.CompleteObjective(_objectiveToComplete);
+
+            if (status.IsComplete())
             {
-                return status;
+                GiveReward(_quest);
+            }
+
+            onListUpdate();
+        }
+
+        public bool HasQuest(Quest _quest)
+        {
+            return GetQuestStatus(_quest) != null;
+        }
+
+        public List<QuestStatus> GetQuestStatueses()
+        {
+            return questStatuses;
+        }
+
+        public QuestStatus GetQuestStatus(Quest _quest)
+        {
+            foreach (QuestStatus status in questStatuses)
+            {
+                if (status.GetQuest() == _quest)
+                {
+                    return status;
+                }
+            }
+
+            return null;
+        }
+
+        private void GiveReward(Quest _quest)
+        {
+            foreach (var reward in _quest.GetRewards())
+            {
+                //bool success = GetComponent<Inventory>().AddToFirstEmptySlot(reward.item, reward.number);
+                //if (!success)
+                //{
+                //    GetComponent<ItemDropper>().DropItem(reward.item, reward.number);
+                //}
+            }
+
+            playerTeam.AwardTeamXP(_quest.GetXPAward());
+        }
+
+        public object CaptureState()
+        {
+            List<object> state = new List<object>();
+
+            foreach (QuestStatus status in questStatuses)
+            {
+                state.Add(status.CaptureState());
+            }
+            return state;
+        }
+
+        public void RestoreState(object state)
+        {
+            List<object> stateList = state as List<object>;
+            if (stateList == null) return;
+
+            questStatuses.Clear();
+            foreach (object objectState in stateList)
+            {
+                questStatuses.Add(new QuestStatus(objectState));
+            }
+
+            if (questStatuses.Count > 0)
+            {
+                onListUpdate();
             }
         }
 
-        return null;
-    }
-
-    private void GiveReward(Quest quest)
-    {
-        foreach(var reward in quest.GetRewards())
+        public bool? Evaluate(string _predicate, string[] _parameters)
         {
-            //bool success = GetComponent<Inventory>().AddToFirstEmptySlot(reward.item, reward.number);
-            //if (!success)
-            //{
-            //    GetComponent<ItemDropper>().DropItem(reward.item, reward.number);
-            //}
+            switch (_predicate)
+            {
+                case "HasQuest":
+                    return HasQuest(Quest.GetByName(_parameters[0]));
+
+                case "CompletedQuest":
+                    QuestStatus status = GetQuestStatus(Quest.GetByName(_parameters[0]));
+                    if (status == null) return false;
+                    return status.IsComplete();
+            }
+
+            return null;
         }
-
-        FindObjectOfType<PlayerTeam>().AwardTeamXP(quest.GetXPAward());
-    }
-
-    public object CaptureState()
-    {
-        List<object> state = new List<object>();
-
-        foreach(QuestStatus status in questStatuses)
-        {
-            state.Add(status.CaptureState());
-        }
-        return state;
-    }
-
-    public void RestoreState(object state)
-    {
-        List<object> stateList = state as List<object>;
-        if (stateList == null) return;
-
-        questStatuses.Clear();
-        foreach(object objectState in stateList)
-        {
-            questStatuses.Add(new QuestStatus(objectState));          
-        }
-
-        if(questStatuses.Count > 0)
-        {
-            onListUpdate();
-        }
-    }
-
-    public bool? Evaluate(string predicate, string[] parameters)
-    {
-        switch (predicate)
-        {
-            case "HasQuest":
-                return HasQuest(Quest.GetByName(parameters[0]));
-
-            case "CompletedQuest":
-                QuestStatus status = GetQuestStatus(Quest.GetByName(parameters[0]));
-                if (status == null) return false;
-                return status.IsComplete();       
-        }
-
-        return null;
     }
 }

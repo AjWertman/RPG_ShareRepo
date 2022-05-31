@@ -1,297 +1,310 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BattleUIMenuKey { None, PlayerMoveSelect, AbilitySelect, ItemSelect, TargetSelect}
-
-public class BattleUIManager : MonoBehaviour
+namespace RPGProject.Combat
 {
-    [SerializeField] BattleHUD battleHUD = null;
-    [SerializeField] PlayerMoveSelect playerMoveSelectMenu = null;
-    [SerializeField] AbilitySelect abilitySelectMenu = null;
-    [SerializeField] TargetSelect targetSelectMenu = null;
+    public enum BattleUIMenuKey { None, PlayerMoveSelect, AbilitySelect, ItemSelect, TargetSelect }
 
-    List<BattleUnit> playerUnits = new List<BattleUnit>();
-    List<BattleUnit> deadPlayerUnits = new List<BattleUnit>();
-    List<BattleUnit> enemyUnits = new List<BattleUnit>();
-    List<BattleUnit> deadEnemyUnits = new List<BattleUnit>();
-
-    BattleUnit currentBattleUnitTurn = null;
-    BattleUnit targetBattleUnit = null;
-    BattleUnit highlightedTarget = null;
-    Ability selectedAbility = null;
-    bool isCopy = false;
-
-    Dictionary<BattleUIMenuKey, GameObject> menuGameObjects = new Dictionary<BattleUIMenuKey, GameObject>();
-    BattleUIMenuKey activeMenuKey = BattleUIMenuKey.None;
-
-    public event Action<BattleUnit, Ability> onPlayerMove;
-    public event Action onEscape;
-
-    public void InitalizeBattleUIManager()
+    public class BattleUIManager : MonoBehaviour
     {
-        PopulateMenuGODict();
-        InitalizeSelectionMenus();
-        DeactivateAllMenus();
-    }
+        [SerializeField] BattleHUD battleHUD = null;
+        [SerializeField] PlayerMoveSelect playerMoveSelectMenu = null;
+        [SerializeField] AbilitySelect abilitySelectMenu = null;
+        [SerializeField] TargetSelect targetSelectMenu = null;
 
-    private void InitalizeSelectionMenus()
-    {
-        playerMoveSelectMenu.InitalizePlayerMoveSelectMenu();
-        abilitySelectMenu.InitalizeAbilitySelectMenu();
-        targetSelectMenu.InitalizeTargetSelectMenu();
+        List<BattleUnit> playerUnits = new List<BattleUnit>();
+        List<BattleUnit> enemyUnits = new List<BattleUnit>();
 
-        playerMoveSelectMenu.onPlayerMoveSelect += OnPlayerMoveSelect;
+        BattleUnit currentBattleUnitTurn = null;
+        BattleUnit targetBattleUnit = null;
+        BattleUnit highlightedTarget = null;
 
-        abilitySelectMenu.onAbilitySelect += OnAbilitySelect;
-        abilitySelectMenu.onBackButton += () => ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
+        Ability selectedAbility = null;
+        bool isCopy = false;
 
-        targetSelectMenu.onTargetSelect += OnTargetSelect;
-        targetSelectMenu.onTargetHighlight += HighlightTarget;
-        targetSelectMenu.onTargetUnhighlight += UnhighlightTarget;
-        targetSelectMenu.onBackButton += ActivateBattleUIMenu;
+        Dictionary<BattleUIMenuKey, GameObject> menuGameObjects = new Dictionary<BattleUIMenuKey, GameObject>();
+        BattleUIMenuKey activeMenuKey = BattleUIMenuKey.None;
 
-        battleHUD.onTurnOrderHighlight += HighlightTarget;
-        battleHUD.onTurnOrderUnhighlight += UnhighlightTarget;
-    }
+        public event Action<BattleUnit, Ability> onPlayerMove;
+        public event Action onEscape;
 
-    public void SetupUIManager(List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits, List<BattleUnit> _turnOrder)
-    {
-        UpdateBattleUnitLists(_playerUnits, new List<BattleUnit>(), _enemyUnits, new List<BattleUnit>());
-        battleHUD.UpdateTurnOrderUIItems(_turnOrder, 0);
-    }
-
-    public void ActivateBattleUIMenu(BattleUIMenuKey _battleUIMenu)
-    {
-        DeactivateAllMenus();
-
-        activeMenuKey = _battleUIMenu;
-
-        switch (activeMenuKey)
+        public void InitalizeBattleUIManager()
         {
-            case BattleUIMenuKey.PlayerMoveSelect:
-
-                ActivatePlayerMoveSelectMenu(true);
-                break;
-
-            case BattleUIMenuKey.AbilitySelect:
-
-                ActivateAbilitySelectMenu(true);
-                break;
-
-            case BattleUIMenuKey.TargetSelect:
-
-                ActivateTargetSelectMenu(true);
-                break;
+            PopulateMenuGODict();
+            InitalizeSelectionMenus();
+            DeactivateAllMenus();
         }
-    }
 
-    private void OnPlayerMoveSelect(PlayerMoveType _playerMoveType)
-    {
-        switch (_playerMoveType)
+        private void InitalizeSelectionMenus()
         {
-            case PlayerMoveType.Attack:
+            playerMoveSelectMenu.InitalizePlayerMoveSelectMenu();
+            abilitySelectMenu.InitalizeAbilitySelectMenu();
+            targetSelectMenu.InitalizeTargetSelectMenu();
 
-                Ability basicAttack = currentBattleUnitTurn.GetBattleUnitInfo().GetBasicAttack();
-                OnAbilitySelect(basicAttack);
-                break;
+            playerMoveSelectMenu.onPlayerMoveSelect += OnPlayerMoveSelect;
 
-            case PlayerMoveType.AbilitySelect:
-        
-                ActivateBattleUIMenu(BattleUIMenuKey.AbilitySelect);
-                break;
+            abilitySelectMenu.onAbilitySelect += OnAbilitySelect;
+            abilitySelectMenu.onBackButton += () => ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
 
-            case PlayerMoveType.ItemSelect:
+            targetSelectMenu.onTargetSelect += OnTargetSelect;
+            targetSelectMenu.onTargetHighlight += HighlightTarget;
+            targetSelectMenu.onTargetUnhighlight += UnhighlightTarget;
+            targetSelectMenu.onBackButton += ActivateBattleUIMenu;
 
-                ActivateBattleUIMenu(BattleUIMenuKey.ItemSelect);
-                break;
-
-            case PlayerMoveType.Escape:
-
-                onEscape();
-                break;
+            battleHUD.onTurnOrderHighlight += HighlightTarget;
+            battleHUD.onTurnOrderUnhighlight += UnhighlightTarget;
         }
-    }
 
-    public void ActivatePlayerMoveSelectMenu(bool _shouldActivate)
-    {
-        if (IsActivationObsolete(BattleUIMenuKey.PlayerMoveSelect, _shouldActivate)) return;
-
-        playerMoveSelectMenu.gameObject.SetActive(_shouldActivate);
-    }
-
-    public void ActivateAbilitySelectMenu(bool _shouldActivate)
-    {
-        if (IsActivationObsolete(BattleUIMenuKey.AbilitySelect, _shouldActivate)) return;
-
-        if (_shouldActivate)
+        public void SetupUIManager(List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits, List<BattleUnit> _turnOrder)
         {
-            abilitySelectMenu.PopulateAbilitiesList(currentBattleUnitTurn);
+            SetCurrentBattleUnitTurn(_turnOrder[0]);
+            UpdateBattleUnitLists(_playerUnits, _enemyUnits);
+            battleHUD.UpdateTurnOrderUIItems(_turnOrder, currentBattleUnitTurn);
         }
-        else
+
+        public void ActivateBattleUIMenu(BattleUIMenuKey _battleUIMenu)
         {
+            DeactivateAllMenus();
+
+            switch (_battleUIMenu)
+            {
+                case BattleUIMenuKey.PlayerMoveSelect:
+
+                    ActivatePlayerMoveSelectMenu(true);
+                    break;
+
+                case BattleUIMenuKey.AbilitySelect:
+
+                    ActivateAbilitySelectMenu(true);
+                    break;
+
+                case BattleUIMenuKey.TargetSelect:
+
+                    ActivateTargetSelectMenu(true);
+                    break;
+            }
+
+            activeMenuKey = _battleUIMenu;
+        }
+
+        private void OnPlayerMoveSelect(PlayerMoveType _playerMoveType)
+        {
+            switch (_playerMoveType)
+            {
+                case PlayerMoveType.Attack:
+
+                    Ability basicAttack = currentBattleUnitTurn.GetBattleUnitInfo().GetBasicAttack();
+                    OnAbilitySelect(basicAttack);
+                    break;
+
+                case PlayerMoveType.AbilitySelect:
+
+                    ActivateBattleUIMenu(BattleUIMenuKey.AbilitySelect);
+                    break;
+
+                case PlayerMoveType.ItemSelect:
+
+                    ActivateBattleUIMenu(BattleUIMenuKey.ItemSelect);
+                    break;
+
+                case PlayerMoveType.Escape:
+
+                    onEscape();
+                    break;
+            }
+        }
+
+        public void ActivatePlayerMoveSelectMenu(bool _shouldActivate)
+        {
+            if (IsActivationObsolete(BattleUIMenuKey.PlayerMoveSelect, _shouldActivate)) return;
+
+            playerMoveSelectMenu.gameObject.SetActive(_shouldActivate);
+        }
+
+        public void ActivateAbilitySelectMenu(bool _shouldActivate)
+        {
+            if (IsActivationObsolete(BattleUIMenuKey.AbilitySelect, _shouldActivate)) return;
+
+            if (_shouldActivate)
+            {
+                abilitySelectMenu.PopulateAbilitiesList(currentBattleUnitTurn);
+            }
+            else
+            {
+                abilitySelectMenu.ResetAbilitySelectMenu();
+            }
+
+            abilitySelectMenu.gameObject.SetActive(_shouldActivate);
+        }
+
+        public void ActivateTargetSelectMenu(bool _shouldActivate)
+        {
+            if (IsActivationObsolete(BattleUIMenuKey.TargetSelect, _shouldActivate)) return;
+
+            if (_shouldActivate)
+            {
+                TargetingType targetingType = selectedAbility.GetTargetingType();
+                targetSelectMenu.SetupTargetSelectMenu(activeMenuKey, targetingType);
+            }
+            else
+            {
+                targetSelectMenu.ResetTargetButtons();
+            }
+
+            targetSelectMenu.gameObject.SetActive(_shouldActivate);
+        }
+
+        public void OnAbilitySelect(Ability _ability)
+        {
+            selectedAbility = _ability;
+
+            List<BattleUnit> targetTeam = new List<BattleUnit>();
+
+            if (selectedAbility.GetTargetingType() == TargetingType.PlayersOnly)
+            {
+                targetTeam = playerUnits;
+            }
+            else
+            {
+                targetTeam = enemyUnits;
+            }
+
+            if (targetTeam.Count > 1)
+            {
+                ActivateBattleUIMenu(BattleUIMenuKey.TargetSelect);
+            }
+            else
+            {
+                OnTargetSelect(targetTeam[0]);
+            }
+        }
+
+        public void OnTargetSelect(BattleUnit _target)
+        {
+            onPlayerMove(_target, selectedAbility);
+
+            battleHUD.SetupUnitResourcesIndicator(null);
+            _target.ActivateUnitIndicatorUI(false);
+        }
+
+        public void ExecuteNextTurn(List<BattleUnit> _turnOrder, BattleUnit _currentBattleUnitTurn)
+        {
+            SetCurrentBattleUnitTurn(_currentBattleUnitTurn);
+            battleHUD.UpdateTurnOrderUIItems(_turnOrder, _currentBattleUnitTurn);
+
+            if (currentBattleUnitTurn.GetBattleUnitInfo().IsPlayer())
+            {
+                ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
+            }
+        }
+
+        public void HighlightTarget(BattleUnit _battleUnit)
+        {
+            if (_battleUnit == null) return;
+            highlightedTarget = _battleUnit;
+
+            highlightedTarget.ActivateUnitIndicatorUI(true);
+            battleHUD.SetupUnitResourcesIndicator(highlightedTarget);
+            
+            //Refactor
+            //Resources UI above head activate
+        }
+
+        public void UnhighlightTarget()
+        {
+            if (highlightedTarget == null) return;
+
+            if (highlightedTarget != currentBattleUnitTurn)
+            {
+                highlightedTarget.ActivateUnitIndicatorUI(false);
+            }
+
+            battleHUD.SetupUnitResourcesIndicator(null);
+            highlightedTarget = null;
+        }
+
+        public void DeactivateAllMenus()
+        {
+            ActivatePlayerMoveSelectMenu(false);
+            ActivateAbilitySelectMenu(false);
+            ActivateTargetSelectMenu(false);
+        }
+
+        public void SetCurrentBattleUnitTurn(BattleUnit _currentBattletUnitTurn)
+        {
+            if(currentBattleUnitTurn != null)
+            {
+                currentBattleUnitTurn.ActivateUnitIndicatorUI(false);
+            }
+
+            currentBattleUnitTurn = _currentBattletUnitTurn;
+            currentBattleUnitTurn.ActivateUnitIndicatorUI(true);
+        }
+
+        public void SetSelectedAbility(Ability _selectedAbility)
+        {
+            selectedAbility = _selectedAbility;
+        }
+
+        public void SetTargetBattleUnit(BattleUnit _targetBattleUnit)
+        {
+            targetBattleUnit = _targetBattleUnit;
+        }
+
+        public void UpdateBattleUnitLists(List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits)
+        {
+            playerUnits = _playerUnits;
+            enemyUnits = _enemyUnits;
+
+            targetSelectMenu.UpdateBattleUnitLists(playerUnits, enemyUnits);
+        }
+
+        public void ResetUIManager()
+        {
+            playerUnits.Clear();
+            enemyUnits.Clear();
+
+            currentBattleUnitTurn = null;
+            selectedAbility = null;
+            isCopy = false;
+
+            targetBattleUnit = null;
+
             abilitySelectMenu.ResetAbilitySelectMenu();
+            targetSelectMenu.ResetTargetSelectMenu();
+            battleHUD.ResetTurnOrderUIItems();
+
+            activeMenuKey = BattleUIMenuKey.None;
         }
 
-        abilitySelectMenu.gameObject.SetActive(_shouldActivate);
-    }
-
-    public void ActivateTargetSelectMenu(bool _shouldActivate)
-    {
-        if (IsActivationObsolete(BattleUIMenuKey.TargetSelect, _shouldActivate)) return;
-
-        if (_shouldActivate)
+        public BattleHUD GetBattleHUD()
         {
-            TargetingType targetingType = selectedAbility.targetingType;
-            targetSelectMenu.SetupTargetSelectMenu(activeMenuKey, targetingType);
-        }
-        else
-        {
-            targetSelectMenu.ResetTargetButtons();
+            return battleHUD;
         }
 
-        targetSelectMenu.gameObject.SetActive(_shouldActivate);
-    }
-
-    public void OnAbilitySelect(Ability _ability)
-    {
-        selectedAbility = _ability;
-
-        List<BattleUnit> targetTeam = new List<BattleUnit>();
-
-        if (selectedAbility.targetingType == TargetingType.PlayersOnly)
+        private void PopulateMenuGODict()
         {
-            targetTeam = playerUnits;
-        }
-        else
-        {
-            targetTeam = enemyUnits;
+            menuGameObjects[BattleUIMenuKey.PlayerMoveSelect] = playerMoveSelectMenu.gameObject;
+            menuGameObjects[BattleUIMenuKey.AbilitySelect] = abilitySelectMenu.gameObject;
+            menuGameObjects[BattleUIMenuKey.TargetSelect] = targetSelectMenu.gameObject;
         }
 
-        if(targetTeam.Count > 1)
+        private bool IsActivationObsolete(BattleUIMenuKey _battleUIMenuKey, bool _isActivating)
         {
-            ActivateBattleUIMenu(BattleUIMenuKey.TargetSelect);
-        }
-        else
-        {
-            OnTargetSelect(targetTeam[0]);
-        }
-    }
-
-    public void OnTargetSelect(BattleUnit _target)
-    {
-        onPlayerMove(_target, selectedAbility);
-
-        battleHUD.SetupUnitResourcesIndicator(null);
-        _target.ActivateUnitIndicatorUI(false);
-    }
-
-    public void ExecuteNextTurn(int _newTurnIndex)
-    {
-        battleHUD.SetupTurnOrderUIItems(_newTurnIndex);
-    }
-
-    public void HighlightTarget(BattleUnit _battleUnit)
-    {
-        if (_battleUnit == null) return;
-        highlightedTarget = _battleUnit;
-
-        highlightedTarget.ActivateUnitIndicatorUI(true);
-        battleHUD.SetupUnitResourcesIndicator(highlightedTarget);
-        //Resources above head
-    }
-
-    public void UnhighlightTarget()
-    {
-        if (highlightedTarget == null) return;
-
-        if(highlightedTarget != currentBattleUnitTurn)
-        {
-            highlightedTarget.ActivateUnitIndicatorUI(false);
+            GameObject menuGO = menuGameObjects[_battleUIMenuKey];
+            bool isObsolete = (menuGO.activeSelf == _isActivating);
+            return isObsolete;
         }
 
-        battleHUD.SetupUnitResourcesIndicator(null);
-        highlightedTarget = null;
-    }
-
-    public void DeactivateAllMenus()
-    {
-        ActivatePlayerMoveSelectMenu(false);
-        ActivateAbilitySelectMenu(false);
-        ActivateTargetSelectMenu(false);
-
-        activeMenuKey = BattleUIMenuKey.None;
-    }
-
-    public void SetCurrentBattleUnitTurn(BattleUnit _currentBattletUnitTurn)
-    {
-        currentBattleUnitTurn = _currentBattletUnitTurn;
-    }
-
-    public void SetSelectedAbility(Ability _selectedAbility)
-    {
-        selectedAbility = _selectedAbility;
-    }
-
-    public void SetTargetBattleUnit(BattleUnit _targetBattleUnit)
-    {
-        targetBattleUnit = _targetBattleUnit;
-    }
-
-    public void UpdateBattleUnitLists(List<BattleUnit> _playerUnits, List<BattleUnit> _deadPlayerUnits, List<BattleUnit> _enemyUnits, List<BattleUnit> _deadEnemyUnits)
-    {
-        playerUnits = _playerUnits;
-        deadPlayerUnits = _deadPlayerUnits;
-
-        enemyUnits = _enemyUnits;
-        deadEnemyUnits = _deadEnemyUnits;
-
-        targetSelectMenu.UpdateBattleUnitLists(playerUnits, deadPlayerUnits, enemyUnits, deadEnemyUnits);
-    }
-
-    public void ResetUIManager()
-    {
-        playerUnits.Clear();
-        deadPlayerUnits.Clear();
-        enemyUnits.Clear();
-        deadEnemyUnits.Clear();
-
-        currentBattleUnitTurn = null;
-        selectedAbility = null;
-        isCopy = false;
-
-        targetBattleUnit = null;
-
-        abilitySelectMenu.ResetAbilitySelectMenu();
-        targetSelectMenu.ResetTargetSelectMenu();
-        battleHUD.ResetTurnOrderUIItems();
-    }
-
-    public BattleHUD GetBattleHUD()
-    {
-        return battleHUD;
-    }
-
-    private void PopulateMenuGODict()
-    { 
-        menuGameObjects[BattleUIMenuKey.PlayerMoveSelect] = playerMoveSelectMenu.gameObject;
-        menuGameObjects[BattleUIMenuKey.AbilitySelect] = abilitySelectMenu.gameObject;
-        menuGameObjects[BattleUIMenuKey.TargetSelect] = targetSelectMenu.gameObject;
-    }
-
-    private bool IsActivationObsolete(BattleUIMenuKey _battleUIMenuKey, bool _isActivating)
-    {
-        GameObject menuGO = menuGameObjects[_battleUIMenuKey];
-        bool isObsolete = (menuGO.activeSelf == _isActivating);
-        return isObsolete;
-    }
-
-    public void SetUILookAts(Transform lookTransform)
-    {
-        foreach (LookAtCam lookAtCam in FindObjectsOfType<LookAtCam>())
+        //Refactor 
+        public void SetUILookAts(Transform _lookTransform)
         {
-            lookAtCam.LookAtCamTransform(lookTransform);      
+            LookAtCam[] lookAtCams = FindObjectsOfType<LookAtCam>();
+            foreach (LookAtCam lookAtCam in lookAtCams)
+            {
+                lookAtCam.LookAtCamTransform(_lookTransform);
+            }
         }
     }
 }

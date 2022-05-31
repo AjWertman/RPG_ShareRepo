@@ -1,6 +1,6 @@
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     public class Dodge : InstantActionHandler<DodgeType>
     {

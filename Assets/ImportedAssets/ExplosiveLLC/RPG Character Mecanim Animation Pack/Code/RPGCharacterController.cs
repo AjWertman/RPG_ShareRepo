@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using RPGCharacterAnims.Actions;
-using RPGCharacterAnims.Extensions;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Actions;
+using ASSETPackANIMATIONS.Extensions;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
 	/// <summary>
     /// RPGCharacterController is the main entry point for triggering animations and holds all the

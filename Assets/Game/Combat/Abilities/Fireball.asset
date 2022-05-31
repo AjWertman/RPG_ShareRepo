@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
+  m_Name: Fireball
+  m_EditorClassIdentifier: 
+  abilityName: Fireball
+  requiredLevel: 0
+  animatorTrigger: Cast0
+  abilityLifetime: 1
+  baseAbilityAmount: 40
+  manaCost: 10
+  description: Fireball
+  shouldExpand: 0
+  buttonColor: {r: 1, g: 0, b: 0, a: 1}
+  textColor: {r: 0, g: 0, b: 0, a: 1}
+  abilityPrefab: {fileID: 1999966156053767337, guid: 235763ff3593b65459bb40600f242a8b,
+    type: 3}
+  hitFXPrefab: {fileID: 1068927474717988, guid: 06b9063795ca5b54aa31740b163001c4,
+    type: 3}
+  abilityResource: 1
+  abilityType: 1
+  targetingType: 0
+  isInstaHit: 0
+  canTargetAll: 0
+  isHeal: 0

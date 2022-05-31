@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
 
-public class QuestCompletion : MonoBehaviour
+namespace RPGProject.Questing
 {
-    [SerializeField] Quest quest = null;
-    [SerializeField] string objectiveRefToComplete = null;
-
-    public void CompleteObjective()
+    public class QuestCompletion : MonoBehaviour
     {
-        PlayerQuestList questList = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerQuestList>();
-        QuestStatus status = questList.GetQuestStatus(quest);
+        [SerializeField] Quest quest = null;
+        [SerializeField] string objectiveRefToComplete = null;
 
-        if (quest.HasObjective(objectiveRefToComplete))
-        {
-            questList.CompleteObjective(quest, objectiveRefToComplete);
+        public void CompleteObjective(PlayerQuestList _playerQuestList)
+        {          
+            QuestStatus status = _playerQuestList.GetQuestStatus(quest);
+
+            if (quest.HasObjective(objectiveRefToComplete))
+            {
+                _playerQuestList.CompleteObjective(quest, objectiveRefToComplete);
+            }
         }
-    } 
+    }
 }

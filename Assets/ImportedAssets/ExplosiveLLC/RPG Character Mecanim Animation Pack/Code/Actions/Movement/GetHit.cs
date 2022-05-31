@@ -4,10 +4,10 @@
 // Hit from left - 4
 // Hit from right - 5
 
-using RPGCharacterAnims.Extensions;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Extensions;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     public class GetHit : MovementActionHandler<HitContext>
     {

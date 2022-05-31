@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Boss
   baseLevel: 1
-  characterMeshKey: 5
+  characterMeshKey: 6
   baseStats:
     stats:
     - statType: 0

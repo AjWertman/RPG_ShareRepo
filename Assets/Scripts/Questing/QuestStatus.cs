@@ -1,93 +1,127 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestStatus
+namespace RPGProject.Questing
 {
-    [System.Serializable]
-    class QuestStatusRecord
-    {
-        public string questName;
-        public Dictionary<string, int> inProgressObjectives;
-        public List<string> completedObjectives;
-    }
+    public class QuestStatus
+    {     
+        Quest quest = null;
 
-    Quest quest = null;
+        Dictionary<string, int> inProgressObjectives = new Dictionary<string, int>();
+        List<string> completedObjectives = new List<string>();
 
-    Dictionary<string, int> inProgressObjectives = new Dictionary<string, int>();
-    List<string> completedObjectives = new List<string>();
-
-    public QuestStatus(Quest quest)
-    {
-        this.quest = quest;
-        foreach(var objective in quest.GetObjectives())
+        public QuestStatus(Quest _quest)
         {
-            inProgressObjectives.Add(objective.reference, 0);
-        }
-    }
-
-    public QuestStatus(object objectState)
-    {
-        QuestStatusRecord state = objectState as QuestStatusRecord;
-        quest = Quest.GetByName(state.questName);
-        completedObjectives = state.completedObjectives;
-        inProgressObjectives = state.inProgressObjectives;
-    }
-
-    public Quest GetQuest()
-    {
-        return quest;
-    }
-
-    public bool IsComplete()
-    {
-        if (completedObjectives.Count == 0) return false;
-        foreach (var objective in quest.GetObjectives())
-        {
-            string objRef = objective.reference;
-            if (!completedObjectives.Contains(objRef))
+            quest = _quest;
+            foreach (var objective in _quest.GetObjectives())
             {
-                return false;
+                inProgressObjectives.Add(objective.GetReference(), 0);
             }
         }
-        return true;
-    }
 
-    public bool IsObjectiveComplete(string objective)
-    {
-        return completedObjectives.Contains(objective);
-    }
+        public QuestStatus(object _objectState)
+        {
+            QuestStatusRecord state = _objectState as QuestStatusRecord;
+            quest = Quest.GetByName(state.GetQuestName());
+            completedObjectives = state.GetCompletedObjectives();
+            inProgressObjectives = state.GetInProgressObjectives();
+        }
 
-    public void CompleteObjective(string objectiveToComplete)
-    {
-        if (quest.HasObjective(objectiveToComplete) && !IsObjectiveComplete(objectiveToComplete))
-        {           
-            inProgressObjectives[objectiveToComplete] = inProgressObjectives[objectiveToComplete] + 1;
+        public Quest GetQuest()
+        {
+            return quest;
+        }
 
-            if(inProgressObjectives[objectiveToComplete] == quest.GetObjective(objectiveToComplete).amountToComplete)
+        public bool IsComplete()
+        {
+            if (completedObjectives.Count == 0) return false;
+            foreach (var objective in quest.GetObjectives())
             {
-                completedObjectives.Add(objectiveToComplete);
-            }           
+                string objRef = objective.GetReference();
+                if (!completedObjectives.Contains(objRef))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool IsObjectiveComplete(string _objective)
+        {
+            return completedObjectives.Contains(_objective);
+        }
+
+        public void CompleteObjective(string _objectiveToComplete)
+        {
+            if (quest.HasObjective(_objectiveToComplete) && !IsObjectiveComplete(_objectiveToComplete))
+            {
+                inProgressObjectives[_objectiveToComplete] = inProgressObjectives[_objectiveToComplete] + 1;
+
+                if (inProgressObjectives[_objectiveToComplete] == quest.GetObjective(_objectiveToComplete).GetAmountToComplete())
+                {
+                    completedObjectives.Add(_objectiveToComplete);
+                }
+            }
+        }
+
+        public int GetCompletedCount()
+        {
+            return completedObjectives.Count;
+        }
+
+        public Dictionary<string, int> GetInProgressObjectives()
+        {
+            return inProgressObjectives;
+        }
+
+        public object CaptureState()
+        {
+            QuestStatusRecord state = new QuestStatusRecord();
+
+            state.SetQuestName(quest.name);
+            state.SetCompletedObjectives(completedObjectives);
+            state.SetInProgressObjectives(inProgressObjectives);
+
+            return state;
         }
     }
 
-    public int GetCompletedCount()
+    [Serializable]
+    class QuestStatusRecord
     {
-        return completedObjectives.Count;
-    }
+        [SerializeField] string questName = "";
+        [SerializeField] Dictionary<string, int> inProgressObjectives = new Dictionary<string, int>();
+        [SerializeField] List<string> completedObjectives = new List<string>();
 
-    public Dictionary<string, int> GetInProgressObjectives()
-    {
-        return inProgressObjectives;
-    }
+        public void SetQuestName(string _questName)
+        {
+            questName = _questName;
+        }
 
-    public object CaptureState()
-    {
-        QuestStatusRecord state = new QuestStatusRecord();
+        public void SetInProgressObjectives(Dictionary<string, int> _inProgressObjectives)
+        {
+            inProgressObjectives = _inProgressObjectives;
+        }
 
-        state.questName = quest.name;
-        state.completedObjectives = completedObjectives;
-        state.inProgressObjectives = inProgressObjectives;
+        public void SetCompletedObjectives(List<string> _completedObjectives)
+        {
+            completedObjectives = _completedObjectives;
+        }
 
-        return state;
+        public string GetQuestName()
+        {
+            return questName;
+        }
+
+        public Dictionary<string, int> GetInProgressObjectives()
+        {
+            return inProgressObjectives;
+        }
+
+        public List<string> GetCompletedObjectives()
+        {
+            return completedObjectives;
+        }
     }
 }

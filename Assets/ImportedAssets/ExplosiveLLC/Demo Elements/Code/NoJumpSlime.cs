@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using RPGCharacterAnims.Actions;
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Actions;
+using ASSETPackANIMATIONS.Lookups;
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
     public class NoJumpSlime : MonoBehaviour
     {

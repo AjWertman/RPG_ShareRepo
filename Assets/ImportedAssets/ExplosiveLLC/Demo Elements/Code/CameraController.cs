@@ -3,7 +3,7 @@
 using UnityEngine.InputSystem;
 #endif
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
 	/// <summary>
 	/// Basic Camera Controller with Follow, Rotate, and Zoom functionality.

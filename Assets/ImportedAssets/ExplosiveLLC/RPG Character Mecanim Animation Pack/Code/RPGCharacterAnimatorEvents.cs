@@ -4,7 +4,7 @@ using UnityEngine.Events;
 [System.Serializable]
 public class AnimatorMoveEvent : UnityEvent<Vector3, Quaternion> { }
 
-namespace RPGCharacterAnims
+namespace ASSETPackANIMATIONS
 {
 	[HelpURL("https://docs.unity3d.com/Manual/script-AnimationWindowEvent.html")]
 

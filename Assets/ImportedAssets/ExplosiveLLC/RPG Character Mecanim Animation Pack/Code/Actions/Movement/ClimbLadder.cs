@@ -1,7 +1,7 @@
-using RPGCharacterAnims.Lookups;
+using ASSETPackANIMATIONS.Lookups;
 using UnityEngine;
 
-namespace RPGCharacterAnims.Actions
+namespace ASSETPackANIMATIONS.Actions
 {
     public class ClimbLadder : MovementActionHandler<EmptyContext>
     {
