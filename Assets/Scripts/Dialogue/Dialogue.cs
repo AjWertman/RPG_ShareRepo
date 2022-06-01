@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace RPGProject.Dialogue
+namespace RPGProject._Dialogue
 {
     [CreateAssetMenu(fileName = "Dialogue", menuName = "Dialogue/Create New Dialogue", order = 0)]
     public class Dialogue : ScriptableObject, ISerializationCallbackReceiver

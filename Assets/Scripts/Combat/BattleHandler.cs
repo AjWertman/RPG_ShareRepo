@@ -1,4 +1,6 @@
 ﻿using RPGProject.Core;
+using RPGProject.Sound;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +36,8 @@ namespace RPGProject.Combat
         MusicOverride musicOverride = null;
 
         bool isBattleOver = true;
+
+        public event Action onBattleEnd; 
 
         private void Awake()
         {
@@ -157,10 +161,8 @@ namespace RPGProject.Combat
 
                 //GetComponent<MusicOverride>().ClearOverride();
 
-                foreach (OverworldEntity overworld in FindObjectsOfType<OverworldEntity>())
-                {
-                    overworld.GetComponent<IOverworld>().BattleEndBehavior();
-                }
+                onBattleEnd();
+
 
                 yield return FindObjectOfType<Fader>().FadeIn(.5f);
             }

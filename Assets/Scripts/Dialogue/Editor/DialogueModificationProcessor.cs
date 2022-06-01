@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEditor;
 
-namespace RPGProject.Dialogue
+namespace RPGProject._Dialogue
 {
     public class DialogueModificationProcessor : AssetModificationProcessor
     {

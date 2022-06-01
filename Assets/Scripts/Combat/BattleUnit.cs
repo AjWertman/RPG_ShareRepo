@@ -1,4 +1,6 @@
 ﻿using RPGProject.Core;
+using RPGProject.Movement;
+using RPGProject.Progression;
 using System;
 using System.Collections;
 using System.Collections.Generic;

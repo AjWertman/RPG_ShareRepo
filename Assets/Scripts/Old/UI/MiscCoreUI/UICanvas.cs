@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using RPGProject.Control;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

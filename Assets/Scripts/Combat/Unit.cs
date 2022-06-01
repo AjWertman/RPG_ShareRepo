@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RPGProject.Progression;
+using UnityEngine;
 
 namespace RPGProject.Combat
 {

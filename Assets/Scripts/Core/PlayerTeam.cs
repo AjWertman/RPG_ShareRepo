@@ -1,4 +1,5 @@
 ﻿using RPGProject.Combat;
+using RPGProject.Progression;
 using RPGProject.Saving;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,13 @@ namespace RPGProject.Core
         [SerializeField] TeamInfo[] teamInfos;
         [SerializeField] Stat[] statsTemplate;
 
-        Progression progressionHandler = null;
+        ProgressionHandler progressionHandler = null;
 
         List<Unit> playerTeam = new List<Unit>();
 
         private void Awake()
         {
-            progressionHandler = GetComponentInChildren<Progression>();
+            progressionHandler = GetComponentInChildren<ProgressionHandler>();
             PopulateTeamInfos();
         }
 

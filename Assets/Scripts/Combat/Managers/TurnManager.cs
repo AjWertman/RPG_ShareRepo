@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPGProject.Progression;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 

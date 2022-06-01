@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using RPGProject.Control;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RPGProject.Dialogue
+namespace RPGProject._Dialogue
 {
     public class DialogueUI : MonoBehaviour
     {

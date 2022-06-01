@@ -1,5 +1,6 @@
 using RPGProject.Combat;
 using RPGProject.Core;
+using RPGProject.Progression;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

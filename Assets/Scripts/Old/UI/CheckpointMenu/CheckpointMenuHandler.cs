@@ -1,4 +1,5 @@
-﻿using RPGProject.Core;
+﻿using RPGProject.Control;
+using RPGProject.Core;
 using System;
 using System.Collections;
 using TMPro;

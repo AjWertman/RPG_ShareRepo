@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class TutorialTrigger : MonoBehaviour
 {
-    BattleZoneTrigger trigger = null;
+    //BattleZoneTrigger trigger = null;
 
     private void Awake()
     {
-        trigger = GetComponent<BattleZoneTrigger>();
+        //trigger = GetComponent<BattleZoneTrigger>();
     }
 
     private void Start()
     {
-        if (trigger == null) return;
+        //if (trigger == null) return;
 
-        StartCoroutine(StartBattleWithDelay());
+        //StartCoroutine(StartBattleWithDelay());
     }
 
-    private IEnumerator StartBattleWithDelay()
-    {
-        yield return new WaitForSeconds(1.5f);
-        trigger.CallStartBattle();
-    }
+    //private IEnumerator StartBattleWithDelay()
+    //{
+    //    yield return new WaitForSeconds(1.5f);
+    //    trigger.CallStartBattle();
+    //}
 }

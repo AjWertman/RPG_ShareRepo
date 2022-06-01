@@ -1,0 +1,258 @@
+﻿using RPGProject.Core;
+using RPGProject.Movement;
+using System;
+using UnityEngine;
+
+namespace RPGProject.Control
+{
+    public class PlayerController : MonoBehaviour, IOverworld
+    {
+        [SerializeField] GameObject playerMesh = null;
+        [SerializeField] GameObject camLookObject = null;
+
+        [SerializeField] KeyCode menuKeyCode = KeyCode.Escape;
+        [SerializeField] Texture2D cursorTexture = null;
+
+        Animator animator = null;
+        FollowCamera followCamera = null;
+        PlayerConversant playerConversant = null;
+        PlayerMover playerMover = null;
+        PlayerTeam playerTeam = null;
+        UICanvas uiCanvas = null;
+
+        BattleZoneTrigger contestedBattleZoneTrigger = null;
+        Checkpoint lastCheckpoint = null;
+
+        bool hasStartedBattle = false;
+        bool isBattling = false;
+
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
+
+            playerConversant = GetComponent<PlayerConversant>();
+            playerTeam = FindObjectOfType<PlayerTeam>();
+            playerMover = GetComponent<PlayerMover>();
+        }
+
+        private void Start()
+        {
+            followCamera = FindObjectOfType<FollowCamera>();
+            uiCanvas = FindObjectOfType<UICanvas>();
+
+            //Cursor.SetCursor(cursorTexture, new Vector2(0, 0), CursorMode.ForceSoftware);
+        }
+
+        private void Update()
+        {
+            if (!isBattling)
+            {
+                playerMover.Move();
+
+                if (InteractWithUI()) return;
+                if (HandleMouseRaycast()) return;
+
+                ActivateCursor(false);
+            }
+            else
+            {
+                ActivateCursor(true);
+            }
+        }
+
+        private bool InteractWithUI()
+        {
+            bool isInteracting = false;
+
+            if (uiCanvas.IsTutorialActive()) isInteracting = true;
+            if (playerConversant.IsChatting()) isInteracting = true;
+            if (uiCanvas.IsAnyMenuActive()) isInteracting = true;
+
+            if (Input.GetKeyDown(menuKeyCode) || Input.GetKeyDown(KeyCode.Escape))
+            {
+                ActivateCoreMenu();
+                isInteracting = true;
+            }
+
+            followCamera.SetCanRotate(!isInteracting);
+            playerMover.SetCanMove(!isInteracting);
+            ActivateCursor(isInteracting);
+            return isInteracting;
+        }
+
+        private bool HandleMouseRaycast()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = RaycastAllSorted(ray);
+
+            foreach (RaycastHit hit in hits)
+            {
+                IRaycastable[] raycastables = hit.transform.gameObject.GetComponents<IRaycastable>();
+                foreach (IRaycastable raycastable in raycastables)
+                {
+                    if (raycastable.HandleRaycast(this))
+                    {
+                        uiCanvas.ActivateActivateUI(raycastable.WhatToActivate());
+
+                        if (Input.GetMouseButton(0))
+                        {
+                            uiCanvas.DeactivateActivateUI();
+                            raycastable.WhatToDoOnClick(this);
+                        }
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private void ActivateCoreMenu()
+        {
+            if (!uiCanvas.AreAnyCoreMenusActive())
+            {
+                uiCanvas.ActivateCoreMenu(true);
+            }
+            else
+            {
+                uiCanvas.ActivateCoreMenu(false);
+            }
+        }
+
+        public void ActivateCheckpointMenu(Checkpoint _checkpoint)
+        {
+            uiCanvas.ActivateCheckpointMenu(_checkpoint);
+        }
+
+        public void ForceDeactivateCheckpointMenu()
+        {
+            uiCanvas.ForceDeactivateCheckpointMenu();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
+            if (battleZoneTrigger != null)
+            {
+                bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
+                if (isEnemyTrigger)
+                {
+                    if (!hasStartedBattle)
+                    {
+                        hasStartedBattle = true;
+                        StartCoroutine(battleZoneTrigger.StartBattle());
+                    }
+                }
+                else
+                {
+                    contestedBattleZoneTrigger = battleZoneTrigger;
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
+            if (battleZoneTrigger != null)
+            {
+                bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
+                if (!isEnemyTrigger)
+                {
+                    contestedBattleZoneTrigger = null;
+                }
+            }
+        }
+
+        public void BattleStartBehavior()
+        {
+            isBattling = true;
+            animator.SetBool("isRunning", false);
+            playerMesh.SetActive(false);
+            followCamera.gameObject.SetActive(false);
+            ActivateCursor(true);
+
+            uiCanvas.DeactivateAllMenus();
+        }
+
+        public void BattleEndBehavior()
+        {
+            isBattling = false;
+            hasStartedBattle = false;
+            followCamera.gameObject.SetActive(true);
+            playerMesh.SetActive(true);
+        }
+
+        public void ReturnToLastCheckpoint()
+        {
+            uiCanvas.ForceDeactivateCoreMenu();
+            lastCheckpoint.FastTravel(lastCheckpoint.GetFastTravelPoint());
+        }
+
+        public void SetLastCheckpoint(Checkpoint _newCheckpoint)
+        {
+            if (lastCheckpoint == _newCheckpoint) return;
+            lastCheckpoint = _newCheckpoint;
+        }
+
+        private void ActivateCursor(bool shouldActivate)
+        {
+            if (Cursor.visible == shouldActivate) return;
+            if (shouldActivate)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+        }
+
+        //Refactor - Create sound effect
+        private void FootStepBehavior()
+        {
+            if (contestedBattleZoneTrigger != null)
+            {
+                contestedBattleZoneTrigger.BattleCheck();
+            }
+        }
+
+        //Animation Event
+        public void FootR()
+        {
+            FootStepBehavior();
+        }
+
+        //Animation Event
+        public void FootL()
+        {
+            FootStepBehavior();
+        }
+
+        private RaycastHit[] RaycastAllSorted(Ray ray)
+        {
+            RaycastHit[] hits = Physics.RaycastAll(ray);
+            float[] distances = new float[hits.Length];
+
+            for (int i = 0; i < hits.Length; i++)
+            {
+                distances[i] = hits[i].distance;
+            }
+
+            Array.Sort(distances, hits);
+
+            return hits;
+        }
+
+        public PlayerMover GetPlayerMover()
+        {
+            return playerMover;
+        }
+
+        public Transform GetCamLookTransform()
+        {
+            return camLookObject.transform;
+        }
+    }
+}
