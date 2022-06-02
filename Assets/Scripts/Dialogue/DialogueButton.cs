@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RPGProject._Dialogue
+namespace RPGProject.Dialogue
 {
     public class DialogueButton : MonoBehaviour
     {

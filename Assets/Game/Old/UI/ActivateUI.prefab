@@ -29,6 +29,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1871582477697752206}
   m_Father: {fileID: 6729782946533465879}
@@ -112,6 +113,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6729782946533465879}
+  - component: {fileID: 6757107273317845426}
   m_Layer: 5
   m_Name: ActivateUI
   m_TagString: Untagged
@@ -129,6 +131,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2792480458213431774}
   m_Father: {fileID: 0}
@@ -139,6 +142,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6757107273317845426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974305302259888701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 374afb67ef4663e47bec2445e061af56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activationPromptObject: {fileID: 686903115211963070}
 --- !u!1 &6568681084229970314
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +167,7 @@ GameObject:
   - component: {fileID: 3150117996412258530}
   - component: {fileID: 4228238695477950208}
   m_Layer: 5
-  m_Name: WhatToActivate
+  m_Name: WhatToActivateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,6 +183,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2792480458213431774}
   m_RootOrder: 0
@@ -206,8 +223,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Activate this thing
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f70a30cea1084d547bd9f898310d5468, type: 2}
-  m_sharedMaterial: {fileID: 1066919105862766378, guid: f70a30cea1084d547bd9f898310d5468, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

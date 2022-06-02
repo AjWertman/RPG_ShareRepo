@@ -1,11 +1,11 @@
-﻿using RPGProject._Dialogue;
+﻿using RPGProject.Dialogue;
 using UnityEngine;
 
 namespace RPGProject.Control
 {
     public class AIConversant : MonoBehaviour, IRaycastable
     {
-        [SerializeField] Dialogue dialogue = null;
+        [SerializeField] DialogueScripObj dialogue = null;
 
         [SerializeField] float conversationMinDistance = 3f;
         [SerializeField] string conversantName = "";
@@ -15,12 +15,12 @@ namespace RPGProject.Control
             return conversantName;
         }
 
-        public Dialogue GetDialogue()
+        public DialogueScripObj GetDialogue()
         {
             return dialogue;
         }
 
-        public void SetDialogue(Dialogue _newDialogue)
+        public void SetDialogue(DialogueScripObj _newDialogue)
         {
             dialogue = _newDialogue;
         }
@@ -32,13 +32,18 @@ namespace RPGProject.Control
 
         public bool HandleRaycast(PlayerController _playerController)
         {
-            if (dialogue == null) return false;
+            if (dialogue == null)
+            {
+                print("dialogue null");
+                return false;
+            }
+
             float distanceToTarget = Vector3.Distance(_playerController.transform.position, transform.position);
             if (distanceToTarget <= conversationMinDistance)
             {
                 return true;
             }
-
+            print("not in distance");
             return false;
         }
 

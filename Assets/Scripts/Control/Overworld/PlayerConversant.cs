@@ -1,4 +1,4 @@
-﻿using RPGProject._Dialogue;
+﻿using RPGProject.Dialogue;
 using RPGProject.Questing;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace RPGProject.Control
     {
         [SerializeField] string playerName = "Conversant";
 
-        Dialogue currentDialogue = null;
+        DialogueScripObj currentDialogue = null;
         DialogueNode currentNode = null;
 
         AIConversant currentConversant = null;
@@ -20,7 +20,7 @@ namespace RPGProject.Control
 
         public event Action onConversationUpdated;
 
-        public void StartDialogue(AIConversant _conversant, Dialogue _newDialogue)
+        public void StartDialogue(AIConversant _conversant, DialogueScripObj _newDialogue)
         {
             currentConversant = _conversant;
             currentDialogue = _newDialogue;
@@ -156,7 +156,7 @@ namespace RPGProject.Control
             }
         }
 
-        public Dialogue GetCurrentDialogue()
+        public DialogueScripObj GetCurrentDialogue()
         {
             return currentDialogue;
         }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace RPGProject.Combat
@@ -29,12 +30,12 @@ namespace RPGProject.Combat
             isSetup = true;
         }
 
-        public void LaunchProjectile()
+        private void LaunchProjectile()
         {
             transform.Translate(Vector3.forward * launchForce * Time.deltaTime);
         }
 
-        public void ReflectProjectile()
+        private void ReflectProjectile()
         {
             isCritical = false;
             target = caster;

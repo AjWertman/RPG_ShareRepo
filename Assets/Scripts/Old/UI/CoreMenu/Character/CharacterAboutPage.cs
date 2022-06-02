@@ -4,44 +4,48 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterAboutPage : MonoBehaviour
+namespace RPGProject.UI
 {
-    [SerializeField] TextMeshProUGUI nameText0 = null;
-    [SerializeField] TextMeshProUGUI nameText1 = null;
-
-    [SerializeField] Image emblemImage = null;
-
-    [SerializeField] TextMeshProUGUI descriptionText = null;
-
-    [SerializeField] Image characterImage = null;
-
-    [SerializeField] TextMeshProUGUI levelText = null;
-    [SerializeField] TextMeshProUGUI ageText = null;
-    [SerializeField] TextMeshProUGUI emblemNameText = null;
-    [SerializeField] TextMeshProUGUI affiliationText = null;
-
-    public void SetupCharacterPage(Unit character, TeamInfo teamInfo)
+    public class CharacterAboutPage : MonoBehaviour
     {
-        ChangeNameTexts(character.GetUnitName());
-        //characterImage.sprite = character.GetFullBodyImage();
-        //descriptionText.text = character.GetSummary();
-        ChangeExtraInfoTexts(character, teamInfo);
-    }
+        [SerializeField] TextMeshProUGUI nameText0 = null;
+        [SerializeField] TextMeshProUGUI nameText1 = null;
 
-    private void ChangeNameTexts(string name)
-    {
-        nameText0.text = name;
-        nameText1.text = name;
-    }
+        [SerializeField] Image emblemImage = null;
 
-    private void ChangeExtraInfoTexts(Unit character, TeamInfo teamInfo)
-    {
-        string levelString = ("Level: " + teamInfo.GetLevel().ToString());
-        levelText.text = levelString;
+        [SerializeField] TextMeshProUGUI descriptionText = null;
 
-        //string ageString = ("Age: " + character.GetAge().ToString());
-        //ageText.text = ageString;
+        [SerializeField] Image characterImage = null;
 
-        //affiliationText.text = character.GetAffiliation();
+        [SerializeField] TextMeshProUGUI levelText = null;
+        [SerializeField] TextMeshProUGUI ageText = null;
+        [SerializeField] TextMeshProUGUI classText = null;
+        [SerializeField] TextMeshProUGUI subClassText = null;
+
+        public void SetupCharacterPage(Unit _character, TeamInfo _teamInfo)
+        {
+            //Refactor Playable charactewr;
+            ChangeNameTexts(_character.GetUnitName());
+            //characterImage.sprite = character.GetFullBodyImage();
+            //descriptionText.text = character.GetSummary();
+            ChangeExtraInfoTexts(_character, _teamInfo);
+        }
+
+        private void ChangeNameTexts(string _name)
+        {
+            nameText0.text = _name;
+            nameText1.text = _name;
+        }
+
+        private void ChangeExtraInfoTexts(Unit _character, TeamInfo _teamInfo)
+        {
+            string levelString = ("Level: " + _teamInfo.GetLevel().ToString());
+            levelText.text = levelString;
+
+            //string ageString = ("Age: " + character.GetAge().ToString());
+            //ageText.text = ageString;
+
+            //affiliationText.text = character.GetAffiliation();
+        }
     }
 }

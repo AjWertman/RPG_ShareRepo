@@ -52,7 +52,7 @@ namespace RPGProject.Questing
             return GetQuestStatus(_quest) != null;
         }
 
-        public List<QuestStatus> GetQuestStatueses()
+        public List<QuestStatus> GetQuestStatuses()
         {
             return questStatuses;
         }

@@ -44,6 +44,7 @@ namespace RPGProject.Combat
             {
                 GameObject targetButtonInstance = Instantiate(targetButtonPrefab, contentRectTransform);
                 TargetButton targetButton = targetButtonInstance.GetComponent<TargetButton>();
+                targetButton.InitalizeTargetButton();
 
                 targetButton.onSelect += OnTargetSelect;
 

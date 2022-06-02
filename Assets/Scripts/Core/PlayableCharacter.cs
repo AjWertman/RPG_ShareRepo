@@ -1,8 +1,6 @@
-using RPGProject.Combat;
 using UnityEngine;
 
-//Refactor - core should not use combat
-namespace RPGProject.Core
+namespace RPGProject.Core 
 {
     [CreateAssetMenu(fileName = "New Playable Character", menuName = "Character/Create New Playable Character", order = 1)]
     public class PlayableCharacter : ScriptableObject
@@ -10,8 +8,6 @@ namespace RPGProject.Core
         [SerializeField] string characterName = "";
         [SerializeField] int age = 0;
         [TextArea(10, 10)] [SerializeField] string summaryText = "";
-
-        [SerializeField] Unit unit = null;
 
         [Header("UI Design")]
         [SerializeField] Sprite backgroundImage = null;
@@ -31,11 +27,6 @@ namespace RPGProject.Core
         public int GetAge()
         {
             return age;
-        }
-
-        public Unit GetUnit()
-        {
-            return unit;
         }
 
         public Sprite GetBackgroundImage()

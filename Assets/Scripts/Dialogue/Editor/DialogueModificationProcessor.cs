@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using UnityEditor;
 
-namespace RPGProject._Dialogue
+namespace RPGProject.Dialogue
 {
     public class DialogueModificationProcessor : AssetModificationProcessor
     {
         private static AssetMoveResult OnWillMoveAsset(string _sourcePath, string _destinationPath)
         {
-            Dialogue dialogue = AssetDatabase.LoadMainAssetAtPath(_sourcePath) as Dialogue;
+            DialogueScripObj dialogue = AssetDatabase.LoadMainAssetAtPath(_sourcePath) as DialogueScripObj;
 
             if (dialogue == null)
             {

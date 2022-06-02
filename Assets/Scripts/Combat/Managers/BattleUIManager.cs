@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPGProject.Core;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -297,7 +298,6 @@ namespace RPGProject.Combat
             return isObsolete;
         }
 
-        //Refactor 
         public void SetUILookAts(Transform _lookTransform)
         {
             LookAtCam[] lookAtCams = FindObjectsOfType<LookAtCam>();

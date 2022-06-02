@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace RPGProject._Dialogue
+namespace RPGProject.Dialogue
 {
     [Serializable]
     public class DialogueNode : ScriptableObject

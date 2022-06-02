@@ -1,0 +1,416 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7843318122737428203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: d1b535d1-bfb2-4082-a220-7b541c81cbf5
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: 'Awww darn, I was hoping to stay far away from the battle! But you are quite
+    the magic user. '
+  children:
+  - e1c6f0b9-a596-4140-b7ee-5d86c1780c44
+  rect:
+    serializedVersion: 2
+    x: 2210
+    y: 87
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-7396435776812841531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: e3d12f46-ecd4-4f76-bc52-180ca1df7d27
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: You're finally up, thank goodness!
+  children:
+  - a4b6185e-9f94-4c81-9d99-a2930c24badf
+  rect:
+    serializedVersion: 2
+    x: 149.00002
+    y: 173
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-5466813219979873218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: baf58883-c054-4179-8a72-6c330b461683
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: Mr. Tough-guy. You ready to take another shot at escaping? Did you want the
+    sword or staff this time?
+  children:
+  - 24939b29-04bd-4293-bdc5-0e794e418b25
+  - 0e698036-bb70-41b7-88ec-0207d8a64b14
+  rect:
+    serializedVersion: 2
+    x: 1617
+    y: 251.00002
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-2343266101870264138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: baf781a9-0758-4ea9-a0b3-2ec57d6b3159
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: It wasn't that bad
+  children:
+  - baf58883-c054-4179-8a72-6c330b461683
+  rect:
+    serializedVersion: 2
+    x: 622
+    y: 253.99998
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-1217763274264300556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: a4b6185e-9f94-4c81-9d99-a2930c24badf
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: You took a pretty hard spill back there.
+  children:
+  - ae90108b-b1d4-4b7f-b534-8d6953398245
+  - baf781a9-0758-4ea9-a0b3-2ec57d6b3159
+  rect:
+    serializedVersion: 2
+    x: 399
+    y: 173
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-345985870113696614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 15548ff6-e6b4-4d91-a372-92ab4ef14d38
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: ' You ready to take another shot at escaping? Did you want the sword or staff
+    this time?'
+  children:
+  - 0e698036-bb70-41b7-88ec-0207d8a64b14
+  - 24939b29-04bd-4293-bdc5-0e794e418b25
+  rect:
+    serializedVersion: 2
+    x: 1629
+    y: 103
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
+  m_Name: Dialogue0
+  m_EditorClassIdentifier: 
+  newNodeOffset: {x: 250, y: 0}
+  dialogueNodes:
+  - {fileID: -7396435776812841531}
+  - {fileID: -1217763274264300556}
+  - {fileID: 6170430553746497910}
+  - {fileID: -2343266101870264138}
+  - {fileID: 2256486119610580714}
+  - {fileID: 7908561896915201885}
+  - {fileID: 2452980185965461257}
+  - {fileID: -5466813219979873218}
+  - {fileID: -345985870113696614}
+  - {fileID: 1339263009868999256}
+  - {fileID: 5124781570401009632}
+  - {fileID: 7162427495121738201}
+  - {fileID: -7843318122737428203}
+  - {fileID: 3634114084752436016}
+  isEssentialDialogue: 0
+--- !u!114 &1339263009868999256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 0e698036-bb70-41b7-88ec-0207d8a64b14
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: Staff
+  children:
+  - d1b535d1-bfb2-4082-a220-7b541c81cbf5
+  rect:
+    serializedVersion: 2
+    x: 1960
+    y: 87
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: giveStaff
+  condition:
+    and: []
+--- !u!114 &2256486119610580714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 107d4fff-3da5-4ac8-82a4-4ca57259eae2
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: You seriously don't remember? Well... we are trapped in this cave and I am
+    Veronica.
+  children:
+  - 4546953b-d712-419b-8afc-6f1bb77ba00e
+  rect:
+    serializedVersion: 2
+    x: 879
+    y: 103
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &2452980185965461257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 547163c8-2ab8-4875-9922-a4b4f3b73558
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: Thankfully death isn't the end here, and when we "die" we wake up at this
+    graveyard.
+  children:
+  - 15548ff6-e6b4-4d91-a372-92ab4ef14d38
+  rect:
+    serializedVersion: 2
+    x: 1379
+    y: 103
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &3634114084752436016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: e1c6f0b9-a596-4140-b7ee-5d86c1780c44
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: Onward!
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 2466
+    y: 164
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &5124781570401009632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 24939b29-04bd-4293-bdc5-0e794e418b25
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: Sword
+  children:
+  - ea04c966-ca50-4949-9582-bb51ff4d0a51
+  rect:
+    serializedVersion: 2
+    x: 1965
+    y: 256
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: giveSword
+  condition:
+    and: []
+--- !u!114 &6170430553746497910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: ae90108b-b1d4-4b7f-b534-8d6953398245
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: Where am I? Who are you?
+  children:
+  - 107d4fff-3da5-4ac8-82a4-4ca57259eae2
+  rect:
+    serializedVersion: 2
+    x: 629
+    y: 103
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &7162427495121738201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: ea04c966-ca50-4949-9582-bb51ff4d0a51
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: Yay! I didn't like getting all that icky blood on my hands last time/
+  children:
+  - e1c6f0b9-a596-4140-b7ee-5d86c1780c44
+  rect:
+    serializedVersion: 2
+    x: 2236
+    y: 256
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &7908561896915201885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 4546953b-d712-419b-8afc-6f1bb77ba00e
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: This death makes 42 failed attempts at escape.
+  children:
+  - 547163c8-2ab8-4875-9922-a4b4f3b73558
+  rect:
+    serializedVersion: 2
+    x: 1129
+    y: 103
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []

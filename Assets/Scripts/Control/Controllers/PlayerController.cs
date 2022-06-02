@@ -49,7 +49,8 @@ namespace RPGProject.Control
             {
                 playerMover.Move();
 
-                if (InteractWithUI()) return;
+                if (InteractWithUI()) return; 
+                
                 if (HandleMouseRaycast()) return;
 
                 ActivateCursor(false);
@@ -64,7 +65,7 @@ namespace RPGProject.Control
         {
             bool isInteracting = false;
 
-            if (uiCanvas.IsTutorialActive()) isInteracting = true;
+            //if (uiCanvas.IsTutorialActive()) isInteracting = true;
             if (playerConversant.IsChatting()) isInteracting = true;
             if (uiCanvas.IsAnyMenuActive()) isInteracting = true;
 
@@ -72,6 +73,7 @@ namespace RPGProject.Control
             {
                 ActivateCoreMenu();
                 isInteracting = true;
+                playerConversant.Quit();
             }
 
             followCamera.SetCanRotate(!isInteracting);
@@ -92,11 +94,11 @@ namespace RPGProject.Control
                 {
                     if (raycastable.HandleRaycast(this))
                     {
-                        uiCanvas.ActivateActivateUI(raycastable.WhatToActivate());
+                        uiCanvas.ActivateActivateUIPrompt(raycastable.WhatToActivate());
 
                         if (Input.GetMouseButton(0))
                         {
-                            uiCanvas.DeactivateActivateUI();
+                            uiCanvas.DeactivateActivateUIPrompt();
                             raycastable.WhatToDoOnClick(this);
                         }
                         return true;
@@ -104,18 +106,19 @@ namespace RPGProject.Control
                 }
             }
 
+            uiCanvas.DeactivateActivateUIPrompt();
             return false;
         }
 
         private void ActivateCoreMenu()
         {
-            if (!uiCanvas.AreAnyCoreMenusActive())
+            if (!uiCanvas.IsAnyPlayerMenuActive())
             {
-                uiCanvas.ActivateCoreMenu(true);
+                uiCanvas.ActivatePlayerMenu();
             }
             else
             {
-                uiCanvas.ActivateCoreMenu(false);
+                uiCanvas.DeactivatePlayerMenu();
             }
         }
 
@@ -126,7 +129,7 @@ namespace RPGProject.Control
 
         public void ForceDeactivateCheckpointMenu()
         {
-            uiCanvas.ForceDeactivateCheckpointMenu();
+            uiCanvas.DeactivateCheckpointMenu();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -166,25 +169,26 @@ namespace RPGProject.Control
         public void BattleStartBehavior()
         {
             isBattling = true;
-            animator.SetBool("isRunning", false);
+            animator.enabled = false;
             playerMesh.SetActive(false);
             followCamera.gameObject.SetActive(false);
             ActivateCursor(true);
 
-            uiCanvas.DeactivateAllMenus();
+            uiCanvas.DeactivateAllUI();
         }
 
         public void BattleEndBehavior()
         {
             isBattling = false;
             hasStartedBattle = false;
+            animator.enabled = true;  
             followCamera.gameObject.SetActive(true);
             playerMesh.SetActive(true);
         }
 
         public void ReturnToLastCheckpoint()
         {
-            uiCanvas.ForceDeactivateCoreMenu();
+            uiCanvas.DeactivatePlayerMenu();
             lastCheckpoint.FastTravel(lastCheckpoint.GetFastTravelPoint());
         }
 
@@ -232,7 +236,7 @@ namespace RPGProject.Control
 
         private RaycastHit[] RaycastAllSorted(Ray ray)
         {
-            RaycastHit[] hits = Physics.RaycastAll(ray);
+            RaycastHit[] hits = Physics.RaycastAll(ray, 100f);
             float[] distances = new float[hits.Length];
 
             for (int i = 0; i < hits.Length; i++)

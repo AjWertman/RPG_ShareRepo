@@ -1,5 +1,4 @@
-﻿using RPGProject.Combat;
-using RPGProject.Progression;
+﻿using RPGProject.Progression;
 using RPGProject.Saving;
 using System;
 using System.Collections.Generic;

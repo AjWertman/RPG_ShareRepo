@@ -35,6 +35,8 @@ namespace RPGProject.Control
 
         public void CallStartBattle()
         {
+            if (startedBattle) return;
+            startedBattle = true;
             StartCoroutine(StartBattle());
         }
 
@@ -86,6 +88,8 @@ namespace RPGProject.Control
 
             currentBattleHandler.onBattleEnd -= EndBattle;
             currentBattleHandler = null;
+
+            startedBattle = false;
         }
 
         private BattleHandler GetClosestBattleHandler()

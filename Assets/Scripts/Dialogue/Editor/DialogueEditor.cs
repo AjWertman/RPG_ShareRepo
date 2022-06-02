@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-namespace RPGProject._Dialogue
+namespace RPGProject.Dialogue
 {
     public class DialogueEditor : EditorWindow
     {
@@ -20,7 +20,7 @@ namespace RPGProject._Dialogue
         [NonSerialized] bool isDraggingCanvas = false;
         [NonSerialized] Vector2 draggingCanvasOffset = new Vector2();
 
-        Dialogue selectedDialogue = null;
+        DialogueScripObj selectedDialogue = null;
         Vector2 scrollPosition = new Vector2();
 
         const float canvasSize = 4000f;
@@ -35,7 +35,7 @@ namespace RPGProject._Dialogue
         [OnOpenAsset(1)]
         public static bool OnOpenAsset(int _instanceID, int _lineNumber)
         {
-            Dialogue dialogue = EditorUtility.InstanceIDToObject(_instanceID) as Dialogue;
+            DialogueScripObj dialogue = EditorUtility.InstanceIDToObject(_instanceID) as DialogueScripObj;
 
             if (dialogue != null)
             {
@@ -63,7 +63,7 @@ namespace RPGProject._Dialogue
 
         private void OnSelectionChange()
         {
-            Dialogue newDialogue = Selection.activeObject as Dialogue;
+            DialogueScripObj newDialogue = Selection.activeObject as DialogueScripObj;
 
             if (newDialogue != null)
             {
