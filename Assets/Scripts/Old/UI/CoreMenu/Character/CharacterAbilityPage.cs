@@ -1,4 +1,5 @@
 using RPGProject.Combat;
+using RPGProject.Core;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -41,11 +42,11 @@ namespace RPGProject.UI
             ResetAbilityButtons();
         }
 
-        public void SetupAbilityPage(Unit _character)
+        public void SetupAbilityPage(Ability[] _abilities)
         {
             //Refactor - playable character
 
-            PopulateAbilityList(_character.GetAbilities());
+            PopulateAbilityList(_abilities);
             DeactivateAbilityTooltip();
         }
 

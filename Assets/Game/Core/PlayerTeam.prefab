@@ -46,8 +46,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be9b758dc0bf2504da6f17d81e766efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingPlayerKeys: 010000000000000002000000
+  statsTemplate:
+  - statType: 0
+    statLevel: 10
+    levelUpPercent: 0
+  - statType: 1
+    statLevel: 10
+    levelUpPercent: 0
+  - statType: 2
+    statLevel: 10
+    levelUpPercent: 0
+  - statType: 3
+    statLevel: 10
+    levelUpPercent: 0
+  - statType: 4
+    statLevel: 10
+    levelUpPercent: 0
+  - statType: 5
+    statLevel: 10
+    levelUpPercent: 0
+  - statType: 6
+    statLevel: 10
+    levelUpPercent: 0
+  - statType: 7
+    statLevel: 10
+    levelUpPercent: 0
   teamInfos:
-  - characterName: Teammate0
+  - playerKey: 0
     stats:
       stats:
       - statType: 0
@@ -81,7 +107,7 @@ MonoBehaviour:
       maxManaPoints: 0
     level: 1
     experiencePoints: 0
-  - characterName: Aj
+  - playerKey: 0
     stats:
       stats:
       - statType: 0
@@ -115,7 +141,7 @@ MonoBehaviour:
       maxManaPoints: 0
     level: 0
     experiencePoints: 0
-  - characterName: Teammate1
+  - playerKey: 0
     stats:
       stats:
       - statType: 0
@@ -149,31 +175,6 @@ MonoBehaviour:
       maxManaPoints: 0
     level: 1
     experiencePoints: 0
-  statsTemplate:
-  - statType: 0
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 1
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 2
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 3
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 4
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 5
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 6
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 7
-    statLevel: 10
-    levelUpPercent: 0
 --- !u!114 &4204676130505864477
 MonoBehaviour:
   m_ObjectHideFlags: 0

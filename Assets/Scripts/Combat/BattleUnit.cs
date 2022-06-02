@@ -1,4 +1,5 @@
 ﻿using RPGProject.Core;
+using RPGProject.GameResources;
 using RPGProject.Movement;
 using RPGProject.Progression;
 using System;
@@ -197,9 +198,9 @@ namespace RPGProject.Combat
             Stats stats = battleUnitInfo.GetStats();
             fighter.UpdateAttributes
                 (
-                stats.GetSpecificStatLevel(StatType.Strength),
-                stats.GetSpecificStatLevel(StatType.Skill),
-                stats.GetSpecificStatLevel(StatType.Luck)
+                stats.GetStat(StatType.Strength),
+                stats.GetStat(StatType.Skill),
+                stats.GetStat(StatType.Luck)
                 );
         }
 
@@ -208,16 +209,16 @@ namespace RPGProject.Combat
             Stats stats = battleUnitInfo.GetStats();
             health.UpdateAttributes
                 (
-                stats.GetSpecificStatLevel(StatType.Stamina),
-                stats.GetSpecificStatLevel(StatType.Armor),
-                stats.GetSpecificStatLevel(StatType.Resistance)
+               stats.GetStat(StatType.Stamina),
+                stats.GetStat(StatType.Armor),
+               stats.GetStat(StatType.Resistance)
                 );
         }
 
         private void UpdateManaStats()
         {
             Stats stats = battleUnitInfo.GetStats();
-            mana.UpdateAttributes(stats.GetSpecificStatLevel(StatType.Spirit));
+            mana.UpdateAttributes(stats.GetStat(StatType.Spirit));
         }
 
         //Refactor - move to Battle unit UI?
@@ -269,22 +270,6 @@ namespace RPGProject.Combat
             mana.ResetMana();
         }
 
-        public Stat GetStat(StatType _statType)
-        {
-            Stat statToGet = null;
-            Stats stats = battleUnitInfo.GetStats();
-            foreach (Stat stat in stats.GetAllStats())
-            {
-                if (stat.GetStatType() == _statType)
-                {
-                    statToGet = stat;
-                    break;
-                }
-            }
-
-            return statToGet;
-        }
-
         public Ability GetRandomAbility()
         {
             Ability basicAttack = battleUnitInfo.GetBasicAttack();
@@ -328,6 +313,11 @@ namespace RPGProject.Combat
             }
 
             return useableAbilities;
+        }
+
+        public int GetStat(StatType _statType)
+        {
+            return battleUnitInfo.GetStats().GetStat(_statType);
         }
 
         public BattleUnitInfo GetBattleUnitInfo()

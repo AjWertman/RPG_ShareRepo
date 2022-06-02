@@ -8,98 +8,155 @@ namespace RPGProject.Progression
     [Serializable]
     public class Stats
     {
-        [SerializeField] Stat[] stats = null;
+        [Range(10, 100)] [SerializeField] int stamina = 10;
+        [Range(10, 100)] [SerializeField] int spirit = 10;
+        [Range(10, 100)] [SerializeField] int strength = 10;
+        [Range(10, 100)] [SerializeField] int skill = 10;
+        [Range(10, 100)] [SerializeField] int armor = 10;
+        [Range(10, 100)] [SerializeField] int resistance = 10;
+        [Range(10, 100)] [SerializeField] int speed = 10;
+        [Range(10, 100)] [SerializeField] int luck = 10;
+
         int baseStatLevel = 10;
+
+        public int GetStat(StatType _statType)
+        {
+            int stat = 0;
+
+            switch (_statType)
+            {
+                case StatType.Stamina:
+                    stat = stamina;
+                    break;
+
+                case StatType.Spirit:
+                    stat = spirit;
+                    break;
+
+                case StatType.Strength:
+                    stat = strength;
+                    break;
+
+                case StatType.Skill:
+                    stat = skill;
+                    break;
+
+                case StatType.Armor:
+                    stat = armor;
+                    break;
+
+                case StatType.Resistance:
+                    stat = resistance;
+                    break;
+
+                case StatType.Speed:
+                    stat = speed;
+                    break;
+
+                case StatType.Luck:
+                    stat = luck;
+                    break;
+            }
+
+            return stat;
+        }
+
+        public void SetStat(StatType _statType, int _level)
+        {
+            switch (_statType)
+            {
+                case StatType.Stamina:
+                    stamina = _level;
+                    break;
+
+                case StatType.Spirit:
+                    spirit = _level;
+                    break;
+
+                case StatType.Strength:
+                    strength = _level;
+                    break;
+
+                case StatType.Skill:
+                    skill = _level;
+                    break;
+
+                case StatType.Armor:
+                    armor = _level;
+                    break;
+
+                case StatType.Resistance:
+                    resistance = _level;
+                    break;
+
+                case StatType.Speed:
+                    speed = _level;
+                    break;
+
+                case StatType.Luck:
+                    luck = _level;
+                    break;
+            }
+        }
 
         public void SetStats(Stats _stats)
         {
-            foreach (Stat stat in stats)
+            foreach(StatType statType in GetStatTypes())
             {
-                int newStatLevel = (int)_stats.GetSpecificStatLevel(stat.GetStatType());
-                stat.SetStatLevel(newStatLevel);
+                int statLevel = _stats.GetStat(statType);
+                SetStat(statType, statLevel);
             }
-        }
-
-        public void SetStat(StatType _statToSet, int _newAmount)
-        {
-            foreach (Stat stat in stats)
-            {
-                if (_statToSet == stat.GetStatType())
-                {
-                    stat.SetStatLevel(_newAmount);
-                }
-            }
-        }
-
-        public Stat[] GetAllStats()
-        {
-            return stats;
-        }
-
-        public Stat GetStat(StatType _statType)
-        {
-            foreach (Stat stat in stats)
-            {
-                if (stat.GetStatType() == _statType)
-                {
-                    return stat;
-                }
-            }
-
-            return null;
-        }
-
-        public float GetSpecificStatLevel(StatType _statType)
-        {
-            Stat specificStat = GetStat(_statType);
-
-            if (specificStat == null)
-            {
-                return 0;
-            }
-
-            return specificStat.GetStatLevel();
         }
 
         public void ResetStats()
-        {
-            foreach (Stat stat in stats)
+        {          
+            foreach (StatType statType in GetStatTypes())
             {
-                stat.SetStatLevel(baseStatLevel);
+                SetStat(statType, baseStatLevel);
             }
         }
-    }
 
-    [Serializable]
-    public class Stat
-    {
-        [SerializeField] StatType statType = StatType.Stamina;
-        [Range(10, 100)] [SerializeField] int statLevel = 10;
-        [SerializeField] int levelUpPercent = 50;
-
-        public StatType GetStatType()
+        private StatType[] GetStatTypes()
         {
-            return statType;
-        }
-
-        public int GetStatLevel()
-        {
-            return statLevel;
-        }
-
-        public void SetStatLevel(int _newLevel)
-        {
-            statLevel = _newLevel;
-        }
-
-        public int GetLevelUpPercent()
-        {
-            return levelUpPercent;
-        }
-
-        public void IncreaseLevel()
-        {
-            statLevel++;
+            return (StatType[])Enum.GetValues(typeof(StatType));
         }
     }
+
+    //[Serializable]
+    //public class Stat
+    //{
+    //    [SerializeField] StatType statType = StatType.Stamina;
+    //    [Range(10, 100)] [SerializeField] int statLevel = 10;
+    //    [SerializeField] int levelUpPercent = 50;
+
+    //    public void SetStatType(StatType _statType)
+    //    {
+    //        statType = _statType;
+    //    }
+
+    //    public void SetStatLevel(int _newLevel)
+    //    {
+    //        statLevel = _newLevel;
+    //    }
+
+    //    public void IncreaseLevel()
+    //    {
+    //        statLevel++;
+    //    }
+
+    //    public StatType GetStatType()
+    //    {
+    //        return statType;
+    //    }
+
+    //    public int GetStatLevel()
+    //    {
+    //        return statLevel;
+    //    }
+
+    //    public int GetLevelUpPercent()
+    //    {
+    //        return levelUpPercent;
+    //    }
+    //}
 }

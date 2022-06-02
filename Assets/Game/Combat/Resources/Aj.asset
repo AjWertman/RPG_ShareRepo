@@ -14,37 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Aj
   baseLevel: 1
-  characterMeshKey: 0
-  baseStats:
-    stats:
-    - statType: 0
-      statLevel: 100
-      levelUpPercent: 80
-    - statType: 1
-      statLevel: 100
-      levelUpPercent: 2
-    - statType: 2
-      statLevel: 100
-      levelUpPercent: 2
-    - statType: 3
-      statLevel: 35
-      levelUpPercent: 2
-    - statType: 4
-      statLevel: 10
-      levelUpPercent: 2
-    - statType: 5
-      statLevel: 10
-      levelUpPercent: 2
-    - statType: 6
-      statLevel: 16
-      levelUpPercent: 2
-    - statType: 7
-      statLevel: 10
-      levelUpPercent: 2
+  characterKey: 0
+  battleUnitResources:
+    healthPoints: 0
+    maxHealthPoints: 0
+    manaPoints: 0
+    maxManaPoints: 0
+  stats:
+    stamina: 100
+    spirit: 100
+    strength: 100
+    skill: 100
+    armor: 100
+    resistance: 100
+    speed: 100
+    luck: 100
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   abilities:
   - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}
-  xpAward: 100
-  backgroundImage: {fileID: 21300000, guid: ba7b3ed94bec5c64ab4ee22be5e0f9fa, type: 3}
-  faceImage: {fileID: 21300000, guid: ba7b3ed94bec5c64ab4ee22be5e0f9fa, type: 3}
-  fullBodyImage: {fileID: 21300000, guid: ba7b3ed94bec5c64ab4ee22be5e0f9fa, type: 3}

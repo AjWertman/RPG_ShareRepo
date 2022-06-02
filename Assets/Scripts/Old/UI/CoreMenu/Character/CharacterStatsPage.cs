@@ -15,41 +15,41 @@ namespace RPGProject.UI
         [SerializeField] Image characterImage = null;
         [SerializeField] StatPageUI[] statPageUIs = null;
 
-        public void SetupStatPageUI(Unit _character, TeamInfo _teamInfo)
+        public void SetupStatPageUI(PlayableCharacter _character, int _level, Stats _stats, BattleUnitResources _battleUnitResources)
         {
-            nameText.text = _teamInfo.GetName();
-            //characterImage.sprite = character.GetFullBodyImage();
-            levelText.text = ("Lv: " + _teamInfo.GetLevel().ToString());
+            nameText.text = _character.GetPlayerKey().ToString();
+            characterImage.sprite = _character.GetFullBodyImage();
+            levelText.text = ("Lv: " + _level.ToString());
 
             foreach (StatPageUI statPageUI in statPageUIs)
             {
                 if (statPageUI.GetStatType() == StatType.Stamina)
                 {
-                    UpdateCharacterPageHealthUI(_teamInfo);
+                    UpdateCharacterPageHealthUI(_battleUnitResources);
 
                 }
                 else if (statPageUI.GetStatType() == StatType.Spirit)
                 {
-                    UpdateCharacterPageManaUI(_teamInfo);
+                   UpdateCharacterPageManaUI(_battleUnitResources);
                 }
                 else
                 {
-                    Stats stats = _teamInfo.GetStats();
-                    Stat newStat = stats.GetStat(statPageUI.GetStatType());
+                    Stats stats = _stats;
+                    int statLevel = stats.GetStat(statPageUI.GetStatType());
 
-                    float sliderAmount = newStat.GetStatLevel() / 100f;
+                    float sliderAmount = statLevel / 100f;
 
                     statPageUI.GetSlider().value = sliderAmount;
-                    statPageUI.GetAmountText().text = newStat.GetStatLevel().ToString();
+                    statPageUI.GetAmountText().text = statLevel.ToString();
                 }
             }
         }
 
-        public void UpdateCharacterPageHealthUI(TeamInfo _teamInfo)
+        public void UpdateCharacterPageHealthUI(BattleUnitResources _battleUnitResources)
         {
             StatPageUI statPageUI = GetHealthUI();
 
-            BattleUnitResources battleUnitResources = _teamInfo.GetBattleUnitResources();
+            BattleUnitResources battleUnitResources = _battleUnitResources;
 
             float health = battleUnitResources.GetHealthPoints();
             float maxHealth = battleUnitResources.GetMaxHealthPoints();
@@ -59,11 +59,11 @@ namespace RPGProject.UI
             statPageUI.GetAmountText().text = health.ToString() + "/" + maxHealth.ToString();
         }
 
-        public void UpdateCharacterPageManaUI(TeamInfo _teamInfo)
+        public void UpdateCharacterPageManaUI(BattleUnitResources _battleUnitResources)
         {
             StatPageUI statPageUI = GetManaUI();
 
-            BattleUnitResources battleUnitResources = _teamInfo.GetBattleUnitResources();
+            BattleUnitResources battleUnitResources = _battleUnitResources;
 
             float mana = battleUnitResources.GetManaPoints();
             float maxMana = battleUnitResources.GetMaxManaPoints();

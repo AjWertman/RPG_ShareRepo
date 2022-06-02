@@ -22,13 +22,13 @@ namespace RPGProject.UI
         [SerializeField] TextMeshProUGUI classText = null;
         [SerializeField] TextMeshProUGUI subClassText = null;
 
-        public void SetupCharacterPage(Unit _character, TeamInfo _teamInfo)
+        public void SetupCharacterPage(PlayableCharacter _character)
         {
             //Refactor Playable charactewr;
-            ChangeNameTexts(_character.GetUnitName());
+            //ChangeNameTexts(_character.GetUnitName());
             //characterImage.sprite = character.GetFullBodyImage();
             //descriptionText.text = character.GetSummary();
-            ChangeExtraInfoTexts(_character, _teamInfo);
+            //ChangeExtraInfoTexts(_character, _teamInfo);
         }
 
         private void ChangeNameTexts(string _name)
@@ -37,10 +37,10 @@ namespace RPGProject.UI
             nameText1.text = _name;
         }
 
-        private void ChangeExtraInfoTexts(Unit _character, TeamInfo _teamInfo)
+        private void ChangeExtraInfoTexts(PlayableCharacter _character)
         {
-            string levelString = ("Level: " + _teamInfo.GetLevel().ToString());
-            levelText.text = levelString;
+            //string levelString = ("Level: " + _teamInfo.GetLevel().ToString());
+            //levelText.text = levelString;
 
             //string ageString = ("Age: " + character.GetAge().ToString());
             //ageText.text = ageString;

@@ -1,11 +1,12 @@
-﻿using RPGProject.Core;
+﻿using RPGProject.Combat;
+using RPGProject.Core;
 using RPGProject.Sound;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.Control
 {
     public enum BattleState { Null, Battling }
 
@@ -21,8 +22,6 @@ namespace RPGProject.Combat
         BattleUnitManager battleUnitManager = null;
         TurnManager turnManager = null;
 
-        PlayerTeam playerTeamInfo = null;
-
         List<Unit> playerTeam = new List<Unit>();
         int playerTeamSize = 0;
 
@@ -37,8 +36,9 @@ namespace RPGProject.Combat
 
         bool isBattleOver = true;
 
-        public event Action onBattleEnd; 
-
+        public event Action onBattleEnd;
+        public event Action<string, BattleUnitResources> onUnitResourcesUpdate;
+        
         private void Awake()
         {
             battleManagersPool = FindObjectOfType<BattleManagersPool>();
@@ -46,17 +46,14 @@ namespace RPGProject.Combat
             musicOverride = GetComponent<MusicOverride>();
         }
 
-        private void Start()
-        {
-            playerTeamInfo = FindObjectOfType<PlayerTeam>();
-        }
-
-        public IEnumerator SetupBattle(List<Unit> _enemyTeam)
+        public IEnumerator SetupBattle(PlayerTeam teamInfos, List<Unit> _enemyTeam)
         {
             battleState = BattleState.Null;
             isBattleOver = false;
 
-            SetupTeams(playerTeamInfo.GetPlayerTeam(), _enemyTeam);
+            SetBattleManagers();
+
+            SetupTeams(teamInfos, _enemyTeam);
             SetupManagers();
 
             SetCurrentBattleUnitTurn(turnManager.GetFirstMoveUnit());
@@ -188,7 +185,7 @@ namespace RPGProject.Combat
                     battleUnitResources.SetHealthPoints(1f);
                 }
 
-                playerTeamInfo.UpdateTeamInfo(unitName, battleUnitResources);
+                onUnitResourcesUpdate(unitName, battleUnitResources);
             }
         }
 
@@ -221,11 +218,17 @@ namespace RPGProject.Combat
             battleUIManager.SetCurrentBattleUnitTurn(currentBattleUnitTurn);
         }
 
-        private void SetupTeams(List<Unit> _playerTeam, List<Unit> _enemyTeam)
-        {            
-            foreach (Unit player in _playerTeam)
+        private void SetupTeams(PlayerTeam teamInfos, List<Unit> _enemyTeam)
+        {
+            foreach (PlayableCharacter playableCharacter in teamInfos.GetPlayableCharacters())
             {
-                playerTeam.Add(player);
+                PlayerKey playerKey = playableCharacter.GetPlayerKey();
+                Unit playerUnit = teamInfos.GetUnit(playerKey);
+                TeamInfo teamInfo = teamInfos.GetTeamInfo(playerKey);
+
+                battleUnitManager.SetupPlayerUnit(playerUnit, teamInfo.GetBattleUnitResources());
+
+                playerTeam.Add(playerUnit);
             }
 
             foreach (Unit enemy in _enemyTeam)
@@ -236,7 +239,7 @@ namespace RPGProject.Combat
             playerTeamSize = playerTeam.Count - 1;
             enemyTeamSize = enemyTeam.Count - 1;
         }
-        private void SetupManagers()
+        private void SetBattleManagers()
         {
             battleManagersPool.transform.parent = transform;
             battleManagersPool.transform.localPosition = Vector3.zero;
@@ -247,7 +250,9 @@ namespace RPGProject.Combat
             battleUnitManager = battleManagersPool.GetBattleUnitManager();
             turnManager = battleManagersPool.GetTurnManager();
             battleUIManager = battleManagersPool.GetBattleUIManager();
-
+        }
+        private void SetupManagers()
+        {
             GameObject battleCamInstance = battleManagersPool.GetBattleCamInstance();
             battleCamInstance.transform.parent = camTransform;
             battleCamInstance.transform.localPosition = Vector3.zero;
@@ -258,14 +263,13 @@ namespace RPGProject.Combat
             SetupTurnManager();
             SetupUIManager();
         }
-
         public void SetupPositionManager()
         {
             battlePositionManager.SetUpBattlePositionManager(playerTeamSize, enemyTeamSize);
         }
         public void SetupUnitManager()
         {
-            battleUnitManager.SetUpUnits(playerTeam, enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
+            battleUnitManager.SetUpUnits(enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
             battleUnitManager.onMoveCompletion += AdvanceTurn;
             battleUnitManager.onTeamWipe += EndBattle;
             battleUnitManager.onUnitListUpdate += UpdateManagerLists;

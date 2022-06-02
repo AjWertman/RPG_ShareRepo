@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RPGProject.GameResources;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -75,7 +76,7 @@ namespace RPGProject.Combat
             {
                 case AbilityType.Melee:
 
-                    targetHealth.DamageHealth(calculatedAmount, isCriticalHit, selectedAbility.GetAbilityResource());
+                    targetHealth.DamageHealth(calculatedAmount, isCriticalHit, true);
                     if (selectedTarget.GetFighter().GetPhysicalReflectionDamage() > 0)
                     {
                         //Do Damage to self

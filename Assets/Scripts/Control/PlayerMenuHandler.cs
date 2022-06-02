@@ -31,7 +31,7 @@ namespace RPGProject.Control
             characterMenu.onBackToCharacterSelect += BackToCharacterSelectMenu;
 
             playerTeam = FindObjectOfType<PlayerTeam>();
-            characterSelectMenu.SetupCharacterSelectMenu(playerTeam.GetPlayerTeam());
+            characterSelectMenu.SetupCharacterSelectMenu(playerTeam.GetPlayableCharacters());
 
             DeactivateAllMenus();
         }
@@ -93,12 +93,14 @@ namespace RPGProject.Control
             characterSelectMenu.gameObject.SetActive(true);
         }
 
-        private void OpenCharacterMenu(Unit _character)
+        private void OpenCharacterMenu(PlayableCharacter _character)
         {
+            Unit unit = playerTeam.GetUnit(_character.GetPlayerKey());
+
             characterSelectMenu.gameObject.SetActive(false);
 
-            TeamInfo newTeamInfo = playerTeam.GetTeamInfo(_character);
-            characterMenu.SetupCharacterMenu(_character, newTeamInfo);
+            TeamInfo newTeamInfo = playerTeam.GetTeamInfo(_character.GetPlayerKey());
+            characterMenu.SetupCharacterMenu(_character, unit, newTeamInfo.GetBattleUnitResources());
             characterMenu.gameObject.SetActive(true);
         }
 

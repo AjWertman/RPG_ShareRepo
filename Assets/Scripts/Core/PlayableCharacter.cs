@@ -1,32 +1,39 @@
+using RPGProject.Core;
 using UnityEngine;
 
-namespace RPGProject.Core 
+namespace RPGProject.Core
 {
     [CreateAssetMenu(fileName = "New Playable Character", menuName = "Character/Create New Playable Character", order = 1)]
     public class PlayableCharacter : ScriptableObject
     {
-        [SerializeField] string characterName = "";
+        [Header("Character Design")]
+        [SerializeField] PlayerKey playerKey = PlayerKey.Aj;
         [SerializeField] int age = 0;
         [TextArea(10, 10)] [SerializeField] string summaryText = "";
-
+        
         [Header("UI Design")]
         [SerializeField] Sprite backgroundImage = null;
         [SerializeField] Sprite faceImage = null;
         [SerializeField] Sprite fullBodyImage = null;
 
-        public string GetName()
+        public PlayerKey GetPlayerKey()
         {
-            return characterName;
+            return playerKey;
         }
 
-        public string GetSummary()
+        public string GetName()
         {
-            return summaryText;
+            return playerKey.ToString();
         }
 
         public int GetAge()
         {
             return age;
+        }
+
+        public string GetSummary()
+        {
+            return summaryText;
         }
 
         public Sprite GetBackgroundImage()

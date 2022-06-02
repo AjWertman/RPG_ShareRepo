@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.GameResources
 {
     public class Health : MonoBehaviour
     {
@@ -74,9 +73,9 @@ namespace RPGProject.Combat
             SetCurrentHealthPercentage();
         }
 
-        public void DamageHealth(float _damageAmount, bool _isCritical, AbilityResource _abilityResource)
+        public void DamageHealth(float _damageAmount, bool _isCritical, bool _isPhysicalAttack)
         {
-            float calculatedDamage = CalculateDamage(_damageAmount, _abilityResource);
+            float calculatedDamage = CalculateDamage(_damageAmount, _isPhysicalAttack);
 
             healthPoints -= calculatedDamage;
             healthPoints = Mathf.Clamp(healthPoints, 0, maxHealthPoints);
@@ -118,17 +117,17 @@ namespace RPGProject.Combat
         //    uiHealthChange.ActivateAmountCanvas(false, false, 0);
         //}
 
-        private float CalculateDamage(float _damageAmount, AbilityResource _abilityResource)
+        private float CalculateDamage(float _damageAmount, bool _isPhysicalAttack)
         {
             float newDamageAmount = 0f;
             float statsModifier = 0f;
 
-            if (_abilityResource == AbilityResource.Physical)
+            if (_isPhysicalAttack)
             {
                 statsModifier = armor - 10f;
             }
-            else if (_abilityResource == AbilityResource.Magic)
-            {
+            else
+            { 
                 statsModifier = resistance - 10f;
             }
 

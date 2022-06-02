@@ -34,6 +34,7 @@ namespace RPGProject.Combat
             {
                 GameObject turnOrderInstance = Instantiate(turnOrderUIPrefab, turnOrderContent);
                 TurnOrderUIItem turnOrderUIItem = turnOrderInstance.GetComponent<TurnOrderUIItem>();
+                turnOrderUIItem.InitalizeTurnOrderUIItem();
 
                 turnOrderUIItem.onPointerEnter += OnTurnOrderHighlight;
                 turnOrderUIItem.onPointerExit += OnTurnOrderUnhighlight;

@@ -11,14 +11,16 @@ namespace RPGProject.Questing
         List<QuestStatus> questStatuses = new List<QuestStatus>();
         List<QuestStatus> completedQuestStatuses = new List<QuestStatus>();
 
-        PlayerTeam playerTeam = null;
+        //PlayerTeam playerTeam = null;
 
         public event Action onListUpdate;
         public event Action onQuestComplete;
 
+        public event Action<float> onAward;
+
         private void Awake()
         {
-            playerTeam = FindObjectOfType<PlayerTeam>();
+            //playerTeam = FindObjectOfType<PlayerTeam>();
         }
 
         public void AddQuest(Quest _quest)
@@ -81,7 +83,8 @@ namespace RPGProject.Questing
                 //}
             }
 
-            playerTeam.AwardTeamXP(_quest.GetXPAward());
+            onAward(_quest.GetXPAward());
+            //playerTeam.AwardTeamXP(_quest.GetXPAward());
         }
 
         public object CaptureState()

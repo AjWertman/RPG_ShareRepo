@@ -44,7 +44,8 @@ namespace RPGProject.Combat
                 turnOrder.Add(unitToSet);
             }
 
-            turnOrder.Sort((a, b) => b.GetStat(StatType.Speed).GetStatLevel().CompareTo(a.GetStat(StatType.Speed).GetStatLevel()));
+            StatType speed = StatType.Speed;
+            turnOrder.Sort((a, b) => b.GetStat(speed).CompareTo(a.GetStat(speed)));
         }
 
         public void UpdateTurnOrder(BattleUnit _battleUnit)

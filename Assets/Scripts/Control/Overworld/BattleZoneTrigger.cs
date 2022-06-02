@@ -16,12 +16,18 @@ namespace RPGProject.Control
 
         BattleHandler currentBattleHandler = null;
 
+        PlayerTeam playerTeam = null;
         List<Unit> enemyTeam = new List<Unit>();
 
         bool isInTrigger = false;
         bool startedBattle = false;
 
         public event Action<bool> updateShouldBeDisabled;
+
+        private void Awake()
+        {
+            playerTeam = FindObjectOfType<PlayerTeam>();
+        }
 
         public void BattleCheck()
         {
@@ -67,7 +73,7 @@ namespace RPGProject.Control
 
             SetRandomEnemyTeam();
 
-            yield return currentBattleHandler.SetupBattle(enemyTeam);
+            yield return currentBattleHandler.SetupBattle(playerTeam, enemyTeam);
 
             yield return FindObjectOfType<Fader>().FadeIn(2f);
 

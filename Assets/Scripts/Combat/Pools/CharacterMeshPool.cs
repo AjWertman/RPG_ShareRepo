@@ -1,3 +1,4 @@
+using RPGProject.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,11 +12,11 @@ namespace RPGProject.Combat
         [Range(1, 4)] [SerializeField] int amountOfGenericsToCreate = 4;
         [SerializeField] GameObject[] genericEnemyMeshPrefabs = null;
 
-        Dictionary<CharacterMeshKey, CharacterMesh> uniqueMeshes = new Dictionary<CharacterMeshKey, CharacterMesh>();
+        Dictionary<CharacterKey, CharacterMesh> uniqueMeshes = new Dictionary<CharacterKey, CharacterMesh>();
 
         //Refactor - each zone has "Zone enemies"
         [SerializeField] GameObject[] uniqueEnemyMeshPrefabs = null;
-        Dictionary<CharacterMeshKey, List<CharacterMesh>> genericMeshes = new Dictionary<CharacterMeshKey, List<CharacterMesh>>();
+        Dictionary<CharacterKey, List<CharacterMesh>> genericMeshes = new Dictionary<CharacterKey, List<CharacterMesh>>();
 
         private void Awake()
         {
@@ -40,9 +41,9 @@ namespace RPGProject.Combat
             {
                 GameObject playerMeshInstance = Instantiate(playerMesh, transform);
                 CharacterMesh characterMesh = playerMeshInstance.GetComponent<CharacterMesh>();
-                CharacterMeshKey characterMeshKey = characterMesh.GetCharacterMeshKey();
+                CharacterKey characterKey = characterMesh.GetCharacterKey();
 
-                uniqueMeshes.Add(characterMeshKey, characterMesh);
+                uniqueMeshes.Add(characterKey, characterMesh);
 
                 playerMeshInstance.SetActive(false);
             }
@@ -54,9 +55,9 @@ namespace RPGProject.Combat
             {
                 GameObject enemyMeshInstance = Instantiate(uniqueEnemyMesh, transform);
                 CharacterMesh characterMesh = enemyMeshInstance.GetComponent<CharacterMesh>();
-                CharacterMeshKey characterMeshKey = characterMesh.GetCharacterMeshKey();
+                CharacterKey characterKey = characterMesh.GetCharacterKey();
 
-                uniqueMeshes.Add(characterMeshKey, characterMesh);
+                uniqueMeshes.Add(characterKey, characterMesh);
 
                 enemyMeshInstance.SetActive(false);
             }
@@ -66,7 +67,7 @@ namespace RPGProject.Combat
         {
             foreach (GameObject genericEnemyMesh in genericEnemyMeshPrefabs)
             {
-                CharacterMeshKey meshKey = genericEnemyMesh.GetComponent<CharacterMesh>().GetCharacterMeshKey();
+                CharacterKey characterKey = genericEnemyMesh.GetComponent<CharacterMesh>().GetCharacterKey();
                 List<CharacterMesh> genericMeshList = new List<CharacterMesh>();
 
                 for (int i = 0; i < amountOfGenericsToCreate; i++)
@@ -77,21 +78,21 @@ namespace RPGProject.Combat
                     enemyMeshInstance.SetActive(false);
                 }
 
-                genericMeshes.Add(meshKey, genericMeshList);
+                genericMeshes.Add(characterKey, genericMeshList);
             }
         }
 
-        public CharacterMesh GetMesh(CharacterMeshKey _characterMeshKey)
+        public CharacterMesh GetMesh(CharacterKey _characterKey)
         {
             CharacterMesh newMesh = null;
 
-            if (IsUniqueMesh(_characterMeshKey))
+            if (IsUniqueMesh(_characterKey))
             {
-                newMesh = uniqueMeshes[_characterMeshKey];
+                newMesh = uniqueMeshes[_characterKey];
             }
             else
             {
-                foreach (CharacterMesh genericMesh in genericMeshes[_characterMeshKey])
+                foreach (CharacterMesh genericMesh in genericMeshes[_characterKey])
                 {
                     if (genericMesh.gameObject.activeSelf) continue;
 
@@ -128,9 +129,9 @@ namespace RPGProject.Combat
             }
         }
 
-        private bool IsUniqueMesh(CharacterMeshKey _characterMeshKey)
+        private bool IsUniqueMesh(CharacterKey _characterKey)
         {
-            return uniqueMeshes.ContainsKey(_characterMeshKey);
+            return uniqueMeshes.ContainsKey(_characterKey);
         }
     }
 }

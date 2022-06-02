@@ -1,4 +1,5 @@
-﻿using RPGProject.Progression;
+﻿using RPGProject.Core;
+using RPGProject.Progression;
 using UnityEngine;
 
 namespace RPGProject.Combat
@@ -8,10 +9,10 @@ namespace RPGProject.Combat
     {
         [SerializeField] string unitName = "";
         [SerializeField] int baseLevel = 1;
-        [SerializeField] CharacterMeshKey characterMeshKey = CharacterMeshKey.Aj;
+        [SerializeField] CharacterKey characterKey = CharacterKey.Aj;
 
-        [Header("Combat")]
-        [SerializeField] Stats baseStats;
+        [SerializeField] BattleUnitResources battleUnitResources = null;
+        [SerializeField] Stats stats = new Stats();
         [SerializeField] Ability basicAttack = null;
         [SerializeField] Ability[] abilities = null;
 
@@ -25,14 +26,19 @@ namespace RPGProject.Combat
             return baseLevel;
         }
 
-        public CharacterMeshKey GetCharacterMeshKey()
+        public CharacterKey GetCharacterKey()
         {
-            return characterMeshKey;
+            return characterKey;
         }
 
-        public Stats GetBaseStats()
+        public BattleUnitResources GetBattleUnitResources()
         {
-            return baseStats;
+            return battleUnitResources;
+        }
+
+        public Stats GetStats()
+        {
+            return stats;
         }
 
         public Ability GetBasicAttack()

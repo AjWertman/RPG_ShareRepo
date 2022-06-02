@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using RPGProject.GameResources;
 
 namespace RPGProject.Combat
 {

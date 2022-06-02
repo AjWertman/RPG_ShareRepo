@@ -1716,7 +1716,7 @@ PrefabInstance:
     - target: {fileID: 2659244645411528458, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}
@@ -1724,6 +1724,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 2531e15fe967a354d9d28c9cfc1d71ca,
         type: 3}
+    - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
+        type: 3}
+      propertyPath: characterKey
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}
       propertyPath: lHandTransform
@@ -1803,7 +1808,7 @@ PrefabInstance:
     - target: {fileID: 5956651695308328124, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5956651695308328124, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}

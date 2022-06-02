@@ -20,7 +20,7 @@ namespace RPGProject.UI
         [SerializeField] CharacterAbilityPage abilityPage = null;
         [SerializeField] CharacterStatsPage statsPage = null;
 
-        PlayerTeam playerTeam = null;
+        //PlayerTeam playerTeam = null;
 
         public event Action onBackToCharacterSelect;
 
@@ -35,11 +35,11 @@ namespace RPGProject.UI
             DeactivateAllPages();
         }
 
-        public void SetupCharacterMenu(Unit _character, TeamInfo _teamInfo)
+        public void SetupCharacterMenu(PlayableCharacter _character, Unit _unit, BattleUnitResources _unitResources)
         {
-            characterPage.SetupCharacterPage(_character, _teamInfo);
-            abilityPage.SetupAbilityPage(_character);
-            statsPage.SetupStatPageUI(_character, _teamInfo);
+            characterPage.SetupCharacterPage(_character);
+            abilityPage.SetupAbilityPage(_unit.GetAbilities());
+            statsPage.SetupStatPageUI(_character, _unit.GetBaseLevel(), _unit.GetStats(), _unitResources);
             ActivatePage(characterTab, characterPage.gameObject);
         }
 

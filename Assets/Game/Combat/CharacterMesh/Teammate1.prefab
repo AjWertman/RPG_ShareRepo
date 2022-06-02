@@ -2594,6 +2594,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}
+      propertyPath: characterKey
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
+        type: 3}
       propertyPath: lHandTransform
       value: 
       objectReference: {fileID: 9033920403700215881}

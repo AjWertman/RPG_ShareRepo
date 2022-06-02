@@ -1,10 +1,11 @@
+using RPGProject.Core;
 using UnityEngine;
 
 namespace RPGProject.Combat
 {
     public class CharacterMesh : MonoBehaviour
     {
-        [SerializeField] CharacterMeshKey characterMeshKey = CharacterMeshKey.Aj;
+        [SerializeField] CharacterKey characterKey = CharacterKey.Aj;
 
         [SerializeField] Sprite faceImage = null;
 
@@ -14,9 +15,9 @@ namespace RPGProject.Combat
 
         [SerializeField] Transform particleExpander = null;
 
-        public CharacterMeshKey GetCharacterMeshKey()
+        public CharacterKey GetCharacterKey()
         {
-            return characterMeshKey;
+            return characterKey;
         }
 
         public Sprite GetFaceImage()
