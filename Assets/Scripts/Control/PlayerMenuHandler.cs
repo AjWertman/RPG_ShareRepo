@@ -95,12 +95,14 @@ namespace RPGProject.Control
 
         private void OpenCharacterMenu(PlayableCharacter _character)
         {
-            Unit unit = playerTeam.GetUnit(_character.GetPlayerKey());
+            PlayerKey playerKey = _character.GetPlayerKey();
+            TeamInfo teamInfo = playerTeam.GetTeamInfo(playerKey);
+            Unit unit = playerTeam.GetUnit(playerKey);
 
             characterSelectMenu.gameObject.SetActive(false);
 
             TeamInfo newTeamInfo = playerTeam.GetTeamInfo(_character.GetPlayerKey());
-            characterMenu.SetupCharacterMenu(_character, unit, newTeamInfo.GetBattleUnitResources());
+            characterMenu.SetupCharacterMenu(_character, unit, teamInfo.GetLevel(), newTeamInfo.GetBattleUnitResources());
             characterMenu.gameObject.SetActive(true);
         }
 

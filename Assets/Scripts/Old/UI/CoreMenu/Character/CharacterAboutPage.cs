@@ -1,4 +1,3 @@
-using RPGProject.Combat;
 using RPGProject.Core;
 using TMPro;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace RPGProject.UI
         [SerializeField] TextMeshProUGUI nameText0 = null;
         [SerializeField] TextMeshProUGUI nameText1 = null;
 
-        [SerializeField] Image emblemImage = null;
+        [SerializeField] Image classImage = null;
 
         [SerializeField] TextMeshProUGUI descriptionText = null;
 
@@ -22,13 +21,12 @@ namespace RPGProject.UI
         [SerializeField] TextMeshProUGUI classText = null;
         [SerializeField] TextMeshProUGUI subClassText = null;
 
-        public void SetupCharacterPage(PlayableCharacter _character)
+        public void SetupCharacterPage(PlayableCharacter _character, int _level)
         {
-            //Refactor Playable charactewr;
-            //ChangeNameTexts(_character.GetUnitName());
-            //characterImage.sprite = character.GetFullBodyImage();
-            //descriptionText.text = character.GetSummary();
-            //ChangeExtraInfoTexts(_character, _teamInfo);
+            ChangeNameTexts(_character.GetName());
+            characterImage.sprite = _character.GetFullBodyImage();
+            descriptionText.text = _character.GetSummary();
+            ChangeExtraInfoTexts(_character, _level);
         }
 
         private void ChangeNameTexts(string _name)
@@ -37,15 +35,16 @@ namespace RPGProject.UI
             nameText1.text = _name;
         }
 
-        private void ChangeExtraInfoTexts(PlayableCharacter _character)
+        private void ChangeExtraInfoTexts(PlayableCharacter _character, int _level)
         {
-            //string levelString = ("Level: " + _teamInfo.GetLevel().ToString());
-            //levelText.text = levelString;
+            string levelString = ("Level: " + _level.ToString());
+            levelText.text = levelString;
 
-            //string ageString = ("Age: " + character.GetAge().ToString());
-            //ageText.text = ageString;
+            string ageString = ("Age: " + _character.GetAge().ToString());
+            ageText.text = ageString;
 
-            //affiliationText.text = character.GetAffiliation();
+            //classText.text = _character.GetClass().ToString();
+            //subClassText.text = _character.GetSubClass().ToString();
         }
     }
 }

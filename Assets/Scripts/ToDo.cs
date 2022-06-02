@@ -3,11 +3,8 @@
 //Current bugs
 //Unit indicator (particles on battleunit)
 
-//Make unit a serializable class, with playable character and enemy being scriptable objects. Inside use battle unit class
-//Rename BattleUnit to BattleController
-//Move spell launch/recieve transforms to character mesh
+//Rename BattleUnit to UnitController
 //Update all parameters to _var
-//spell, etc pool, and use the mesh from the Unit SO, also use animator controller override variable
 //Add music and sound fx
 //Update Main menu
 //Update combat UI To be under 1 canvas

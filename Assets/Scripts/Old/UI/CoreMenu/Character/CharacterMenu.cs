@@ -20,8 +20,6 @@ namespace RPGProject.UI
         [SerializeField] CharacterAbilityPage abilityPage = null;
         [SerializeField] CharacterStatsPage statsPage = null;
 
-        //PlayerTeam playerTeam = null;
-
         public event Action onBackToCharacterSelect;
 
         private void Start()
@@ -35,11 +33,11 @@ namespace RPGProject.UI
             DeactivateAllPages();
         }
 
-        public void SetupCharacterMenu(PlayableCharacter _character, Unit _unit, BattleUnitResources _unitResources)
+        public void SetupCharacterMenu(PlayableCharacter _character, Unit _unit, int _level ,BattleUnitResources _unitResources)
         {
-            characterPage.SetupCharacterPage(_character);
+            characterPage.SetupCharacterPage(_character, _level);
             abilityPage.SetupAbilityPage(_unit.GetAbilities());
-            statsPage.SetupStatPageUI(_character, _unit.GetBaseLevel(), _unit.GetStats(), _unitResources);
+            statsPage.SetupStatPageUI(_character, _level, _unit.GetStats(), _unitResources);
             ActivatePage(characterTab, characterPage.gameObject);
         }
 
@@ -61,20 +59,20 @@ namespace RPGProject.UI
             _selectedTab.interactable = false;
         }
 
-        private IEnumerable<Button> GetTabs()
-        {
-            yield return characterTab;
-            yield return equipmentTab;
-            yield return abilityTab;
-            yield return statsTab;
-        }
-
         private void DeactivateAllPages()
         {
             characterPage.gameObject.SetActive(false);
             equipmentPage.gameObject.SetActive(false);
             abilityPage.gameObject.SetActive(false);
             statsPage.gameObject.SetActive(false);
+        }
+
+        private IEnumerable<Button> GetTabs()
+        {
+            yield return characterTab;
+            yield return equipmentTab;
+            yield return abilityTab;
+            yield return statsTab;
         }
     }
 }

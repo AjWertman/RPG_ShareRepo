@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2291830050832072975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2291830050832072974}
+  - component: {fileID: 2291830050832072972}
+  - component: {fileID: 2291830050832072973}
+  m_Layer: 0
+  m_Name: Databases
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2291830050832072974
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2291830050832072975}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2291830050832072972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2291830050832072975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3bd869868a3fe54ba5ff677de31d60d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playableCharacters:
+  - {fileID: 11400000, guid: 9e180d9fcce19bf47956a3abfc907d89, type: 2}
+  - {fileID: 11400000, guid: 8d1bd338900ee1e4b95c62a9e25f1db9, type: 2}
+  - {fileID: 11400000, guid: 27b6a81bb5e33b748a9b0ed38e93c01c, type: 2}
+--- !u!114 &2291830050832072973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2291830050832072975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9b774c2894eca249b2e5933662dbc5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  units:
+  - {fileID: 11400000, guid: af9c44b539f941649bbc234222e3edc0, type: 2}
+  - {fileID: 11400000, guid: d28dafea7a8855a4382a29e89b638228, type: 2}
+  - {fileID: 11400000, guid: 84f4c602b8ecbb6478959f1dc39fe890, type: 2}
+  - {fileID: 11400000, guid: d1f29e39f08f7d649be76be1d1b6a2ed, type: 2}
+  - {fileID: 11400000, guid: 7bcc44a958b5e4d40876c31efaef0b33, type: 2}
+  - {fileID: 11400000, guid: 5dafee8c8f2e11645a50491a8aeef431, type: 2}
+  - {fileID: 11400000, guid: 01382343b6a30714eacbbfb1eefb672b, type: 2}

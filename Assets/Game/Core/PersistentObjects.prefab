@@ -35,6 +35,7 @@ Transform:
   - {fileID: 870482764265021447}
   - {fileID: 2150040783996901692}
   - {fileID: 4278653915891208044}
+  - {fileID: 1278571870}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -223,6 +224,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3608358155602870797}
     m_Modifications:
+    - target: {fileID: 628851800663528378, guid: 2490d746a77a4f34fb664df72eaabfaf,
+        type: 3}
+      propertyPath: teamInfos.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 641351199502469048, guid: 2490d746a77a4f34fb664df72eaabfaf,
         type: 3}
       propertyPath: statsTemplate.Array.size
@@ -445,6 +451,86 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3913911039068754670, guid: 737ec7e28c7606b4ca7a3bd3a190ab71,
     type: 3}
   m_PrefabInstance: {fileID: 3608358154557367203}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4121836335294728211
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3608358155602870797}
+    m_Modifications:
+    - target: {fileID: 4121836334157348170, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_Name
+      value: 'ThePools '
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7889097664806788515, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_Lens.m_SensorSize.x
+      value: 1.7786334
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6534295e3922fa640a004b0a151f71f3, type: 3}
+--- !u!4 &1278571870 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4121836334157348173, guid: 6534295e3922fa640a004b0a151f71f3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4121836335294728211}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7081681501431150377
 PrefabInstance:

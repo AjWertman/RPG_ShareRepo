@@ -12,15 +12,13 @@ namespace RPGProject.Control
     public class PlayerTeam : MonoBehaviour, ISaveable
     {
         [SerializeField] PlayerKey[] startingPlayerKeys = null;
+        [SerializeField] List<TeamInfo> teamInfos = new List<TeamInfo>();
 
         PlayableCharacterDatabase playableCharacterDatabase = null;
         UnitDatabase unitDatabase = null;
 
         ProgressionHandler progressionHandler = null;
 
-        public List<TeamInfo> teamInfos = new List<TeamInfo>();
-
-        //List<PlayableCharacter> playerTeam = new List<PlayableCharacter>();
         List<PlayableCharacter> playerTeam = new List<PlayableCharacter>();
 
         private void Awake()
@@ -38,6 +36,7 @@ namespace RPGProject.Control
 
         private void PopulateTeamInfos(PlayerKey[] _playerKeys)
         {
+            teamInfos.Clear();
             foreach (PlayerKey playerKey in _playerKeys)
             {
                 PlayableCharacter playableCharacter = playableCharacterDatabase.GetPlayableCharacter(playerKey);

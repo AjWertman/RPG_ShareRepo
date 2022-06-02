@@ -12,13 +12,11 @@ namespace RPGProject.UI
     {
         [SerializeField] TextMeshProUGUI nameText = null;
         [SerializeField] TextMeshProUGUI levelText = null;
-        [SerializeField] Image characterImage = null;
         [SerializeField] StatPageUI[] statPageUIs = null;
 
         public void SetupStatPageUI(PlayableCharacter _character, int _level, Stats _stats, BattleUnitResources _battleUnitResources)
         {
             nameText.text = _character.GetPlayerKey().ToString();
-            characterImage.sprite = _character.GetFullBodyImage();
             levelText.text = ("Lv: " + _level.ToString());
 
             foreach (StatPageUI statPageUI in statPageUIs)
