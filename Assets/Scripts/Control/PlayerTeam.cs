@@ -56,7 +56,7 @@ namespace RPGProject.Control
                 BattleUnitResources battleUnitResources = new BattleUnitResources();
                 battleUnitResources.SetBattleUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxManaPoints);
 
-                teamInfo.SetBattleUnitResources(battleUnitResources);
+                teamInfo.SetUnitResources(battleUnitResources);
 
                 teamInfos.Add(teamInfo);
 
@@ -64,14 +64,14 @@ namespace RPGProject.Control
             }
         }
 
-        public void UpdateTeamInfo(PlayerKey _playerKey, BattleUnitResources _battleUnitResources)
+        public void UpdateTeamInfo(PlayerKey _playerKey, BattleUnitResources _unitResources)
         {
             foreach (TeamInfo teamInfo in teamInfos)
             {
                 if (teamInfo.GetPlayerKey() == _playerKey)
                 {
-                    BattleUnitResources battleUnitResources = teamInfo.GetBattleUnitResources();
-                    battleUnitResources.SetBattleUnitResources(_battleUnitResources);
+                    BattleUnitResources unitResources = teamInfo.GetUnitResources();
+                    teamInfo.SetUnitResources(_unitResources);
                 }
             }
         }
@@ -80,12 +80,11 @@ namespace RPGProject.Control
         {
             foreach (TeamInfo teamInfo in teamInfos)
             {
-                BattleUnitResources battleUnitResources = teamInfo.GetBattleUnitResources();
-                float maxHealthPoints = battleUnitResources.GetMaxHealthPoints();
-                float maxManaPoints = battleUnitResources.GetMaxManaPoints();
+                BattleUnitResources unitResources = teamInfo.GetUnitResources();
+                float maxHealthPoints = unitResources.GetMaxHealthPoints();
+                float maxManaPoints = unitResources.GetMaxManaPoints();
 
-                battleUnitResources.SetHealthPoints(maxHealthPoints);
-                battleUnitResources.SetMaxManaPoints(maxManaPoints);
+                unitResources.SetBattleUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxHealthPoints);
             }
         }
 
@@ -198,8 +197,9 @@ namespace RPGProject.Control
     {
         [SerializeField] PlayerKey playerKey = PlayerKey.Aj;
 
+        [SerializeField] BattleUnitInfo unitInfo = new BattleUnitInfo();
+        [SerializeField] BattleUnitResources unitResources = new BattleUnitResources();
         [SerializeField] Stats stats = new Stats();
-        [SerializeField] BattleUnitResources battleUnitResources = new BattleUnitResources();
 
         [SerializeField] int level = 1;
         [SerializeField] float experiencePoints = 0f;
@@ -209,14 +209,19 @@ namespace RPGProject.Control
             playerKey = _playerKey;
         }
 
+        public void SetUnitInfo(BattleUnitInfo _unitInfo)
+        {
+            unitInfo.SetUnitInfo(unitInfo);
+        }
+
+        public void SetUnitResources(BattleUnitResources _unitResources)
+        {
+            unitResources.SetUnitResources(_unitResources);
+        }
+
         public void SetStats(Stats _stats)
         {
             stats.SetStats(_stats);
-        }
-
-        public void SetBattleUnitResources(BattleUnitResources _battleUnitResources)
-        {
-            battleUnitResources.SetBattleUnitResources(_battleUnitResources);
         }
 
         public void SetLevel(int _level)
@@ -248,14 +253,19 @@ namespace RPGProject.Control
             return playerKey.ToString();
         }
 
+        public BattleUnitInfo GetUnitInfo()
+        {
+            return unitInfo;
+        }
+
+        public BattleUnitResources GetUnitResources()
+        {
+            return unitResources;
+        }
+
         public Stats GetStats()
         {
             return stats;
-        }
-
-        public BattleUnitResources GetBattleUnitResources()
-        {
-            return battleUnitResources;
         }
 
         public int GetLevel()

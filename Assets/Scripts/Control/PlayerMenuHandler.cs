@@ -102,7 +102,7 @@ namespace RPGProject.Control
             characterSelectMenu.gameObject.SetActive(false);
 
             TeamInfo newTeamInfo = playerTeam.GetTeamInfo(_character.GetPlayerKey());
-            characterMenu.SetupCharacterMenu(_character, unit, teamInfo.GetLevel(), newTeamInfo.GetBattleUnitResources());
+            characterMenu.SetupCharacterMenu(_character, unit, teamInfo.GetLevel(), newTeamInfo.GetUnitResources());
             characterMenu.gameObject.SetActive(true);
         }
 

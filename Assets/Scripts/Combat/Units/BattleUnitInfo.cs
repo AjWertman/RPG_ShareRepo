@@ -1,3 +1,4 @@
+using RPGProject.Core;
 using RPGProject.Progression;
 using System;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace RPGProject.Combat
     [Serializable]
     public class BattleUnitInfo
     {
+        [SerializeField] CharacterKey characterKey = CharacterKey.Aj;
         [SerializeField] string unitName = "";
         [SerializeField] int unitLevel = 0;
 
@@ -17,17 +19,18 @@ namespace RPGProject.Combat
 
         bool isPlayer = true;
 
-        public void SetBattleUnitInfo(string _unitName, int _unitLevel, bool _isPlayer,
+        public void SetBattleUnitInfo(CharacterKey _characterKey, int _unitLevel, bool _isPlayer,
             Stats _stats, Ability _basicAttack, Ability[] _abilities)
         {
-            unitName = _unitName;
+            characterKey = _characterKey;
+            unitName = characterKey.ToString();
             unitLevel = _unitLevel;
             isPlayer = _isPlayer;
             stats.SetStats(_stats);
             SetAbilities(_basicAttack, _abilities);
         }
 
-        public void SetBattleUnitInfo(BattleUnitInfo _battleUnitInfo)
+        public void SetUnitInfo(BattleUnitInfo _battleUnitInfo)
         {
             unitName = _battleUnitInfo.GetUnitName();
             unitLevel = _battleUnitInfo.GetUnitLevel();
@@ -45,6 +48,11 @@ namespace RPGProject.Combat
         {
             basicAttack = _basicAttack;
             abilities = _ability;
+        }
+
+        public CharacterKey GetCharacterKey()
+        {
+            return characterKey;
         }
 
         public string GetUnitName()

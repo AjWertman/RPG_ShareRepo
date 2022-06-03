@@ -14,10 +14,10 @@ namespace RPGProject.Control
         List<Unit> playerTeam = new List<Unit>();
         List<UnitController> playerUnits = new List<UnitController>();
 
-        Dictionary<Unit, BattleUnitResources> initialPlayerResources = new Dictionary<Unit, BattleUnitResources>();
-
         List<Unit> enemyTeam = new List<Unit>();
         List<UnitController> enemyUnits = new List<UnitController>();
+
+        PlayerTeam playerTeamManager = null;
 
         BattleUnitPool battleUnitPool = null;
         CharacterMeshPool characterMeshPool = null;
@@ -31,15 +31,15 @@ namespace RPGProject.Control
 
         public void InitalizeUnitManager()
         {
+            playerTeamManager = FindObjectOfType<PlayerTeam>();
             battleUnitPool = FindObjectOfType<BattleUnitPool>();
             characterMeshPool = FindObjectOfType<CharacterMeshPool>();
             SetupEvents();
         }
 
-        public void SetupPlayerUnit(Unit _playerUnit, BattleUnitResources _playerResources)
+        public void SetupPlayerUnit(Unit _playerUnit)
         {
             playerTeam.Add(_playerUnit);
-            initialPlayerResources.Add(_playerUnit, _playerResources);
         }
 
         public void SetUpUnits(List<Unit> _enemyTeam, List<Transform> _playerPositions, List<Transform> _enemyPositions)
@@ -68,24 +68,26 @@ namespace RPGProject.Control
         {
             UnitController unitController = battleUnitPool.GetAvailableBattleUnit();
             Fighter fighter = unitController.GetFighter();
-       
+
+            CharacterKey characterKey = _unit.GetCharacterKey();
+
             SetBattleUnitTransform(unitController, _teamPosition);
 
             BattleUnitInfo battleUnitInfo = unitController.GetBattleUnitInfo();
-            battleUnitInfo.SetBattleUnitInfo(_unit.GetUnitName(), _unit.GetBaseLevel(),
+            battleUnitInfo.SetBattleUnitInfo(characterKey, _unit.GetBaseLevel(),
                 _isPlayerTeam, _unit.GetStats(), _unit.GetBasicAttack(), _unit.GetAbilities());
 
-            BattleUnitResources battleUnitResources = unitController.GetBattleUnitResources();
+            BattleUnitResources battleUnitResources = unitController.GetUnitResources();
 
-            CharacterMesh newMesh = characterMeshPool.GetMesh(_unit.GetCharacterKey());
+            CharacterMesh newMesh = characterMeshPool.GetMesh(characterKey);
 
             if (_isPlayerTeam)
             {
                 //Refactor add player level ovverride
                 //battleUnitInfo.SetUnitLevel(teamInfo.GetLevel());
-
-                BattleUnitResources playerResources = initialPlayerResources[_unit];
-                battleUnitResources.SetBattleUnitResources(playerResources);
+                PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
+                TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
+                battleUnitResources.SetUnitResources(teamInfo.GetUnitResources());
             }
             else
             {
@@ -157,7 +159,6 @@ namespace RPGProject.Control
 
             playerTeam.Clear();
             playerUnits.Clear();
-            initialPlayerResources.Clear();
 
             enemyTeam.Clear();
             enemyUnits.Clear();
@@ -186,7 +187,7 @@ namespace RPGProject.Control
             onMoveCompletion();
         }
 
-        public List<UnitController> GetBattleUnits()
+        public List<UnitController> GetAllUnits()
         {
             return unitControllers;
         }

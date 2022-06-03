@@ -89,6 +89,7 @@ namespace RPGProject.Control
 
         public void Quit()
         {
+            if (currentDialogue == null) return;
             currentDialogue = null;
             TriggerExitAction();
             currentConversant = null;

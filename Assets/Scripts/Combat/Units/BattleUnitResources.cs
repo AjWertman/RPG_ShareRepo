@@ -6,11 +6,11 @@ namespace RPGProject.Combat
     [Serializable]
     public class BattleUnitResources
     {
-        [SerializeField] float healthPoints = 0f;
-        [SerializeField] float maxHealthPoints = 0f;
+        [SerializeField] float healthPoints = 0;
+        [SerializeField] float maxHealthPoints = 100;
 
-        [SerializeField] float manaPoints = 0f;
-        [SerializeField] float maxManaPoints = 0f;
+        [SerializeField] float manaPoints = 0;
+        [SerializeField] float maxManaPoints = 100;
 
         public void SetBattleUnitResources(float _healthPoints, float _maxHealthPoints, float _manaPoints, float _maxManaPoints)
         {
@@ -20,7 +20,7 @@ namespace RPGProject.Combat
             maxManaPoints = _maxManaPoints;
         }
 
-        public void SetBattleUnitResources(BattleUnitResources _battleUnitResources)
+        public void SetUnitResources(BattleUnitResources _battleUnitResources)
         {
             healthPoints = _battleUnitResources.GetHealthPoints();
             maxHealthPoints = _battleUnitResources.GetMaxHealthPoints();
@@ -73,7 +73,7 @@ namespace RPGProject.Combat
 
         public float GetMaxManaPoints()
         {
-            return manaPoints;
+            return maxManaPoints;
         }
     }
 }

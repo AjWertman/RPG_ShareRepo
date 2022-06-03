@@ -1,5 +1,6 @@
 ﻿using RPGProject.Combat;
 using RPGProject.Core;
+using RPGProject.GameResources;
 using RPGProject.Sound;
 using RPGProject.UI;
 using System;
@@ -23,6 +24,7 @@ namespace RPGProject.Control
         BattleUnitManager battleUnitManager = null;
         TurnManager turnManager = null;
 
+        PlayerTeam playerTeamManager = null;
         List<Unit> playerTeam = new List<Unit>();
         int playerTeamSize = 0;
 
@@ -32,6 +34,7 @@ namespace RPGProject.Control
         BattleState battleState = BattleState.Null;
 
         UnitController currentUnitTurn = null;
+        IEnumerator currentAttack = null;
 
         MusicOverride musicOverride = null;
 
@@ -47,14 +50,15 @@ namespace RPGProject.Control
             musicOverride = GetComponent<MusicOverride>();
         }
 
-        public IEnumerator SetupBattle(PlayerTeam teamInfos, List<Unit> _enemyTeam)
+        public IEnumerator SetupBattle(PlayerTeam _playerTeamManager, List<Unit> _enemyTeam)
         {
             battleState = BattleState.Null;
             isBattleOver = false;
 
             SetBattleManagers();
 
-            SetupTeams(teamInfos, _enemyTeam);
+            playerTeamManager = _playerTeamManager;
+            SetupTeams(playerTeamManager.GetPlayableCharacters(), _enemyTeam);
             SetupManagers();
 
             SetCurrentBattleUnitTurn(turnManager.GetFirstMoveUnit());
@@ -87,7 +91,8 @@ namespace RPGProject.Control
      
         public void UseAbility(Fighter _target, Ability _selectedAbility)
         {
-            StartCoroutine(currentUnitTurn.UseAbilityBehavior(_target, _selectedAbility));
+            currentAttack = currentUnitTurn.UseAbilityBehavior(_target, _selectedAbility);
+            StartCoroutine(currentAttack);
         }
 
         public void AIUseAbility()
@@ -98,7 +103,7 @@ namespace RPGProject.Control
             Ability randomAbility = currentUnitFighter.GetRandomAbility();
             Fighter randomTarget = GetRandomTarget(isPlayerAI, randomAbility.GetTargetingType());
 
-            StartCoroutine(currentUnitTurn.UseAbilityBehavior(randomTarget, randomAbility));
+            UseAbility(randomTarget, randomAbility);
         }
 
         private void AdvanceTurn()
@@ -149,6 +154,8 @@ namespace RPGProject.Control
 
         private IEnumerator EndBattleBehavior(bool? _won)
         {
+            StopCoroutine(currentAttack);
+            currentAttack = null;
             playerTeam.Clear();
             playerTeamSize = 0;
             enemyTeam.Clear();
@@ -156,7 +163,6 @@ namespace RPGProject.Control
 
             if (_won == true)
             {
-                //CalculateBattleRewards();
 
                 yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
 
@@ -171,6 +177,8 @@ namespace RPGProject.Control
                 //FindObjectOfType<SavingWrapper>().Save();     
 
                 //GetComponent<MusicOverride>().ClearOverride();
+
+                //CalculateBattleRewards();
 
                 onBattleEnd();
 
@@ -189,18 +197,38 @@ namespace RPGProject.Control
 
         private void UpdateTeamResources(List<UnitController> _playerUnits)
         {
-            foreach (UnitController battleUnit in _playerUnits)
+            foreach (UnitController unit in _playerUnits)
             {
-                string unitName = battleUnit.GetBattleUnitInfo().GetUnitName();
-                BattleUnitResources battleUnitResources = battleUnit.GetBattleUnitResources();
+                BattleUnitResources unitResources = UpdateUnitResources(unit);
 
-                if (battleUnit.GetHealth().IsDead())
+                if (unit.GetHealth().IsDead())
                 {
-                    battleUnitResources.SetHealthPoints(1f);
+                    unitResources.SetHealthPoints(1f);
                 }
 
-                onUnitResourcesUpdate(unitName, battleUnitResources);
+                CharacterKey characterKey = unit.GetBattleUnitInfo().GetCharacterKey();
+                PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
+                playerTeamManager.UpdateTeamInfo(playerKey, unitResources);
             }
+        }
+
+        private BattleUnitResources UpdateUnitResources(UnitController _unit)
+        {
+            BattleUnitResources unitResources = _unit.GetUnitResources();
+
+            Health unitHealth = _unit.GetHealth();
+            Mana unitMana = _unit.GetMana();
+            unitResources.SetBattleUnitResources
+                (
+                unitHealth.GetHealthPoints(),
+                unitHealth.GetMaxHealthPoints(),
+                unitMana.GetManaPoints(),
+                unitMana.GetMaxManaPoints()
+                );
+
+            print(unitMana.GetManaPoints() + " " + unitMana.GetMaxManaPoints());
+
+            return unitResources;
         }
 
         private void Escape()
@@ -232,15 +260,15 @@ namespace RPGProject.Control
             battleUIManager.SetCurrentCombatantTurn(currentUnitTurn.GetFighter());
         }
 
-        private void SetupTeams(PlayerTeam teamInfos, List<Unit> _enemyTeam)
+        private void SetupTeams(List<PlayableCharacter> _playerTeam, List<Unit> _enemyTeam)
         {
-            foreach (PlayableCharacter playableCharacter in teamInfos.GetPlayableCharacters())
+            foreach (PlayableCharacter playableCharacter in _playerTeam)
             {
                 PlayerKey playerKey = playableCharacter.GetPlayerKey();
-                Unit playerUnit = teamInfos.GetUnit(playerKey);
-                TeamInfo teamInfo = teamInfos.GetTeamInfo(playerKey);
+                Unit playerUnit = playerTeamManager.GetUnit(playerKey);
+                TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
 
-                battleUnitManager.SetupPlayerUnit(playerUnit, teamInfo.GetBattleUnitResources());
+                battleUnitManager.SetupPlayerUnit(playerUnit);
 
                 playerTeam.Add(playerUnit);
             }
@@ -290,7 +318,7 @@ namespace RPGProject.Control
         }
         public void SetupTurnManager()
         {
-            turnManager.SetUpTurns(battleUnitManager.GetBattleUnits(), battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
+            turnManager.SetUpTurns(battleUnitManager.GetAllUnits(), battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits());
             turnManager.onTurnChange += SetCurrentBattleUnitTurn;
         }
         public void SetupUIManager()

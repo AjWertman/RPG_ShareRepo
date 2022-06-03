@@ -277,12 +277,12 @@ namespace RPGProject.Combat
 
         public void SetUnitInfo(BattleUnitInfo _unitInfo)
         {
-            unitInfo.SetBattleUnitInfo(_unitInfo);
+            unitInfo = _unitInfo;
         }
 
         public void SetUnitResources(BattleUnitResources _unitResources)
         {
-            unitResources.SetBattleUnitResources(_unitResources);
+            unitResources= _unitResources;
         }
 
         public Ability GetRandomAbility()

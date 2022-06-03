@@ -10,7 +10,7 @@ namespace RPGProject.GameResources
 
         float manaPercentage = 1f;
 
-        float baseMaxManaPoints = 0f;
+        float baseMaxManaPoints = 100f;
         float intellect = 10f;
         float intellectManaAmount = 10f;
 

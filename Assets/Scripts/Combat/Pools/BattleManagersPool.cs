@@ -18,8 +18,11 @@ namespace RPGProject.Control
         BattleUIManager battleUIManager = null;
         TurnManager turnManager = null;
 
+        Transform startingParent = null;
+
         private void Start()
         {
+            startingParent = transform.parent;
             CreateManagers();
         }
 
@@ -55,7 +58,7 @@ namespace RPGProject.Control
             battleCamGameObject.transform.localPosition = Vector3.zero;
             battleCamGameObject.transform.localEulerAngles = Vector3.zero;
 
-            transform.parent = null;
+            transform.parent = startingParent;
             transform.position = Vector3.zero;
             transform.eulerAngles = Vector3.zero;
             ActivateManagersGameObjects(false);

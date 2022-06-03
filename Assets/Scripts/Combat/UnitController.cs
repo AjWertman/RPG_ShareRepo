@@ -1,11 +1,9 @@
 ﻿using RPGProject.Combat;
-using RPGProject.Core;
 using RPGProject.GameResources;
 using RPGProject.Movement;
 using RPGProject.Progression;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Control
@@ -56,7 +54,7 @@ namespace RPGProject.Control
             SetupIndicator(_isPlayer);
             SetCharacterMesh(_characterMesh);
 
-            battleUnitInfo.SetBattleUnitInfo(_battleUnitInfo);
+            battleUnitInfo.SetUnitInfo(_battleUnitInfo);
             startingStats.SetStats(battleUnitInfo.GetStats());
 
             UpdateComponentStats(true);
@@ -156,7 +154,7 @@ namespace RPGProject.Control
 
         public void SetBattleUnitResources(BattleUnitResources _battleUnitResources)
         {
-            battleUnitResources.SetBattleUnitResources(_battleUnitResources);
+            battleUnitResources.SetUnitResources(_battleUnitResources);
             health.SetUnitHealth(battleUnitResources.GetHealthPoints(), battleUnitResources.GetMaxHealthPoints());
             mana.SetMana(battleUnitResources.GetManaPoints(), battleUnitResources.GetMaxManaPoints());
 
@@ -279,7 +277,7 @@ namespace RPGProject.Control
             return battleUnitInfo;
         }
 
-        public BattleUnitResources GetBattleUnitResources()
+        public BattleUnitResources GetUnitResources()
         {
             return battleUnitResources;
         }
