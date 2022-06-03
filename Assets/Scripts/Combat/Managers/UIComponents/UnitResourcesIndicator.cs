@@ -14,18 +14,18 @@ namespace RPGProject.Combat
         [SerializeField] TextMeshProUGUI healthText = null;
         [SerializeField] TextMeshProUGUI manaText = null;
 
-        public void SetupResourceIndicator(BattleUnit _battleUnit)
+        public void SetupResourceIndicator(Fighter _fighter)
         {
-            if (_battleUnit != null)
+            if (_fighter != null)
             {
-                BattleUnitInfo battleUnitInfo = _battleUnit.GetBattleUnitInfo();
+                BattleUnitInfo battleUnitInfo = _fighter.GetUnitInfo();
                 SetBackgroundColor(battleUnitInfo.IsPlayer());
 
                 nameText.text = battleUnitInfo.GetUnitName();
-                faceImage.sprite = _battleUnit.GetCharacterMesh().GetFaceImage();
+                faceImage.sprite = _fighter.GetCharacterMesh().GetFaceImage();
 
-                Health unitHealth = _battleUnit.GetHealth();
-                Mana unitMana = _battleUnit.GetMana();
+                Health unitHealth = _fighter.GetHealth();
+                Mana unitMana = _fighter.GetMana();
                 healthText.text = ("Health: " + unitHealth.GetHealthPoints() + "/" + unitHealth.GetMaxHealthPoints());
                 manaText.text = ("Mana: " + unitMana.GetManaPoints() + "/" + unitMana.GetMaxManaPoints());
             }

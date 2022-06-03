@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.Control
 {
     public class BattlePositionManager : MonoBehaviour
     {

@@ -7,7 +7,7 @@ namespace RPGProject.Combat
     //Used to calculate and/or test things during combat
     public static class CombatAssistant
     {
-        public static string CanUseAbilityCheck(BattleUnit _caster, Ability _selectedAbility)
+        public static string CanUseAbilityCheck(Fighter _caster, Ability _selectedAbility)
         {
             float manaCost = _selectedAbility.GetManaCost();
             if (manaCost > 0)
@@ -28,9 +28,8 @@ namespace RPGProject.Combat
             return "";
         }
 
-        public static string CanUseAbilityCheck(BattleUnit _caster, BattleUnit _target, Ability _selectedAbility)
+        public static string CanUseAbilityCheck(Fighter _caster, Fighter _target, Ability _selectedAbility)
         {
-            Fighter targetFighter = _target.GetFighter();
             GameObject abilityPrefab = _selectedAbility.GetAbilityPrefab();
 
             float manaCost = _selectedAbility.GetManaCost();
@@ -53,17 +52,17 @@ namespace RPGProject.Combat
             {
                 PhysicalReflector physReflector = abilityPrefab.GetComponent<PhysicalReflector>();
                 bool isPhysReflector = (physReflector != null);
-                bool isTargetReflectingPhys = (targetFighter.GetPhysicalReflectionDamage() > 0);
+                bool isTargetReflectingPhys = (_target.GetPhysicalReflectionDamage() > 0);
                 if (isPhysReflector && isTargetReflectingPhys) return "Target is already reflecting physical damage";
 
                 SpellReflector spellReflector = abilityPrefab.GetComponent<SpellReflector>();
                 bool isSpellReflector = (spellReflector != null);
-                bool isTargetReflectingSpells = (targetFighter.IsReflectingSpells());
+                bool isTargetReflectingSpells = (_target.IsReflectingSpells());
                 if (isSpellReflector && isTargetReflectingSpells) return "Target is already reflecting spells";
 
                 Silence silence = abilityPrefab.GetComponent<Silence>();
                 bool isSilence = (silence != null);
-                bool isTargetSilenced = (targetFighter.IsSilenced());
+                bool isTargetSilenced = (_target.IsSilenced());
                 if (isSilence && isTargetSilenced) return "Target is already silenced";
             }
 

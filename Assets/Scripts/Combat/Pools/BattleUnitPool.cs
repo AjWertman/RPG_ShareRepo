@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.Control
 {
     //Creates the unit controllers for combat
     public class BattleUnitPool : MonoBehaviour
@@ -10,7 +10,7 @@ namespace RPGProject.Combat
         [SerializeField] GameObject battleUnitPrefab = null;
         [Range(2, 8)] [SerializeField] int numberOfUnits = 8;
 
-        Dictionary<BattleUnit, bool> battleUnits = new Dictionary<BattleUnit, bool>();
+        Dictionary<UnitController, bool> battleUnits = new Dictionary<UnitController, bool>();
 
         private void Awake()
         {
@@ -22,7 +22,7 @@ namespace RPGProject.Combat
             for (int i = 0; i < numberOfUnits; i++)
             {
                 GameObject battleUnitInstance = Instantiate(battleUnitPrefab, transform);
-                BattleUnit battleUnit = battleUnitInstance.GetComponent<BattleUnit>();
+                UnitController battleUnit = battleUnitInstance.GetComponent<UnitController>();
 
                 battleUnits.Add(battleUnit, false);
                 battleUnit.InitalizeBattleUnit();
@@ -31,11 +31,11 @@ namespace RPGProject.Combat
             }
         }
 
-        public BattleUnit GetAvailableBattleUnit()
+        public UnitController GetAvailableBattleUnit()
         {
-            BattleUnit availableBattleUnit = null;
+            UnitController availableBattleUnit = null;
 
-            foreach (BattleUnit battleUnit in battleUnits.Keys)
+            foreach (UnitController battleUnit in battleUnits.Keys)
             {
                 if (battleUnits[battleUnit]) continue;
 
@@ -50,9 +50,9 @@ namespace RPGProject.Combat
 
         public void ResetBattleUnitPool()
         {
-            List<BattleUnit> unitsToReset = new List<BattleUnit>();
+            List<UnitController> unitsToReset = new List<UnitController>();
 
-            foreach (BattleUnit battleUnit in GetActiveBattleUnits())
+            foreach (UnitController battleUnit in GetActiveBattleUnits())
             {
                 battleUnit.transform.parent = transform;
                 battleUnit.transform.localPosition = Vector3.zero;
@@ -62,23 +62,23 @@ namespace RPGProject.Combat
                 unitsToReset.Add(battleUnit);
             }
 
-            foreach (BattleUnit battleUnit in unitsToReset)
+            foreach (UnitController battleUnit in unitsToReset)
             {
                 battleUnits[battleUnit] = false;
             }
         }
 
-        public IEnumerable<BattleUnit> GetAllBattleUnits()
+        public IEnumerable<UnitController> GetAllBattleUnits()
         {
-            foreach (BattleUnit battleUnit in battleUnits.Keys)
+            foreach (UnitController battleUnit in battleUnits.Keys)
             {
                 yield return battleUnit;
             }
         }
 
-        public IEnumerable<BattleUnit> GetActiveBattleUnits()
+        public IEnumerable<UnitController> GetActiveBattleUnits()
         {
-            foreach (BattleUnit battleUnit in battleUnits.Keys)
+            foreach (UnitController battleUnit in battleUnits.Keys)
             {
                 if (battleUnits[battleUnit])
                 {

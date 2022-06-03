@@ -1,20 +1,21 @@
+using RPGProject.Combat;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace RPGProject.Combat
+namespace RPGProject.UI
 {
     public class TargetButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         Button button = null;
         TextMeshProUGUI buttonText = null;
 
-        BattleUnit assignedTarget = null;
+        Fighter assignedTarget = null;
 
-        public event Action<BattleUnit> onSelect;
-        public event Action<BattleUnit> onPointerEnter;
+        public event Action<Fighter> onSelect;
+        public event Action<Fighter> onPointerEnter;
         public event Action onPointerExit;
 
         public void InitalizeTargetButton()
@@ -25,10 +26,10 @@ namespace RPGProject.Combat
             button.onClick.AddListener(() => onSelect(assignedTarget));
         }
 
-        public void SetupTargetButton(BattleUnit _target)
+        public void SetupTargetButton(Fighter _target)
         {
             assignedTarget = _target;
-            buttonText.text = assignedTarget.GetBattleUnitInfo().GetUnitName();
+            buttonText.text = assignedTarget.GetUnitInfo().GetUnitName();
         }
 
         public void ResetTargetButton()
@@ -37,7 +38,7 @@ namespace RPGProject.Combat
             buttonText.text = "Target";
         }
 
-        public BattleUnit GetTarget()
+        public Fighter GetTarget()
         {
             return assignedTarget;
         }

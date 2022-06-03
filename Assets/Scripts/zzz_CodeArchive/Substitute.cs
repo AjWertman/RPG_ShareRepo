@@ -21,7 +21,7 @@ namespace RPGProject.Combat
 
         public event Action onSubstituteTurnEnd;
 
-        public override void InitalizeSpell(BattleUnit _caster, BattleUnit _target)
+        public override void InitalizeSpell(Fighter _caster, Fighter _target)
         {
             base.InitalizeSpell(_caster, _target);
             SetupSubstitute(_target);
@@ -29,7 +29,7 @@ namespace RPGProject.Combat
             _target.GetComponent<Fighter>().SetHasSubsitute(true);
         }
 
-        private void SetupSubstitute(BattleUnit _target)
+        private void SetupSubstitute(Fighter _target)
         {
             Instantiate(base.target.GetCharacterMesh(), transform);
             animator = GetComponentInChildren<Animator>();
@@ -58,7 +58,7 @@ namespace RPGProject.Combat
             StopCoroutine(SubstituteAttackBehavior());
         }
 
-        public void StartExecutingAttackBehavior(BattleUnit _target)
+        public void StartExecutingAttackBehavior(Fighter _target)
         {
             isExecutingAttackBehavior = true;
             target = _target;

@@ -1,6 +1,7 @@
 ﻿using RPGProject.Combat;
 using RPGProject.Core;
 using RPGProject.Sound;
+using RPGProject.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace RPGProject.Control
 
         BattleState battleState = BattleState.Null;
 
-        BattleUnit currentBattleUnitTurn = null;
+        UnitController currentUnitTurn = null;
 
         MusicOverride musicOverride = null;
 
@@ -67,11 +68,11 @@ namespace RPGProject.Control
             yield return null;
         }
 
-        public void OnPlayerMove(BattleUnit _target, Ability _selectedAbility)
+        public void OnPlayerMove(Fighter _target, Ability _selectedAbility)
         {
             battleUIManager.DeactivateAllMenus();
 
-            string cantUseAbilityReason = CombatAssistant.CanUseAbilityCheck(currentBattleUnitTurn, _target, _selectedAbility);
+            string cantUseAbilityReason = CombatAssistant.CanUseAbilityCheck(currentUnitTurn.GetFighter(), _target, _selectedAbility);
 
             if (cantUseAbilityReason == "")
             {
@@ -84,20 +85,20 @@ namespace RPGProject.Control
             }
         }
      
-        public void UseAbility(BattleUnit _target, Ability _selectedAbility)
+        public void UseAbility(Fighter _target, Ability _selectedAbility)
         {
-            StartCoroutine(currentBattleUnitTurn.UseAbilityBehavior(_target, _selectedAbility));
+            StartCoroutine(currentUnitTurn.UseAbilityBehavior(_target, _selectedAbility));
         }
 
         public void AIUseAbility()
         {
-            Fighter currentUnitFighter = currentBattleUnitTurn.GetFighter();
-            bool isPlayerAI = currentBattleUnitTurn.GetBattleUnitInfo().IsPlayer();
+            Fighter currentUnitFighter = currentUnitTurn.GetFighter();
+            bool isPlayerAI = currentUnitTurn.GetBattleUnitInfo().IsPlayer();
 
-            Ability randomAbility = currentBattleUnitTurn.GetRandomAbility();
-            BattleUnit randomTarget = GetRandomTarget(isPlayerAI, randomAbility.GetTargetingType());
+            Ability randomAbility = currentUnitFighter.GetRandomAbility();
+            Fighter randomTarget = GetRandomTarget(isPlayerAI, randomAbility.GetTargetingType());
 
-            StartCoroutine(currentBattleUnitTurn.UseAbilityBehavior(randomTarget, randomAbility));
+            StartCoroutine(currentUnitTurn.UseAbilityBehavior(randomTarget, randomAbility));
         }
 
         private void AdvanceTurn()
@@ -115,12 +116,25 @@ namespace RPGProject.Control
         public void ExecuteNextTurn()
         {
             //if (isTutorial) return;
-            battleUIManager.ExecuteNextTurn(turnManager.GetTurnOrder(), currentBattleUnitTurn);
+            List<Fighter> unitFighters = GetUnitFighters(turnManager.GetTurnOrder());
+            battleUIManager.ExecuteNextTurn(unitFighters, currentUnitTurn.GetFighter());
 
             if (!turnManager.IsPlayerTurn())
             {
                 AIUseAbility();
             }
+        }
+
+        public List<Fighter> GetUnitFighters(List<UnitController> _unitControllers)
+        {
+            List<Fighter> unitFighters = new List<Fighter>();
+
+            foreach(UnitController unitController in _unitControllers)
+            {
+                unitFighters.Add(unitController.GetFighter());
+            }
+
+            return unitFighters;
         }
 
         private void EndBattle(bool? _won)
@@ -173,9 +187,9 @@ namespace RPGProject.Control
             }
         }
 
-        private void UpdateTeamResources(List<BattleUnit> _playerUnits)
+        private void UpdateTeamResources(List<UnitController> _playerUnits)
         {
-            foreach (BattleUnit battleUnit in _playerUnits)
+            foreach (UnitController battleUnit in _playerUnits)
             {
                 string unitName = battleUnit.GetBattleUnitInfo().GetUnitName();
                 BattleUnitResources battleUnitResources = battleUnit.GetBattleUnitResources();
@@ -196,7 +210,7 @@ namespace RPGProject.Control
 
         private IEnumerator EscapeBehavior()
         {
-            foreach (BattleUnit player in battleUnitManager.GetPlayerUnits())
+            foreach (UnitController player in battleUnitManager.GetPlayerUnits())
             {
                 StartCoroutine(player.GetMover().Retreat());
             }
@@ -206,16 +220,16 @@ namespace RPGProject.Control
             EndBattle(null);
         }
 
-        public void SetCurrentBattleUnitTurn(BattleUnit _currentBattleUnitTurn)
+        public void SetCurrentBattleUnitTurn(UnitController _currentUnitTurn)
         {
-            if(currentBattleUnitTurn != null)
+            if(currentUnitTurn != null)
             {
-                currentBattleUnitTurn.SetIsTurn(false);
+                currentUnitTurn.SetIsTurn(false);
             }
 
-            currentBattleUnitTurn = _currentBattleUnitTurn;
-            currentBattleUnitTurn.SetIsTurn(true);
-            battleUIManager.SetCurrentBattleUnitTurn(currentBattleUnitTurn);
+            currentUnitTurn = _currentUnitTurn;
+            currentUnitTurn.SetIsTurn(true);
+            battleUIManager.SetCurrentCombatantTurn(currentUnitTurn.GetFighter());
         }
 
         private void SetupTeams(PlayerTeam teamInfos, List<Unit> _enemyTeam)
@@ -281,18 +295,21 @@ namespace RPGProject.Control
         }
         public void SetupUIManager()
         {
-            battleUIManager.SetupUIManager(battleUnitManager.GetPlayerUnits(), battleUnitManager.GetEnemyUnits(), turnManager.GetTurnOrder());
+            List<Fighter> _playerCombatants = GetUnitFighters(battleUnitManager.GetPlayerUnits());
+            List<Fighter> _enemyCombatants = GetUnitFighters(battleUnitManager.GetEnemyUnits());
+            List<Fighter> _combatantTurnOrder = GetUnitFighters(turnManager.GetTurnOrder());
+            battleUIManager.SetupUIManager(_playerCombatants, _enemyCombatants, _combatantTurnOrder);
             battleUIManager.SetUILookAts(camTransform);
             battleUIManager.onPlayerMove += OnPlayerMove;
             battleUIManager.onEscape += Escape;
         }
 
-        private void UpdateManagerLists(BattleUnit _unitThatCausedUpdate)
+        private void UpdateManagerLists(UnitController _unitThatCausedUpdate)
         {
-            List<BattleUnit> playerUnits = battleUnitManager.GetPlayerUnits();
-            List<BattleUnit> enemyUnits = battleUnitManager.GetEnemyUnits();
+            List<Fighter> playerCombatants = GetUnitFighters(battleUnitManager.GetPlayerUnits());
+            List<Fighter> enemyCombatants = GetUnitFighters(battleUnitManager.GetEnemyUnits());
 
-            battleUIManager.UpdateBattleUnitLists(playerUnits, enemyUnits);
+            battleUIManager.UpdateBattleUnitLists(playerCombatants, enemyCombatants);
             turnManager.UpdateTurnOrder(_unitThatCausedUpdate);
         }
         private void ResetManagers()
@@ -315,7 +332,7 @@ namespace RPGProject.Control
             abilityObjectPool.ResetAbilityObjectPool();
         }
 
-        public BattleUnit GetRandomTarget(bool _isPlayer, TargetingType _targetingType)
+        public Fighter GetRandomTarget(bool _isPlayer, TargetingType _targetingType)
         {         
             if (_targetingType != TargetingType.SelfOnly)
             {
@@ -324,16 +341,16 @@ namespace RPGProject.Control
 
                 if (returnRandomPlayer)
                 {
-                    return battleUnitManager.GetRandomPlayerUnit();
+                    return battleUnitManager.GetRandomPlayerUnit().GetFighter();
                 }
                 else
                 {
-                    return battleUnitManager.GetRandomEnemyUnit();
+                    return battleUnitManager.GetRandomEnemyUnit().GetFighter();
                 }
             }
             else
             {
-                return currentBattleUnitTurn;
+                return currentUnitTurn.GetFighter();
             }
         }
 

@@ -44,12 +44,12 @@ namespace RPGProject.Combat
 
         private void OnTriggerEnter(Collider other)
         {
-            BattleUnit hitBattleUnit = other.GetComponent<BattleUnit>();
+            Fighter hitCombatant = other.GetComponent<Fighter>();
             SpellReflector hitSpellReflector = other.GetComponent<SpellReflector>();
 
             //Refactor put Hit FX somewhere
 
-            if (hitBattleUnit != null && hitBattleUnit == target)
+            if (hitCombatant != null && hitCombatant == target)
             {
                 if (!hasAppliedChangeAmount)
                 {

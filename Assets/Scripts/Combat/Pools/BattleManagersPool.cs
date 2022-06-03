@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.Control
 {
     //Creates all the necessary managers for combat to run
     public class BattleManagersPool : MonoBehaviour

@@ -7,8 +7,8 @@ namespace RPGProject.Combat
     {
         protected Ability ability = null;
 
-        protected BattleUnit caster = null;
-        protected BattleUnit target = null;
+        protected Fighter caster = null;
+        protected Fighter target = null;
         protected float changeAmount = 0f;
         protected bool isCritical = false;
 
@@ -21,7 +21,7 @@ namespace RPGProject.Combat
             ability = _ability;
         }
 
-        public void SetupAbility(BattleUnit _caster, BattleUnit _target, float _changeAmount, bool _isCritical)
+        public void SetupAbility(Fighter _caster, Fighter _target, float _changeAmount, bool _isCritical)
         {
             caster = _caster;
             target = _target;

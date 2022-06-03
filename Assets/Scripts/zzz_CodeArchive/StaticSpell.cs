@@ -13,10 +13,10 @@ public abstract class StaticSpell : MonoBehaviour
     [SerializeField] public int duration = 0;
     [SerializeField] protected int currentLifetime = 0;
 
-    protected BattleUnit caster = null;
-    protected BattleUnit target = null;
+    protected Fighter caster = null;
+    protected Fighter target = null;
 
-    public virtual void InitalizeSpell(BattleUnit _caster, BattleUnit _target)
+    public virtual void InitalizeSpell(Fighter _caster, Fighter _target)
     {
         caster = _caster;
         target = _target;
@@ -25,10 +25,10 @@ public abstract class StaticSpell : MonoBehaviour
 
     public abstract void DestroyStaticSpell();
 
-    public void MoveToTransform(Transform transformToMove)
+    public void MoveToTransform(Transform _transformToMove)
     {
-        transform.position = transformToMove.position;
-        transform.rotation = transformToMove.rotation;
+        transform.position = _transformToMove.position;
+        transform.rotation = _transformToMove.rotation;
     }
 
     public void ResetLifetime()

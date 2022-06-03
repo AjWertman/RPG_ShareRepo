@@ -1,9 +1,10 @@
+using RPGProject.Combat;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RPGProject.Combat
+namespace RPGProject.UI
 {
     public class TargetSelect : MonoBehaviour
     {
@@ -14,15 +15,15 @@ namespace RPGProject.Combat
         [SerializeField] Button enemyGroupButton = null;
         [SerializeField] Button backButton = null;
 
-        List<BattleUnit> playerUnits = new List<BattleUnit>();
-        List<BattleUnit> enemyUnits = new List<BattleUnit>();
+        List<Fighter> playerTargets = new List<Fighter>();
+        List<Fighter> enemyTargets = new List<Fighter>();
 
         Dictionary<TargetButton, bool> targetButtons = new Dictionary<TargetButton, bool>();
 
         BattleUIMenuKey previousPageKey = BattleUIMenuKey.None;
 
-        public event Action<BattleUnit> onTargetSelect;
-        public event Action<BattleUnit> onTargetHighlight;
+        public event Action<Fighter> onTargetSelect;
+        public event Action<Fighter> onTargetHighlight;
         public event Action onTargetUnhighlight;
         public event Action<BattleUIMenuKey> onBackButton;
 
@@ -56,15 +57,15 @@ namespace RPGProject.Combat
             }
         }
 
-        private void OnTargetSelect(BattleUnit _battleUnit)
+        private void OnTargetSelect(Fighter _target)
         {
             ResetTargetButtons();
-            onTargetSelect(_battleUnit);
+            onTargetSelect(_target);
         }
 
-        private void OnTargetHighlight(BattleUnit _battleUnit)
+        private void OnTargetHighlight(Fighter _target)
         {
-            onTargetHighlight(_battleUnit);
+            onTargetHighlight(_target);
         }
 
         private void OnTargetUnhighlight()
@@ -86,9 +87,9 @@ namespace RPGProject.Combat
         {
             ResetTargetButtons();
 
-            List<BattleUnit> targets = GetTargets(_isPlayer);
+            List<Fighter> targets = GetTargets(_isPlayer);
 
-            foreach (BattleUnit target in targets)
+            foreach (Fighter target in targets)
             {
                 TargetButton targetButton = GetAvailableTargetButton();
                 targetButton.SetupTargetButton(target);
@@ -147,18 +148,18 @@ namespace RPGProject.Combat
             }
         }
 
-        public void UpdateBattleUnitLists(List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits)
+        public void UpdateBattleUnitLists(List<Fighter> _playerTargets, List<Fighter> _enemyTargets)
         {
-            playerUnits = _playerUnits;
+            playerTargets = _playerTargets;
 
-            enemyUnits = _enemyUnits;
+            enemyTargets = _enemyTargets;
         }
 
         public void ResetTargetSelectMenu()
         {
             previousPageKey = BattleUIMenuKey.None;
-            playerUnits.Clear();
-            enemyUnits.Clear();
+            playerTargets.Clear();
+            enemyTargets.Clear();
 
             ResetTargetButtons();
         }
@@ -196,11 +197,11 @@ namespace RPGProject.Combat
             onBackButton(previousPageKey);
         }
 
-        public List<BattleUnit> GetTargets(bool _isPlayer)
+        public List<Fighter> GetTargets(bool _isPlayer)
         {
-            List<BattleUnit> targets = new List<BattleUnit>();
+            List<Fighter> targets = new List<Fighter>();
 
-            foreach (BattleUnit battleUnit in GetTeamList(_isPlayer))
+            foreach (Fighter battleUnit in GetTeamList(_isPlayer))
             {
                 if (!battleUnit.GetHealth().IsDead())
                 {
@@ -211,17 +212,17 @@ namespace RPGProject.Combat
             return targets;
         }
 
-        public List<BattleUnit> GetTeamList(bool _isPlayer)
+        public List<Fighter> GetTeamList(bool _isPlayer)
         {
-            List<BattleUnit> teamList = new List<BattleUnit>();
+            List<Fighter> teamList = new List<Fighter>();
 
             if (_isPlayer)
             {
-                teamList = playerUnits;
+                teamList = playerTargets;
             }
             else
             {
-                teamList = enemyUnits;
+                teamList = enemyTargets;
             }
 
             return teamList;

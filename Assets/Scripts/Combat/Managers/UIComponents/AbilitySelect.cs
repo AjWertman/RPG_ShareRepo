@@ -50,18 +50,18 @@ namespace RPGProject.Combat
             }
         }
 
-        public void PopulateAbilitiesList(BattleUnit _currentBattleUnitTurn)
+        public void PopulateAbilitiesList(Fighter _caster, List<Ability> _abilities)
         {
             ResetAbilitiesList();
             unusableAbilities.Clear();
 
-            foreach (Ability ability in _currentBattleUnitTurn.GetKnownAbilities())
+            foreach (Ability ability in _abilities)
             {
                 AbilityButton availableAbilityButton = GetAvailableAbilityButton();
 
                 bool isCopyAbility = (ability.GetAbilityType() == AbilityType.Copy);
 
-                string cantUseAbilityReason = CombatAssistant.CanUseAbilityCheck(_currentBattleUnitTurn, ability);
+                string cantUseAbilityReason = CombatAssistant.CanUseAbilityCheck(_caster, ability);
 
                 availableAbilityButton.SetAssignedAbility(ability);
                 abilityButtons[availableAbilityButton] = true;

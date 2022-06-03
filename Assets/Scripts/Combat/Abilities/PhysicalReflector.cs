@@ -4,13 +4,13 @@ namespace RPGProject.Combat
     {
         public override void PerformSpellBehavior()
         {
-            target.GetFighter().ApplyAbilityBehaviorStatus(this);
-            target.GetFighter().SetPhysicalReflectionDamage(changeAmount);
+            target.ApplyAbilityBehaviorStatus(this);
+            target.SetPhysicalReflectionDamage(changeAmount);
         }
 
         public override void OnAbilityDeath()
         {
-            target.GetFighter().SetPhysicalReflectionDamage(0);
+            target.SetPhysicalReflectionDamage(0);
             base.OnAbilityDeath();
         }
     }

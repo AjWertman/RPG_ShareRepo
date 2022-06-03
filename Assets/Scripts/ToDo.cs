@@ -1,8 +1,4 @@
 
-
-//Current bugs
-//Unit indicator (particles on battleunit)
-
 //Rename BattleUnit to UnitController
 //Update all parameters to _var
 //Add music and sound fx

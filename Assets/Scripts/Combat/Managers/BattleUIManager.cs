@@ -1,12 +1,12 @@
-﻿using RPGProject.Core;
+﻿using RPGProject.Combat;
+using RPGProject.Core;
+using RPGProject.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.Control
 {
-    public enum BattleUIMenuKey { None, PlayerMoveSelect, AbilitySelect, ItemSelect, TargetSelect }
-
     public class BattleUIManager : MonoBehaviour
     {
         [SerializeField] BattleHUD battleHUD = null;
@@ -14,20 +14,21 @@ namespace RPGProject.Combat
         [SerializeField] AbilitySelect abilitySelectMenu = null;
         [SerializeField] TargetSelect targetSelectMenu = null;
 
-        List<BattleUnit> playerUnits = new List<BattleUnit>();
-        List<BattleUnit> enemyUnits = new List<BattleUnit>();
+        List<Fighter> playerCombatants = new List<Fighter>();
+        List<Fighter> enemyCombatants = new List<Fighter>();
 
-        BattleUnit currentBattleUnitTurn = null;
-        BattleUnit targetBattleUnit = null;
-        BattleUnit highlightedTarget = null;
+        Fighter currentCombatantTurn = null;
+        Fighter target = null;
+        Fighter highlightedTarget = null;
 
         Ability selectedAbility = null;
         bool isCopy = false;
 
+        Dictionary<Fighter, UnitUI> fighterUIDict = new Dictionary<Fighter, UnitUI>();
         Dictionary<BattleUIMenuKey, GameObject> menuGameObjects = new Dictionary<BattleUIMenuKey, GameObject>();
         BattleUIMenuKey activeMenuKey = BattleUIMenuKey.None;
 
-        public event Action<BattleUnit, Ability> onPlayerMove;
+        public event Action<Fighter, Ability> onPlayerMove;
         public event Action onEscape;
 
         public void InitalizeBattleUIManager()
@@ -57,11 +58,12 @@ namespace RPGProject.Combat
             battleHUD.onTurnOrderUnhighlight += UnhighlightTarget;
         }
 
-        public void SetupUIManager(List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits, List<BattleUnit> _turnOrder)
+        public void SetupUIManager(List<Fighter> _playerCombatants, List<Fighter> _enemyCombatants, List<Fighter> _turnOrder)
         {
-            SetCurrentBattleUnitTurn(_turnOrder[0]);
-            UpdateBattleUnitLists(_playerUnits, _enemyUnits);
-            battleHUD.UpdateTurnOrderUIItems(_turnOrder, currentBattleUnitTurn);
+            SetCurrentCombatantTurn(_turnOrder[0]);
+            UpdateBattleUnitLists(_playerCombatants, _enemyCombatants);
+
+            battleHUD.UpdateTurnOrderUIItems(_turnOrder, currentCombatantTurn);
         }
 
         public void ActivateBattleUIMenu(BattleUIMenuKey _battleUIMenu)
@@ -95,7 +97,7 @@ namespace RPGProject.Combat
             {
                 case PlayerMoveType.Attack:
 
-                    Ability basicAttack = currentBattleUnitTurn.GetBattleUnitInfo().GetBasicAttack();
+                    Ability basicAttack = currentCombatantTurn.GetUnitInfo().GetBasicAttack();
                     OnAbilitySelect(basicAttack);
                     break;
 
@@ -128,8 +130,8 @@ namespace RPGProject.Combat
             if (IsActivationObsolete(BattleUIMenuKey.AbilitySelect, _shouldActivate)) return;
 
             if (_shouldActivate)
-            {
-                abilitySelectMenu.PopulateAbilitiesList(currentBattleUnitTurn);
+            {;
+                abilitySelectMenu.PopulateAbilitiesList(currentCombatantTurn, currentCombatantTurn.GetKnownAbilities());
             }
             else
             {
@@ -160,15 +162,15 @@ namespace RPGProject.Combat
         {
             selectedAbility = _ability;
 
-            List<BattleUnit> targetTeam = new List<BattleUnit>();
+            List<Fighter> targetTeam = new List<Fighter>();
 
             if (selectedAbility.GetTargetingType() == TargetingType.PlayersOnly)
             {
-                targetTeam = playerUnits;
+                targetTeam = playerCombatants;
             }
             else
             {
-                targetTeam = enemyUnits;
+                targetTeam = enemyCombatants;
             }
 
             if (targetTeam.Count > 1)
@@ -181,31 +183,31 @@ namespace RPGProject.Combat
             }
         }
 
-        public void OnTargetSelect(BattleUnit _target)
+        public void OnTargetSelect(Fighter _target)
         {
             onPlayerMove(_target, selectedAbility);
 
             battleHUD.SetupUnitResourcesIndicator(null);
-            _target.ActivateUnitIndicatorUI(false);
         }
 
-        public void ExecuteNextTurn(List<BattleUnit> _turnOrder, BattleUnit _currentBattleUnitTurn)
+        public void ExecuteNextTurn(List<Fighter> _turnOrder, Fighter _currentCombatantTurn)
         {
-            SetCurrentBattleUnitTurn(_currentBattleUnitTurn);
-            battleHUD.UpdateTurnOrderUIItems(_turnOrder, _currentBattleUnitTurn);
+            SetCurrentCombatantTurn(_currentCombatantTurn);
+            battleHUD.UpdateTurnOrderUIItems(_turnOrder, currentCombatantTurn);
 
-            if (currentBattleUnitTurn.GetBattleUnitInfo().IsPlayer())
+            if (currentCombatantTurn.GetUnitInfo().IsPlayer())
             {
                 ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
             }
         }
 
-        public void HighlightTarget(BattleUnit _battleUnit)
+        public void HighlightTarget(Fighter _combatant)
         {
-            if (_battleUnit == null) return;
-            highlightedTarget = _battleUnit;
+            if (_combatant == null) return;
+            highlightedTarget = _combatant;
 
-            highlightedTarget.ActivateUnitIndicatorUI(true);
+            //Refactor UnitUI
+            //highlightedTarget.ActivateUnitIndicatorUI(true);
             battleHUD.SetupUnitResourcesIndicator(highlightedTarget);
             
             //Refactor
@@ -216,9 +218,9 @@ namespace RPGProject.Combat
         {
             if (highlightedTarget == null) return;
 
-            if (highlightedTarget != currentBattleUnitTurn)
+            if (highlightedTarget != currentCombatantTurn)
             {
-                highlightedTarget.ActivateUnitIndicatorUI(false);
+                //highlightedTarget.ActivateUnitIndicatorUI(false);
             }
 
             battleHUD.SetupUnitResourcesIndicator(null);
@@ -232,15 +234,15 @@ namespace RPGProject.Combat
             ActivateTargetSelectMenu(false);
         }
 
-        public void SetCurrentBattleUnitTurn(BattleUnit _currentBattletUnitTurn)
+        public void SetCurrentCombatantTurn(Fighter _currentCombatantTurn)
         {
-            if(currentBattleUnitTurn != null)
+            if(currentCombatantTurn != null)
             {
-                currentBattleUnitTurn.ActivateUnitIndicatorUI(false);
+                //currentCombatantTurn.ActivateUnitIndicatorUI(false);
             }
 
-            currentBattleUnitTurn = _currentBattletUnitTurn;
-            currentBattleUnitTurn.ActivateUnitIndicatorUI(true);
+            currentCombatantTurn = _currentCombatantTurn;
+            //currentCombatantTurn.ActivateUnitIndicatorUI(true);
         }
 
         public void SetSelectedAbility(Ability _selectedAbility)
@@ -248,29 +250,29 @@ namespace RPGProject.Combat
             selectedAbility = _selectedAbility;
         }
 
-        public void SetTargetBattleUnit(BattleUnit _targetBattleUnit)
+        public void SetTargetBattleUnit(Fighter _target)
         {
-            targetBattleUnit = _targetBattleUnit;
+            target = _target;
         }
 
-        public void UpdateBattleUnitLists(List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits)
+        public void UpdateBattleUnitLists(List<Fighter> _playerUnits, List<Fighter> _enemyUnits)
         {
-            playerUnits = _playerUnits;
-            enemyUnits = _enemyUnits;
+            playerCombatants = _playerUnits;
+            enemyCombatants = _enemyUnits;
 
-            targetSelectMenu.UpdateBattleUnitLists(playerUnits, enemyUnits);
+            targetSelectMenu.UpdateBattleUnitLists(playerCombatants, enemyCombatants);
         }
 
         public void ResetUIManager()
         {
-            playerUnits.Clear();
-            enemyUnits.Clear();
+            playerCombatants.Clear();
+            enemyCombatants.Clear();
 
-            currentBattleUnitTurn = null;
+            currentCombatantTurn = null;
             selectedAbility = null;
             isCopy = false;
 
-            targetBattleUnit = null;
+            target = null;
 
             abilitySelectMenu.ResetAbilitySelectMenu();
             targetSelectMenu.ResetTargetSelectMenu();
@@ -307,4 +309,9 @@ namespace RPGProject.Combat
             }
         }
     }
+}
+
+namespace RPGProject.UI
+{
+    public enum BattleUIMenuKey { None, PlayerMoveSelect, AbilitySelect, ItemSelect, TargetSelect }
 }

@@ -1,4 +1,5 @@
-﻿using RPGProject.Core;
+﻿using RPGProject.Combat;
+using RPGProject.Core;
 using RPGProject.GameResources;
 using RPGProject.Movement;
 using RPGProject.Progression;
@@ -7,9 +8,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.Control
 {
-    public class BattleUnit : MonoBehaviour
+    public class UnitController : MonoBehaviour
     {
         [SerializeField] BattleUnitInfo battleUnitInfo = new BattleUnitInfo();
         [SerializeField] BattleUnitResources battleUnitResources = new BattleUnitResources();
@@ -73,17 +74,15 @@ namespace RPGProject.Combat
             mover.SetStartVariables();
         }
 
-        public IEnumerator UseAbilityBehavior(BattleUnit _target, Ability _ability)
+        public IEnumerator UseAbilityBehavior(Fighter _target, Ability _ability)
         {
             ActivateUnitIndicatorUI(false);
 
             while (isTurn)
             {
-                Fighter targetFighter = _target.GetFighter();
-
                 if (!fighter.IsInRange(_ability.GetAbilityType(), _target)) 
                 {
-                    Vector3 targetPosition = targetFighter.transform.position;
+                    Vector3 targetPosition = _target.transform.position;
                     Quaternion currentRotation = transform.rotation;
 
                     yield return mover.JumpToPos(targetPosition, currentRotation, true);
@@ -131,7 +130,7 @@ namespace RPGProject.Combat
             }
         }
 
-        public void UseAbility(BattleUnit _target, Ability _selectedAbility)
+        public void UseAbility(Fighter _target, Ability _selectedAbility)
         {
             mana.SpendManaPoints(_selectedAbility.GetManaCost());
             fighter.Attack(_target, _selectedAbility);
@@ -268,51 +267,6 @@ namespace RPGProject.Combat
             fighter.ResetFighter();
             health.ResetHealth();
             mana.ResetMana();
-        }
-
-        public Ability GetRandomAbility()
-        {
-            Ability basicAttack = battleUnitInfo.GetBasicAttack();
-            Ability[] abilities = battleUnitInfo.GetAbilities();
-
-            if (!fighter.IsSilenced())
-            {
-                if (abilities.Length == 0 || abilities == null) return basicAttack;
-                int randomInt = RandomGenerator.GetRandomNumber(0, abilities.Length - 1);
-                return abilities[randomInt];
-            }
-            else
-            {
-                List<Ability> physicalAbilities = new List<Ability>();
-                physicalAbilities.Add(basicAttack);
-
-                foreach (Ability ability in abilities)
-                {
-                    if (ability.GetAbilityType() == AbilityType.Melee)
-                    {
-                        physicalAbilities.Add(ability);
-                    }
-                }
-
-                int randomInt = RandomGenerator.GetRandomNumber(0, physicalAbilities.Count - 1);
-                return physicalAbilities[randomInt];
-            }
-        }
-
-        public List<Ability> GetKnownAbilities()
-        {
-            List<Ability> useableAbilities = new List<Ability>();
-            int currentLevel = battleUnitInfo.GetUnitLevel();
-
-            foreach (Ability ability in battleUnitInfo.GetAbilities())
-            {
-                if (currentLevel >= ability.GetRequiredLevel())
-                {
-                    useableAbilities.Add(ability);
-                }
-            }
-
-            return useableAbilities;
         }
 
         public int GetStat(StatType _statType)

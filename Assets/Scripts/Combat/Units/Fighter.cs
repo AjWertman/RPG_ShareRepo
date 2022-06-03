@@ -1,4 +1,5 @@
-﻿using RPGProject.GameResources;
+﻿using RPGProject.Core;
+using RPGProject.GameResources;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,11 +9,15 @@ namespace RPGProject.Combat
     public class Fighter : MonoBehaviour
     {
         Animator animator = null;
-
         CharacterMesh characterMesh = null;
+        Health health = null;
+        Mana mana = null;
+
+        BattleUnitInfo unitInfo = new BattleUnitInfo();
+        BattleUnitResources unitResources = new BattleUnitResources();
 
         Ability selectedAbility = null;
-        BattleUnit selectedTarget = null;
+        Fighter selectedTarget = null;
         //List<BattleUnit> allTargets = new List<BattleUnit>();
 
         AbilityObjectPool abilityObjectPool = null;
@@ -30,10 +35,14 @@ namespace RPGProject.Combat
         bool isSilenced = false;
         bool hasSubstitute = false;
 
+        bool isPlayerFighter = false;
+
         public void InitalizeFighter()
         {
             animator = GetComponent<Animator>();
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
+            health = GetComponent<Health>();
+            mana = GetComponent<Mana>();
 
             //Preset to fit the agents size
             meleeRange = GetComponent<NavMeshAgent>().stoppingDistance;
@@ -53,15 +62,14 @@ namespace RPGProject.Combat
             characterMesh = _characterMesh;
         }
 
-        public void Attack(BattleUnit _selectedTarget, Ability _selectedAbility)
+        public void Attack(Fighter _selectedTarget, Ability _selectedAbility)
         {
-            //Set attack range before 
             selectedTarget = _selectedTarget;
             selectedAbility = _selectedAbility;
 
             animator.CrossFade(selectedAbility.GetAnimatorTrigger(), .1f);
         }
-        
+
         private void PerformAbility()
         {
             AbilityType abilityType = selectedAbility.GetAbilityType();
@@ -77,9 +85,10 @@ namespace RPGProject.Combat
                 case AbilityType.Melee:
 
                     targetHealth.DamageHealth(calculatedAmount, isCriticalHit, true);
-                    if (selectedTarget.GetFighter().GetPhysicalReflectionDamage() > 0)
+                    float reflectionAmount = selectedTarget.GetPhysicalReflectionDamage();
+                    if (reflectionAmount > 0)
                     {
-                        //Do Damage to self
+                        health.DamageHealth(reflectionAmount, false, true);
                     }
                     break;
 
@@ -93,7 +102,7 @@ namespace RPGProject.Combat
                 case AbilityType.Cast:
 
                     AbilityBehavior abilityBehavior = abilityObjectPool.GetAbilityInstance(selectedAbility);
-                    abilityBehavior.SetupAbility(GetComponent<BattleUnit>(), selectedTarget, calculatedAmount, isCriticalHit);
+                    abilityBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit);
                     abilityBehavior.gameObject.SetActive(true);
                     abilityBehavior.PerformSpellBehavior();
                     break;
@@ -116,6 +125,11 @@ namespace RPGProject.Combat
             isReflectingSpells = false;
             isSilenced = false;
             hasSubstitute = false;
+
+            isPlayerFighter = false;
+            unitInfo = new BattleUnitInfo();
+            unitResources = new BattleUnitResources();
+
 
             SetCharacterMesh(null);
         }
@@ -153,11 +167,11 @@ namespace RPGProject.Combat
             PerformAbility();
         }
 
-        public bool IsInRange(AbilityType _abilityType, BattleUnit _battleUnit)
+        public bool IsInRange(AbilityType _abilityType, Fighter _target)
         {
-            if(_abilityType == AbilityType.Melee)
+            if (_abilityType == AbilityType.Melee)
             {
-                float distanceToTarget = GetDistanceToTarget(_battleUnit.transform.position);
+                float distanceToTarget = GetDistanceToTarget(_target.transform.position);
                 return (distanceToTarget <= meleeRange);
             }
 
@@ -173,6 +187,21 @@ namespace RPGProject.Combat
         {
             if (selectedTarget != null) return true;
             else return false;
+        }
+
+        public CharacterMesh GetCharacterMesh()
+        {
+            return characterMesh;
+        }
+
+        public Health GetHealth()
+        {
+            return health;
+        }
+
+        public Mana GetMana()
+        {
+            return mana;
         }
 
         public void SetPhysicalReflectionDamage(float _damageToSet)
@@ -244,6 +273,70 @@ namespace RPGProject.Combat
             }
 
             return newChangeAmount;
+        }
+
+        public void SetUnitInfo(BattleUnitInfo _unitInfo)
+        {
+            unitInfo.SetBattleUnitInfo(_unitInfo);
+        }
+
+        public void SetUnitResources(BattleUnitResources _unitResources)
+        {
+            unitResources.SetBattleUnitResources(_unitResources);
+        }
+
+        public Ability GetRandomAbility()
+        {
+            Ability basicAttack = unitInfo.GetBasicAttack();
+            Ability[] abilities = unitInfo.GetAbilities();
+
+            if (!IsSilenced())
+            {
+                if (abilities.Length == 0 || abilities == null) return basicAttack;
+                int randomInt = RandomGenerator.GetRandomNumber(0, abilities.Length - 1);
+                return abilities[randomInt];
+            }
+            else
+            {
+                List<Ability> physicalAbilities = new List<Ability>();
+                physicalAbilities.Add(basicAttack);
+
+                foreach (Ability ability in abilities)
+                {
+                    if (ability.GetAbilityType() == AbilityType.Melee)
+                    {
+                        physicalAbilities.Add(ability);
+                    }
+                }
+
+                int randomInt = RandomGenerator.GetRandomNumber(0, physicalAbilities.Count - 1);
+                return physicalAbilities[randomInt];
+            }
+        }
+
+        public List<Ability> GetKnownAbilities()
+        {
+            List<Ability> useableAbilities = new List<Ability>();
+            int currentLevel = unitInfo.GetUnitLevel();
+
+            foreach (Ability ability in unitInfo.GetAbilities())
+            {
+                if (currentLevel >= ability.GetRequiredLevel())
+                {
+                    useableAbilities.Add(ability);
+                }
+            }
+
+            return useableAbilities;
+        }
+        public BattleUnitInfo GetUnitInfo()
+        {
+            return unitInfo;
+        }
+
+        public BattleUnitResources GetUnitResources()
+        {
+            return unitResources;
         }
     }
 }

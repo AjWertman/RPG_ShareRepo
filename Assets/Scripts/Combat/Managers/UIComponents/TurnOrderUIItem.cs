@@ -15,11 +15,11 @@ namespace RPGProject.Combat
         LayoutElement layoutElement = null;
 
         int index = 0;
-        BattleUnit battleUnit = null;
+        Fighter combatant = null;
         Sprite facePic = null;
         bool isPlayer = false;
 
-        public event Action<BattleUnit> onPointerEnter;
+        public event Action<Fighter> onPointerEnter;
         public event Action onPointerExit;
 
         public void InitalizeTurnOrderUIItem()
@@ -27,12 +27,12 @@ namespace RPGProject.Combat
             layoutElement = GetComponent<LayoutElement>();
         }
 
-        public void SetupTurnOrderUI(int _index, BattleUnit _battleUnit)
+        public void SetupTurnOrderUI(int _index, Fighter _combatant)
         {
             index = _index;
-            battleUnit = _battleUnit;
-            facePic = battleUnit.GetCharacterMesh().GetFaceImage();
-            isPlayer = battleUnit.GetBattleUnitInfo().IsPlayer();
+            combatant = _combatant;
+            facePic = combatant.GetCharacterMesh().GetFaceImage();
+            isPlayer = combatant.GetUnitInfo().IsPlayer();
 
             SetSize(index);
             SetImage(facePic);
@@ -42,7 +42,7 @@ namespace RPGProject.Combat
         public void ResetTurnOrderUIItem()
         {
             index = 0;
-            battleUnit = null;
+            combatant = null;
             facePic = null;
             isPlayer = false;
 
@@ -65,14 +65,14 @@ namespace RPGProject.Combat
             }
         }
 
-        public BattleUnit GetBattleUnit()
+        public Fighter GetCombatant()
         {
-            return battleUnit;
+            return combatant;
         }
 
-        public void SetImage(Sprite facePic)
+        public void SetImage(Sprite _facePic)
         {
-            faceImage.sprite = facePic;
+            faceImage.sprite = _facePic;
         }
 
         public void SetBackgroundColor(bool? _isPlayer)
@@ -107,8 +107,8 @@ namespace RPGProject.Combat
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (battleUnit == null) return;
-            onPointerEnter(battleUnit);
+            if (combatant == null) return;
+            onPointerEnter(combatant);
         }
 
         public void OnPointerExit(PointerEventData eventData)

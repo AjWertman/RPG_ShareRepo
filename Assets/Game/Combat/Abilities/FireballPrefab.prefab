@@ -151,10 +151,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5452577972267325468, guid: daa23738cfcb2484aa4edbc2a9beaadd,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5490296437756197594, guid: daa23738cfcb2484aa4edbc2a9beaadd,
         type: 3}
       propertyPath: m_Name
       value: FireballPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
+        type: 3}
+      propertyPath: launchForce
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: daa23738cfcb2484aa4edbc2a9beaadd, type: 3}

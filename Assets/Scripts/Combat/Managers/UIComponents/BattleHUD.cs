@@ -1,10 +1,11 @@
+using RPGProject.Combat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.UI
 {
     public class BattleHUD : MonoBehaviour
     {
@@ -18,9 +19,9 @@ namespace RPGProject.Combat
 
         List<TurnOrderUIItem> turnOrderUIItems = new List<TurnOrderUIItem>();
 
-        List<BattleUnit> uiTurnOrder = new List<BattleUnit>();
+        List<Fighter> uiTurnOrder = new List<Fighter>();
 
-        public event Action<BattleUnit> onTurnOrderHighlight;
+        public event Action<Fighter> onTurnOrderHighlight;
         public event Action onTurnOrderUnhighlight;
 
         private void Awake()
@@ -45,9 +46,9 @@ namespace RPGProject.Combat
             }
         }
 
-        public void UpdateTurnOrderUIItems(List<BattleUnit> _currentTurnOrder, BattleUnit _currentBattleUnitTurn)
+        public void UpdateTurnOrderUIItems(List<Fighter> _currentTurnOrder, Fighter _currentcombatantTurn)
         {
-            uiTurnOrder = GetUITurnOrder(_currentTurnOrder, _currentBattleUnitTurn);
+            uiTurnOrder = GetUITurnOrder(_currentTurnOrder, _currentcombatantTurn);
             SetupTurnOrderUIItems();
         }
 
@@ -55,25 +56,25 @@ namespace RPGProject.Combat
         {
             for (int i = 0; i < amountOfTurnOrderUIItems; i++)
             {
-                BattleUnit battleUnit = uiTurnOrder[i];
+                Fighter combatant = uiTurnOrder[i];
                 TurnOrderUIItem currentTurnOrderUIItem = turnOrderUIItems[i];
 
-                currentTurnOrderUIItem.SetupTurnOrderUI(i, battleUnit);
+                currentTurnOrderUIItem.SetupTurnOrderUI(i, combatant);
                 currentTurnOrderUIItem.gameObject.SetActive(true);
             }
         }
 
-        public void SetupUnitResourcesIndicator(BattleUnit _battleUnit)
+        public void SetupUnitResourcesIndicator(Fighter _combatant)
         {
-            unitResourcesIndicator.SetupResourceIndicator(_battleUnit);
+            unitResourcesIndicator.SetupResourceIndicator(_combatant);
 
-            bool isBattleUnitNull = (_battleUnit == null);
-            unitResourcesIndicator.gameObject.SetActive(!isBattleUnitNull);
+            bool isCombatantNull = (_combatant == null);
+            unitResourcesIndicator.gameObject.SetActive(!isCombatantNull);
         }
 
-        private void OnTurnOrderHighlight(BattleUnit _battleUnit)
+        private void OnTurnOrderHighlight(Fighter _combatant)
         {
-            onTurnOrderHighlight(_battleUnit);
+            onTurnOrderHighlight(_combatant);
         }
 
         private void OnTurnOrderUnhighlight()
@@ -89,17 +90,17 @@ namespace RPGProject.Combat
             }
         }
 
-        public List<BattleUnit> GetUITurnOrder(List<BattleUnit> _currentTurnOrder, BattleUnit _currentBattleUnitTurn)
+        public List<Fighter> GetUITurnOrder(List<Fighter> _currentTurnOrder, Fighter _currentCombatantTurn)
         {
-            List<BattleUnit> updatedUITurnOrder = new List<BattleUnit>();
+            List<Fighter> updatedUITurnOrder = new List<Fighter>();
 
             int turnOrderCount = _currentTurnOrder.Count;
-            int currentTurnIndex = _currentTurnOrder.IndexOf(_currentBattleUnitTurn);
+            int currentTurnIndex = _currentTurnOrder.IndexOf(_currentCombatantTurn);
             int index = currentTurnIndex;
 
             for (int i = 0; i < amountOfTurnOrderUIItems; i++)
             {
-                BattleUnit unitTurn = _currentTurnOrder[index];
+                Fighter unitTurn = _currentTurnOrder[index];
                 updatedUITurnOrder.Add(unitTurn);
 
                 index = UpdateIndex(index, turnOrderCount);

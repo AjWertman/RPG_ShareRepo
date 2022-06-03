@@ -3,28 +3,28 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Combat
+namespace RPGProject.Control
 {
     public enum UnitTurnState { Null, Player, Enemy }
 
     public class TurnManager : MonoBehaviour
     {
-        List<BattleUnit> battleUnits = new List<BattleUnit>();
-        List<BattleUnit> playerUnits = new List<BattleUnit>();
-        List<BattleUnit> enemyUnits = new List<BattleUnit>();
+        List<UnitController> battleUnits = new List<UnitController>();
+        List<UnitController> playerUnits = new List<UnitController>();
+        List<UnitController> enemyUnits = new List<UnitController>();
 
-        List<BattleUnit> turnOrder = new List<BattleUnit>();
+        List<UnitController> turnOrder = new List<UnitController>();
 
-        BattleUnit currentBattleUnitTurn = null;
+        UnitController currentBattleUnitTurn = null;
 
         UnitTurnState unitTurnState = UnitTurnState.Null;
         UnitTurnState firstUnitTurnState = UnitTurnState.Null;
 
-        public event Action<BattleUnit> onTurnChange;
+        public event Action<UnitController> onTurnChange;
 
         int turn = 0;
 
-        public void SetUpTurns(List<BattleUnit> _activeUnits, List<BattleUnit> _playerUnits, List<BattleUnit> _enemyUnits)
+        public void SetUpTurns(List<UnitController> _activeUnits, List<UnitController> _playerUnits, List<UnitController> _enemyUnits)
         {
             battleUnits = _activeUnits;
             playerUnits = _playerUnits;
@@ -39,7 +39,7 @@ namespace RPGProject.Combat
 
         public void SetTurnOrder()
         {
-            foreach (BattleUnit unitToSet in battleUnits)
+            foreach (UnitController unitToSet in battleUnits)
             {
                 turnOrder.Add(unitToSet);
             }
@@ -48,7 +48,7 @@ namespace RPGProject.Combat
             turnOrder.Sort((a, b) => b.GetStat(speed).CompareTo(a.GetStat(speed)));
         }
 
-        public void UpdateTurnOrder(BattleUnit _battleUnit)
+        public void UpdateTurnOrder(UnitController _battleUnit)
         {
             bool newUnitDeathStatus = _battleUnit.GetHealth().IsDead();
 
@@ -101,7 +101,7 @@ namespace RPGProject.Combat
             AdvanceTurn();
         }
 
-        public void AddUnitToTurnOrder(BattleUnit _battleUnit)
+        public void AddUnitToTurnOrder(UnitController _battleUnit)
         {
             if (turnOrder.Contains(_battleUnit)) return;
             
@@ -114,7 +114,7 @@ namespace RPGProject.Combat
             ////than the next unit, move them closer to first. Increase x% each turn. 20%, 30%, 40%....
         }
 
-        public void RemoveUnitFromTurnOrder(BattleUnit _battleUnit)
+        public void RemoveUnitFromTurnOrder(UnitController _battleUnit)
         {
             if (!turnOrder.Contains(_battleUnit)) return;
 
@@ -139,7 +139,7 @@ namespace RPGProject.Combat
             firstUnitTurnState = UnitTurnState.Null;
         }
 
-        public BattleUnit GetBattleUnitTurn()
+        public UnitController GetBattleUnitTurn()
         {
             int turnIndex = GetTurnIndex(currentBattleUnitTurn);
             if (turnIndex <= turnOrder.Count - 1)
@@ -152,7 +152,7 @@ namespace RPGProject.Combat
             }
         }
 
-        public BattleUnit GetNextBattleUnitTurn()
+        public UnitController GetNextBattleUnitTurn()
         {
             int nextTurnIndex = GetTurnIndex(currentBattleUnitTurn) + 1;
             if (nextTurnIndex <= turnOrder.Count - 1)
@@ -165,7 +165,7 @@ namespace RPGProject.Combat
             }
         }
 
-        public BattleUnit GetFirstMoveUnit()
+        public UnitController GetFirstMoveUnit()
         {
             return turnOrder[0];
         }
@@ -186,17 +186,17 @@ namespace RPGProject.Combat
             else return UnitTurnState.Enemy;
         }
 
-        public List<BattleUnit> GetTurnOrder()
+        public List<UnitController> GetTurnOrder()
         {
             return turnOrder;
         }
 
-        public BattleUnit GetCurrentBattleUnitTurn()
+        public UnitController GetCurrentBattleUnitTurn()
         {
             return currentBattleUnitTurn;
         }
 
-        private int GetTurnIndex(BattleUnit _battleUnit)
+        private int GetTurnIndex(UnitController _battleUnit)
         {
             return turnOrder.IndexOf(_battleUnit);
         }
