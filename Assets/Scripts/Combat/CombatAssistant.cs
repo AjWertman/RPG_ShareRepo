@@ -72,19 +72,19 @@ namespace RPGProject.Combat
         public static bool CriticalHitCheck(float _critChance)
         {
             float randomFloat = RandomGenerator.GetRandomNumber(0, 99);
+            bool isCriticalHit = _critChance > randomFloat;
 
-            if (_critChance > randomFloat) return true;
-            else return true;
+            return isCriticalHit;
         }
 
         public static float GetCalculatedAmount(float _baseAmount, bool _isCritical)
         {
-            float calculatedAmount = 0;
+            float calculatedAmount = _baseAmount;
 
             if (_isCritical)
             {
                 float criticalModifier = _baseAmount / 2;
-                calculatedAmount = _baseAmount + criticalModifier;
+                calculatedAmount += criticalModifier;
             }
 
             return calculatedAmount;

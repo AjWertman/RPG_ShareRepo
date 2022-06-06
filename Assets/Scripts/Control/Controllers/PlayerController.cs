@@ -7,6 +7,8 @@ namespace RPGProject.Control
 {
     public class PlayerController : MonoBehaviour, IOverworld
     {
+        [SerializeField] PlayerKey[] playerTeam = null;
+
         [SerializeField] GameObject playerMesh = null;
         [SerializeField] GameObject camLookObject = null;
 
@@ -17,7 +19,7 @@ namespace RPGProject.Control
         FollowCamera followCamera = null;
         PlayerConversant playerConversant = null;
         PlayerMover playerMover = null;
-        PlayerTeam playerTeam = null;
+        PlayerTeam playerTeamManager = null;
         UICanvas uiCanvas = null;
 
         BattleZoneTrigger contestedBattleZoneTrigger = null;
@@ -31,7 +33,7 @@ namespace RPGProject.Control
             animator = GetComponent<Animator>();
 
             playerConversant = GetComponent<PlayerConversant>();
-            playerTeam = FindObjectOfType<PlayerTeam>();
+
             playerMover = GetComponent<PlayerMover>();
         }
 
@@ -39,6 +41,9 @@ namespace RPGProject.Control
         {
             followCamera = FindObjectOfType<FollowCamera>();
             uiCanvas = FindObjectOfType<UICanvas>();
+
+            playerTeamManager = FindObjectOfType<PlayerTeam>();
+            playerTeamManager.PopulateTeamInfos(playerTeam);
 
             //Cursor.SetCursor(cursorTexture, new Vector2(0, 0), CursorMode.ForceSoftware);
         }
@@ -258,5 +263,15 @@ namespace RPGProject.Control
         {
             return camLookObject.transform;
         }
+
+        public void EquipWeapon(bool _isSword)
+        {
+            EquipmentManager equipmentManager = FindObjectOfType<EquipmentManager>();
+
+            print(equipmentManager == null);
+            equipmentManager.EquipWeapon(_isSword);
+            //Equip abilities
+        }
+
     }
 }

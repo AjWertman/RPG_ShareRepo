@@ -32,18 +32,13 @@ namespace RPGProject.Control
 
         public bool HandleRaycast(PlayerController _playerController)
         {
-            if (dialogue == null)
-            {
-                print("dialogue null");
-                return false;
-            }
+            if (dialogue == null) return false;
 
             float distanceToTarget = Vector3.Distance(_playerController.transform.position, transform.position);
             if (distanceToTarget <= conversationMinDistance)
             {
                 return true;
             }
-            print("not in distance");
             return false;
         }
 

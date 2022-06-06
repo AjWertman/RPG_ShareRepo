@@ -14,7 +14,7 @@ namespace RPGProject.UI
         [SerializeField] TextMeshProUGUI levelText = null;
         [SerializeField] StatPageUI[] statPageUIs = null;
 
-        public void SetupStatPageUI(PlayableCharacter _character, int _level, Stats _stats, BattleUnitResources _battleUnitResources)
+        public void SetupStatPageUI(PlayableCharacter _character, int _level, Stats _stats, UnitResources _unitResources)
         {
             nameText.text = _character.GetPlayerKey().ToString();
             levelText.text = ("Lv: " + _level.ToString());
@@ -23,12 +23,12 @@ namespace RPGProject.UI
             {
                 if (statPageUI.GetStatType() == StatType.Stamina)
                 {
-                    UpdateCharacterPageHealthUI(_battleUnitResources);
+                    UpdateCharacterPageHealthUI(_unitResources);
 
                 }
                 else if (statPageUI.GetStatType() == StatType.Spirit)
                 {
-                   UpdateCharacterPageManaUI(_battleUnitResources);
+                   UpdateCharacterPageManaUI(_unitResources);
                 }
                 else
                 {
@@ -43,28 +43,28 @@ namespace RPGProject.UI
             }
         }
 
-        public void UpdateCharacterPageHealthUI(BattleUnitResources _battleUnitResources)
+        public void UpdateCharacterPageHealthUI(UnitResources _unitResources)
         {
             StatPageUI statPageUI = GetHealthUI();
 
-            BattleUnitResources battleUnitResources = _battleUnitResources;
+            UnitResources unitResources = _unitResources;
 
-            float health = battleUnitResources.GetHealthPoints();
-            float maxHealth = battleUnitResources.GetMaxHealthPoints();
+            float health = unitResources.GetHealthPoints();
+            float maxHealth = unitResources.GetMaxHealthPoints();
 
             float sliderAmount = health / maxHealth;
             statPageUI.GetSlider().value = sliderAmount;
             statPageUI.GetAmountText().text = health.ToString() + "/" + maxHealth.ToString();
         }
 
-        public void UpdateCharacterPageManaUI(BattleUnitResources _battleUnitResources)
+        public void UpdateCharacterPageManaUI(UnitResources _unitResources)
         {
             StatPageUI statPageUI = GetManaUI();
 
-            BattleUnitResources battleUnitResources = _battleUnitResources;
+            UnitResources unitResources = _unitResources;
 
-            float mana = battleUnitResources.GetManaPoints();
-            float maxMana = battleUnitResources.GetMaxManaPoints();
+            float mana = unitResources.GetManaPoints();
+            float maxMana = unitResources.GetMaxManaPoints();
 
             float sliderAmount = mana / maxMana;
             statPageUI.GetSlider().value = sliderAmount;

@@ -2,18 +2,19 @@ namespace RPGProject.Core
 {
     public enum CharacterKey
     {
+        None = 0,
+
         //Player Characters
-        Aj,
-        Teammate0,
-        Teammate1,
-        Teammate2,
+        Player = 1,
+        Rogue = 2,
+        Druid = 3,
+        ShieldMaiden = 4,
 
         //Unqiue Enemies
-        Boss,
+        Dhurmumir_WorldBreaker = 5,
+        Juggernaut = 6,
 
         //Generic Enemies
-        Knight0,
-        Knight1,
-        Pigmen
+        Erradication_Drone = 7
     }
 }

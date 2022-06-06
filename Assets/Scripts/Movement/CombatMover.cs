@@ -6,8 +6,6 @@ namespace RPGProject.Movement
     public class CombatMover : AIMover
     {
         [SerializeField] Transform retreatTransform = null;
-        [SerializeField] bool isMover = true;
-        [SerializeField] bool isBattleUnit = false;
 
         Vector3 startPosition = Vector3.zero;
         Quaternion startRotation = Quaternion.identity;

@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allAbilities:
   - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}
+  amountOfAbilityObjects: 4
 --- !u!1001 &6394786980111018847
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -166,7 +167,7 @@ PrefabInstance:
     - target: {fileID: 7258872099348809398, guid: 6c4ad25f65060464c90a94152e3dc0cb,
         type: 3}
       propertyPath: m_Name
-      value: BattleUnitPool
+      value: UnitPool
       objectReference: {fileID: 0}
     - target: {fileID: 7258872099348809399, guid: 6c4ad25f65060464c90a94152e3dc0cb,
         type: 3}

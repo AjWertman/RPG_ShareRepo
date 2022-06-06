@@ -7,7 +7,7 @@ namespace RPGProject.Core
     public class PlayableCharacter : ScriptableObject
     {
         [Header("Character Design")]
-        [SerializeField] PlayerKey playerKey = PlayerKey.Aj;
+        [SerializeField] PlayerKey playerKey = PlayerKey.None;
         [SerializeField] int age = 0;
         [TextArea(10, 10)] [SerializeField] string summaryText = "";
         

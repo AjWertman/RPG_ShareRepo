@@ -13,12 +13,12 @@ namespace RPGProject.Combat
         Health health = null;
         Mana mana = null;
 
-        BattleUnitInfo unitInfo = new BattleUnitInfo();
-        BattleUnitResources unitResources = new BattleUnitResources();
+        UnitInfo unitInfo = new UnitInfo();
+        UnitResources unitResources = new UnitResources();
 
         Ability selectedAbility = null;
         Fighter selectedTarget = null;
-        //List<BattleUnit> allTargets = new List<BattleUnit>();
+        //List<Fighter> allTargets = new List<Fighter>();
 
         AbilityObjectPool abilityObjectPool = null;
 
@@ -127,8 +127,8 @@ namespace RPGProject.Combat
             hasSubstitute = false;
 
             isPlayerFighter = false;
-            unitInfo = new BattleUnitInfo();
-            unitResources = new BattleUnitResources();
+            unitInfo = new UnitInfo();
+            unitResources = new UnitResources();
 
 
             SetCharacterMesh(null);
@@ -161,11 +161,17 @@ namespace RPGProject.Combat
             currentAbilityStatuses.Remove(_abilityBehavior);
         }
 
-        //Animation Event
+        //Animation Events
         void Hit()
         {
             PerformAbility();
         }
+
+        void Shoot()
+        {
+            PerformAbility();
+        }
+        //////////
 
         public bool IsInRange(AbilityType _abilityType, Fighter _target)
         {
@@ -244,9 +250,9 @@ namespace RPGProject.Combat
             return hasSubstitute;
         }
 
-        //public void SetAllTargets(List<BattleUnit> _targets)
+        //public void SetAllTargets(List<Fighter> _targets)
         //{
-        //    foreach (BattleUnit target in _targets)
+        //    foreach (Fighter fighter in _targets)
         //    {
         //        allTargets.Add(target);
         //    }
@@ -275,12 +281,12 @@ namespace RPGProject.Combat
             return newChangeAmount;
         }
 
-        public void SetUnitInfo(BattleUnitInfo _unitInfo)
+        public void SetUnitInfo(UnitInfo _unitInfo)
         {
             unitInfo = _unitInfo;
         }
 
-        public void SetUnitResources(BattleUnitResources _unitResources)
+        public void SetUnitResources(UnitResources _unitResources)
         {
             unitResources= _unitResources;
         }
@@ -329,12 +335,12 @@ namespace RPGProject.Combat
 
             return useableAbilities;
         }
-        public BattleUnitInfo GetUnitInfo()
+        public UnitInfo GetUnitInfo()
         {
             return unitInfo;
         }
 
-        public BattleUnitResources GetUnitResources()
+        public UnitResources GetUnitResources()
         {
             return unitResources;
         }

@@ -1,13 +1,18 @@
 using RPGProject.Core;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace RPGProject.Combat
 {
     public class CharacterMesh : MonoBehaviour
     {
-        [SerializeField] CharacterKey characterKey = CharacterKey.Aj;
+        [SerializeField] CharacterKey characterKey = CharacterKey.None;
 
         [SerializeField] Sprite faceImage = null;
+
+        //Refactor?
+        [SerializeField] AnimatorOverrideController controller = null;
+        [SerializeField] Avatar avatar = null;
 
         [SerializeField] Transform aimTransform = null;
         [SerializeField] Transform rHandTransform = null;
@@ -23,6 +28,16 @@ namespace RPGProject.Combat
         public Sprite GetFaceImage()
         {
             return faceImage;
+        }
+
+        public AnimatorOverrideController GetAnimatorController()
+        {
+            return controller;
+        }
+
+        public Avatar GetAvatar()
+        {
+            return avatar;
         }
 
         public Transform GetAimTransform()

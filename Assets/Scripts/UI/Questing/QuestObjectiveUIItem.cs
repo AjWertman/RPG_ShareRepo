@@ -6,6 +6,9 @@ namespace RPGProject.UI
 {
     public class QuestObjectiveUIItem : MonoBehaviour
     {
+        [SerializeField] GameObject nonCompletedImage = null;
+        [SerializeField] GameObject completedImage = null;
+
         [SerializeField] TextMeshProUGUI descriptionText = null;
         [SerializeField] TextMeshProUGUI progressText = null;
 
@@ -17,6 +20,9 @@ namespace RPGProject.UI
             amountCompleted = _status.GetInProgressObjectives()[_objective.GetReference()];
             amountToComplete = _objective.GetAmountToComplete();
 
+            bool isCompleted = amountCompleted >= amountToComplete;
+            SetUIImage(isCompleted);
+
             string progressString = amountCompleted.ToString() + "/" + amountToComplete.ToString();
 
             descriptionText.text = _objective.GetDescription();
@@ -27,6 +33,20 @@ namespace RPGProject.UI
         {
             descriptionText.text = "";
             progressText.text = "";
+        }
+
+        private void SetUIImage(bool _isCompleted)
+        {
+            DeactivateImages();
+
+            if (_isCompleted) completedImage.SetActive(true);
+            else nonCompletedImage.SetActive(true);
+        }
+
+        private void DeactivateImages()
+        {
+            nonCompletedImage.SetActive(false);
+            completedImage.SetActive(false);
         }
     }
 }

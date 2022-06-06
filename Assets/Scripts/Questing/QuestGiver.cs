@@ -7,23 +7,28 @@ namespace RPGProject.Questing
         [SerializeField] GameObject exclamationPointObject = null;
         [SerializeField] Quest questToGive = null;
 
+        PlayerQuestList playerQuestList = null;
+
         private void Awake()
         {
-            if (HasQuest())
-            {
-                exclamationPointObject.SetActive(true);
-            }
+            playerQuestList = FindObjectOfType<PlayerQuestList>();
+            HasQuest();
         }
 
-        public void GiveQuest(PlayerQuestList _playerQuestList)
+        public void GiveQuest()
         {
-            _playerQuestList.AddQuest(questToGive);
-            exclamationPointObject.SetActive(false);
+            playerQuestList.AddQuest(questToGive);
+            questToGive = null;
+
+            HasQuest();
         }
 
         public bool HasQuest()
         {
-            return (questToGive != null);
+            bool hasQuest = questToGive != null;
+            exclamationPointObject.SetActive(hasQuest);
+
+            return hasQuest;
         }
     }
 }

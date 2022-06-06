@@ -4,17 +4,37 @@ namespace RPGProject.Questing
 {
     public class QuestCompletion : MonoBehaviour
     {
+        [SerializeField] GameObject quest_ionMark = null;
         [SerializeField] Quest quest = null;
         [SerializeField] string objectiveRefToComplete = null;
 
-        public void CompleteObjective(PlayerQuestList _playerQuestList)
-        {          
-            QuestStatus status = _playerQuestList.GetQuestStatus(quest);
+        PlayerQuestList playerQuestList = null;
+        QuestStatus status = null;
 
+        private void Awake()
+        {
+            playerQuestList = FindObjectOfType<PlayerQuestList>();
+
+            status = playerQuestList.GetQuestStatus(quest);
+
+            IsQuestComplete();
+        }
+
+        public void CompleteObjective()
+        {          
             if (quest.HasObjective(objectiveRefToComplete))
             {
-                _playerQuestList.CompleteObjective(quest, objectiveRefToComplete);
+                playerQuestList.CompleteObjective(quest, objectiveRefToComplete);
             }
+        }
+
+        private bool IsQuestComplete()
+        {
+            bool isQuestComplete = status.IsComplete();
+
+            quest_ionMark.SetActive(isQuestComplete);
+
+            return isQuestComplete;
         }
     }
 }

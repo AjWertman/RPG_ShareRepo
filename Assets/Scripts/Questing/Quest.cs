@@ -72,7 +72,7 @@ namespace RPGProject.Questing
         {
             foreach (Quest quest in Resources.LoadAll<Quest>(""))
             {
-                if (quest.name == _questName)
+                if (quest.GetTitle() == _questName)
                 {
                     return quest;
                 }

@@ -31,7 +31,6 @@ namespace RPGProject.Control
             characterMenu.onBackToCharacterSelect += BackToCharacterSelectMenu;
 
             playerTeam = FindObjectOfType<PlayerTeam>();
-            characterSelectMenu.SetupCharacterSelectMenu(playerTeam.GetPlayableCharacters());
 
             DeactivateAllMenus();
         }
@@ -84,6 +83,7 @@ namespace RPGProject.Control
 
         private void OpenCharacterSelectMenu()
         {
+            characterSelectMenu.SetupCharacterSelectMenu(playerTeam.GetPlayableCharacters());
             characterSelectMenu.gameObject.SetActive(true);
         }
 
@@ -113,7 +113,7 @@ namespace RPGProject.Control
 
         private void OpenQuestsMenu()
         {
-            questMenu.ActivateQuestsPage();
+            questMenu.ActivateQuestsPage(false);
             questMenu.gameObject.SetActive(true);
         }
 

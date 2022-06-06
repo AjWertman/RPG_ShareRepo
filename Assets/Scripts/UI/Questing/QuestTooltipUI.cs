@@ -21,7 +21,7 @@ namespace RPGProject.UI
         [SerializeField] Transform rewardContainer = null;
         [SerializeField] GameObject rewardPrefab = null;
 
-        Dictionary<QuestObjectiveUIItem, bool> objectiveObjects = new Dictionary<QuestObjectiveUIItem, bool>();
+        List<QuestObjectiveUIItem> objectiveObjects = new List<QuestObjectiveUIItem>();
 
         private void Awake()
         {
@@ -45,13 +45,16 @@ namespace RPGProject.UI
             DeactivateObjectiveObjects();
 
             Quest quest = _status.GetQuest();
+
             foreach (Objective objective in quest.GetObjectives())
-            {
-                QuestObjectiveUIItem questObjectiveUIItem = null;
+            { 
+                QuestObjectiveUIItem questObjectiveUIItem = GetAvailableObjectiveInstance();
+                bool isCompleted = false;
 
                 if (objective.GetRequiredObjectives().Length <= 0)
                 {
-                    questObjectiveUIItem = GetAvailableObjectiveInstance(true);
+                    isCompleted = true;
+                    questObjectiveUIItem = GetAvailableObjectiveInstance();
                 }
                 else
                 {
@@ -69,26 +72,21 @@ namespace RPGProject.UI
 
                     if (hasAllRequiredObjectives)
                     {
-                        questObjectiveUIItem = GetAvailableObjectiveInstance(false);
+                        isCompleted = false;                        
                     }
                 }
 
                 questObjectiveUIItem.SetupObjectiveUIITem(_status, objective);
+                questObjectiveUIItem.gameObject.SetActive(true);
             }
         }
 
         private void CreateObjectiveObjects()
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 QuestObjectiveUIItem objective = InstantiateObjectiveUIItem(objectivePrefab);
-                objectiveObjects.Add(objective, false);
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                QuestObjectiveUIItem objective = InstantiateObjectiveUIItem(objectivePrefab);
-                objectiveObjects.Add(objective, true);
+                objectiveObjects.Add(objective);
             }
 
             DeactivateObjectiveObjects();
@@ -105,7 +103,7 @@ namespace RPGProject.UI
 
         private void DeactivateObjectiveObjects()
         {
-            foreach (QuestObjectiveUIItem objective in objectiveObjects.Keys)
+            foreach (QuestObjectiveUIItem objective in objectiveObjects)
             {
                 objective.gameObject.SetActive(false);
             }
@@ -117,14 +115,13 @@ namespace RPGProject.UI
             noQuestSelectedObject.SetActive(true);
         }
 
-        private QuestObjectiveUIItem GetAvailableObjectiveInstance(bool _completedObjectiveObject)
+        private QuestObjectiveUIItem GetAvailableObjectiveInstance()
         {
             QuestObjectiveUIItem availableObjectiveInstance = null;
 
-            foreach (QuestObjectiveUIItem objectiveObject in objectiveObjects.Keys)
+            foreach (QuestObjectiveUIItem objectiveObject in objectiveObjects)
             {
-                if (objectiveObject.gameObject.activeSelf) continue;
-                if(objectiveObjects[objectiveObject] == _completedObjectiveObject)
+                if(objectiveObject.gameObject.activeSelf == false)
                 {
                     availableObjectiveInstance = objectiveObject;
                     break;

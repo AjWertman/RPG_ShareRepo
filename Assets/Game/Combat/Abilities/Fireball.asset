@@ -16,7 +16,7 @@ MonoBehaviour:
   requiredLevel: 0
   animatorTrigger: Cast0
   abilityLifetime: 1
-  baseAbilityAmount: 40
+  baseAbilityAmount: 120
   manaCost: 10
   description: Fireball
   shouldExpand: 0

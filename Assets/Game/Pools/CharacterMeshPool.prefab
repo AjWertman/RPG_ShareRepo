@@ -45,14 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMeshPrefabs:
-  - {fileID: 5590127811670098502, guid: 8b97d201349f86b4e8cf2680d7bcd4e4, type: 3}
-  - {fileID: 5590127811670098502, guid: 964c035e10962e2458d86cb4d7fdd855, type: 3}
-  - {fileID: 5590127811670098502, guid: 06aa6dae26a182c4ab6334a77b98aa4b, type: 3}
-  - {fileID: 5590127811670098502, guid: 9d1994c931259064a8fa50df075644eb, type: 3}
+  - {fileID: 5167164173009306999, guid: 124aede704385fb43b5284bb94b4b125, type: 3}
+  - {fileID: 5167164173009306999, guid: 90959c97072835044a2d53ab1fb9fcb8, type: 3}
+  - {fileID: 5167164173009306999, guid: 52b81c0c2e91e434f8afe16274f2ebf5, type: 3}
+  - {fileID: 5167164173009306999, guid: 0895cdda01a364a418a9af72547060fc, type: 3}
   amountOfGenericsToCreate: 4
   genericEnemyMeshPrefabs:
-  - {fileID: 5590127811670098502, guid: d732114ca32e9eb41aadddc2f1b5eb96, type: 3}
-  - {fileID: 5590127811670098502, guid: 2990b201edeed904bbe00622887b89b5, type: 3}
-  - {fileID: 2989104262753727868, guid: ce85de64a4f1e144b83ee6c609d0db88, type: 3}
+  - {fileID: 5167164173009306999, guid: 6eb504483b5a20b4cb5e1586cebc7f62, type: 3}
   uniqueEnemyMeshPrefabs:
-  - {fileID: 5590127811670098502, guid: bbe1004002e4e704d88ab33d8a34fe56, type: 3}
+  - {fileID: 5167164173009306999, guid: b18d2f84616004d4683011816d514d38, type: 3}
+  - {fileID: 5167164173009306999, guid: f6fa140bc9a30f14c9b30ba2a84b61c4, type: 3}

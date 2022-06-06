@@ -11,17 +11,10 @@ namespace RPGProject.Questing
         List<QuestStatus> questStatuses = new List<QuestStatus>();
         List<QuestStatus> completedQuestStatuses = new List<QuestStatus>();
 
-        //PlayerTeam playerTeam = null;
-
         public event Action onListUpdate;
         public event Action onQuestComplete;
 
         public event Action<float> onAward;
-
-        private void Awake()
-        {
-            //playerTeam = FindObjectOfType<PlayerTeam>();
-        }
 
         public void AddQuest(Quest _quest)
         {

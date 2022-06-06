@@ -20,7 +20,7 @@ namespace RPGProject.GameResources
         float armor = 10f;
         float resistance = 10f;
 
-        public event Action onHealthChange;
+        public event Action<bool, float> onHealthChange;
         public event Action<Health> onDeath;
 
         private void Awake()
@@ -82,6 +82,8 @@ namespace RPGProject.GameResources
 
             SetCurrentHealthPercentage();
 
+            onHealthChange(_isCritical, -calculatedDamage);
+
             if (DeathCheck())
             {
                 Die();
@@ -98,24 +100,9 @@ namespace RPGProject.GameResources
             healthPoints = Mathf.Clamp(healthPoints, 0, maxHealthPoints);
 
             SetCurrentHealthPercentage();
+
+            onHealthChange(_isCritical, _restoreAmount);
         }
-
-        //Refactor - move elsewhere - UnitControllerUI?
-        //public void UIHealthChangeStuff()
-        //{
-               // Text above head that displays changeamount/critical
-
-        //    uiHealthChange.ActivateCriticalCanvas(_isCritical, true);
-        //    uiHealthChange.ActivateAmountCanvas(true, true, calculatedDamage);
-        //    uiHealthChange.ActivateCriticalCanvas(false, true);
-        //    uiHealthChange.ActivateAmountCanvas(false, true, 0);
-
-        //    uiHealthChange.ActivateCriticalCanvas(_isCritical, false);
-        //    uiHealthChange.ActivateAmountCanvas(true, false, _restoreAmount);
-
-        //    uiHealthChange.ActivateCriticalCanvas(false, false);
-        //    uiHealthChange.ActivateAmountCanvas(false, false, 0);
-        //}
 
         private float CalculateDamage(float _damageAmount, bool _isPhysicalAttack)
         {
@@ -188,7 +175,7 @@ namespace RPGProject.GameResources
 
             if (myQuestCompletion != null)
             {
-                myQuestCompletion.CompleteObjective(playerQuestList);
+                myQuestCompletion.CompleteObjective();
             }
         }
 

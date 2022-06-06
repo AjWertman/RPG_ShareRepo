@@ -33,7 +33,7 @@ namespace RPGProject.UI
             DeactivateAllPages();
         }
 
-        public void SetupCharacterMenu(PlayableCharacter _character, Unit _unit, int _level ,BattleUnitResources _unitResources)
+        public void SetupCharacterMenu(PlayableCharacter _character, Unit _unit, int _level ,UnitResources _unitResources)
         {
             characterPage.SetupCharacterPage(_character, _level);
             abilityPage.SetupAbilityPage(_unit.GetAbilities());

@@ -1,5 +1,4 @@
 ﻿using RPGProject.Questing;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,15 +11,13 @@ namespace RPGProject.UI
         [SerializeField] Button completedTab = null;
         [SerializeField] GameObject questItemPrefab = null;
 
-        [Header("Quests")]
-        [SerializeField] GameObject questsPage = null;
         [SerializeField] Transform questListContent = null;
         [SerializeField] QuestTooltipUI questTooltipUI = null;
 
-        [Header("Completed")]
-        [SerializeField] GameObject completedQuestsPage = null;
-        [SerializeField] Transform completedListContent = null;
-        [SerializeField] QuestTooltipUI completedTooltipUI = null;
+        //[Header("Completed")]
+        //[SerializeField] GameObject completedQuestsPage = null;
+        //[SerializeField] Transform completedListContent = null;
+        //[SerializeField] QuestTooltipUI completedTooltipUI = null;
 
         PlayerQuestList questList = null;
 
@@ -28,8 +25,8 @@ namespace RPGProject.UI
 
         private void Start()
         {
-            questsTab.onClick.AddListener(() => ActivateQuestsPage());
-            completedTab.onClick.AddListener(() => ActivateCompletedPage());
+            questsTab.onClick.AddListener(() => ActivateQuestsPage(false));
+            completedTab.onClick.AddListener(() => ActivateQuestsPage(true));
 
             questList = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerQuestList>();
             CreateQuestItemUIPool(questList.GetQuestStatuses().Count);
@@ -37,14 +34,14 @@ namespace RPGProject.UI
             questList.onListUpdate += Redraw;
             questList.onQuestComplete += Redraw;
 
-            DeactivateTooltips();
+            DeactivateTooltip();
             Redraw();
         }
 
         public void OnDisable()
         {
             ResetQuestItemUIs();
-            DeactivateTooltips();
+            DeactivateTooltip();
         }
 
         private void CreateQuestItemUIPool(int _questListCount)
@@ -57,7 +54,7 @@ namespace RPGProject.UI
                 QuestItemUI questItemUI = questUIInstance.GetComponent<QuestItemUI>();
 
                 questItemUI.onMouseEnter += SetupTooltip;
-                questItemUI.onMouseExit += DeactivateTooltips;
+                questItemUI.onMouseExit += DeactivateTooltip;
 
                 questItemUIs.Add(questItemUI);
             }
@@ -65,19 +62,20 @@ namespace RPGProject.UI
             ResetQuestItemUIs();
         }
 
-        public void ActivateQuestsPage()
+        public void ActivateQuestsPage(bool _completedPage)
         {
-            SetSelectedTabColor(questsTab);
-            completedQuestsPage.SetActive(false);
-            questsPage.SetActive(true);
+            if (_completedPage) SetSelectedTabColor(questsTab);
+            else SetSelectedTabColor(completedTab);
+
+            //PopulateQuestPage(_completedPage);
         }
 
-        private void ActivateCompletedPage()
-        {
-            SetSelectedTabColor(completedTab);
-            questsPage.SetActive(false);
-            completedQuestsPage.SetActive(true);
-        }
+        //private void ActivateCompletedPage()
+        //{
+        //    SetSelectedTabColor(completedTab);
+        //    questsPage.SetActive(false);
+        //    completedQuestsPage.SetActive(true);
+        //}
 
         private void Redraw()
         {
@@ -87,19 +85,8 @@ namespace RPGProject.UI
             {
                 QuestItemUI questUIInstance = GetAvailableQuestItemUI();
                 questUIInstance.SetupQuestItemUI(status);
-
-                Transform newParent = null;
-
-                if (!status.IsComplete())
-                {
-                    newParent = questListContent;
-                }
-                else
-                {
-                    newParent = completedListContent;
-                }
-
-                questUIInstance.transform.parent = newParent;
+               
+                questUIInstance.transform.parent = questListContent;
                 questUIInstance.gameObject.SetActive(true);
             }
         }
@@ -112,13 +99,13 @@ namespace RPGProject.UI
         private void SetupTooltip(QuestStatus _status)
         {
             questTooltipUI.SetupTooltip(_status);
-            completedTooltipUI.SetupTooltip(_status);
+            //completedTooltipUI.SetupTooltip(_status);
         }
 
-        private void DeactivateTooltips()
+        private void DeactivateTooltip()
         {
             questTooltipUI.DeactivateTooltip();
-            completedTooltipUI.DeactivateTooltip();
+            //completedTooltipUI.DeactivateTooltip();
         }
 
         private void ResetQuestItemUIs()
@@ -126,7 +113,6 @@ namespace RPGProject.UI
             foreach (QuestItemUI questItemUI in questItemUIs)
             {
                 questItemUI.ResetQuestItemUI();
-                questItemUI.transform.parent = transform;
                 questItemUI.gameObject.SetActive(false);
             }
         }

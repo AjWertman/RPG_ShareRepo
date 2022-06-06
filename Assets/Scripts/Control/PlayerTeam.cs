@@ -11,7 +11,6 @@ namespace RPGProject.Control
     //Refactor rename PlayerTeamManager
     public class PlayerTeam : MonoBehaviour, ISaveable
     {
-        [SerializeField] PlayerKey[] startingPlayerKeys = null;
         [SerializeField] List<TeamInfo> teamInfos = new List<TeamInfo>();
 
         PlayableCharacterDatabase playableCharacterDatabase = null;
@@ -30,11 +29,9 @@ namespace RPGProject.Control
             unitDatabase.PopulateDatabase();
 
             progressionHandler = GetComponentInChildren<ProgressionHandler>();
-            
-            PopulateTeamInfos(startingPlayerKeys);
         }
 
-        private void PopulateTeamInfos(PlayerKey[] _playerKeys)
+        public void PopulateTeamInfos(PlayerKey[] _playerKeys)
         {
             teamInfos.Clear();
             foreach (PlayerKey playerKey in _playerKeys)
@@ -53,10 +50,10 @@ namespace RPGProject.Control
                 float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.GetStats().GetStat(StatType.Stamina));
                 float maxManaPoints = CalculateMaxMana(teamInfo.GetStats().GetStat(StatType.Spirit));
 
-                BattleUnitResources battleUnitResources = new BattleUnitResources();
-                battleUnitResources.SetBattleUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxManaPoints);
+                UnitResources unitResources = new UnitResources();
+                unitResources.SetUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxManaPoints);
 
-                teamInfo.SetUnitResources(battleUnitResources);
+                teamInfo.SetUnitResources(unitResources);
 
                 teamInfos.Add(teamInfo);
 
@@ -64,13 +61,13 @@ namespace RPGProject.Control
             }
         }
 
-        public void UpdateTeamInfo(PlayerKey _playerKey, BattleUnitResources _unitResources)
+        public void UpdateTeamInfo(PlayerKey _playerKey, UnitResources _unitResources)
         {
             foreach (TeamInfo teamInfo in teamInfos)
             {
                 if (teamInfo.GetPlayerKey() == _playerKey)
                 {
-                    BattleUnitResources unitResources = teamInfo.GetUnitResources();
+                    UnitResources unitResources = teamInfo.GetUnitResources();
                     teamInfo.SetUnitResources(_unitResources);
                 }
             }
@@ -80,11 +77,11 @@ namespace RPGProject.Control
         {
             foreach (TeamInfo teamInfo in teamInfos)
             {
-                BattleUnitResources unitResources = teamInfo.GetUnitResources();
+                UnitResources unitResources = teamInfo.GetUnitResources();
                 float maxHealthPoints = unitResources.GetMaxHealthPoints();
                 float maxManaPoints = unitResources.GetMaxManaPoints();
 
-                unitResources.SetBattleUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxHealthPoints);
+                unitResources.SetUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxHealthPoints);
             }
         }
 
@@ -195,10 +192,10 @@ namespace RPGProject.Control
     [Serializable]
     public class TeamInfo
     {
-        [SerializeField] PlayerKey playerKey = PlayerKey.Aj;
+        [SerializeField] PlayerKey playerKey = PlayerKey.None;
 
-        [SerializeField] BattleUnitInfo unitInfo = new BattleUnitInfo();
-        [SerializeField] BattleUnitResources unitResources = new BattleUnitResources();
+        [SerializeField] UnitInfo unitInfo = new UnitInfo();
+        [SerializeField] UnitResources unitResources = new UnitResources();
         [SerializeField] Stats stats = new Stats();
 
         [SerializeField] int level = 1;
@@ -209,12 +206,12 @@ namespace RPGProject.Control
             playerKey = _playerKey;
         }
 
-        public void SetUnitInfo(BattleUnitInfo _unitInfo)
+        public void SetUnitInfo(UnitInfo _unitInfo)
         {
             unitInfo.SetUnitInfo(unitInfo);
         }
 
-        public void SetUnitResources(BattleUnitResources _unitResources)
+        public void SetUnitResources(UnitResources _unitResources)
         {
             unitResources.SetUnitResources(_unitResources);
         }
@@ -253,12 +250,12 @@ namespace RPGProject.Control
             return playerKey.ToString();
         }
 
-        public BattleUnitInfo GetUnitInfo()
+        public UnitInfo GetUnitInfo()
         {
             return unitInfo;
         }
 
-        public BattleUnitResources GetUnitResources()
+        public UnitResources GetUnitResources()
         {
             return unitResources;
         }

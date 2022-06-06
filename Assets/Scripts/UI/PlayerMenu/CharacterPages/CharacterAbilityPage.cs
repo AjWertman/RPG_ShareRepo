@@ -49,6 +49,8 @@ namespace RPGProject.UI
 
         private void PopulateAbilityList(Ability[] _abilities)
         {
+            ResetAbilityButtons();
+
             foreach(Ability ability in _abilities)
             {
                 AbilityUIButton abilityUIButton = GetAvailableAbilityUIButton();

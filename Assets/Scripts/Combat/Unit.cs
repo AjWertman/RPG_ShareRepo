@@ -9,9 +9,9 @@ namespace RPGProject.Combat
     {
         [SerializeField] string unitName = "";
         [SerializeField] int baseLevel = 1;
-        [SerializeField] CharacterKey characterKey = CharacterKey.Aj;
+        [SerializeField] CharacterKey characterKey = CharacterKey.None;
 
-        [SerializeField] BattleUnitResources battleUnitResources = null;
+        [SerializeField] UnitResources unitResources = new UnitResources();
         [SerializeField] Stats stats = new Stats();
         [SerializeField] Ability basicAttack = null;
         [SerializeField] Ability[] abilities = null;
@@ -31,9 +31,9 @@ namespace RPGProject.Combat
             return characterKey;
         }
 
-        public BattleUnitResources GetBattleUnitResources()
+        public UnitResources GetUnitResources()
         {
-            return battleUnitResources;
+            return unitResources;
         }
 
         public Stats GetStats()

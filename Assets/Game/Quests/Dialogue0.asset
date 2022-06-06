@@ -47,14 +47,19 @@ MonoBehaviour:
   - a4b6185e-9f94-4c81-9d99-a2930c24badf
   rect:
     serializedVersion: 2
-    x: 149.00002
-    y: 173
+    x: 304.00003
+    y: 82
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
-    and: []
+    and:
+    - or:
+      - negatePredicate: 1
+        predicate: HasQuest
+        parameters:
+        - Escape the Cave
 --- !u!114 &-5466813219979873218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,8 +108,8 @@ MonoBehaviour:
   - baf58883-c054-4179-8a72-6c330b461683
   rect:
     serializedVersion: 2
-    x: 622
-    y: 253.99998
+    x: 1052
+    y: 255.99998
     width: 200
     height: 100
   onEnterAction: 
@@ -131,8 +136,36 @@ MonoBehaviour:
   - baf781a9-0758-4ea9-a0b3-2ec57d6b3159
   rect:
     serializedVersion: 2
-    x: 399
-    y: 173
+    x: 506
+    y: 127.000015
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-1102005523917385902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 44acd129-9907-4aa2-be47-ef4911a55743
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: Oh, it's you...
+  children:
+  - 5910939b-b9d8-425b-b3a6-1b877804574f
+  - e3d12f46-ecd4-4f76-bc52-180ca1df7d27
+  rect:
+    serializedVersion: 2
+    x: 19.999985
+    y: 185.00002
     width: 200
     height: 100
   onEnterAction: 
@@ -196,6 +229,8 @@ MonoBehaviour:
   - {fileID: 7162427495121738201}
   - {fileID: -7843318122737428203}
   - {fileID: 3634114084752436016}
+  - {fileID: -1102005523917385902}
+  - {fileID: 4529153463891630537}
   isEssentialDialogue: 0
 --- !u!114 &1339263009868999256
 MonoBehaviour:
@@ -244,8 +279,8 @@ MonoBehaviour:
   - 4546953b-d712-419b-8afc-6f1bb77ba00e
   rect:
     serializedVersion: 2
-    x: 879
-    y: 103
+    x: 946
+    y: 98
     width: 200
     height: 100
   onEnterAction: 
@@ -298,8 +333,38 @@ MonoBehaviour:
   children: []
   rect:
     serializedVersion: 2
-    x: 2466
-    y: 164
+    x: 2472
+    y: 162
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: giveQuest
+  condition:
+    and:
+    - or:
+      - negatePredicate: 0
+        predicate: HasQuest
+        parameters: []
+--- !u!114 &4529153463891630537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 5910939b-b9d8-425b-b3a6-1b877804574f
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: We should get back to the mission!
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 310
+    y: 323
     width: 200
     height: 100
   onEnterAction: 
@@ -352,8 +417,8 @@ MonoBehaviour:
   - 107d4fff-3da5-4ac8-82a4-4ca57259eae2
   rect:
     serializedVersion: 2
-    x: 629
-    y: 103
+    x: 722
+    y: 102
     width: 200
     height: 100
   onEnterAction: 
@@ -406,7 +471,7 @@ MonoBehaviour:
   - 547163c8-2ab8-4875-9922-a4b4f3b73558
   rect:
     serializedVersion: 2
-    x: 1129
+    x: 1170
     y: 103
     width: 200
     height: 100
