@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 1646649399447466939}
   - component: {fileID: 509161126029126438}
   - component: {fileID: -3233447754243240660}
+  - component: {fileID: 3504165519863861257}
   - component: {fileID: 4292025080150459303}
   m_Layer: 0
   m_Name: UnitController
@@ -125,7 +126,7 @@ Animator:
   m_Controller: {fileID: 22100000, guid: cce47a98a6d3cc1479d8754036d4adfb, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -144,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 941839d2438e89d49926bfe1a43d9b2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleUnitInfo:
+  unitInfo:
     characterKey: 0
     unitName: 
     unitLevel: 0
@@ -157,11 +158,11 @@ MonoBehaviour:
       resistance: 10
       speed: 10
       luck: 10
-  battleUnitResources:
+  unitResources:
     healthPoints: 0
-    maxHealthPoints: 0
+    maxHealthPoints: 100
     manaPoints: 0
-    maxManaPoints: 0
+    maxManaPoints: 100
   startingStats:
     stamina: 10
     spirit: 10
@@ -212,8 +213,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   retreatTransform: {fileID: 4806116191025221250}
-  isMover: 1
-  isBattleUnit: 1
 --- !u!114 &-3233447754243240660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,6 +223,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4ff99147c9681f48aaa9a8cae376f13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3504165519863861257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642788015177014662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32849fa94f5c34a4cb99ebfedd81381a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4292025080150459303

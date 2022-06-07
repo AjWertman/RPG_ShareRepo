@@ -1,5 +1,6 @@
 ﻿using RPGProject.Core;
 using RPGProject.GameResources;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,6 +10,7 @@ namespace RPGProject.Combat
     public class Fighter : MonoBehaviour
     {
         Animator animator = null;
+        ComboLinker comboLinker = null;
         CharacterMesh characterMesh = null;
         Health health = null;
         Mana mana = null;
@@ -18,6 +20,7 @@ namespace RPGProject.Combat
 
         Ability selectedAbility = null;
         Fighter selectedTarget = null;
+        AbilityObjectKey currentAbilityObjectKey = AbilityObjectKey.None;
         //List<Fighter> allTargets = new List<Fighter>();
 
         AbilityObjectPool abilityObjectPool = null;
@@ -40,6 +43,10 @@ namespace RPGProject.Combat
         public void InitalizeFighter()
         {
             animator = GetComponent<Animator>();
+            comboLinker = GetComponent<ComboLinker>();
+            comboLinker.InitializeComboLinker();
+            comboLinker.onComboStarted += SetCurrentAbilityInstance;
+
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
             health = GetComponent<Health>();
             mana = GetComponent<Mana>();
@@ -62,12 +69,14 @@ namespace RPGProject.Combat
             characterMesh = _characterMesh;
         }
 
-        public void Attack(Fighter _selectedTarget, Ability _selectedAbility)
+        public IEnumerator Attack(Fighter _selectedTarget, Ability _selectedAbility)
         {
             selectedTarget = _selectedTarget;
             selectedAbility = _selectedAbility;
 
-            animator.CrossFade(selectedAbility.GetAnimatorTrigger(), .1f);
+            yield return comboLinker.ExecuteCombo(selectedAbility.GetCombo());
+
+            //animator.CrossFade(selectedAbility.GetAnimatorTrigger(), .1f);
         }
 
         private void PerformAbility()
@@ -101,7 +110,7 @@ namespace RPGProject.Combat
 
                 case AbilityType.Cast:
 
-                    AbilityBehavior abilityBehavior = abilityObjectPool.GetAbilityInstance(selectedAbility);
+                    AbilityBehavior abilityBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
                     abilityBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit);
                     abilityBehavior.gameObject.SetActive(true);
                     abilityBehavior.PerformSpellBehavior();
@@ -114,6 +123,11 @@ namespace RPGProject.Combat
         public void LookAtTarget(Transform _target)
         {
             transform.LookAt(_target);
+        }
+
+        public void SetCurrentAbilityInstance(AbilityObjectKey _abilityObjectKey)
+        {
+            currentAbilityObjectKey = _abilityObjectKey;
         }
 
         public void ResetFighter()
@@ -130,7 +144,7 @@ namespace RPGProject.Combat
             unitInfo = new UnitInfo();
             unitResources = new UnitResources();
 
-
+            currentAbilityObjectKey = AbilityObjectKey.None;
             SetCharacterMesh(null);
         }
 

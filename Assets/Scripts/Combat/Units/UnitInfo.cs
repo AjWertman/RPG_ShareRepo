@@ -8,8 +8,8 @@ namespace RPGProject.Combat
     [Serializable]
     public class UnitInfo
     {
-        [SerializeField] CharacterKey characterKey = CharacterKey.None;
         [SerializeField] string unitName = "";
+        [SerializeField] CharacterKey characterKey = CharacterKey.None;
         [SerializeField] int unitLevel = 0;
 
         [SerializeField] Stats stats = new Stats();
@@ -19,11 +19,11 @@ namespace RPGProject.Combat
 
         bool isPlayer = true;
 
-        public void SetUnitInfo(CharacterKey _characterKey, int _unitLevel, bool _isPlayer,
+        public void SetUnitInfo(string _unitName, CharacterKey _characterKey, int _unitLevel, bool _isPlayer,
             Stats _stats, Ability _basicAttack, Ability[] _abilities)
         {
+            unitName = _unitName;
             characterKey = _characterKey;
-            unitName = characterKey.ToString();
             unitLevel = _unitLevel;
             isPlayer = _isPlayer;
             stats.SetStats(_stats);

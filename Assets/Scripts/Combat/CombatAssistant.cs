@@ -9,11 +9,11 @@ namespace RPGProject.Combat
     {
         public static string CanUseAbilityCheck(Fighter _caster, Ability _selectedAbility)
         {
-            float manaCost = _selectedAbility.GetManaCost();
+            float manaCost = _selectedAbility.GetCombo()[0].GetManaCost();
             if (manaCost > 0)
             {
                 float manaPoints = _caster.GetMana().GetManaPoints();
-                bool hasEnoughMana = manaPoints >= _selectedAbility.GetManaCost();
+                bool hasEnoughMana = manaPoints >= manaCost;
                 if (!hasEnoughMana) return "Not enough Mana";
             }
 
@@ -28,19 +28,17 @@ namespace RPGProject.Combat
             return "";
         }
 
-        public static string CanUseAbilityCheck(Fighter _caster, Fighter _target, Ability _selectedAbility)
+        public static string CanUseAbilityCheck(Fighter _caster, Fighter _target, Ability _ability)
         {
-            GameObject abilityPrefab = _selectedAbility.GetAbilityPrefab();
-
-            float manaCost = _selectedAbility.GetManaCost();
+            float manaCost = _ability.GetCombo()[0].GetManaCost();
             if(manaCost > 0)
             {
                 float manaPoints = _caster.GetMana().GetManaPoints();
-                bool hasEnoughMana = manaPoints >= _selectedAbility.GetManaCost();
+                bool hasEnoughMana = manaPoints >= manaCost;
                 if (!hasEnoughMana) return "Not enough Mana";
             }   
 
-            bool isCopyAbility = _selectedAbility.GetAbilityType() == AbilityType.Copy;
+            bool isCopyAbility = _ability.GetAbilityType() == AbilityType.Copy;
             if (isCopyAbility)
             {
                 List<Ability> copyList = new List<Ability>();
@@ -48,23 +46,23 @@ namespace RPGProject.Combat
                 if (isCopyAbility && isCopyListNullOrEmpty) return "No copyable abilities used";
             }
 
-            if(_selectedAbility.GetAbilityType() == AbilityType.Cast)
-            {
-                PhysicalReflector physReflector = abilityPrefab.GetComponent<PhysicalReflector>();
-                bool isPhysReflector = (physReflector != null);
-                bool isTargetReflectingPhys = (_target.GetPhysicalReflectionDamage() > 0);
-                if (isPhysReflector && isTargetReflectingPhys) return "Target is already reflecting physical damage";
+            //if(_selectedAbility.GetAbilityType() == AbilityType.Cast)
+            //{
+            //    PhysicalReflector physReflector = abilityPrefab.GetComponent<PhysicalReflector>();
+            //    bool isPhysReflector = (physReflector != null);
+            //    bool isTargetReflectingPhys = (_target.GetPhysicalReflectionDamage() > 0);
+            //    if (isPhysReflector && isTargetReflectingPhys) return "Target is already reflecting physical damage";
 
-                SpellReflector spellReflector = abilityPrefab.GetComponent<SpellReflector>();
-                bool isSpellReflector = (spellReflector != null);
-                bool isTargetReflectingSpells = (_target.IsReflectingSpells());
-                if (isSpellReflector && isTargetReflectingSpells) return "Target is already reflecting spells";
+            //    SpellReflector spellReflector = abilityPrefab.GetComponent<SpellReflector>();
+            //    bool isSpellReflector = (spellReflector != null);
+            //    bool isTargetReflectingSpells = (_target.IsReflectingSpells());
+            //    if (isSpellReflector && isTargetReflectingSpells) return "Target is already reflecting spells";
 
-                Silence silence = abilityPrefab.GetComponent<Silence>();
-                bool isSilence = (silence != null);
-                bool isTargetSilenced = (_target.IsSilenced());
-                if (isSilence && isTargetSilenced) return "Target is already silenced";
-            }
+            //    Silence silence = abilityPrefab.GetComponent<Silence>();
+            //    bool isSilence = (silence != null);
+            //    bool isTargetSilenced = (_target.IsSilenced());
+            //    if (isSilence && isTargetSilenced) return "Target is already silenced";
+            //}
 
             return "";
         }

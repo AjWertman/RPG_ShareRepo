@@ -113,7 +113,8 @@ namespace RPGProject.Questing
             switch (_predicate)
             {
                 case "HasQuest":
-                    return HasQuest(Quest.GetByName(_parameters[0]));
+                    Quest quest = Quest.GetByName(_parameters[0]);
+                    return HasQuest(quest);
 
                 case "CompletedQuest":
                     QuestStatus status = GetQuestStatus(Quest.GetByName(_parameters[0]));

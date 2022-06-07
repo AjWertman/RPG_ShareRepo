@@ -5,21 +5,24 @@ namespace RPGProject.Combat
 {
     public abstract class AbilityBehavior : MonoBehaviour
     {
-        protected Ability ability = null;
+        [SerializeField] protected AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
 
+        //protected Ability ability = null;
+       
         protected Fighter caster = null;
         protected Fighter target = null;
         protected float changeAmount = 0f;
         protected bool isCritical = false;
 
-        protected int abilityLifetime = 0;
+        protected float abilityLifetime = 0;
 
         public event Action<AbilityBehavior> onAbilityDeath;
 
-        public void InitializeAbility(Ability _ability)
-        {
-            ability = _ability;
-        }
+        //public void InitializeAbility(Ability _ability)
+        //{
+        //    ability = _ability;
+        //    abilityLifetime = ability.GetAbilityLifetime();
+        //}
 
         public void SetupAbility(Fighter _caster, Fighter _target, float _changeAmount, bool _isCritical)
         {
@@ -27,9 +30,7 @@ namespace RPGProject.Combat
             target = _target;
             changeAmount = _changeAmount;
             isCritical = _isCritical;
-
-            abilityLifetime = ability.GetAbilityLifetime();
-
+            
             transform.position = _caster.GetCharacterMesh().GetLHandTransform().position;
         }
 
@@ -57,7 +58,7 @@ namespace RPGProject.Combat
             target = null;
             changeAmount = 0;
             isCritical = false;
-            abilityLifetime = ability.GetAbilityLifetime();
+            //abilityLifetime = ability.GetAbilityLifetime();
         }
     }
 }

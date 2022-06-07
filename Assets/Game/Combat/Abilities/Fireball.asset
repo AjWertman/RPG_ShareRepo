@@ -12,23 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
+  combo:
+  - animationID: Cast0
+    comboPointCost: 0
+    manaCost: 0
+    enduranceCost: 0
+    abilityObjectKey: 1
+    hitFXPrefab: {fileID: 0}
+  - animationID: Cast0
+    comboPointCost: 0
+    manaCost: 0
+    enduranceCost: 0
+    abilityObjectKey: 1
+    hitFXPrefab: {fileID: 0}
+  - animationID: Cast0
+    comboPointCost: 0
+    manaCost: 0
+    enduranceCost: 0
+    abilityObjectKey: 1
+    hitFXPrefab: {fileID: 0}
+  abilityResource: 1
   abilityName: Fireball
   requiredLevel: 0
-  animatorTrigger: Cast0
   abilityLifetime: 1
   baseAbilityAmount: 120
-  manaCost: 10
   description: Fireball
   shouldExpand: 0
   buttonColor: {r: 1, g: 0, b: 0, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
-  abilityPrefab: {fileID: 1999966156053767337, guid: 235763ff3593b65459bb40600f242a8b,
-    type: 3}
-  hitFXPrefab: {fileID: 1068927474717988, guid: 06b9063795ca5b54aa31740b163001c4,
-    type: 3}
-  abilityResource: 1
   abilityType: 1
   targetingType: 0
-  isInstaHit: 0
   canTargetAll: 0
   isHeal: 0
+  isInstaHit: 0

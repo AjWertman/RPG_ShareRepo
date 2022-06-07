@@ -10,7 +10,6 @@ namespace RPGProject.Combat
 
         [SerializeField] Sprite faceImage = null;
 
-        //Refactor?
         [SerializeField] AnimatorOverrideController controller = null;
         [SerializeField] Avatar avatar = null;
 

@@ -12,21 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
   m_Name: BasicAttack
   m_EditorClassIdentifier: 
+  combo:
+  - animationID: Attack0
+    comboPointCost: 0
+    manaCost: 0
+    enduranceCost: 0
+    abilityObjectKey: 0
+    hitFXPrefab: {fileID: 0}
+  abilityResource: 0
   abilityName: Attack
   requiredLevel: 1
-  animatorTrigger: BasicAttack
   abilityLifetime: 1
   baseAbilityAmount: 40
-  manaCost: 0
   description: 
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
-  abilityPrefab: {fileID: 0}
-  hitFXPrefab: {fileID: 0}
-  abilityResource: 0
   abilityType: 0
   targetingType: 0
-  isInstaHit: 0
   canTargetAll: 0
   isHeal: 0
+  isInstaHit: 0

@@ -81,8 +81,8 @@ MonoBehaviour:
   - 0e698036-bb70-41b7-88ec-0207d8a64b14
   rect:
     serializedVersion: 2
-    x: 1617
-    y: 251.00002
+    x: 1557
+    y: 241.00003
     width: 200
     height: 100
   onEnterAction: 
@@ -342,9 +342,10 @@ MonoBehaviour:
   condition:
     and:
     - or:
-      - negatePredicate: 0
+      - negatePredicate: 1
         predicate: HasQuest
-        parameters: []
+        parameters:
+        - EscapeCave
 --- !u!114 &4529153463891630537
 MonoBehaviour:
   m_ObjectHideFlags: 0

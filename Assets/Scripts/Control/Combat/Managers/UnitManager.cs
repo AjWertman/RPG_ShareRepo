@@ -74,7 +74,7 @@ namespace RPGProject.Control
             SetUnitTransform(unitController, _teamPosition);
 
             UnitInfo unitInfo = unitController.GetUnitInfo();
-            unitInfo.SetUnitInfo(characterKey, _unit.GetBaseLevel(),
+            unitInfo.SetUnitInfo(_unit.GetUnitName(), characterKey, _unit.GetBaseLevel(),
                 _isPlayerTeam, _unit.GetStats(), _unit.GetBasicAttack(), _unit.GetAbilities());
 
             UnitResources unitResources = unitController.GetUnitResources();

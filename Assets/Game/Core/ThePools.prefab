@@ -79,8 +79,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06fda64ccec9ee44f92774406f38b7f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allAbilities:
-  - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}
+  abilityPrefabs:
+  - abilityObjectKey: 1
+    abilityPrefab: {fileID: 1999966156053767337, guid: 235763ff3593b65459bb40600f242a8b,
+      type: 3}
   amountOfAbilityObjects: 4
 --- !u!1001 &6394786980111018847
 PrefabInstance:

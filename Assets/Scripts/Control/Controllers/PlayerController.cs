@@ -266,9 +266,8 @@ namespace RPGProject.Control
 
         public void EquipWeapon(bool _isSword)
         {
-            EquipmentManager equipmentManager = FindObjectOfType<EquipmentManager>();
+            EquipmentManager equipmentManager = FindObjectOfType<EquipmentManager>(true);
 
-            print(equipmentManager == null);
             equipmentManager.EquipWeapon(_isSword);
             //Equip abilities
         }

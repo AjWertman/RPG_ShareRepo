@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
   m_Name: ED
   m_EditorClassIdentifier: 
-  unitName: ED
+  unitName: Erradication Drone
   baseLevel: 8
   characterKey: 7
   unitResources:

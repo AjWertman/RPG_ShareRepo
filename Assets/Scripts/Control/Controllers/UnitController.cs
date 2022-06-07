@@ -17,6 +17,7 @@ namespace RPGProject.Control
         
         Animator animator = null;
         Fighter fighter = null;
+        ComboLinker comboLinker = null;
         Health health = null;
         Mana mana = null;
         CombatMover mover = null;
@@ -33,6 +34,7 @@ namespace RPGProject.Control
             animator = GetComponent<Animator>();
 
             fighter = GetComponent<Fighter>();
+            comboLinker = GetComponent<ComboLinker>();
             health = GetComponent<Health>();
             mana = GetComponent<Mana>();
             mover = GetComponent<CombatMover>();
@@ -48,6 +50,8 @@ namespace RPGProject.Control
         {
             SetName(_unitInfo.GetUnitName());
             SetCharacterMesh(_characterMesh);
+
+            comboLinker.SetupComboLinker();
 
             unitInfo.SetUnitInfo(_unitInfo);
             startingStats.SetStats(unitInfo.GetStats());
@@ -90,13 +94,14 @@ namespace RPGProject.Control
                         fighter.LookAtTarget(_target.transform);
                     }
 
+                    float moveDuration = comboLinker.GetFullComboTime(_ability.GetCombo());
+                    float moveDurationWOffset = moveDuration * 1.1f;
+
                     UseAbility(_target, _ability);
 
                     //AddToRenCopyList(selectedAbility,isRenCopy);
 
-                    //Refactor - move duration
-                    //Bring in combo system
-                    yield return new WaitForSeconds(1.5f);
+                    yield return new WaitForSeconds(moveDurationWOffset);
 
                     if (!health.IsDead())
                     {
@@ -126,8 +131,8 @@ namespace RPGProject.Control
 
         public void UseAbility(Fighter _target, Ability _selectedAbility)
         {
-            mana.SpendManaPoints(_selectedAbility.GetManaCost());
-            fighter.Attack(_target, _selectedAbility);
+            //mana.SpendManaPoints(_selectedAbility.GetManaCost());
+            StartCoroutine(fighter.Attack(_target, _selectedAbility));
         }
 
         public void SetName(string _name)
@@ -271,6 +276,11 @@ namespace RPGProject.Control
         public Mana GetMana()
         {
             return mana;
+        }
+
+        public Animator GetAnimator()
+        {
+            return animator;
         }
 
         public CharacterMesh GetCharacterMesh()

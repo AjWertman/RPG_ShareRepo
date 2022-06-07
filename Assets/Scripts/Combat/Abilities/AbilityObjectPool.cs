@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,11 +6,11 @@ namespace RPGProject.Combat
 {
     public class AbilityObjectPool : MonoBehaviour
     {
-        [SerializeField] Ability[] allAbilities = null;
+        [SerializeField] AbilityPrefab[] abilityPrefabs = null;
         [SerializeField] int amountOfAbilityObjects = 4;
 
         //Refactor - only use for the abilities of that zone including known player abilities
-        Dictionary<Ability, List<AbilityBehavior>> abilityPool = new Dictionary<Ability, List<AbilityBehavior>>();
+        Dictionary<AbilityObjectKey, List<AbilityBehavior>> abilityPool = new Dictionary<AbilityObjectKey, List<AbilityBehavior>>();
         //Dictionary<Ability, GameObject> hitFXPool = new Dictionary<Ability, GameObject>();
         
         private void Awake()
@@ -20,20 +21,21 @@ namespace RPGProject.Combat
 
         private void CreateAbilityPool()
         {
-            foreach (Ability ability in allAbilities)
+            foreach(AbilityPrefab abilityPrefab in abilityPrefabs)
             {
                 List<AbilityBehavior> abilityBehaviorInstances = new List<AbilityBehavior>();
 
-                for (int i = 0; i < amountOfAbilityObjects; i++)
+                for (int i = 0; i < 4; i++)
                 {
-                    GameObject abilityInstance = Instantiate(ability.GetAbilityPrefab(), transform);
+                    GameObject abilityInstance = Instantiate(abilityPrefab.GetAbilityPrefab(), transform);
                     AbilityBehavior abilityBehavior = abilityInstance.GetComponent<AbilityBehavior>();
-                    abilityBehavior.InitializeAbility(ability);
+                    //abilityBehavior.InitializeAbility(abilityPrefabDict[abilityPrefab]);
                     abilityBehavior.onAbilityDeath += ResetAbilityBehavior;
 
                     abilityBehaviorInstances.Add(abilityBehavior);
                 }
-                abilityPool.Add(ability, abilityBehaviorInstances);
+
+                abilityPool.Add(abilityPrefab.GetAbilityObjectKey(), abilityBehaviorInstances);
             }
 
             ResetAbilityObjectPool();
@@ -57,11 +59,11 @@ namespace RPGProject.Combat
             }
         }
 
-        public AbilityBehavior GetAbilityInstance(Ability _ability)
+        public AbilityBehavior GetAbilityInstance(AbilityObjectKey _abilityObjectKey)
         {
             AbilityBehavior availableAbilityBehavior = null;
 
-            foreach (AbilityBehavior abilityBehavior in abilityPool[_ability])
+            foreach (AbilityBehavior abilityBehavior in abilityPool[_abilityObjectKey])
             {
                 if (!abilityBehavior.gameObject.activeSelf)
                 {
@@ -71,6 +73,23 @@ namespace RPGProject.Combat
             }
 
             return availableAbilityBehavior;
+        }
+    }
+
+    [Serializable]
+    public class AbilityPrefab
+    {
+        [SerializeField] AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
+        [SerializeField] GameObject abilityPrefab = null;
+
+        public AbilityObjectKey GetAbilityObjectKey()
+        {
+            return abilityObjectKey;
+        }
+
+        public GameObject GetAbilityPrefab()
+        {
+            return abilityPrefab;
         }
     }
 }
