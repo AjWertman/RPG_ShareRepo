@@ -73,43 +73,27 @@ namespace RPGProject.GameResources
             SetCurrentHealthPercentage();
         }
 
-        public void DamageHealth(float _damageAmount, bool _isCritical, bool _isPhysicalAttack)
+        public void ChangeHealth(float _changeAmount, bool _isCritical, bool _isChangeMagical)
         {
-            float calculatedDamage = CalculateDamage(_damageAmount, _isPhysicalAttack);
+            float calculatedAmount = CalculateChange(_changeAmount, _isChangeMagical);
 
-            healthPoints -= calculatedDamage;
+            healthPoints += calculatedAmount;
             healthPoints = Mathf.Clamp(healthPoints, 0, maxHealthPoints);
-
             SetCurrentHealthPercentage();
+            onHealthChange(_isCritical, calculatedAmount);
 
-            onHealthChange(_isCritical, -calculatedDamage);
-
-            if (DeathCheck())
-            {
-                Die();
-            }
-            else
-            {
-                animator.Play("TakeDamage");
-            }
+            if (DeathCheck()) Die();
+            else animator.Play("TakeDamage"); 
         }
 
-        public void RestoreHealth(float _restoreAmount, bool _isCritical)
+        private float CalculateChange(float _changeAmount, bool _isChangeMagical)
         {
-            healthPoints += _restoreAmount;
-            healthPoints = Mathf.Clamp(healthPoints, 0, maxHealthPoints);
+            if (_changeAmount > 0) return _changeAmount;
 
-            SetCurrentHealthPercentage();
-
-            onHealthChange(_isCritical, _restoreAmount);
-        }
-
-        private float CalculateDamage(float _damageAmount, bool _isPhysicalAttack)
-        {
             float newDamageAmount = 0f;
             float statsModifier = 0f;
 
-            if (_isPhysicalAttack)
+            if (!_isChangeMagical)
             {
                 statsModifier = armor - 10f;
             }
@@ -120,13 +104,13 @@ namespace RPGProject.GameResources
 
             if (statsModifier == 0)
             {
-                newDamageAmount = _damageAmount;
+                newDamageAmount = _changeAmount;
             }
             else
             {
                 float defensivePercentage = 1f - (statsModifier * .01f);
 
-                newDamageAmount = _damageAmount * defensivePercentage;
+                newDamageAmount = _changeAmount * defensivePercentage;
             }
 
             return newDamageAmount;

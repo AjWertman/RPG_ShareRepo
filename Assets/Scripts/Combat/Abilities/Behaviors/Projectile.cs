@@ -57,7 +57,7 @@ namespace RPGProject.Combat
 
                     //Add heal check? Will there be healing projectiles?
 
-                    target.GetHealth().DamageHealth(changeAmount, isCritical, false);
+                    target.GetHealth().ChangeHealth(changeAmount, isCritical, false);
 
                     
                     OnAbilityDeath();

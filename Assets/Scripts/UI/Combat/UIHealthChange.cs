@@ -44,12 +44,18 @@ namespace RPGProject.UI
         {
             amountChangeText.color = Color.red;
 
+            string beforeChangeAmountString = "";
+
             if (!_isDamage)
             {
-                criticalText.color = Color.green;
+                amountChangeText.color = Color.green;
+                beforeChangeAmountString = "+";
+
             }
 
-            amountChangeText.text = _changeAmount.ToString();
+            string text = (beforeChangeAmountString + _changeAmount.ToString());
+
+            amountChangeText.text = text;
             amountChangeText.gameObject.SetActive(true);
         }
 

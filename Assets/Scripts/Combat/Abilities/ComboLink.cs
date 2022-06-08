@@ -13,7 +13,11 @@ namespace RPGProject.Combat
         [SerializeField] float enduranceCost = 0f;
 
         [SerializeField] AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
+        //[SerializeField] HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
         [SerializeField] GameObject hitFXPrefab = null;
+
+        //[SerializeField] Buff buffToApply = null;
+        //[SerializeField] float chanceToApplyBuff = 0f;
 
         public string GetAnimationID()
         {

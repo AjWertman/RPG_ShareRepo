@@ -14,6 +14,7 @@ namespace RPGProject.Combat
         [SerializeField] Avatar avatar = null;
 
         [SerializeField] Transform aimTransform = null;
+
         [SerializeField] Transform rHandTransform = null;
         [SerializeField] Transform lHandTransform = null;
 

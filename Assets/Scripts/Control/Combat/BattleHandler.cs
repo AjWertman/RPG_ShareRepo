@@ -250,12 +250,22 @@ namespace RPGProject.Control
         {
             if(currentUnitTurn != null)
             {
+                ApplyActiveAbilitys(currentUnitTurn.GetFighter());
                 currentUnitTurn.SetIsTurn(false);
             }
 
             currentUnitTurn = _currentUnitTurn;
+        
             currentUnitTurn.SetIsTurn(true);
             battleUIManager.SetCurrentCombatantTurn(currentUnitTurn.GetFighter());
+        }
+
+        private void ApplyActiveAbilitys(Fighter _fighter)
+        {
+            foreach (AbilityBehavior abilityBehavior in _fighter.GetActiveAbilityBehaviors())
+            {
+                abilityBehavior.OnTurnAdvance();
+            }
         }
 
         private void SetupTeams(List<PlayableCharacter> _playerTeam, List<Unit> _enemyTeam)

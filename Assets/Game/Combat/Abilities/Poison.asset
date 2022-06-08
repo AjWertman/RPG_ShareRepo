@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: TargetAll
+  m_Name: Poison
   m_EditorClassIdentifier: 
-  abilityName: TargetAll
+  combo:
+  - animationID: Cast0
+    comboPointCost: 0
+    manaCost: 0
+    enduranceCost: 0
+    abilityObjectKey: 4
+    hitFXPrefab: {fileID: 0}
+  abilityResource: 0
+  abilityName: Poison
   requiredLevel: 1
-  abilityType: 1
-  animatorTrigger: cast
-  moveDuration: 1.5
-  baseAbilityAmount: 40
-  manaCost: 48
-  spellDescription: 'I can target everyone
-
-'
+  abilityLifetime: 3
+  baseAbilityAmount: -20
+  description: 
   shouldExpand: 0
-  buttonColor: {r: 1, g: 1, b: 1, a: 1}
+  buttonColor: {r: 0.37106323, g: 0, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
-  spellPrefab: {fileID: 0}
-  hitFXPrefab: {fileID: 0}
-  spellType: 0
-  targetingType: 3
-  isInstaHit: 0
+  abilityType: 4
+  targetingType: 0
   canTargetAll: 0
   isHeal: 0

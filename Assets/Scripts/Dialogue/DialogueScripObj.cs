@@ -24,7 +24,7 @@ namespace RPGProject.Dialogue
             nodeLookup.Clear();
 
             foreach (DialogueNode node in GetAllDialogueNodes())
-            {
+            {              
                 nodeLookup[node.name] = node;
             }
         }

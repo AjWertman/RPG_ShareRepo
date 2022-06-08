@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7843318122737428203
+--- !u!114 &-9169201200307079606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: d1b535d1-bfb2-4082-a220-7b541c81cbf5
+  m_Name: 1c07f44f-c7f1-4806-bd38-d881f63bfc9d
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: 'Awww darn, I was hoping to stay far away from the battle! But you are quite
-    the magic user. '
+  overrideConversantName: Player
+  text: '*You turn around to druidName bleeding, and shieldMaidenName in attack position,
+    her aggression directed at rogueName.*'
   children:
-  - e1c6f0b9-a596-4140-b7ee-5d86c1780c44
+  - fb987796-47f4-4408-bb18-e2d6c5ec9e85
   rect:
     serializedVersion: 2
-    x: 2210
-    y: 87
+    x: 245
+    y: 121
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &-7396435776812841531
+--- !u!114 &-8621105228695175227
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,58 +38,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: e3d12f46-ecd4-4f76-bc52-180ca1df7d27
+  m_Name: 850aa01c-57ea-40ec-a41c-3ebe27f38221
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: You're finally up, thank goodness!
+  overrideConversantName: Dhurmumir
+  text: 'Ye done good work RogueName me boy. '
   children:
-  - a4b6185e-9f94-4c81-9d99-a2930c24badf
+  - ba267be7-16e8-4230-83d0-7c17c9af8733
   rect:
     serializedVersion: 2
-    x: 304.00003
-    y: 82
-    width: 200
-    height: 100
-  onEnterAction: 
-  onExitAction: 
-  condition:
-    and:
-    - or:
-      - negatePredicate: 1
-        predicate: HasQuest
-        parameters:
-        - Escape the Cave
---- !u!114 &-5466813219979873218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: baf58883-c054-4179-8a72-6c330b461683
-  m_EditorClassIdentifier: 
-  isPlayerNode: 0
-  overrideConversantName: 
-  text: Mr. Tough-guy. You ready to take another shot at escaping? Did you want the
-    sword or staff this time?
-  children:
-  - 24939b29-04bd-4293-bdc5-0e794e418b25
-  - 0e698036-bb70-41b7-88ec-0207d8a64b14
-  rect:
-    serializedVersion: 2
-    x: 1557
-    y: 241.00003
+    x: 1942
+    y: 131
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &-2343266101870264138
+--- !u!114 &-7279873442953872528
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,24 +65,51 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: baf781a9-0758-4ea9-a0b3-2ec57d6b3159
+  m_Name: 77a5909a-5812-472b-8132-868c07ab32b2
   m_EditorClassIdentifier: 
-  isPlayerNode: 1
-  overrideConversantName: 
-  text: It wasn't that bad
-  children:
-  - baf58883-c054-4179-8a72-6c330b461683
+  isPlayerNode: 0
+  overrideConversantName: Dhurmumir
+  text: 'It''s time for ye to become fuel for my children! '
+  children: []
   rect:
     serializedVersion: 2
-    x: 1052
-    y: 255.99998
+    x: 2834
+    y: 130
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: startBattle
+  condition:
+    and: []
+--- !u!114 &-6798851558956951111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 8f2aa216-0b80-48f1-b3c2-82d0bca0594b
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: RogueName
+  text: I expected to have to flee the country after killing that old fart, not receive
+    a medal of honor for my service.
+  children:
+  - e47318dd-2baf-4115-b537-117b7db24723
+  rect:
+    serializedVersion: 2
+    x: 1316
+    y: 130
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &-1217763274264300556
+--- !u!114 &-4756418180694624211
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,25 +119,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: a4b6185e-9f94-4c81-9d99-a2930c24badf
+  m_Name: d1906aa5-b61b-4277-b7d2-fc2178e42d06
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: You took a pretty hard spill back there.
+  overrideConversantName: Dhurmumir
+  text: '*The ground begins to shake, and the dwarf''s personal defense mech approaches,
+    it looks much more powerful than ordinary mechs.*'
   children:
-  - ae90108b-b1d4-4b7f-b534-8d6953398245
-  - baf781a9-0758-4ea9-a0b3-2ec57d6b3159
+  - 77a5909a-5812-472b-8132-868c07ab32b2
   rect:
     serializedVersion: 2
-    x: 506
-    y: 127.000015
+    x: 2584
+    y: 130
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &-1102005523917385902
+--- !u!114 &-4708691315936388196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,25 +147,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: 44acd129-9907-4aa2-be47-ef4911a55743
+  m_Name: 3c492915-e9a8-4d6e-a005-79842ec26a4c
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: Oh, it's you...
+  overrideConversantName: RogueName
+  text: 'The King of the most powerful kingdom in a thousands years gets killed off
+    during the midst of this war? '
   children:
-  - 5910939b-b9d8-425b-b3a6-1b877804574f
-  - e3d12f46-ecd4-4f76-bc52-180ca1df7d27
+  - a847dd3a-2b6d-4fa3-b03d-743f0f3f48fa
   rect:
     serializedVersion: 2
-    x: 19.999985
-    y: 185.00002
+    x: 897
+    y: 126
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &-345985870113696614
+--- !u!114 &-3715466716818411796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,19 +175,72 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: 15548ff6-e6b4-4d91-a372-92ab4ef14d38
+  m_Name: ba267be7-16e8-4230-83d0-7c17c9af8733
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: ' You ready to take another shot at escaping? Did you want the sword or staff
-    this time?'
+  overrideConversantName: Dhurmumir
+  text: 'Ahhh lookie here, three fleshbags for the furnace. '
   children:
-  - 0e698036-bb70-41b7-88ec-0207d8a64b14
-  - 24939b29-04bd-4293-bdc5-0e794e418b25
+  - 00e3ee0e-b071-4b17-9f1a-2212c9462635
   rect:
     serializedVersion: 2
-    x: 1629
-    y: 103
+    x: 2139
+    y: 133
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-1970608728885240036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 00e3ee0e-b071-4b17-9f1a-2212c9462635
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Dhurmumir
+  text: '*The dwarf then lets out an ear-piercing scream in his native tongue.*'
+  children:
+  - d1906aa5-b61b-4277-b7d2-fc2178e42d06
+  rect:
+    serializedVersion: 2
+    x: 2351
+    y: 130
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-1181290296574863182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: fb987796-47f4-4408-bb18-e2d6c5ec9e85
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: RogueName
+  text: 'Hahaha, those psychics aren''t worth a damn. I was lying to them from the
+    start. '
+  children:
+  - 30ebe0ec-7b89-4fa3-87b4-07b8c74493d1
+  rect:
+    serializedVersion: 2
+    x: 460
+    y: 123
     width: 200
     height: 100
   onEnterAction: 
@@ -211,28 +257,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
-  m_Name: Dialogue0
+  m_Name: DemoDialogue2
   m_EditorClassIdentifier: 
   newNodeOffset: {x: 250, y: 0}
   dialogueNodes:
-  - {fileID: -7396435776812841531}
-  - {fileID: -1217763274264300556}
-  - {fileID: 6170430553746497910}
-  - {fileID: -2343266101870264138}
-  - {fileID: 2256486119610580714}
-  - {fileID: 7908561896915201885}
-  - {fileID: 2452980185965461257}
-  - {fileID: -5466813219979873218}
-  - {fileID: -345985870113696614}
-  - {fileID: 1339263009868999256}
-  - {fileID: 5124781570401009632}
-  - {fileID: 7162427495121738201}
-  - {fileID: -7843318122737428203}
-  - {fileID: 3634114084752436016}
-  - {fileID: -1102005523917385902}
-  - {fileID: 4529153463891630537}
+  - {fileID: 2595502941107372826}
+  - {fileID: -9169201200307079606}
+  - {fileID: -1181290296574863182}
+  - {fileID: 5744047471299643191}
+  - {fileID: -4708691315936388196}
+  - {fileID: 1013668569647048888}
+  - {fileID: -6798851558956951111}
+  - {fileID: 7822209259648309687}
+  - {fileID: 4370271542027299359}
+  - {fileID: -8621105228695175227}
+  - {fileID: -3715466716818411796}
+  - {fileID: -1970608728885240036}
+  - {fileID: -4756418180694624211}
+  - {fileID: -7279873442953872528}
   isEssentialDialogue: 0
---- !u!114 &1339263009868999256
+--- !u!114 &1013668569647048888
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -242,52 +286,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: 0e698036-bb70-41b7-88ec-0207d8a64b14
-  m_EditorClassIdentifier: 
-  isPlayerNode: 1
-  overrideConversantName: 
-  text: Staff
-  children:
-  - d1b535d1-bfb2-4082-a220-7b541c81cbf5
-  rect:
-    serializedVersion: 2
-    x: 1960
-    y: 87
-    width: 200
-    height: 100
-  onEnterAction: 
-  onExitAction: giveStaff
-  condition:
-    and: []
---- !u!114 &2256486119610580714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: 107d4fff-3da5-4ac8-82a4-4ca57259eae2
+  m_Name: a847dd3a-2b6d-4fa3-b03d-743f0f3f48fa
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: You seriously don't remember? Well... we are trapped in this cave and I am
-    Veronica.
+  overrideConversantName: RogueName
+  text: 'Do they realize how many assassination attempts were unsuccessful? I lost
+    count after 100. But during negotiations of peace he just gets murdered? '
   children:
-  - 4546953b-d712-419b-8afc-6f1bb77ba00e
+  - 8f2aa216-0b80-48f1-b3c2-82d0bca0594b
   rect:
     serializedVersion: 2
-    x: 946
-    y: 98
+    x: 1108
+    y: 130
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &2452980185965461257
+--- !u!114 &2595502941107372826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -297,25 +314,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: 547163c8-2ab8-4875-9922-a4b4f3b73558
+  m_Name: 09bab6e8-0a5b-4963-82a5-ac21fc0c45d2
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: Thankfully death isn't the end here, and when we "die" we wake up at this
-    graveyard.
+  overrideConversantName: Player
+  text: '*Just before you open the door you hear a scream from behind.*'
   children:
-  - 15548ff6-e6b4-4d91-a372-92ab4ef14d38
+  - 1c07f44f-c7f1-4806-bd38-d881f63bfc9d
   rect:
     serializedVersion: 2
-    x: 1379
-    y: 103
+    x: 31.000015
+    y: 120
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &3634114084752436016
+--- !u!114 &4370271542027299359
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -325,54 +341,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: e1c6f0b9-a596-4140-b7ee-5d86c1780c44
+  m_Name: fb34c5dc-d7fb-4520-9dca-e6064e14c137
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: Onward!
-  children: []
+  overrideConversantName: Player
+  text: '*Before you could say a word, an eerie laugh comes from within the house.
+    A short and stocky dwarf exits the home.*'
+  children:
+  - 850aa01c-57ea-40ec-a41c-3ebe27f38221
   rect:
     serializedVersion: 2
-    x: 2472
-    y: 162
-    width: 200
-    height: 100
-  onEnterAction: 
-  onExitAction: giveQuest
-  condition:
-    and:
-    - or:
-      - negatePredicate: 1
-        predicate: HasQuest
-        parameters:
-        - EscapeCave
---- !u!114 &4529153463891630537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: 5910939b-b9d8-425b-b3a6-1b877804574f
-  m_EditorClassIdentifier: 
-  isPlayerNode: 0
-  overrideConversantName: 
-  text: We should get back to the mission!
-  children: []
-  rect:
-    serializedVersion: 2
-    x: 310
-    y: 323
+    x: 1730
+    y: 131
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &5124781570401009632
+--- !u!114 &5744047471299643191
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -382,51 +369,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: 24939b29-04bd-4293-bdc5-0e794e418b25
+  m_Name: 30ebe0ec-7b89-4fa3-87b4-07b8c74493d1
   m_EditorClassIdentifier: 
-  isPlayerNode: 1
-  overrideConversantName: 
-  text: Sword
+  isPlayerNode: 0
+  overrideConversantName: RogueName
+  text: When I was summoned to join this team I couldn't help but laugh.
   children:
-  - ea04c966-ca50-4949-9582-bb51ff4d0a51
+  - 3c492915-e9a8-4d6e-a005-79842ec26a4c
   rect:
     serializedVersion: 2
-    x: 1965
-    y: 256
-    width: 200
-    height: 100
-  onEnterAction: 
-  onExitAction: giveSword
-  condition:
-    and: []
---- !u!114 &6170430553746497910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: ae90108b-b1d4-4b7f-b534-8d6953398245
-  m_EditorClassIdentifier: 
-  isPlayerNode: 1
-  overrideConversantName: 
-  text: Where am I? Who are you?
-  children:
-  - 107d4fff-3da5-4ac8-82a4-4ca57259eae2
-  rect:
-    serializedVersion: 2
-    x: 722
-    y: 102
+    x: 686
+    y: 126
     width: 200
     height: 100
   onEnterAction: 
   onExitAction: 
   condition:
     and: []
---- !u!114 &7162427495121738201
+--- !u!114 &7822209259648309687
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -436,44 +396,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: ea04c966-ca50-4949-9582-bb51ff4d0a51
+  m_Name: e47318dd-2baf-4115-b537-117b7db24723
   m_EditorClassIdentifier: 
   isPlayerNode: 0
-  overrideConversantName: 
-  text: Yay! I didn't like getting all that icky blood on my hands last time/
+  overrideConversantName: RogueName
+  text: Dhurmumir offered me all the gold and power I please, and to do what I love
+    most... KILL!
   children:
-  - e1c6f0b9-a596-4140-b7ee-5d86c1780c44
+  - fb34c5dc-d7fb-4520-9dca-e6064e14c137
   rect:
     serializedVersion: 2
-    x: 2236
-    y: 256
-    width: 200
-    height: 100
-  onEnterAction: 
-  onExitAction: 
-  condition:
-    and: []
---- !u!114 &7908561896915201885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
-  m_Name: 4546953b-d712-419b-8afc-6f1bb77ba00e
-  m_EditorClassIdentifier: 
-  isPlayerNode: 0
-  overrideConversantName: 
-  text: This death makes 42 failed attempts at escape.
-  children:
-  - 547163c8-2ab8-4875-9922-a4b4f3b73558
-  rect:
-    serializedVersion: 2
-    x: 1170
-    y: 103
+    x: 1523
+    y: 128
     width: 200
     height: 100
   onEnterAction: 

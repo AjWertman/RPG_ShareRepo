@@ -10,9 +10,11 @@ namespace RPGProject.Combat
         [SerializeField] int amountOfAbilityObjects = 4;
 
         //Refactor - only use for the abilities of that zone including known player abilities
+
         Dictionary<AbilityObjectKey, List<AbilityBehavior>> abilityPool = new Dictionary<AbilityObjectKey, List<AbilityBehavior>>();
-        //Dictionary<Ability, GameObject> hitFXPool = new Dictionary<Ability, GameObject>();
-        
+        //[SerializeField] HitFXPrefab[] hitFXPrefabs = null;
+        //Dictionary<HitFXObjectKey, List<HitFXBehavior>> hitFXPool = new Dictionary<HitFXObjectKey, List<HitFXBehavior>>();
+
         private void Awake()
         {
             CreateAbilityPool();
@@ -90,6 +92,23 @@ namespace RPGProject.Combat
         public GameObject GetAbilityPrefab()
         {
             return abilityPrefab;
+        }
+    }
+
+    [Serializable]
+    public class HitFXPrefab
+    {
+        [SerializeField] HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
+        [SerializeField] GameObject hitFXPrefab = null;
+
+        public HitFXObjectKey GetHitFXObjectKey()
+        {
+            return hitFXObjectKey;
+        }
+
+        public GameObject GetHitFXPrefab()
+        {
+            return hitFXPrefab;
         }
     }
 }

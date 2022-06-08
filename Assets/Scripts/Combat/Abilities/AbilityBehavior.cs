@@ -7,30 +7,24 @@ namespace RPGProject.Combat
     {
         [SerializeField] protected AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
 
-        //protected Ability ability = null;
-       
         protected Fighter caster = null;
         protected Fighter target = null;
         protected float changeAmount = 0f;
         protected bool isCritical = false;
 
-        protected float abilityLifetime = 0;
+        public int abilityLifetime = 0;
 
         public event Action<AbilityBehavior> onAbilityDeath;
 
-        //public void InitializeAbility(Ability _ability)
-        //{
-        //    ability = _ability;
-        //    abilityLifetime = ability.GetAbilityLifetime();
-        //}
-
-        public void SetupAbility(Fighter _caster, Fighter _target, float _changeAmount, bool _isCritical)
+        public void SetupAbility(Fighter _caster, Fighter _target, float _changeAmount, bool _isCritical, int _lifeTime)
         {
             caster = _caster;
             target = _target;
             changeAmount = _changeAmount;
             isCritical = _isCritical;
-            
+            abilityLifetime = _lifeTime;
+
+            //Refactor - Make way to allow for specific locations
             transform.position = _caster.GetCharacterMesh().GetLHandTransform().position;
         }
 
@@ -42,7 +36,12 @@ namespace RPGProject.Combat
             onAbilityDeath(this);
         }
 
-        public void DecrementLifetime()
+        public virtual void OnTurnAdvance()
+        {
+            DecrementLifetime();
+        }
+
+        private void DecrementLifetime()
         {
             abilityLifetime--;
 
@@ -58,7 +57,7 @@ namespace RPGProject.Combat
             target = null;
             changeAmount = 0;
             isCritical = false;
-            //abilityLifetime = ability.GetAbilityLifetime();
+            abilityLifetime = 0;
         }
     }
 }

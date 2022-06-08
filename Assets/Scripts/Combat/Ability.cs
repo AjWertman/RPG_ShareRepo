@@ -4,7 +4,7 @@ using UnityEngine;
 namespace RPGProject.Combat
 {
     public enum AbilityResource {None, Health, Endurance, Mana }
-    public enum AbilityType { Melee, Cast, Copy, Buff }
+    public enum AbilityType { Melee, Cast, Copy, Buff, InstaHit }
     public enum TargetingType { EnemiesOnly, PlayersOnly, SelfOnly, Everyone }
 
     [CreateAssetMenu(fileName = "Ability", menuName = "Ability/Create New Ability", order = 1)]
@@ -25,7 +25,6 @@ namespace RPGProject.Combat
         [Header("AbilityInfo")]
         [SerializeField] string abilityName = "";
         [SerializeField] int requiredLevel = 1;
-        //[SerializeField] string animatorTrigger = "";
         [SerializeField] int abilityLifetime = 1;
         [SerializeField] float baseAbilityAmount = 40;
 
@@ -44,7 +43,6 @@ namespace RPGProject.Combat
         
         [SerializeField] bool canTargetAll = false;
         [SerializeField] bool isHeal = false;
-        [SerializeField] bool isInstaHit = false;
 
         public string GetAbilityName()
         {
@@ -55,11 +53,6 @@ namespace RPGProject.Combat
         {
             return requiredLevel;
         }
-
-        //public string GetAnimatorTrigger()
-        //{
-        //    return animatorTrigger;
-        //}
 
         public int GetAbilityLifetime()
         {
@@ -104,11 +97,6 @@ namespace RPGProject.Combat
         public TargetingType GetTargetingType()
         {
             return targetingType;
-        }
-
-        public bool IsInstaHit()
-        {
-            return isInstaHit;
         }
 
         public bool CanTargetAll()

@@ -4,7 +4,7 @@ namespace RPGProject.Combat
     {
         public override void PerformSpellBehavior()
         {
-            target.ApplyAbilityBehaviorStatus(this);
+            target.ApplyActiveAbilityBehavior(this);
             target.SetIsReflectingSpells(true);
         }
 

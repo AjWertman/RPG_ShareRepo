@@ -75,9 +75,21 @@ namespace RPGProject.Combat
             return isCriticalHit;
         }
 
+        public static bool ApplyBuffCheck(float _applyChance)
+        {
+            float randomFloat = RandomGenerator.GetRandomNumber(0, 99);
+            bool isSuccessful = _applyChance > randomFloat;
+
+            //Refactor - add buff to apply and target parameter
+            ///Check if target has something applied already
+
+            return isSuccessful;
+        }
+
         public static float GetCalculatedAmount(float _baseAmount, bool _isCritical)
         {
             float calculatedAmount = _baseAmount;
+            bool isHeal = _baseAmount > 0;
 
             if (_isCritical)
             {

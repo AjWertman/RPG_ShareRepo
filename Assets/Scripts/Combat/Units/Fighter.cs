@@ -25,7 +25,7 @@ namespace RPGProject.Combat
 
         AbilityObjectPool abilityObjectPool = null;
 
-        List<AbilityBehavior> currentAbilityStatuses = new List<AbilityBehavior>();
+        List<AbilityBehavior> activeAbilityBehaviors = new List<AbilityBehavior>();
 
         float meleeRange = 0f;
 
@@ -83,21 +83,31 @@ namespace RPGProject.Combat
         {
             AbilityType abilityType = selectedAbility.GetAbilityType();
             bool isCriticalHit = CombatAssistant.CriticalHitCheck(luck);
+            bool isHeal = selectedAbility.IsHeal();
 
             float abilityAmountWStatModifier = GetStatsModifier(selectedAbility.GetBaseAbilityAmount());
             float calculatedAmount = CombatAssistant.GetCalculatedAmount(selectedAbility.GetBaseAbilityAmount(), isCriticalHit);
 
             Health targetHealth = selectedTarget.GetHealth();
 
+            AbilityBehavior abilityBehavior = null;
+
+            if (currentAbilityObjectKey != AbilityObjectKey.None)
+            {
+                abilityBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
+                abilityBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit, selectedAbility.GetAbilityLifetime());
+                //Set transform ?
+            }
+
             switch (abilityType)
             {
                 case AbilityType.Melee:
 
-                    targetHealth.DamageHealth(calculatedAmount, isCriticalHit, true);
+                    targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
                     float reflectionAmount = selectedTarget.GetPhysicalReflectionDamage();
                     if (reflectionAmount > 0)
                     {
-                        health.DamageHealth(reflectionAmount, false, true);
+                        health.ChangeHealth(reflectionAmount, false, false);
                     }
                     break;
 
@@ -110,10 +120,19 @@ namespace RPGProject.Combat
 
                 case AbilityType.Cast:
 
-                    AbilityBehavior abilityBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
-                    abilityBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit);
                     abilityBehavior.gameObject.SetActive(true);
                     abilityBehavior.PerformSpellBehavior();
+                    break;
+
+                case AbilityType.InstaHit:
+
+                    abilityBehavior.transform.parent = selectedTarget.transform;
+                    abilityBehavior.transform.localPosition = Vector3.zero;
+                    abilityBehavior.gameObject.SetActive(true);
+                    abilityBehavior.PerformSpellBehavior();
+
+                    targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
+
                     break;
             }
 
@@ -159,20 +178,35 @@ namespace RPGProject.Combat
             selectedAbility = null;
         }
 
-        public void ApplyAbilityBehaviorStatus(AbilityBehavior _abilityBehavior)
+        public void ApplyActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
-            _abilityBehavior.onAbilityDeath += RemoveAbilityBehaviorStatus;
+            _abilityBehavior.onAbilityDeath += RemoveActiveAbilityBehavior;
 
-            if (currentAbilityStatuses.Contains(_abilityBehavior)) return;
-            currentAbilityStatuses.Add(_abilityBehavior);
+            if (activeAbilityBehaviors.Contains(_abilityBehavior)) return;
+            activeAbilityBehaviors.Add(_abilityBehavior);
         }
 
-        private void RemoveAbilityBehaviorStatus(AbilityBehavior _abilityBehavior)
+        private void RemoveActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
-            _abilityBehavior.onAbilityDeath -= RemoveAbilityBehaviorStatus;
+            _abilityBehavior.onAbilityDeath -= RemoveActiveAbilityBehavior;
 
-            if (!currentAbilityStatuses.Contains(_abilityBehavior)) return;
-            currentAbilityStatuses.Remove(_abilityBehavior);
+            if (!activeAbilityBehaviors.Contains(_abilityBehavior)) return;
+            activeAbilityBehaviors.Remove(_abilityBehavior);
+        }
+
+        public IEnumerable<AbilityBehavior> GetActiveAbilityBehaviors()
+        {
+            List<AbilityBehavior> abilityBehaviors = new List<AbilityBehavior>();
+
+            foreach (AbilityBehavior abilityBehavior in activeAbilityBehaviors)
+            {
+                abilityBehaviors.Add(abilityBehavior);
+            }
+
+            foreach (AbilityBehavior abilityBehavior in abilityBehaviors)
+            {
+                yield return abilityBehavior;
+            }
         }
 
         //Animation Events

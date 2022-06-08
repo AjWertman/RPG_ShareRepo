@@ -23,7 +23,7 @@ MonoBehaviour:
   abilityName: Attack
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: 40
+  baseAbilityAmount: -40
   description: 
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
@@ -32,4 +32,3 @@ MonoBehaviour:
   targetingType: 0
   canTargetAll: 0
   isHeal: 0
-  isInstaHit: 0
