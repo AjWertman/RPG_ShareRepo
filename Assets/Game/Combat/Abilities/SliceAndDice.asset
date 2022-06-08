@@ -36,11 +36,10 @@ MonoBehaviour:
   requiredLevel: 1
   abilityLifetime: 1
   baseAbilityAmount: -40
-  description: 
+  description: A brutal barrage of slices targeting vital spots.
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   abilityType: 0
   targetingType: 0
   canTargetAll: 0
-  isHeal: 0

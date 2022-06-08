@@ -6,15 +6,17 @@ namespace RPGProject.Combat
     public abstract class AbilityBehavior : MonoBehaviour
     {
         [SerializeField] protected AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
+        [SerializeField] protected HitFXObjectKey hitFX = HitFXObjectKey.None;
 
         protected Fighter caster = null;
         protected Fighter target = null;
         protected float changeAmount = 0f;
         protected bool isCritical = false;
 
-        public int abilityLifetime = 0;
+        protected int abilityLifetime = 0;
 
         public event Action<AbilityBehavior> onAbilityDeath;
+        public event Action<HitFXObjectKey, Transform> hitFXSpawnRequest;
 
         public void SetupAbility(Fighter _caster, Fighter _target, float _changeAmount, bool _isCritical, int _lifeTime)
         {

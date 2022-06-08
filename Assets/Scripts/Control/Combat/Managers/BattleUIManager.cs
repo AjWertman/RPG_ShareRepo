@@ -168,9 +168,14 @@ namespace RPGProject.Control
             {
                 targetTeam = playerCombatants;
             }
-            else
+            else if(selectedAbility.GetTargetingType() == TargetingType.EnemiesOnly)
             {
                 targetTeam = enemyCombatants;
+            }
+            else if (selectedAbility.GetTargetingType() == TargetingType.SelfOnly)
+            {
+                OnTargetSelect(currentCombatantTurn);
+                return;
             }
 
             if (targetTeam.Count > 1)

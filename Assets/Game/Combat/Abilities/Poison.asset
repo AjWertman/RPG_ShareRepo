@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Poison
   m_EditorClassIdentifier: 
   combo:
-  - animationID: Cast0
+  - animationID: Attack0
     comboPointCost: 0
     manaCost: 0
     enduranceCost: 0
@@ -23,12 +23,12 @@ MonoBehaviour:
   abilityName: Poison
   requiredLevel: 1
   abilityLifetime: 3
-  baseAbilityAmount: -20
-  description: 
+  baseAbilityAmount: -50
+  description: Inflicts an extremely toxic poison to the target's magic and turns
+    it against its user causing damage.
   shouldExpand: 0
   buttonColor: {r: 0.37106323, g: 0, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
-  abilityType: 4
+  abilityType: 0
   targetingType: 0
   canTargetAll: 0
-  isHeal: 0

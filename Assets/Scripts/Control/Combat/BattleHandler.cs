@@ -163,7 +163,6 @@ namespace RPGProject.Control
 
             if (_won == true)
             {
-
                 yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
 
                 UpdateTeamResources(unitManager.GetPlayerUnits());

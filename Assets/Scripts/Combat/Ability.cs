@@ -12,7 +12,7 @@ namespace RPGProject.Combat
     {
         [SerializeField] List<ComboLink> combo = new List<ComboLink>();
         [SerializeField] AbilityResource abilityResource = AbilityResource.None;
-        
+
 
         public List<ComboLink> GetCombo()
         {
@@ -35,14 +35,13 @@ namespace RPGProject.Combat
         [SerializeField] bool shouldExpand = false;
         [SerializeField] Color buttonColor = Color.white;
         [SerializeField] Color textColor = Color.black;
-       
+
         [Header("Behaviors")]
 
         [SerializeField] AbilityType abilityType = AbilityType.Melee;
         [SerializeField] TargetingType targetingType = TargetingType.Everyone;
-        
+
         [SerializeField] bool canTargetAll = false;
-        [SerializeField] bool isHeal = false;
 
         public string GetAbilityName()
         {
@@ -102,11 +101,6 @@ namespace RPGProject.Combat
         public bool CanTargetAll()
         {
             return canTargetAll;
-        }
-
-        public bool IsHeal()
-        {
-            return isHeal;
         }
     }
 }

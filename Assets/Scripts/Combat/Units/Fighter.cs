@@ -21,7 +21,7 @@ namespace RPGProject.Combat
         Ability selectedAbility = null;
         Fighter selectedTarget = null;
         AbilityObjectKey currentAbilityObjectKey = AbilityObjectKey.None;
-        //List<Fighter> allTargets = new List<Fighter>();
+        List<Fighter> allTargets = new List<Fighter>();
 
         AbilityObjectPool abilityObjectPool = null;
 
@@ -83,7 +83,6 @@ namespace RPGProject.Combat
         {
             AbilityType abilityType = selectedAbility.GetAbilityType();
             bool isCriticalHit = CombatAssistant.CriticalHitCheck(luck);
-            bool isHeal = selectedAbility.IsHeal();
 
             float abilityAmountWStatModifier = GetStatsModifier(selectedAbility.GetBaseAbilityAmount());
             float calculatedAmount = CombatAssistant.GetCalculatedAmount(selectedAbility.GetBaseAbilityAmount(), isCriticalHit);
@@ -104,11 +103,12 @@ namespace RPGProject.Combat
                 case AbilityType.Melee:
 
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
-                    float reflectionAmount = selectedTarget.GetPhysicalReflectionDamage();
-                    if (reflectionAmount > 0)
-                    {
-                        health.ChangeHealth(reflectionAmount, false, false);
-                    }
+
+                    if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior, selectedTarget.transform);
+
+                    float reflectionAmount = -selectedTarget.GetPhysicalReflectionDamage();
+                    if (reflectionAmount > 0) health.ChangeHealth(reflectionAmount, false, false);
+     
                     break;
 
                 case AbilityType.Copy:
@@ -120,23 +120,29 @@ namespace RPGProject.Combat
 
                 case AbilityType.Cast:
 
-                    abilityBehavior.gameObject.SetActive(true);
-                    abilityBehavior.PerformSpellBehavior();
+                    ActivateAbilityBehavior(abilityBehavior, null);
                     break;
 
                 case AbilityType.InstaHit:
+                   
+                    ActivateAbilityBehavior(abilityBehavior, selectedTarget.transform);
 
-                    abilityBehavior.transform.parent = selectedTarget.transform;
-                    abilityBehavior.transform.localPosition = Vector3.zero;
-                    abilityBehavior.gameObject.SetActive(true);
-                    abilityBehavior.PerformSpellBehavior();
-
-                    targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
-
+                    if(calculatedAmount != 0) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
                     break;
             }
 
             //Refactor - Play soundfx
+        }
+
+        public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior, Transform _newParent)
+        {
+            if(_newParent != null)
+            {
+                _abilityBehavior.transform.parent = _newParent;
+                _abilityBehavior.transform.localPosition = Vector3.zero;
+            }
+            _abilityBehavior.gameObject.SetActive(true);
+            _abilityBehavior.PerformSpellBehavior();
         }
 
         public void LookAtTarget(Transform _target)

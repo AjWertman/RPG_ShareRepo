@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: ForestsWrath
+  m_Name: Silence
   m_EditorClassIdentifier: 
   combo:
-  - animationID: Cast0
+  - animationID: Attack1
     comboPointCost: 0
     manaCost: 0
     enduranceCost: 0
-    abilityObjectKey: 3
+    abilityObjectKey: 6
     hitFXPrefab: {fileID: 0}
   abilityResource: 0
-  abilityName: Forest's Wrath
+  abilityName: Silence
   requiredLevel: 1
-  abilityLifetime: 1
-  baseAbilityAmount: -60
-  description: Adding a negative charge to life energy creates a very lethal sphere
-    of chaos.
+  abilityLifetime: 2
+  baseAbilityAmount: -5
+  description: Places a curse on the targets magic reserve, preventing them from
+    casting for two turns.
   shouldExpand: 0
-  buttonColor: {r: 0, g: 1, b: 0, a: 1}
+  buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
-  abilityType: 1
+  abilityType: 4
   targetingType: 0
   canTargetAll: 0

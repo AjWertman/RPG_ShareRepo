@@ -25,6 +25,10 @@ namespace RPGProject.Combat
                 if (isCopyAbility && isCopyListNullOrEmpty) return "No copyable abilities used";
             }
 
+            bool isAbilityMagic = (_selectedAbility.GetAbilityType() != AbilityType.Melee);
+            bool isFighterSilenced = _caster.IsSilenced();
+            if (isAbilityMagic && isFighterSilenced) return "Caster is silenced";
+
             return "";
         }
 

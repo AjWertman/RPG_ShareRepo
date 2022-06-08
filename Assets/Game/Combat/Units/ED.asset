@@ -21,12 +21,12 @@ MonoBehaviour:
     manaPoints: 0
     maxManaPoints: 100
   stats:
-    stamina: 20
-    spirit: 15
-    strength: 20
-    skill: 18
-    armor: 20
-    resistance: 20
+    stamina: 100
+    spirit: 10
+    strength: 10
+    skill: 10
+    armor: 10
+    resistance: 10
     speed: 10
     luck: 10
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
