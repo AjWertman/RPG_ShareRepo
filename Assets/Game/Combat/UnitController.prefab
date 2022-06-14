@@ -146,8 +146,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitInfo:
-    characterKey: 0
     unitName: 
+    characterKey: 0
     unitLevel: 0
     stats:
       stamina: 10
@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013a2c4e78ee67c45a8e2725579a3e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hurtClip: {fileID: 8300000, guid: 1a4dfee53881a784680f03108acf9ba1, type: 3}
   healthPoints: 0
   maxHealthPoints: 100
 --- !u!114 &1646649399447466939
@@ -225,6 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ff99147c9681f48aaa9a8cae376f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  magicClip: {fileID: 8300000, guid: 14e57a7f84d9ab0478b3b599be8fb87e, type: 3}
+  meleeClip: {fileID: 8300000, guid: 167fa4a566ffb81498ac8cec6cafaea4, type: 3}
 --- !u!114 &3504165519863861257
 MonoBehaviour:
   m_ObjectHideFlags: 0

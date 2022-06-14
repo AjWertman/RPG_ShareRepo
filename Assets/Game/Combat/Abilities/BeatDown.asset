@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
+  m_Name: BeatDown
+  m_EditorClassIdentifier: 
+  combo:
+  - animationID: 
+    comboPointCost: 0
+    manaCost: 0
+    enduranceCost: 0
+    abilityObjectKey: 0
+    hitFXPrefab: {fileID: 0}
+  - animationID: 
+    comboPointCost: 0
+    manaCost: 0
+    enduranceCost: 0
+    abilityObjectKey: 0
+    hitFXPrefab: {fileID: 0}
+  - animationID: 
+    comboPointCost: 0
+    manaCost: 0
+    enduranceCost: 0
+    abilityObjectKey: 0
+    hitFXPrefab: {fileID: 0}
+  abilityResource: 0
+  abilityName: 
+  requiredLevel: 1
+  abilityLifetime: 1
+  baseAbilityAmount: 40
+  description: 
+  shouldExpand: 0
+  buttonColor: {r: 1, g: 1, b: 1, a: 1}
+  textColor: {r: 0, g: 0, b: 0, a: 1}
+  abilityType: 0
+  targetingType: 0
+  canTargetAll: 0

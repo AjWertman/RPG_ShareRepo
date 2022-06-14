@@ -85,7 +85,7 @@ namespace RPGProject.Control
 
                 case CheckpointMenuKey.Heal:
 
-                    FindObjectOfType<PlayerTeam>().RestoreAllResources();
+                    FindObjectOfType<PlayerTeamManager>().RestoreAllResources();
                     break;
 
                 case CheckpointMenuKey.Save:

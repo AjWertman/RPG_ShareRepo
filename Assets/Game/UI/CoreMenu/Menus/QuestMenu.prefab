@@ -1813,8 +1813,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7939193695760444736}
   m_HandleRect: {fileID: 6599869848331692294}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.6261
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2569,14 +2569,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questsTab: {fileID: 1331962912383828784}
   completedTab: {fileID: 8928603256318864250}
+  backButton: {fileID: 200822092777074928}
   questItemPrefab: {fileID: 5451721590064745685, guid: 32564cd1e0895df4f9290b2454ecf663,
     type: 3}
-  questsPage: {fileID: 3222830581588513795}
   questListContent: {fileID: 3213017851767369954}
   questTooltipUI: {fileID: 3696638944040630336}
-  completedQuestsPage: {fileID: 8010695804620191088}
-  completedListContent: {fileID: 3717655578117960134}
-  completedTooltipUI: {fileID: 8060892521939307667}
 --- !u!1 &4417386024470076921
 GameObject:
   m_ObjectHideFlags: 0
@@ -4083,7 +4080,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0000076293945, y: -0.000009298325}
+  m_AnchoredPosition: {x: 0.0000076293945, y: 2201.425}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1160693056933055989

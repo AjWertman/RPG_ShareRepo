@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 1117073207142316478}
   - component: {fileID: 8645980614155925719}
   - component: {fileID: 6345306665929297697}
-  - component: {fileID: 8130566532782105626}
   - component: {fileID: -7143616735528514833}
   - component: {fileID: 2941801511647040063}
   - component: {fileID: 7722672655448484436}
+  - component: {fileID: 7441022182438283322}
   m_Layer: 0
   m_Name: OverWorldEnemy
   m_TagString: Untagged
@@ -110,19 +110,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owMeshObject: {fileID: 0}
   chaseDistance: 15
---- !u!114 &8130566532782105626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1117073207142316476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb7afec5e882c9d498bf90157ed7ce6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  retreatTransform: {fileID: 0}
 --- !u!114 &-7143616735528514833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +149,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42143d4578db2284794cff5b71f2974a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7441022182438283322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117073207142316476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18d65270bb25c214d8699f3d1585b6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &4457191990742106142

@@ -40,6 +40,7 @@ namespace RPGProject.UI
             characterButton.onClick.AddListener(() => OnCharacterButton());
             inventoryButton.onClick.AddListener(() => OnInventoryButton());
             questsButton.onClick.AddListener(() => OnQuestsButton());
+
             mapButton.onClick.AddListener(() => OnMapButton());
             saveButton.onClick.AddListener(() => OnSaveButton());
             loadButton.onClick.AddListener(() => OnLoadButton());
@@ -55,7 +56,7 @@ namespace RPGProject.UI
 
         private void OnInventoryButton()
         {
-            onMenuButtonSelect(MainMenuButtonType.Inventory);
+            //onMenuButtonSelect(MainMenuButtonType.Inventory);
         }
 
         private void OnQuestsButton()
@@ -65,22 +66,22 @@ namespace RPGProject.UI
 
         private void OnMapButton()
         {
-            onMenuButtonSelect(MainMenuButtonType.Map);
+            //onMenuButtonSelect(MainMenuButtonType.Map);
         }
 
         private void OnSaveButton()
         {
-            FindObjectOfType<SavingWrapper>().Save();
+            //FindObjectOfType<SavingWrapper>().Save();
         }
 
         private void OnLoadButton()
         {
-            FindObjectOfType<SavingWrapper>().Load();
+            //FindObjectOfType<SavingWrapper>().Load();
         }
 
         private void OnOptionsButton()
         {
-            onMenuButtonSelect(MainMenuButtonType.Options);
+            //onMenuButtonSelect(MainMenuButtonType.Options);
         }
 
         private void OnMainMenuButton()

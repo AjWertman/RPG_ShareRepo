@@ -47,7 +47,7 @@ MonoBehaviour:
   playerMeshPrefabs:
   - {fileID: 5167164173009306999, guid: 124aede704385fb43b5284bb94b4b125, type: 3}
   - {fileID: 5167164173009306999, guid: 90959c97072835044a2d53ab1fb9fcb8, type: 3}
-  - {fileID: 5167164173009306999, guid: 52b81c0c2e91e434f8afe16274f2ebf5, type: 3}
+  - {fileID: 1003874204040948796, guid: c7f3f94be33251f46a539e12d20590af, type: 3}
   - {fileID: 5167164173009306999, guid: 0895cdda01a364a418a9af72547060fc, type: 3}
   amountOfGenericsToCreate: 4
   genericEnemyMeshPrefabs:

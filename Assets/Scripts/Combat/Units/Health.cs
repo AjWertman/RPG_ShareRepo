@@ -1,10 +1,13 @@
-﻿using System;
+﻿using RPGProject.Sound;
+using System;
 using UnityEngine;
 
 namespace RPGProject.GameResources
 {
     public class Health : MonoBehaviour
     {
+        [SerializeField] AudioClip hurtClip = null;
+
         [SerializeField] float healthPoints = 0f;
         [SerializeField] float maxHealthPoints = 100f;
 
@@ -21,7 +24,8 @@ namespace RPGProject.GameResources
         float resistance = 10f;
 
         public event Action<bool, float> onHealthChange;
-        public event Action<Health> onDeath;
+        public event Action<Health> onAnimDeath;
+        public event Action<Health> onHealthDeath;
 
         private void Awake()
         {
@@ -82,6 +86,11 @@ namespace RPGProject.GameResources
             SetCurrentHealthPercentage();
             onHealthChange(_isCritical, calculatedAmount);
 
+            if(calculatedAmount < 0)
+            {
+                FindObjectOfType<SoundFXManager>().CreateSoundFX(hurtClip, transform, .5f); 
+            }
+
             if (DeathCheck()) Die();
             else animator.Play("TakeDamage"); 
         }
@@ -122,45 +131,25 @@ namespace RPGProject.GameResources
             {
                 isDead = true;
                 animator.Play("Die");
-                
-                //Refactor play deeath sound
-                
-                HandleQuestCompletion();
+                onHealthDeath(this);
+                //Refactor play deeath sounds
             }
         }
 
         public void OnAnimDeath()
         {
-            onDeath(this);
+            onAnimDeath(this);
         }
 
         public bool DeathCheck()
         {
-            if (healthPoints <= 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            if (healthPoints <= 0) return true;
+            else return false;
         }
 
         public bool IsDead()
         {
             return isDead;
-        }
-
-        //Refactor
-        private void HandleQuestCompletion()
-        {
-            RPGProject.Questing.QuestCompletion myQuestCompletion = GetComponent<RPGProject.Questing.QuestCompletion>();
-            RPGProject.Questing.PlayerQuestList playerQuestList = FindObjectOfType<RPGProject.Questing.PlayerQuestList>();
-
-            if (myQuestCompletion != null)
-            {
-                myQuestCompletion.CompleteObjective();
-            }
         }
 
         public float GetHealthPoints()

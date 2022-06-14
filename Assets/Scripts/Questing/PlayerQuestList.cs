@@ -30,9 +30,13 @@ namespace RPGProject.Questing
         {
             QuestStatus status = GetQuestStatus(_quest);
 
-            if (status == null) return;
+            if (status == null)
+            {
+                return;
+            }
 
             status.CompleteObjective(_objectiveToComplete);
+
 
             if (status.IsComplete())
             {
@@ -54,6 +58,7 @@ namespace RPGProject.Questing
 
         public QuestStatus GetQuestStatus(Quest _quest)
         {
+
             foreach (QuestStatus status in questStatuses)
             {
                 if (status.GetQuest() == _quest)

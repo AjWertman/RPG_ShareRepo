@@ -25,9 +25,9 @@ namespace RPGProject.Control
             int index = 0;
 
             Transform currentPositionsParent = null;
-
             foreach (Transform positionsParent in _allPositionsParent.transform)
             {
+
                 if (index == _teamSize)
                 {
                     currentPositionsParent = positionsParent;

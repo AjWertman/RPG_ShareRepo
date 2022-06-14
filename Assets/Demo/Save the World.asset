@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 899177481ad13c448a8e512226c4fed0, type: 3}
+  m_Name: Save the World
+  m_EditorClassIdentifier: 
+  questDescription: Save the World
+  objectives:
+  - reference: a
+    amountToComplete: 1
+    description: Rendevous with your new team.
+    requiredObjectives: []
+  - reference: b
+    amountToComplete: 2
+    description: Defeat the Erradication Drones defending the camp.
+    requiredObjectives:
+    - a
+  - reference: c
+    amountToComplete: 1
+    description: Save the World!!!
+    requiredObjectives:
+    - b
+  rewards: []
+  xpAward: 9999

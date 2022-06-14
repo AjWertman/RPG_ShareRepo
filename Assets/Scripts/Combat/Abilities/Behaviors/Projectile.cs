@@ -21,7 +21,7 @@ namespace RPGProject.Combat
             }
         }
 
-        public override void PerformSpellBehavior()
+        public override void PerformAbilityBehavior()
         {
             hasAppliedChangeAmount = false;
 

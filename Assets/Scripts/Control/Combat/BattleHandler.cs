@@ -1,6 +1,7 @@
 ﻿using RPGProject.Combat;
 using RPGProject.Core;
 using RPGProject.GameResources;
+using RPGProject.Questing;
 using RPGProject.Sound;
 using RPGProject.UI;
 using System;
@@ -24,7 +25,7 @@ namespace RPGProject.Control
         UnitManager unitManager = null;
         TurnManager turnManager = null;
 
-        PlayerTeam playerTeamManager = null;
+        PlayerTeamManager playerTeamManager = null;
         List<Unit> playerTeam = new List<Unit>();
         int playerTeamSize = 0;
 
@@ -50,7 +51,7 @@ namespace RPGProject.Control
             musicOverride = GetComponent<MusicOverride>();
         }
 
-        public IEnumerator SetupBattle(PlayerTeam _playerTeamManager, List<Unit> _enemyTeam)
+        public IEnumerator SetupBattle(PlayerTeamManager _playerTeamManager, List<Unit> _enemyTeam)
         {
             battleState = BattleState.Null;
             isBattleOver = false;
@@ -67,7 +68,7 @@ namespace RPGProject.Control
 
             battleState = BattleState.Battling;
 
-            ExecuteNextTurn();
+            StartCoroutine(ExecuteNextTurn());
 
             yield return null;
         }
@@ -91,7 +92,25 @@ namespace RPGProject.Control
      
         public void UseAbility(Fighter _target, Ability _selectedAbility)
         {
+            if (_selectedAbility.CanTargetAll())
+            {
+                TargetAll(_selectedAbility);
+                return;
+            }
+             
             currentAttack = currentUnitTurn.UseAbilityBehavior(_target, _selectedAbility);
+            StartCoroutine(currentAttack);
+        }
+
+        private void TargetAll(Ability _selectedAbility)
+        {
+            List<UnitController> targetTeam = unitManager.GetEnemyUnits();
+            if(_selectedAbility.GetTargetingType() == TargetingType.PlayersOnly)
+            {
+                targetTeam = unitManager.GetPlayerUnits();
+            }
+
+            currentAttack = currentUnitTurn.UseAbilityOnAllBehavior(targetTeam, _selectedAbility);
             StartCoroutine(currentAttack);
         }
 
@@ -110,17 +129,21 @@ namespace RPGProject.Control
         {
             if (isBattleOver) return;
 
+            if (turnManager.GetCurrentUnitTurn() != null) turnManager.GetCurrentUnitTurn().GetUnitUI().ActivateUnitIndicator(false);
+
             turnManager.AdvanceTurn();
 
             if (battleState == BattleState.Battling)
             {
-                ExecuteNextTurn();
+                StartCoroutine(ExecuteNextTurn());
             }
         }
 
-        public void ExecuteNextTurn()
+        public IEnumerator ExecuteNextTurn()
         {
             //if (isTutorial) return;
+            yield return new WaitForSeconds(1f);
+            turnManager.GetCurrentUnitTurn().GetUnitUI().ActivateUnitIndicator(true);
             List<Fighter> unitFighters = GetUnitFighters(turnManager.GetTurnOrder());
             battleUIManager.ExecuteNextTurn(unitFighters, currentUnitTurn.GetFighter());
 
@@ -161,7 +184,7 @@ namespace RPGProject.Control
             enemyTeam.Clear();
             enemyTeamSize = 0;
 
-            if (_won == true)
+            if (_won == true) 
             {
                 yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
 
@@ -181,17 +204,21 @@ namespace RPGProject.Control
 
                 onBattleEnd();
 
-
                 yield return FindObjectOfType<Fader>().FadeIn(.5f);
-            }
-            else if (_won == false)
-            {
-                //Refactor - Handle deaths/Loss
             }
             else
             {
-                //Refactor - basically win ending without reward
+                FindObjectOfType<SceneManagerScript>().LoadMainMenu();
             }
+            //else if (_won == false)
+            //{
+            //    //Refactor a lose
+
+            //}
+            //else
+            //{
+            //    //Refactor - basically win ending without reward
+            //}
         }
 
         private void UpdateTeamResources(List<UnitController> _playerUnits)
@@ -321,7 +348,7 @@ namespace RPGProject.Control
             unitManager.SetUpUnits(enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
             unitManager.onMoveCompletion += AdvanceTurn;
             unitManager.onTeamWipe += EndBattle;
-            unitManager.onUnitListUpdate += UpdateManagerLists;
+            unitManager.onUnitDeath += OnUnitDeath;
         }
         public void SetupTurnManager()
         {
@@ -339,7 +366,7 @@ namespace RPGProject.Control
             battleUIManager.onEscape += Escape;
         }
 
-        private void UpdateManagerLists(UnitController _unitThatCausedUpdate)
+        private void OnUnitDeath(UnitController _unitThatCausedUpdate)
         {
             List<Fighter> playerCombatants = GetUnitFighters(unitManager.GetPlayerUnits());
             List<Fighter> enemyCombatants = GetUnitFighters(unitManager.GetEnemyUnits());
@@ -351,7 +378,7 @@ namespace RPGProject.Control
         {
             unitManager.onMoveCompletion -= AdvanceTurn;
             unitManager.onTeamWipe -= EndBattle;
-            unitManager.onUnitListUpdate -= UpdateManagerLists;
+            unitManager.onUnitDeath -= OnUnitDeath;
 
             battleUIManager.onPlayerMove -= OnPlayerMove;
             battleUIManager.onEscape -= Escape;
@@ -376,11 +403,11 @@ namespace RPGProject.Control
 
                 if (returnRandomPlayer)
                 {
-                    return unitManager.GetRandomPlayerUnit().GetFighter();
+                    return unitManager.GetRandomAlivePlayerUnit().GetFighter();
                 }
                 else
                 {
-                    return unitManager.GetRandomEnemyUnit().GetFighter();
+                    return unitManager.GetRandomAliveEnemyUnit().GetFighter();
                 }
             }
             else

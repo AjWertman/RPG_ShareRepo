@@ -47,13 +47,13 @@ namespace RPGProject.UI
             Quest quest = _status.GetQuest();
 
             foreach (Objective objective in quest.GetObjectives())
-            { 
+            {
                 QuestObjectiveUIItem questObjectiveUIItem = GetAvailableObjectiveInstance();
-                bool isCompleted = false;
+                bool shouldActivateObjective = false;
 
                 if (objective.GetRequiredObjectives().Length <= 0)
                 {
-                    isCompleted = true;
+                    shouldActivateObjective = true;
                     questObjectiveUIItem = GetAvailableObjectiveInstance();
                 }
                 else
@@ -72,12 +72,15 @@ namespace RPGProject.UI
 
                     if (hasAllRequiredObjectives)
                     {
-                        isCompleted = false;                        
+                        shouldActivateObjective = true;
                     }
                 }
 
-                questObjectiveUIItem.SetupObjectiveUIITem(_status, objective);
-                questObjectiveUIItem.gameObject.SetActive(true);
+                if (shouldActivateObjective)
+                {
+                    questObjectiveUIItem.SetupObjectiveUIITem(_status, objective);
+                    questObjectiveUIItem.gameObject.SetActive(true);
+                }
             }
         }
 

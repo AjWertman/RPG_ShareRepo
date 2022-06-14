@@ -23,13 +23,19 @@ namespace RPGProject.UI
             button = GetComponent<Button>();
             buttonText = GetComponentInChildren<TextMeshProUGUI>();
 
-            button.onClick.AddListener(() => onSelect(assignedTarget));
+            button.onClick.AddListener(OnSelect);
         }
 
         public void SetupTargetButton(Fighter _target)
         {
             assignedTarget = _target;
             buttonText.text = assignedTarget.GetUnitInfo().GetUnitName();
+        }
+
+        public void OnSelect()
+        {
+            onSelect(assignedTarget);
+            onPointerExit();
         }
 
         public void ResetTargetButton()

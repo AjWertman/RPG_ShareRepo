@@ -1,6 +1,7 @@
 ﻿using RPGProject.Combat;
 using RPGProject.Core;
 using RPGProject.GameResources;
+using RPGProject.Questing;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,21 +18,21 @@ namespace RPGProject.Control
         List<Unit> enemyTeam = new List<Unit>();
         List<UnitController> enemyUnits = new List<UnitController>();
 
-        PlayerTeam playerTeamManager = null;
+        PlayerTeamManager playerTeamManager = null;
 
         UnitPool unitPool = null;
         CharacterMeshPool characterMeshPool = null;
 
         public event Action onMoveCompletion;
         public event Action<bool?> onTeamWipe;
-        public event Action<UnitController> onUnitListUpdate;
+        public event Action<UnitController> onUnitDeath;
 
         int startingPlayerTeamSize = 0;
         int startingEnemyTeamSize = 0;
 
         public void InitalizeUnitManager()
         {
-            playerTeamManager = FindObjectOfType<PlayerTeam>();
+            playerTeamManager = FindObjectOfType<PlayerTeamManager>();
             unitPool = FindObjectOfType<UnitPool>();
             characterMeshPool = FindObjectOfType<CharacterMeshPool>();
             SetupEvents();
@@ -130,7 +131,7 @@ namespace RPGProject.Control
 
             deadUnit.GetUnitUI().ActivateResourceSliders(false);
             TeamWipeCheck();
-            onUnitListUpdate(deadUnit);
+            onUnitDeath(deadUnit);
         }
 
         private void TeamWipeCheck()
@@ -168,7 +169,18 @@ namespace RPGProject.Control
             foreach (UnitController unit in unitPool.GetAllUnits())
             {
                 unit.onMoveCompletion += OnMoveCompletion;
-                unit.GetHealth().onDeath += OnUnitDeath;
+                unit.GetHealth().onHealthDeath += TestQuestCompletion;
+                unit.GetHealth().onAnimDeath += OnUnitDeath;
+            }
+        }
+
+        private void TestQuestCompletion(Health _health)
+        {
+            QuestCompletion myQuestCompletion = _health.GetComponentInChildren<QuestCompletion>();
+
+            if (myQuestCompletion != null)
+            {
+                myQuestCompletion.CompleteObjective();
             }
         }
 
@@ -234,6 +246,34 @@ namespace RPGProject.Control
             int randomInt = RandomGenerator.GetRandomNumber(0, enemyUnits.Count - 1);
 
             return enemyUnits[randomInt];
+        }
+
+        public UnitController GetRandomAlivePlayerUnit()
+        {
+            List<UnitController> livingPlayerUnits = new List<UnitController>();
+            foreach(UnitController playerUnit in playerUnits)
+            {
+                if (playerUnit.GetHealth().IsDead()) continue;
+
+                livingPlayerUnits.Add(playerUnit);
+            }
+
+            int randomInt = RandomGenerator.GetRandomNumber(0, livingPlayerUnits.Count - 1);
+            return playerUnits[randomInt];
+        }
+
+        public UnitController GetRandomAliveEnemyUnit()
+        {
+            List<UnitController> livingEnemyUnits = new List<UnitController>();
+            foreach (UnitController enemyUnit in enemyUnits)
+            {
+                if (enemyUnit.GetHealth().IsDead()) continue;
+
+                livingEnemyUnits.Add(enemyUnit);
+            }
+
+            int randomInt = RandomGenerator.GetRandomNumber(0, livingEnemyUnits.Count - 1);
+            return playerUnits[randomInt];
         }
     }
 }

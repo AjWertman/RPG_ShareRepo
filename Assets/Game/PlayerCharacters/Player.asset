@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce03015cc62a59f479a67cabc6a6e062, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
+  characterName: Player
   playerKey: 1
   age: 99
-  summaryText: 'charName worked in a tavern until they decided to be the protagonist
+  summaryText: 'Player worked in a tavern until they decided to be the protagonist
     of a video game. '
   backgroundImage: {fileID: 21300000, guid: fb1e48043961d8f44948225f539a83bb, type: 3}
   faceImage: {fileID: 21300000, guid: fb1e48043961d8f44948225f539a83bb, type: 3}

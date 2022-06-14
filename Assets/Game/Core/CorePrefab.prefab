@@ -316,6 +316,23 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8811703614119544576}
     m_Modifications:
+    - target: {fileID: 2150040783996901691, guid: 3d1eb631c41a8644182da8616ed2587a,
+        type: 3}
+      propertyPath: mainPlaylist.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2150040783996901691, guid: 3d1eb631c41a8644182da8616ed2587a,
+        type: 3}
+      propertyPath: mainPlaylist.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 844f3249087cebf43992fe1d79a99405,
+        type: 2}
+    - target: {fileID: 2150040783996901691, guid: 3d1eb631c41a8644182da8616ed2587a,
+        type: 3}
+      propertyPath: mainPlaylist.Array.data[1]
+      value: 
+      objectReference: {fileID: 8506834691253120693, guid: 3dab45d97b4eea64790f8e9345fce80c,
+        type: 3}
     - target: {fileID: 3608358155602870797, guid: 3d1eb631c41a8644182da8616ed2587a,
         type: 3}
       propertyPath: m_RootOrder
@@ -399,17 +416,17 @@ PrefabInstance:
     - target: {fileID: 3800577166827565797, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7786334
+      value: 1.7791587
       objectReference: {fileID: 0}
     - target: {fileID: 3800577166827565798, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7123785
+      value: 0.71237844
       objectReference: {fileID: 0}
     - target: {fileID: 3800577166827565798, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.06476168
+      value: 0.064761676
       objectReference: {fileID: 0}
     - target: {fileID: 3800577166827565798, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
@@ -419,7 +436,7 @@ PrefabInstance:
     - target: {fileID: 3800577166827565798, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.063266456
+      value: 0.06326647
       objectReference: {fileID: 0}
     - target: {fileID: 3800577167626231985, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
@@ -449,7 +466,7 @@ PrefabInstance:
     - target: {fileID: 3800577167626231985, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7786334
+      value: 1.7791587
       objectReference: {fileID: 0}
     - target: {fileID: 3800577167626231985, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
@@ -549,7 +566,7 @@ PrefabInstance:
     - target: {fileID: 3800577168565408694, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7786334
+      value: 1.7791587
       objectReference: {fileID: 0}
     - target: {fileID: 3800577168565408695, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
@@ -574,7 +591,7 @@ PrefabInstance:
     - target: {fileID: 3800577168662924049, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7786334
+      value: 1.7791587
       objectReference: {fileID: 0}
     - target: {fileID: 3800577168662924050, guid: 4378cc5a96058684c822f3d6ee5eb281,
         type: 3}
@@ -1804,6 +1821,11 @@ PrefabInstance:
     - target: {fileID: 2002189191903431160, guid: f751b85f9f9060a47beefeec785886d8,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2002189191903431160, guid: f751b85f9f9060a47beefeec785886d8,
+        type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2008160654835714214, guid: f751b85f9f9060a47beefeec785886d8,
@@ -5729,7 +5751,7 @@ PrefabInstance:
     - target: {fileID: 8351099775433002779, guid: f751b85f9f9060a47beefeec785886d8,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8352846345978309910, guid: f751b85f9f9060a47beefeec785886d8,
         type: 3}
@@ -6265,6 +6287,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9000088167501883979, guid: f751b85f9f9060a47beefeec785886d8,
+        type: 3}
+      propertyPath: m_Size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9000088167501883979, guid: f751b85f9f9060a47beefeec785886d8,
         type: 3}

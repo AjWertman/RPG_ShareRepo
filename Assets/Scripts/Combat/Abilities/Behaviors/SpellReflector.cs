@@ -1,9 +1,14 @@
+using UnityEngine;
+
 namespace RPGProject.Combat
 {
     public class SpellReflector : AbilityBehavior
     {
-        public override void PerformSpellBehavior()
+        public override void PerformAbilityBehavior()
         {
+            transform.localEulerAngles = Vector3.zero;
+            transform.parent = null;
+
             target.ApplyActiveAbilityBehavior(this);
             target.SetIsReflectingSpells(true);
         }

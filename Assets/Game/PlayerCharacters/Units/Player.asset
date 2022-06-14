@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Player
   baseLevel: 10
-  characterKey: 1
+  characterKey: 0
   unitResources:
     healthPoints: 0
     maxHealthPoints: 100
@@ -27,7 +27,7 @@ MonoBehaviour:
     skill: 20
     armor: 20
     resistance: 20
-    speed: 20
+    speed: 30
     luck: 20
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   abilities:

@@ -1,4 +1,5 @@
 ﻿using RPGProject.Questing;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,32 +10,34 @@ namespace RPGProject.UI
     {
         [SerializeField] Button questsTab = null;
         [SerializeField] Button completedTab = null;
+        [SerializeField] Button backButton = null;
+
         [SerializeField] GameObject questItemPrefab = null;
 
         [SerializeField] Transform questListContent = null;
         [SerializeField] QuestTooltipUI questTooltipUI = null;
 
-        //[Header("Completed")]
-        //[SerializeField] GameObject completedQuestsPage = null;
-        //[SerializeField] Transform completedListContent = null;
-        //[SerializeField] QuestTooltipUI completedTooltipUI = null;
-
         PlayerQuestList questList = null;
 
         List<QuestItemUI> questItemUIs = new List<QuestItemUI>();
 
-        private void Start()
+        public event Action onBackButton;
+
+        public void InitializeMenu()
         {
             questsTab.onClick.AddListener(() => ActivateQuestsPage(false));
             completedTab.onClick.AddListener(() => ActivateQuestsPage(true));
 
-            questList = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerQuestList>();
+            backButton.onClick.AddListener(() => onBackButton());
+
+            questList = FindObjectOfType<PlayerQuestList>(true);
             CreateQuestItemUIPool(questList.GetQuestStatuses().Count);
 
             questList.onListUpdate += Redraw;
             questList.onQuestComplete += Redraw;
 
             DeactivateTooltip();
+            SetSelectedTabColor(null);
             Redraw();
         }
 
@@ -67,15 +70,8 @@ namespace RPGProject.UI
             if (_completedPage) SetSelectedTabColor(questsTab);
             else SetSelectedTabColor(completedTab);
 
-            //PopulateQuestPage(_completedPage);
+            Redraw();
         }
-
-        //private void ActivateCompletedPage()
-        //{
-        //    SetSelectedTabColor(completedTab);
-        //    questsPage.SetActive(false);
-        //    completedQuestsPage.SetActive(true);
-        //}
 
         private void Redraw()
         {
@@ -123,6 +119,8 @@ namespace RPGProject.UI
             {
                 tab.interactable = true;
             }
+
+            if (_selectedTab == null) return;
             _selectedTab.interactable = false;
         }
 

@@ -1,0 +1,590 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4681155158354586345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: f66d966c-296b-4a06-b7f7-07b1120c31d4
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: I thought I could feel some powerful magic radiating off of you. Just don't
+    hit me with any of those spells of yours.
+  children:
+  - 7e178202-0485-470a-93aa-e145ff7c7e89
+  rect:
+    serializedVersion: 2
+    x: 2043
+    y: 234
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-3721764979555099463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: befe628d-5c39-4770-b0c5-f0a723b726f0
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: There's no time, the longer we wait the more machines he crafts. The time
+    is now.
+  children:
+  - 6a21dd19-7833-4cc5-97ab-f537991b2bcb
+  rect:
+    serializedVersion: 2
+    x: 3058
+    y: 230
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-3575572258186343690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: a278572a-303d-4542-a4e8-06d3cbc32d3c
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: They never gave me one.
+  children:
+  - 539c29e9-2b43-448c-a79f-7619aa4bcda2
+  rect:
+    serializedVersion: 2
+    x: 1082
+    y: 290
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-3172328736462893479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 96dd6d3f-60aa-46b2-aa40-f7cfa2d0e7be
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: '*Sigh* Lucky for you, I brought an extra sword, and Mellaniphe brought an
+    extra staff. Which weapon suits you?'
+  children:
+  - ee8a4f4b-70ae-44bd-9368-d9a7d87b7325
+  - 69880b07-3817-42e1-980b-09a29ff9725f
+  rect:
+    serializedVersion: 2
+    x: 1559
+    y: 184
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-2991250158105101429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 07ac163f-6c02-481f-9572-ff9684a6608f
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: I like your spirit. Let's move out.
+  children:
+  - 6a21dd19-7833-4cc5-97ab-f537991b2bcb
+  rect:
+    serializedVersion: 2
+    x: 3065
+    y: 116
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-2134472390460831447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 3e5172b8-d17a-40c9-ad2b-30c0a51a6d45
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: Ahhh a warrior of my own heart. I look forward to sharing the battlefield
+    with you.
+  children:
+  - 7e178202-0485-470a-93aa-e145ff7c7e89
+  rect:
+    serializedVersion: 2
+    x: 2054
+    y: 129
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-117668165817815377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 6a21dd19-7833-4cc5-97ab-f537991b2bcb
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: You can press the "O" key to open the player menu and go over your new teammates
+    stats and abilities. You can also see your quests there. Some of the other buttons
+    may not work though.
+  children:
+  - 09b411e2-e7e9-41b6-9a2f-7c9137ce3505
+  rect:
+    serializedVersion: 2
+    x: 3318
+    y: 160
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
+  m_Name: DemoDialogue1
+  m_EditorClassIdentifier: 
+  newNodeOffset: {x: 250, y: 0}
+  dialogueNodes:
+  - {fileID: 8419405632792585456}
+  - {fileID: 4442194344081728052}
+  - {fileID: 9207106299333754033}
+  - {fileID: 6296036671691309631}
+  - {fileID: 2374864427661007009}
+  - {fileID: -3575572258186343690}
+  - {fileID: 4463641587948092028}
+  - {fileID: -3172328736462893479}
+  - {fileID: 6526123035304869409}
+  - {fileID: 5942444264893864519}
+  - {fileID: -2134472390460831447}
+  - {fileID: -4681155158354586345}
+  - {fileID: 5522926084239613752}
+  - {fileID: 4143611321552774791}
+  - {fileID: 6535953123278653497}
+  - {fileID: 8577422589962598474}
+  - {fileID: -3721764979555099463}
+  - {fileID: -2991250158105101429}
+  - {fileID: -117668165817815377}
+  - {fileID: 6232263795182146166}
+  isEssentialDialogue: 1
+--- !u!114 &2374864427661007009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 1916d2e6-134b-40e7-a684-2fbdcbac4546
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: I don't have one.
+  children:
+  - 539c29e9-2b43-448c-a79f-7619aa4bcda2
+  rect:
+    serializedVersion: 2
+    x: 1079
+    y: 129
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &4143611321552774791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 0432a568-a151-409f-800b-2dfe3ed0d0d2
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: Is everyone ready?
+  children:
+  - b3cd582b-313a-4014-b1b3-f743c26ec9f7
+  - ffc7fca1-5492-44ae-9ac4-5c6c418e22c9
+  rect:
+    serializedVersion: 2
+    x: 2553
+    y: 183
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &4442194344081728052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 99aa831a-f3a9-4067-a53a-70b3d7922a45
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Unknown
+  text: Good luck on your mission.
+  children:
+  - ac52f703-a4c0-460f-9535-b01218f8de00
+  rect:
+    serializedVersion: 2
+    x: 332
+    y: 175
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: giveQuest
+  condition:
+    and: []
+--- !u!114 &4463641587948092028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 539c29e9-2b43-448c-a79f-7619aa4bcda2
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: We're supposed to be the best warriors in the world, going up against the
+    most dangerous threat in this world... and you... don't have a weapon.
+  children:
+  - 96dd6d3f-60aa-46b2-aa40-f7cfa2d0e7be
+  rect:
+    serializedVersion: 2
+    x: 1307
+    y: 186
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &5522926084239613752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 7e178202-0485-470a-93aa-e145ff7c7e89
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: Alright team, our target is Dhurmumir WorldBreaker. I have no doubts he will
+    have Erradication Drones on standby to stop us. We will destroy any machine that
+    stands in our way.
+  children:
+  - 0432a568-a151-409f-800b-2dfe3ed0d0d2
+  rect:
+    serializedVersion: 2
+    x: 2308
+    y: 173
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &5942444264893864519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 69880b07-3817-42e1-980b-09a29ff9725f
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: Staff
+  children:
+  - f66d966c-296b-4a06-b7f7-07b1120c31d4
+  rect:
+    serializedVersion: 2
+    x: 1793
+    y: 231
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: giveStaff
+  condition:
+    and: []
+--- !u!114 &6232263795182146166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 09b411e2-e7e9-41b6-9a2f-7c9137ce3505
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: TILL VALHALLA!
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 3569
+    y: 161
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: giveNewDialogue
+  condition:
+    and: []
+--- !u!114 &6296036671691309631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 2f995b5c-7816-4813-85ac-f82ddded29a0
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: Where's your weapon?
+  children:
+  - 1916d2e6-134b-40e7-a684-2fbdcbac4546
+  - a278572a-303d-4542-a4e8-06d3cbc32d3c
+  rect:
+    serializedVersion: 2
+    x: 833
+    y: 178
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &6526123035304869409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: ee8a4f4b-70ae-44bd-9368-d9a7d87b7325
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: Sword
+  children:
+  - 3e5172b8-d17a-40c9-ad2b-30c0a51a6d45
+  rect:
+    serializedVersion: 2
+    x: 1802
+    y: 135
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: giveSword
+  condition:
+    and: []
+--- !u!114 &6535953123278653497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: b3cd582b-313a-4014-b1b3-f743c26ec9f7
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: I was born ready.
+  children:
+  - 07ac163f-6c02-481f-9572-ff9684a6608f
+  rect:
+    serializedVersion: 2
+    x: 2815
+    y: 116
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &8419405632792585456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: aca19721-07c5-4bf8-b44d-33b4fe8c0177
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: ' '
+  text: '*You hear a voice coming through the portal behind you.* '
+  children:
+  - 99aa831a-f3a9-4067-a53a-70b3d7922a45
+  rect:
+    serializedVersion: 2
+    x: 85
+    y: 182
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &8577422589962598474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: ffc7fca1-5492-44ae-9ac4-5c6c418e22c9
+  m_EditorClassIdentifier: 
+  isPlayerNode: 1
+  overrideConversantName: 
+  text: Uhhh, can we wait a for a bit.
+  children:
+  - befe628d-5c39-4770-b0c5-f0a723b726f0
+  rect:
+    serializedVersion: 2
+    x: 2805
+    y: 230
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &9207106299333754033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: ac52f703-a4c0-460f-9535-b01218f8de00
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Gudrid
+  text: Welcome to the team, I'm Gudrid, I'm going to serve as our tank. The druid
+    over there is Mellaniphe, she will heal our wounds. As for you and Dario the
+    rogue, you two will take care of dealing damage.
+  children:
+  - 2f995b5c-7816-4813-85ac-f82ddded29a0
+  rect:
+    serializedVersion: 2
+    x: 581
+    y: 178
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: completeObjective
+  condition:
+    and: []

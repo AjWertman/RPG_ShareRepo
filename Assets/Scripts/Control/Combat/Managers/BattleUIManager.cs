@@ -162,6 +162,12 @@ namespace RPGProject.Control
         {
             selectedAbility = _ability;
 
+            if (selectedAbility.CanTargetAll())
+            {
+                OnTargetSelect(null);
+                return;
+            }
+          
             List<Fighter> targetTeam = new List<Fighter>();
 
             if (selectedAbility.GetTargetingType() == TargetingType.PlayersOnly)
@@ -211,8 +217,8 @@ namespace RPGProject.Control
             if (_combatant == null) return;
             highlightedTarget = _combatant;
 
-            //Refactor UnitUI
-            //highlightedTarget.ActivateUnitIndicatorUI(true);
+            //Refactor UnitUI to be in dict
+            highlightedTarget.GetComponent<UnitUI>().ActivateUnitIndicator(true);
             battleHUD.SetupUnitResourcesIndicator(highlightedTarget);
             
             //Refactor
@@ -225,7 +231,7 @@ namespace RPGProject.Control
 
             if (highlightedTarget != currentCombatantTurn)
             {
-                //highlightedTarget.ActivateUnitIndicatorUI(false);
+                highlightedTarget.GetComponent<UnitUI>().ActivateUnitIndicator(false);
             }
 
             battleHUD.SetupUnitResourcesIndicator(null);
@@ -241,13 +247,7 @@ namespace RPGProject.Control
 
         public void SetCurrentCombatantTurn(Fighter _currentCombatantTurn)
         {
-            if(currentCombatantTurn != null)
-            {
-                //currentCombatantTurn.ActivateUnitIndicatorUI(false);
-            }
-
             currentCombatantTurn = _currentCombatantTurn;
-            //currentCombatantTurn.ActivateUnitIndicatorUI(true);
         }
 
         public void SetSelectedAbility(Ability _selectedAbility)

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
   m_Name: ShieldMaiden
   m_EditorClassIdentifier: 
-  unitName: ShieldMaiden
+  unitName: Gudrid
   baseLevel: 10
   characterKey: 4
   unitResources:
@@ -27,7 +27,9 @@ MonoBehaviour:
     skill: 10
     armor: 32
     resistance: 18
-    speed: 10
+    speed: 30
     luck: 10
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
-  abilities: []
+  abilities:
+  - {fileID: 11400000, guid: 079d274c19cce124c804934d9f4a6f04, type: 2}
+  - {fileID: 11400000, guid: eeb30ade689268945988d61c52b6d429, type: 2}

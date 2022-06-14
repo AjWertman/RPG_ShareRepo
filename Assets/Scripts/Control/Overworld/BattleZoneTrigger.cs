@@ -16,7 +16,7 @@ namespace RPGProject.Control
 
         BattleHandler currentBattleHandler = null;
 
-        PlayerTeam playerTeam = null;
+        PlayerTeamManager playerTeam = null;
         List<Unit> enemyTeam = new List<Unit>();
 
         bool isInTrigger = false;
@@ -26,7 +26,7 @@ namespace RPGProject.Control
 
         private void Awake()
         {
-            playerTeam = FindObjectOfType<PlayerTeam>();
+            playerTeam = FindObjectOfType<PlayerTeamManager>();
         }
 
         public void BattleCheck()

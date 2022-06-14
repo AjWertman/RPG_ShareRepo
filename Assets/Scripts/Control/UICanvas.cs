@@ -24,11 +24,16 @@ namespace RPGProject.Control
 
         private void Start()
         {
+            playerMenu.InitializeMenu();
+
             DeactivateAllUI();
         }
 
         public void ActivatePlayerMenu()
         {
+            //Demolevel-----
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0) return;
+
             DeactivateAllUI();
             playerMenu.ActivateCoreMainMenu(true);
         }

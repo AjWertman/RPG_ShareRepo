@@ -1,5 +1,7 @@
 ﻿using RPGProject.Core;
 using RPGProject.GameResources;
+using RPGProject.Sound;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,19 +11,24 @@ namespace RPGProject.Combat
 {
     public class Fighter : MonoBehaviour
     {
+        //refactor - spells have own sounds in Ability.cs
+        [SerializeField] AudioClip magicClip = null;
+        [SerializeField] AudioClip meleeClip = null;
+
         Animator animator = null;
         ComboLinker comboLinker = null;
         CharacterMesh characterMesh = null;
         Health health = null;
         Mana mana = null;
+        SoundFXManager soundFXManager = null;
 
         UnitInfo unitInfo = new UnitInfo();
         UnitResources unitResources = new UnitResources();
 
         Ability selectedAbility = null;
         Fighter selectedTarget = null;
+        List<Fighter> selectedTargets = new List<Fighter>();
         AbilityObjectKey currentAbilityObjectKey = AbilityObjectKey.None;
-        List<Fighter> allTargets = new List<Fighter>();
 
         AbilityObjectPool abilityObjectPool = null;
 
@@ -42,7 +49,7 @@ namespace RPGProject.Combat
 
         public void InitalizeFighter()
         {
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             comboLinker = GetComponent<ComboLinker>();
             comboLinker.InitializeComboLinker();
             comboLinker.onComboStarted += SetCurrentAbilityInstance;
@@ -75,8 +82,14 @@ namespace RPGProject.Combat
             selectedAbility = _selectedAbility;
 
             yield return comboLinker.ExecuteCombo(selectedAbility.GetCombo());
+        }
 
-            //animator.CrossFade(selectedAbility.GetAnimatorTrigger(), .1f);
+        public IEnumerator AttackAll(List<Fighter> _targetTeam, Ability _selectedAbility)
+        {
+            selectedTargets = _targetTeam;
+            selectedAbility = _selectedAbility;
+
+            yield return comboLinker.ExecuteCombo(selectedAbility.GetCombo());
         }
 
         private void PerformAbility()
@@ -87,8 +100,6 @@ namespace RPGProject.Combat
             float abilityAmountWStatModifier = GetStatsModifier(selectedAbility.GetBaseAbilityAmount());
             float calculatedAmount = CombatAssistant.GetCalculatedAmount(selectedAbility.GetBaseAbilityAmount(), isCriticalHit);
 
-            Health targetHealth = selectedTarget.GetHealth();
-
             AbilityBehavior abilityBehavior = null;
 
             if (currentAbilityObjectKey != AbilityObjectKey.None)
@@ -98,24 +109,28 @@ namespace RPGProject.Combat
                 //Set transform ?
             }
 
+            if (selectedAbility.CanTargetAll())
+            {
+                TargetAllTargets(abilityBehavior, calculatedAmount, isCriticalHit);
+                return;
+            }
+
+            Health targetHealth = selectedTarget.GetHealth();
+
             switch (abilityType)
             {
                 case AbilityType.Melee:
 
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
-
                     if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior, selectedTarget.transform);
-
                     float reflectionAmount = -selectedTarget.GetPhysicalReflectionDamage();
-                    if (reflectionAmount > 0) health.ChangeHealth(reflectionAmount, false, false);
-     
+                    if (reflectionAmount > 0) health.ChangeHealth(reflectionAmount, false, false);    
                     break;
 
                 case AbilityType.Copy:
 
                     //onCopyAbilitySelected
                     /// Open ability menu with copy list
-
                     break;
 
                 case AbilityType.Cast:
@@ -124,14 +139,31 @@ namespace RPGProject.Combat
                     break;
 
                 case AbilityType.InstaHit:
-                   
+                    
                     ActivateAbilityBehavior(abilityBehavior, selectedTarget.transform);
-
                     if(calculatedAmount != 0) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
                     break;
             }
 
-            //Refactor - Play soundfx
+            if(abilityType == AbilityType.Melee)
+            {
+                FindObjectOfType<SoundFXManager>().CreateSoundFX(meleeClip, transform, .5f);
+            }
+            else
+            {
+                FindObjectOfType<SoundFXManager>().CreateSoundFX(magicClip, transform, .5f);
+            }
+        }
+
+        private void TargetAllTargets(AbilityBehavior _abilityBehavior, float _changeAmount, bool _isCritical)
+        {
+            TargetAll targetAll = _abilityBehavior.GetComponent<TargetAll>();
+            targetAll.transform.position = targetAll.GetCenterOfTargetsPoint(selectedTargets);
+            ActivateAbilityBehavior(_abilityBehavior, null);
+            foreach (Fighter fighter in selectedTargets)
+            {
+                fighter.GetHealth().ChangeHealth(_changeAmount, _isCritical, true);
+            }            
         }
 
         public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior, Transform _newParent)
@@ -142,7 +174,7 @@ namespace RPGProject.Combat
                 _abilityBehavior.transform.localPosition = Vector3.zero;
             }
             _abilityBehavior.gameObject.SetActive(true);
-            _abilityBehavior.PerformSpellBehavior();
+            _abilityBehavior.PerformAbilityBehavior();
         }
 
         public void LookAtTarget(Transform _target)
@@ -186,6 +218,8 @@ namespace RPGProject.Combat
 
         public void ApplyActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
+            bool isAlreadyEffected = CombatAssistant.IsAlreadyEffected(_abilityBehavior, this);
+            if (isAlreadyEffected) return;
             _abilityBehavior.onAbilityDeath += RemoveActiveAbilityBehavior;
 
             if (activeAbilityBehaviors.Contains(_abilityBehavior)) return;
@@ -347,19 +381,26 @@ namespace RPGProject.Combat
 
         public Ability GetRandomAbility()
         {
+            Ability randomAbility = null;
+
+            List<Ability> knownAbilities = new List<Ability>();
             Ability basicAttack = unitInfo.GetBasicAttack();
             Ability[] abilities = unitInfo.GetAbilities();
 
+            knownAbilities.Add(basicAttack);
             if (!IsSilenced())
             {
-                if (abilities.Length == 0 || abilities == null) return basicAttack;
-                int randomInt = RandomGenerator.GetRandomNumber(0, abilities.Length - 1);
-                return abilities[randomInt];
+                if (abilities.Length == 0 || abilities == null) randomAbility = basicAttack;
+                foreach(Ability ability in abilities)
+                {
+                    knownAbilities.Add(ability);
+                }
+
+                randomAbility = knownAbilities[RandomGenerator.GetRandomNumber(0, knownAbilities.Count -1)];
             }
             else
             {
                 List<Ability> physicalAbilities = new List<Ability>();
-                physicalAbilities.Add(basicAttack);
 
                 foreach (Ability ability in abilities)
                 {
@@ -369,9 +410,18 @@ namespace RPGProject.Combat
                     }
                 }
 
-                int randomInt = RandomGenerator.GetRandomNumber(0, physicalAbilities.Count - 1);
-                return physicalAbilities[randomInt];
+                randomAbility = physicalAbilities[RandomGenerator.GetRandomNumber(0, physicalAbilities.Count - 1)];
             }
+
+            if(randomAbility.GetCombo().Count == 1)
+            {
+                AbilityObjectKey abilityObjectKey = randomAbility.GetCombo()[0].GetAbilityObjectKey();
+                if (abilityObjectKey == AbilityObjectKey.None) return basicAttack;
+                AbilityBehavior abilityBehavior = abilityObjectPool.GetAbilityInstance(abilityObjectKey);
+                if (CombatAssistant.IsAlreadyEffected(abilityBehavior, selectedTarget)) return basicAttack;
+            }
+           
+            return randomAbility;
         }
 
         public List<Ability> GetKnownAbilities()

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
   m_Name: Rogue
   m_EditorClassIdentifier: 
-  unitName: Rogue
+  unitName: Dario
   baseLevel: 10
   characterKey: 2
   unitResources:
@@ -31,7 +31,5 @@ MonoBehaviour:
     luck: 48
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   abilities:
-  - {fileID: 11400000, guid: 3f3f40d7f05eb4d4e9648ddd4cf47ecd, type: 2}
   - {fileID: 11400000, guid: 5869f318d1e0da0429afba87ad2eacee, type: 2}
   - {fileID: 11400000, guid: c85330b2f2ba4f243b78989de59bc85a, type: 2}
-  - {fileID: 11400000, guid: e17fc177aec1b65469bbf106f19a58a1, type: 2}

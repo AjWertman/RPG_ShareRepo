@@ -750,7 +750,7 @@ PrefabInstance:
     - target: {fileID: 7851687807527868500, guid: fb37dcb8ebeb305498dd46dd98492ead,
         type: 3}
       propertyPath: m_text
-      value: 'Quit
+      value: 'Quit Game
 
 '
       objectReference: {fileID: 0}

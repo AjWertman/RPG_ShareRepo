@@ -44,9 +44,9 @@ namespace RPGProject.UI
         private void ActivatePage(Button _selectedTab, GameObject _pageToActive)
         {
             if (_pageToActive.activeSelf) return;
-            SetSelectedTabColor(_selectedTab);
 
             DeactivateAllPages();
+            SetSelectedTabColor(_selectedTab);
             _pageToActive.SetActive(true);
         }
 

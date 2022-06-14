@@ -50,10 +50,6 @@ namespace RPGProject.Control
         {
             if (Vector3.Distance(transform.position, player.transform.position) <= activationDistance)
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    _playerController.SetLastCheckpoint(this);
-                }
                 return true;
             }
 
@@ -72,6 +68,7 @@ namespace RPGProject.Control
 
         public void WhatToDoOnClick(PlayerController _playerController)
         {
+            _playerController.SetLastCheckpoint(this);
             player.ActivateCheckpointMenu(this);
         }
     }

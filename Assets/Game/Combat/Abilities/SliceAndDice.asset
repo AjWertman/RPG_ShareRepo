@@ -19,7 +19,7 @@ MonoBehaviour:
     enduranceCost: 0
     abilityObjectKey: 0
     hitFXPrefab: {fileID: 0}
-  - animationID: Attack1
+  - animationID: Attack2
     comboPointCost: 0
     manaCost: 0
     enduranceCost: 0

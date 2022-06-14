@@ -10,5 +10,8 @@ namespace RPGProject.Combat
         Discharge = 5,
         Silence = 6,
         HumanFlame = 7,
+        Nuke = 8,
+        ShieldWall = 9,
+        Missile = 10,
     }
 }

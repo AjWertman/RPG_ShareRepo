@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameKey: Battle Song
   song: {fileID: 8300000, guid: ed78c44ea5b01d845bc10a3a9cdffd3d, type: 3}
-  volume: 1
+  volume: 0.5

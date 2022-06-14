@@ -101,6 +101,15 @@ MonoBehaviour:
   - abilityObjectKey: 7
     abilityPrefab: {fileID: 6202032157614960914, guid: 834e9b63e32285b43ad7de3682615c81,
       type: 3}
+  - abilityObjectKey: 8
+    abilityPrefab: {fileID: 397587535005714845, guid: 06ca79ff456b7e745bf2979663af56b7,
+      type: 3}
+  - abilityObjectKey: 9
+    abilityPrefab: {fileID: 5117204864137538549, guid: b62d2e9abf389684c937eacee9491ff5,
+      type: 3}
+  - abilityObjectKey: 10
+    abilityPrefab: {fileID: 2410868920286215375, guid: 575647ab0451c484681eb7173b74116a,
+      type: 3}
   amountOfAbilityObjects: 4
 --- !u!1001 &6394786980111018847
 PrefabInstance:

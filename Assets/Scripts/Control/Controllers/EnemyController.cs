@@ -1,6 +1,7 @@
-﻿using RPGProject.Combat;
+﻿using RPGProject.Movement;
 using RPGProject.Saving;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace RPGProject.Control
 {
@@ -12,11 +13,12 @@ namespace RPGProject.Control
         Animator animator = null;
         BattleZoneTrigger enemyTrigger = null;
         
-
         PlayerController player = null;
 
+        AIMover mover = null;
+
         //Refactor - use triggers to activate level enemies?
-        bool isActive = false;
+        bool isActive = true;
         bool isBattling = false;
 
         bool shouldBeDisabled = false;
@@ -24,7 +26,7 @@ namespace RPGProject.Control
         private void Awake()
         {
             animator = GetComponentInChildren<Animator>();
-            //mover = GetComponent<CombatMover>();
+            mover = GetComponent<AIMover>();
             enemyTrigger = GetComponentInChildren<BattleZoneTrigger>();
         }
 
@@ -47,7 +49,7 @@ namespace RPGProject.Control
 
         private void Chase()
         {
-            //mover.MoveTo(player.transform.position);
+            mover.MoveTo(player.transform.position);
         }
 
         private float GetDistanceToPlayer()
@@ -83,6 +85,10 @@ namespace RPGProject.Control
         {
             owMeshObject.SetActive(false);
             enemyTrigger.gameObject.SetActive(false);
+
+            //refactor
+            GetComponent<CapsuleCollider>().enabled = false ;
+            GetComponent<NavMeshAgent>().enabled = false;
             isActive = false;
         }
 

@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Sandbox.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Demo/Menu.unity
+    guid: fee346b4715e30a41a31806f026720dd
+  - enabled: 1
+    path: Assets/Demo/ConfinedRoom.unity
+    guid: 4dfe68d78615486408ce671501e34938
+  - enabled: 1
+    path: Assets/Demo/Prototype.unity
+    guid: 86e6c8927b0310c45b2b5b875d2c7d82
+  - enabled: 1
+    path: Assets/Demo/ConfinedRoom 1.unity
+    guid: 3922e2cdca0c54e429f8fc9b1e2f3c51
   m_configObjects: {}

@@ -15,19 +15,7 @@ MonoBehaviour:
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    manaCost: 0
-    enduranceCost: 0
-    abilityObjectKey: 1
-    hitFXPrefab: {fileID: 0}
-  - animationID: Cast0
-    comboPointCost: 0
-    manaCost: 0
-    enduranceCost: 0
-    abilityObjectKey: 1
-    hitFXPrefab: {fileID: 0}
-  - animationID: Cast0
-    comboPointCost: 0
-    manaCost: 0
+    manaCost: 20
     enduranceCost: 0
     abilityObjectKey: 1
     hitFXPrefab: {fileID: 0}
@@ -43,4 +31,3 @@ MonoBehaviour:
   abilityType: 1
   targetingType: 0
   canTargetAll: 0
-  isHeal: 0

@@ -16,7 +16,7 @@ namespace RPGProject.UI
 
         public void SetupStatPageUI(PlayableCharacter _character, int _level, Stats _stats, UnitResources _unitResources)
         {
-            nameText.text = _character.GetPlayerKey().ToString();
+            nameText.text = _character.GetName();
             levelText.text = ("Lv: " + _level.ToString());
 
             foreach (StatPageUI statPageUI in statPageUIs)

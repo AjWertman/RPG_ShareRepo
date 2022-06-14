@@ -32,7 +32,8 @@ namespace RPGProject.Control
 
         public void InitalizeUnitController()
         {
-            animator = GetComponent<Animator>();
+            //Refactor anim to be on Main only
+            animator = GetComponentInChildren<Animator>();
 
             fighter = GetComponent<Fighter>();
             comboLinker = GetComponent<ComboLinker>();
@@ -128,6 +129,16 @@ namespace RPGProject.Control
                     yield break;
                 }
             }
+        }
+
+        public IEnumerator UseAbilityOnAllBehavior(List<UnitController> _targetTeam, Ability _selectedAbility)
+        {
+            List<Fighter> targetFighters = new List<Fighter>();
+
+            foreach (UnitController unitController in _targetTeam) targetFighters.Add(unitController.fighter);
+
+            StartCoroutine(fighter.AttackAll(targetFighters, _selectedAbility));
+            yield return null;
         }
 
         public void UseAbility(Fighter _target, Ability _selectedAbility)

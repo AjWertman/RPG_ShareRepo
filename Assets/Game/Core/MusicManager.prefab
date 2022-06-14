@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -45,9 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainPlaylist:
-  - {fileID: 1751463598247527692, guid: e700adbef035aab42ac58a07cdb197bc, type: 3}
-  - {fileID: 8506834691253120693, guid: 77918dc24f47dd44ca7032077cff72f4, type: 3}
-  - {fileID: 8506834691253120693, guid: 3dab45d97b4eea64790f8e9345fce80c, type: 3}
+  - {fileID: 11400000, guid: 844f3249087cebf43992fe1d79a99405, type: 2}
 --- !u!82 &6968748865402679782
 AudioSource:
   m_ObjectHideFlags: 0
@@ -58,11 +57,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: ed78c44ea5b01d845bc10a3a9cdffd3d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

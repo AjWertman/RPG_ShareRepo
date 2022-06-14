@@ -1,13 +1,16 @@
-﻿using RPGProject.Core;
+﻿using RPGProject.Combat;
+using RPGProject.Core;
 using RPGProject.Movement;
+using RPGProject.Sound;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Control
 {
     public class PlayerController : MonoBehaviour, IOverworld
     {
-        [SerializeField] PlayerKey[] playerTeam = null;
+        [SerializeField] List<PlayerKey> playerTeam = new List<PlayerKey>();
 
         [SerializeField] GameObject playerMesh = null;
         [SerializeField] GameObject camLookObject = null;
@@ -15,11 +18,14 @@ namespace RPGProject.Control
         [SerializeField] KeyCode menuKeyCode = KeyCode.Escape;
         [SerializeField] Texture2D cursorTexture = null;
 
+        [SerializeField] AudioClip footstepsClip = null;
+
         Animator animator = null;
         FollowCamera followCamera = null;
         PlayerConversant playerConversant = null;
         PlayerMover playerMover = null;
-        PlayerTeam playerTeamManager = null;
+        PlayerTeamManager playerTeamManager = null;
+        SoundFXManager soundFXManager = null;
         UICanvas uiCanvas = null;
 
         BattleZoneTrigger contestedBattleZoneTrigger = null;
@@ -41,8 +47,9 @@ namespace RPGProject.Control
         {
             followCamera = FindObjectOfType<FollowCamera>();
             uiCanvas = FindObjectOfType<UICanvas>();
+            soundFXManager = FindObjectOfType<SoundFXManager>();
 
-            playerTeamManager = FindObjectOfType<PlayerTeam>();
+            playerTeamManager = FindObjectOfType<PlayerTeamManager>();
             playerTeamManager.PopulateTeamInfos(playerTeam);
 
             //Cursor.SetCursor(cursorTexture, new Vector2(0, 0), CursorMode.ForceSoftware);
@@ -68,6 +75,8 @@ namespace RPGProject.Control
 
         private bool InteractWithUI()
         {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0) return true;
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 3) return true;
             bool isInteracting = false;
 
             //if (uiCanvas.IsTutorialActive()) isInteracting = true;
@@ -117,6 +126,8 @@ namespace RPGProject.Control
 
         private void ActivateCoreMenu()
         {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 1) return;
+
             if (!uiCanvas.IsAnyPlayerMenuActive())
             {
                 uiCanvas.ActivatePlayerMenu();
@@ -221,6 +232,7 @@ namespace RPGProject.Control
         //Refactor - Create sound effect
         private void FootStepBehavior()
         {
+            soundFXManager.CreateSoundFX(footstepsClip, transform, .2f);
             if (contestedBattleZoneTrigger != null)
             {
                 contestedBattleZoneTrigger.BattleCheck();
@@ -264,13 +276,29 @@ namespace RPGProject.Control
             return camLookObject.transform;
         }
 
+
+        /// /////////////////////////////Demo//////////////////////////////////////////////////////////
+
         public void EquipWeapon(bool _isSword)
         {
-            EquipmentManager equipmentManager = FindObjectOfType<EquipmentManager>(true);
+            EquipmentManager[] equipmentManager = FindObjectsOfType<EquipmentManager>(true);
 
-            equipmentManager.EquipWeapon(_isSword);
-            //Equip abilities
+            equipmentManager[0].EquipWeapon(_isSword);
         }
 
+        public void AddTeammate(PlayerKey _playerKey)
+        {
+            playerTeamManager.AddTeammate(_playerKey);
+        }
+
+        public void RemoveTeammate(PlayerKey _playerKey)
+        {
+            playerTeamManager.RemoveTeammate(_playerKey);
+        }
+
+        public void RemoveTeammate()
+        {
+            playerTeamManager.RemoveTeammate(PlayerKey.Rogue);
+        }
     }
 }

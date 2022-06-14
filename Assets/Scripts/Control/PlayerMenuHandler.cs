@@ -19,18 +19,22 @@ namespace RPGProject.Control
         [Header("Other UI")]
         [SerializeField] CurrencyUI currencyMenu = null;
 
-        PlayerTeam playerTeam = null;
+        PlayerTeamManager playerTeam = null;
 
-        private void Start()
+        public void InitializeMenu()
         {
             coreMainMenu.onMenuButtonSelect += OpenMenu;
+
+            questMenu.onBackButton += ()=> ActivateCoreMainMenu(true);
 
             characterSelectMenu.onCharacterSelect += OpenCharacterMenu;
             characterSelectMenu.onBackToMainCoreMenu += BackToMainMenu;
 
             characterMenu.onBackToCharacterSelect += BackToCharacterSelectMenu;
 
-            playerTeam = FindObjectOfType<PlayerTeam>();
+            playerTeam = FindObjectOfType<PlayerTeamManager>();
+
+            questMenu.InitializeMenu();
 
             DeactivateAllMenus();
         }

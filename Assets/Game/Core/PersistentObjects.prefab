@@ -204,10 +204,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MusicManager
       objectReference: {fileID: 0}
-    - target: {fileID: 4043533424629077057, guid: 8b9b575795db47c44a341b39b4a41ae2,
+    - target: {fileID: 6968748865402679782, guid: 8b9b575795db47c44a341b39b4a41ae2,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: Priority
+      value: 256
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b9b575795db47c44a341b39b4a41ae2, type: 3}
@@ -459,6 +459,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3608358155602870797}
     m_Modifications:
+    - target: {fileID: 1158034894643399861, guid: 6534295e3922fa640a004b0a151f71f3,
+        type: 3}
+      propertyPath: m_Lens.m_SensorSize.x
+      value: 1.7777778
+      objectReference: {fileID: 0}
     - target: {fileID: 4121836334157348170, guid: 6534295e3922fa640a004b0a151f71f3,
         type: 3}
       propertyPath: m_Name

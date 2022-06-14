@@ -71,6 +71,19 @@ namespace RPGProject.Combat
             return "";
         }
 
+        public static bool IsAlreadyEffected(AbilityBehavior _abilityBehavior, Fighter _target)
+        {
+            //Refactor - doesnt work
+            if (_abilityBehavior == null || _target == null) return false;
+
+            foreach (AbilityBehavior abilityBehavior in _target.GetActiveAbilityBehaviors())
+            {
+                if (abilityBehavior == _abilityBehavior) return true;
+            }
+
+            return false;       
+        }
+
         public static bool CriticalHitCheck(float _critChance)
         {
             float randomFloat = RandomGenerator.GetRandomNumber(0, 99);

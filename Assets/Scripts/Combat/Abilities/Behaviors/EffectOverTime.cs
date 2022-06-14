@@ -8,7 +8,7 @@ namespace RPGProject.Combat
             base.OnTurnAdvance();
         }
 
-        public override void PerformSpellBehavior()
+        public override void PerformAbilityBehavior()
         {
             target.ApplyActiveAbilityBehavior(this);
         }

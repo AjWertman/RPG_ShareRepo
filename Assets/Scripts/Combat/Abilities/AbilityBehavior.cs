@@ -30,7 +30,7 @@ namespace RPGProject.Combat
             transform.position = _caster.GetCharacterMesh().GetLHandTransform().position;
         }
 
-        public abstract void PerformSpellBehavior();
+        public abstract void PerformAbilityBehavior();
 
         public virtual void OnAbilityDeath()
         {

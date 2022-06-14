@@ -1,0 +1,478 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7895527211360185723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: b7c30fa1-a485-4203-8395-357317127a90
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: '*You wake up in a familiar, unfamiliar place.*'
+  children:
+  - f8f916a8-6180-4e23-983b-b4e196d11ecc
+  rect:
+    serializedVersion: 2
+    x: 14
+    y: 206
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-6200780984190645795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: ebb158f3-df10-40ca-806c-76df20d5d18e
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: We sincerely apologize for the deception.
+  children:
+  - 1fed0e48-f538-45b0-9cc9-315b421ccdc5
+  rect:
+    serializedVersion: 2
+    x: 1008
+    y: 207.00002
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-5220196053386452889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 4b65d648-8b82-482f-9024-57c3c03733ce
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Darla
+  text: You are sentenced to an eternity in a mental prison of your own creation.
+    The horrific details of which will be rendered based on your own definition of
+    hell.
+  children:
+  - e9f58075-ae4e-478f-95f7-cf1a0d93ad2b
+  rect:
+    serializedVersion: 2
+    x: 2718
+    y: 403
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-839792300390320374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 1fed0e48-f538-45b0-9cc9-315b421ccdc5
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: 'Dhurmumir was no more, however, we realized there was still an evil that
+    needed to be dealt with... Dario the assassin. '
+  children:
+  - 4f44df78-1428-4a34-b655-ce04cf6fa04c
+  rect:
+    serializedVersion: 2
+    x: 1197
+    y: 204
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &-272864897592491575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 549fbee0-19a6-458a-a5dd-c20388ad179f
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Darla
+  text: Dario Blademan you are under arrest for the murder of King Dorian and attempted
+    world domination.
+  children:
+  - 4b65d648-8b82-482f-9024-57c3c03733ce
+  rect:
+    serializedVersion: 2
+    x: 2439
+    y: 392
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be363cd322425640a09caec20856a77, type: 3}
+  m_Name: FinalDialogue
+  m_EditorClassIdentifier: 
+  newNodeOffset: {x: 250, y: 0}
+  dialogueNodes:
+  - {fileID: -7895527211360185723}
+  - {fileID: 5044252165022616749}
+  - {fileID: 6435385713780632778}
+  - {fileID: -6200780984190645795}
+  - {fileID: 1734338916021688666}
+  - {fileID: -839792300390320374}
+  - {fileID: 7166524432383952987}
+  - {fileID: -272864897592491575}
+  - {fileID: -5220196053386452889}
+  - {fileID: 9003499779058719394}
+  - {fileID: 4740991467855871858}
+  - {fileID: 9209222796727638157}
+  - {fileID: 5253724741220701597}
+  - {fileID: 1856494773908903535}
+  - {fileID: 8277928280677955440}
+  - {fileID: 3889708649546224220}
+  isEssentialDialogue: 0
+--- !u!114 &1734338916021688666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: b820b74b-08dc-49a0-8b59-79c757fb0950
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: The real Dhurmumir WorldBreaker was defeated almost a year ago today... by
+    the three of you actually - Gudrid the mighty shield-maiden, Mellaniphe the powerful
+    druid, and a last minute stand in.
+  children:
+  - ebb158f3-df10-40ca-806c-76df20d5d18e
+  rect:
+    serializedVersion: 2
+    x: 776
+    y: 204
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &1856494773908903535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: eb9f9ed0-e71f-403a-8453-607ada48f58a
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Aj
+  text: Thank you for playing! :)
+  children: []
+  rect:
+    serializedVersion: 2
+    x: 3532
+    y: 530
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: quit
+  condition:
+    and: []
+--- !u!114 &3889708649546224220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: bc6374df-d440-4923-abb0-4404b73b8f23
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Darla
+  text: After the confession was recorded and we were sure a fight was to break out,
+    we decided to let you go ahead and finish the fight, it only seemed right.
+  children:
+  - 3efb34ab-307f-450b-bffb-a11534948889
+  rect:
+    serializedVersion: 2
+    x: 1941
+    y: 198
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &4740991467855871858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 17096c87-402f-4a11-9c32-bcc923c4f4f3
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Darla
+  text: The plan was successful and we received a full confession from the Dario
+    the assassin. The Didora Kingdom, the world, and I - Darla, Queen of Didora and
+    daughter of King Dorian, give you our deepest thanks.
+  children:
+  - bc6374df-d440-4923-abb0-4404b73b8f23
+  rect:
+    serializedVersion: 2
+    x: 1688
+    y: 198
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &5044252165022616749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: f8f916a8-6180-4e23-983b-b4e196d11ecc
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: I am sure you are all confused and have many questions.
+  children:
+  - 32fe1f99-19ac-4223-acbb-590473f2545a
+  rect:
+    serializedVersion: 2
+    x: 264
+    y: 205
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &5253724741220701597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 28e58c41-659e-47b0-ad1a-70cdb15bb48e
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: '  '
+  text: '*Before you knew it, you were back at your home, with all of your memories.
+    As you look outside you realize that the world is now able to heal and rebuild.
+    A sense of content overwhelms your body and you fall asleep.* '
+  children:
+  - eb9f9ed0-e71f-403a-8453-607ada48f58a
+  rect:
+    serializedVersion: 2
+    x: 3456
+    y: 432
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &6435385713780632778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 32fe1f99-19ac-4223-acbb-590473f2545a
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: I should begin by saying, what you all just experienced was not reality.
+    It was a shared simulation that our psychics implanted in all of your brains.
+  children:
+  - b820b74b-08dc-49a0-8b59-79c757fb0950
+  rect:
+    serializedVersion: 2
+    x: 526
+    y: 205
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &7166524432383952987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 3efb34ab-307f-450b-bffb-a11534948889
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Darla
+  text: '*The speaker clears her voice*'
+  children:
+  - 549fbee0-19a6-458a-a5dd-c20388ad179f
+  rect:
+    serializedVersion: 2
+    x: 2167
+    y: 406
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &8277928280677955440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 2777bdac-f1aa-4990-b5d7-65dd72097ffe
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: '  '
+  text: ' *Through the thick walls, you hear an ear-piercing scream... then nothing
+    but silence.*'
+  children:
+  - 28e58c41-659e-47b0-ad1a-70cdb15bb48e
+  rect:
+    serializedVersion: 2
+    x: 3251
+    y: 424
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &9003499779058719394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: 4f44df78-1428-4a34-b655-ce04cf6fa04c
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: 
+  text: We were sure of his guilt, although we had no evidence to support our claim.
+    We then devised this plan as our last resort to lower his guard.
+  children:
+  - 17096c87-402f-4a11-9c32-bcc923c4f4f3
+  rect:
+    serializedVersion: 2
+    x: 1441
+    y: 202
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
+--- !u!114 &9209222796727638157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5529f4ee9e8145b4d4987c2cf657a, type: 3}
+  m_Name: e9f58075-ae4e-478f-95f7-cf1a0d93ad2b
+  m_EditorClassIdentifier: 
+  isPlayerNode: 0
+  overrideConversantName: Darla
+  text: Your days of killing and causing nothing but suffering are over. Now begone!
+  children:
+  - 2777bdac-f1aa-4990-b5d7-65dd72097ffe
+  rect:
+    serializedVersion: 2
+    x: 2974
+    y: 411
+    width: 200
+    height: 100
+  onEnterAction: 
+  onExitAction: 
+  condition:
+    and: []
