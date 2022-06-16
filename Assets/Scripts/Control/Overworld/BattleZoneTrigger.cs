@@ -24,7 +24,7 @@ namespace RPGProject.Control
 
         public event Action<bool> updateShouldBeDisabled;
 
-        private void Awake()
+        private void Start()
         {
             playerTeam = FindObjectOfType<PlayerTeamManager>();
         }

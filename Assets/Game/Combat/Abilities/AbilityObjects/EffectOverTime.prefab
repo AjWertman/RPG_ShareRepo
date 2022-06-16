@@ -45,3 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilityObjectKey: 0
+  spawnLocation: 4
+  hitFXObjectKey: 0

@@ -216,6 +216,16 @@ PrefabInstance:
       propertyPath: launchForce
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
+        type: 3}
+      propertyPath: hitFXObjectKey
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
+        type: 3}
+      propertyPath: abilityObjectKey
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: daa23738cfcb2484aa4edbc2a9beaadd, type: 3}
 --- !u!4 &6075423212566937893 stripped

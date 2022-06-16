@@ -75,4 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6357a94a53161942a696a0ccd62e6b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abilityObjectKey: 0
+  spawnLocation: 2
+  hitFXObjectKey: 0
   launchForce: 10

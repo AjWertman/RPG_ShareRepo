@@ -7,11 +7,13 @@ namespace RPGProject.GameResources
     public class Health : MonoBehaviour
     {
         [SerializeField] AudioClip hurtClip = null;
+        [SerializeField] AudioClip deathClip = null;
 
         [SerializeField] float healthPoints = 0f;
         [SerializeField] float maxHealthPoints = 100f;
 
         Animator animator = null;
+        SoundFXManager soundFXManager = null;
 
         float healthPercentage = 1f;
         bool isDead = false;
@@ -27,9 +29,10 @@ namespace RPGProject.GameResources
         public event Action<Health> onAnimDeath;
         public event Action<Health> onHealthDeath;
 
-        private void Awake()
+        public void InitalizeHealth()
         {
             animator = GetComponent<Animator>();
+            soundFXManager = FindObjectOfType<SoundFXManager>();
             baseMaxHealthPoints = stamina * staminaHealthAmount;
         }
 
@@ -88,7 +91,7 @@ namespace RPGProject.GameResources
 
             if(calculatedAmount < 0)
             {
-                FindObjectOfType<SoundFXManager>().CreateSoundFX(hurtClip, transform, .5f); 
+                soundFXManager.CreateSoundFX(hurtClip, transform, .5f); 
             }
 
             if (DeathCheck()) Die();
@@ -131,8 +134,8 @@ namespace RPGProject.GameResources
             {
                 isDead = true;
                 animator.Play("Die");
+                soundFXManager.CreateSoundFX(deathClip, transform, .75f);
                 onHealthDeath(this);
-                //Refactor play deeath sounds
             }
         }
 

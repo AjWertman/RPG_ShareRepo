@@ -8,10 +8,6 @@ namespace RPGProject.Combat
     {
         [SerializeField] Unit[] units = null;
 
-        //Demo
-        [SerializeField] Unit swordPlayer = null;
-        [SerializeField] Unit staffPlayer = null;
-
         Dictionary<CharacterKey, Unit> unitsDict = new Dictionary<CharacterKey, Unit>();
 
         public void PopulateDatabase()
@@ -26,25 +22,6 @@ namespace RPGProject.Combat
         public Unit GetUnit(CharacterKey _characterKey)
         {
             return unitsDict[_characterKey];
-        }
-
-        public Unit SetSelectedPlayerUnit(bool _isSword)
-        {
-            Unit unit = null;
-
-            if (!unitsDict.ContainsKey(CharacterKey.Player))
-            {
-                if (_isSword) unit = swordPlayer;
-                else unit = staffPlayer;
-
-                unitsDict.Add(CharacterKey.Player, unit);
-            }
-            else
-            {
-                unit = unitsDict[CharacterKey.Player];
-            }
-
-            return unit;
         }
     }
 }

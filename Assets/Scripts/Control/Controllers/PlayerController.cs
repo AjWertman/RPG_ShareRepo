@@ -229,7 +229,6 @@ namespace RPGProject.Control
             }
         }
 
-        //Refactor - Create sound effect
         private void FootStepBehavior()
         {
             soundFXManager.CreateSoundFX(footstepsClip, transform, .2f);
@@ -276,16 +275,6 @@ namespace RPGProject.Control
             return camLookObject.transform;
         }
 
-
-        /// /////////////////////////////Demo//////////////////////////////////////////////////////////
-
-        public void EquipWeapon(bool _isSword)
-        {
-            EquipmentManager[] equipmentManager = FindObjectsOfType<EquipmentManager>(true);
-
-            equipmentManager[0].EquipWeapon(_isSword);
-        }
-
         public void AddTeammate(PlayerKey _playerKey)
         {
             playerTeamManager.AddTeammate(_playerKey);
@@ -294,11 +283,6 @@ namespace RPGProject.Control
         public void RemoveTeammate(PlayerKey _playerKey)
         {
             playerTeamManager.RemoveTeammate(_playerKey);
-        }
-
-        public void RemoveTeammate()
-        {
-            playerTeamManager.RemoveTeammate(PlayerKey.Rogue);
         }
     }
 }

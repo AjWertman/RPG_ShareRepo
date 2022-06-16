@@ -33,7 +33,6 @@ namespace RPGProject.UI
 
         private void SetupStartMenu()
         {
-            //Refactor
             //if (HasPreviousSaveFile())
             //{
             //    continueButton.onClick.AddListener(OnContinueButton);

@@ -32,6 +32,7 @@ namespace RPGProject.UI
         {
             healthSlider.UpdateSliderValue(GetHealthPercentage());
             manaSlider.UpdateSliderValue(GetManaPercentage());
+            ActivateResourceSliders(false);
         }
 
         public void ActivateUnitIndicator(bool _shouldActivate)

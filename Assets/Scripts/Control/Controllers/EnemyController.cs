@@ -1,5 +1,6 @@
 ﻿using RPGProject.Movement;
 using RPGProject.Saving;
+using RPGProject.Sound;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,17 +8,21 @@ namespace RPGProject.Control
 {
     public class EnemyController : MonoBehaviour, ISaveable, IOverworld
     {
+        [SerializeField] AudioClip footstepsClip = null;
         [SerializeField] GameObject owMeshObject = null;
         [SerializeField] float chaseDistance = 10f;
 
         Animator animator = null;
         BattleZoneTrigger enemyTrigger = null;
+        CapsuleCollider capsuleCollider = null;
         
         PlayerController player = null;
+        SoundFXManager soundFXManager = null;
 
         AIMover mover = null;
 
-        //Refactor - use triggers to activate level enemies?
+        //Refactor - use triggers to activate level enemies - possible way to trim down update function calls
+
         bool isActive = true;
         bool isBattling = false;
 
@@ -28,11 +33,13 @@ namespace RPGProject.Control
             animator = GetComponentInChildren<Animator>();
             mover = GetComponent<AIMover>();
             enemyTrigger = GetComponentInChildren<BattleZoneTrigger>();
+            capsuleCollider = GetComponent<CapsuleCollider>();
         }
 
         private void Start()
         {
             player = FindObjectOfType<PlayerController>();
+            soundFXManager = FindObjectOfType<SoundFXManager>();
             enemyTrigger.updateShouldBeDisabled += SetShouldBeDisabled;
         }
 
@@ -85,21 +92,24 @@ namespace RPGProject.Control
         {
             owMeshObject.SetActive(false);
             enemyTrigger.gameObject.SetActive(false);
-
-            //refactor
-            GetComponent<CapsuleCollider>().enabled = false ;
-            GetComponent<NavMeshAgent>().enabled = false;
+            capsuleCollider.enabled = false;
+            mover.enabled = false;
             isActive = false;
         }
 
-        public void FootR()
+        public void FootstepBehavior()
         {
-            //CreateFootStepSound();
+            soundFXManager.CreateSoundFX(footstepsClip, transform, .75f);
         }
 
-        public void FootL()
+        void FootR()
         {
-            //CreateFootStepSound();
+            FootstepBehavior();
+        }
+
+        void FootL()
+        {
+            FootstepBehavior();
         }
 
         public object CaptureState()

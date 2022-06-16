@@ -1,3 +1,4 @@
+using RPGProject.Sound;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ namespace RPGProject.Combat
     public class ComboLinker : MonoBehaviour
     {
         Animator animator = null;
+        SoundFXManager soundFXManager = null;
 
         Dictionary<string, float> animationTimesDictionary = new Dictionary<string, float>();
 
@@ -15,12 +17,13 @@ namespace RPGProject.Combat
 
         bool isExecutingCombo = false;
 
-        //public event Action<AbilityResource, float> onComboLinkExecuted;
         public event Action<AbilityObjectKey> onComboStarted;
+        public event Action<ComboLink> onComboLinkExecution;
 
         public void InitializeComboLinker()
         {
             animator = GetComponent<Animator>();
+            soundFXManager = FindObjectOfType<SoundFXManager>();
         }
 
         public void SetupComboLinker()
@@ -52,13 +55,25 @@ namespace RPGProject.Combat
 
                     string animationID = currentLink.GetAnimationID();           
                     float animationTime = animationTimesDictionary[animationID];
+
+                    PlaySoundEffect(currentLink);
+                    onComboLinkExecution(currentLink);
                     animator.CrossFadeInFixedTime(animationID, .1f);            
+                    
 
                     yield return new WaitForSeconds(animationTime);
                 }
 
                 isExecutingCombo = false;
             }
+        }
+
+        private void PlaySoundEffect(ComboLink _comboLink)
+        {
+            AudioClip audioClip = _comboLink.GetAbilityClip();
+            if (audioClip == null) return;
+
+            soundFXManager.CreateSoundFX(audioClip, transform, .75f);
         }
 
         public void ResetComboLinker()

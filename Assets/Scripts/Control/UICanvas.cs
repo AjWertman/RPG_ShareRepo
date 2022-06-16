@@ -12,8 +12,6 @@ namespace RPGProject.Control
         ActivateUIPrompt activateUIPrompt = null;
         DialogueUI dialogueUI = null;
 
-        //[SerializeField] GameObject tutorial = null;
-
         private void Awake()
         {
             playerMenu = GetComponentInChildren<PlayerMenuHandler>();
@@ -31,9 +29,6 @@ namespace RPGProject.Control
 
         public void ActivatePlayerMenu()
         {
-            //Demolevel-----
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0) return;
-
             DeactivateAllUI();
             playerMenu.ActivateCoreMainMenu(true);
         }

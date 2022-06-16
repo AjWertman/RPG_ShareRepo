@@ -47,16 +47,12 @@ namespace RPGProject.UI
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (assignedAbility == null) return;
-
-            //Refactor for basic attack;
-            if (assignedAbility.GetAbilityType() == AbilityType.Melee) return;
             onPointerEnter(assignedAbility);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             if (assignedAbility == null) return;
-            if (assignedAbility.GetAbilityType() == AbilityType.Melee) return;
             onPointerExit();
         }
 

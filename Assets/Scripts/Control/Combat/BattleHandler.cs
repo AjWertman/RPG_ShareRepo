@@ -44,7 +44,7 @@ namespace RPGProject.Control
         public event Action onBattleEnd;
         public event Action<string, UnitResources> onUnitResourcesUpdate;
         
-        private void Awake()
+        private void Start()
         {
             battleManagersPool = FindObjectOfType<BattleManagersPool>();
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
@@ -123,6 +123,7 @@ namespace RPGProject.Control
             Fighter randomTarget = GetRandomTarget(isPlayerAI, randomAbility.GetTargetingType());
 
             UseAbility(randomTarget, randomAbility);
+            battleUIManager.ActivateUnitTurnUI(currentUnitFighter, false);
         }
 
         private void AdvanceTurn()
@@ -206,18 +207,14 @@ namespace RPGProject.Control
 
                 yield return FindObjectOfType<Fader>().FadeIn(.5f);
             }
-            else
+
+            else if (_won == false)
             {
                 FindObjectOfType<SceneManagerScript>().LoadMainMenu();
             }
-            //else if (_won == false)
+            //else if(_won == null)
             //{
-            //    //Refactor a lose
-
-            //}
-            //else
-            //{
-            //    //Refactor - basically win ending without reward
+            //    Refactor Win ending without reward??
             //}
         }
 

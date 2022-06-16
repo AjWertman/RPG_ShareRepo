@@ -1,3 +1,4 @@
+using RPGProject.Core;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,16 +10,15 @@ namespace RPGProject.Combat
         [SerializeField] AbilityPrefab[] abilityPrefabs = null;
         [SerializeField] int amountOfAbilityObjects = 4;
 
-        //Refactor - only use for the abilities of that zone including known player abilities
+        [SerializeField] HitFXPrefab[] hitFXPrefabs = null;
 
         Dictionary<AbilityObjectKey, List<AbilityBehavior>> abilityPool = new Dictionary<AbilityObjectKey, List<AbilityBehavior>>();
-        //[SerializeField] HitFXPrefab[] hitFXPrefabs = null;
-        //Dictionary<HitFXObjectKey, List<HitFXBehavior>> hitFXPool = new Dictionary<HitFXObjectKey, List<HitFXBehavior>>();
+        Dictionary<HitFXObjectKey, GameObject> hitFXPool = new Dictionary<HitFXObjectKey, GameObject>();
 
-        private void Awake()
+        private void Start()
         {
             CreateAbilityPool();
-            //CreateHitFXPool();
+            CreateHitFXPool();
         }
 
         private void CreateAbilityPool()
@@ -31,8 +31,8 @@ namespace RPGProject.Combat
                 {
                     GameObject abilityInstance = Instantiate(abilityPrefab.GetAbilityPrefab(), transform);
                     AbilityBehavior abilityBehavior = abilityInstance.GetComponent<AbilityBehavior>();
-                    //abilityBehavior.InitializeAbility(abilityPrefabDict[abilityPrefab]);
                     abilityBehavior.onAbilityDeath += ResetAbilityBehavior;
+                    abilityBehavior.hitFXSpawnRequest += SpawnHitFX;
 
                     abilityBehaviorInstances.Add(abilityBehavior);
                 }
@@ -43,11 +43,39 @@ namespace RPGProject.Combat
             ResetAbilityObjectPool();
         }
 
+        private void CreateHitFXPool()
+        {
+            foreach (HitFXPrefab hitFXPrefab in hitFXPrefabs)
+            {
+                GameObject hitFXInstance = Instantiate(hitFXPrefab.GetHitFXPrefab(), transform);
+                HitFXObjectKey hitFXObjectKey = hitFXPrefab.GetHitFXObjectKey();
+                hitFXInstance.GetComponent<ReturnAfterEffect>().onEffectCompletion += ReturnToPool;
+
+                hitFXPool.Add(hitFXObjectKey, hitFXInstance);
+                hitFXInstance.SetActive(false);
+            }
+        }
+
+        private void SpawnHitFX(HitFXObjectKey _hitFXObjectKey, Vector3 _position)
+        {
+            GameObject hitFX = hitFXPool[_hitFXObjectKey];
+
+            hitFX.transform.position = _position;
+
+            hitFX.gameObject.SetActive(true);
+        }
+
         private void ResetAbilityBehavior(AbilityBehavior _abilityToReset)
         {
             _abilityToReset.transform.parent = transform;
             _abilityToReset.transform.localPosition = Vector3.zero;
             _abilityToReset.gameObject.SetActive(false);
+        }
+
+        private void ReturnToPool(ReturnAfterEffect _returnAfterEffect)
+        {
+            _returnAfterEffect.transform.localPosition = Vector3.zero;
+            _returnAfterEffect.gameObject.SetActive(false);
         }
 
         public void ResetAbilityObjectPool()

@@ -63,11 +63,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   units:
+  - {fileID: 11400000, guid: af9c44b539f941649bbc234222e3edc0, type: 2}
   - {fileID: 11400000, guid: 5dafee8c8f2e11645a50491a8aeef431, type: 2}
   - {fileID: 11400000, guid: 01382343b6a30714eacbbfb1eefb672b, type: 2}
   - {fileID: 11400000, guid: b68383a98de03b9479a89647193b4aae, type: 2}
   - {fileID: 11400000, guid: 108d2e81932fe844c98f22f0d7d30dd8, type: 2}
   - {fileID: 11400000, guid: d28dafea7a8855a4382a29e89b638228, type: 2}
   - {fileID: 11400000, guid: 7bcc44a958b5e4d40876c31efaef0b33, type: 2}
-  swordPlayer: {fileID: 11400000, guid: 34b235b80bf6a814694cf2a1bc66d4c4, type: 2}
-  staffPlayer: {fileID: 11400000, guid: 2505205a7cbeb7644a2d17a327bc3de5, type: 2}

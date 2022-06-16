@@ -11,10 +11,6 @@ namespace RPGProject.Combat
 {
     public class Fighter : MonoBehaviour
     {
-        //refactor - spells have own sounds in Ability.cs
-        [SerializeField] AudioClip magicClip = null;
-        [SerializeField] AudioClip meleeClip = null;
-
         Animator animator = null;
         ComboLinker comboLinker = null;
         CharacterMesh characterMesh = null;
@@ -29,6 +25,7 @@ namespace RPGProject.Combat
         Fighter selectedTarget = null;
         List<Fighter> selectedTargets = new List<Fighter>();
         AbilityObjectKey currentAbilityObjectKey = AbilityObjectKey.None;
+        ComboLink currentComboLink = null;
 
         AbilityObjectPool abilityObjectPool = null;
 
@@ -53,6 +50,7 @@ namespace RPGProject.Combat
             comboLinker = GetComponent<ComboLinker>();
             comboLinker.InitializeComboLinker();
             comboLinker.onComboStarted += SetCurrentAbilityInstance;
+            comboLinker.onComboLinkExecution += SetCurrentComboLink;
 
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
             health = GetComponent<Health>();
@@ -106,7 +104,14 @@ namespace RPGProject.Combat
             {
                 abilityBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
                 abilityBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit, selectedAbility.GetAbilityLifetime());
-                //Set transform ?
+
+                if (currentComboLink != null)
+                {
+                    if (currentComboLink.GetSpawnLocationOverride() != SpawnLocation.None)
+                    {
+                        abilityBehavior.SetSpawnLocation(currentComboLink.GetSpawnLocationOverride());
+                    }
+                } 
             }
 
             if (selectedAbility.CanTargetAll())
@@ -122,7 +127,7 @@ namespace RPGProject.Combat
                 case AbilityType.Melee:
 
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
-                    if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior, selectedTarget.transform);
+                    if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior);
                     float reflectionAmount = -selectedTarget.GetPhysicalReflectionDamage();
                     if (reflectionAmount > 0) health.ChangeHealth(reflectionAmount, false, false);    
                     break;
@@ -135,23 +140,14 @@ namespace RPGProject.Combat
 
                 case AbilityType.Cast:
 
-                    ActivateAbilityBehavior(abilityBehavior, null);
+                    ActivateAbilityBehavior(abilityBehavior);
                     break;
 
                 case AbilityType.InstaHit:
                     
-                    ActivateAbilityBehavior(abilityBehavior, selectedTarget.transform);
+                    ActivateAbilityBehavior(abilityBehavior);
                     if(calculatedAmount != 0) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
                     break;
-            }
-
-            if(abilityType == AbilityType.Melee)
-            {
-                FindObjectOfType<SoundFXManager>().CreateSoundFX(meleeClip, transform, .5f);
-            }
-            else
-            {
-                FindObjectOfType<SoundFXManager>().CreateSoundFX(magicClip, transform, .5f);
             }
         }
 
@@ -159,20 +155,15 @@ namespace RPGProject.Combat
         {
             TargetAll targetAll = _abilityBehavior.GetComponent<TargetAll>();
             targetAll.transform.position = targetAll.GetCenterOfTargetsPoint(selectedTargets);
-            ActivateAbilityBehavior(_abilityBehavior, null);
+            ActivateAbilityBehavior(_abilityBehavior);
             foreach (Fighter fighter in selectedTargets)
             {
                 fighter.GetHealth().ChangeHealth(_changeAmount, _isCritical, true);
             }            
         }
 
-        public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior, Transform _newParent)
+        public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
-            if(_newParent != null)
-            {
-                _abilityBehavior.transform.parent = _newParent;
-                _abilityBehavior.transform.localPosition = Vector3.zero;
-            }
             _abilityBehavior.gameObject.SetActive(true);
             _abilityBehavior.PerformAbilityBehavior();
         }
@@ -185,6 +176,11 @@ namespace RPGProject.Combat
         public void SetCurrentAbilityInstance(AbilityObjectKey _abilityObjectKey)
         {
             currentAbilityObjectKey = _abilityObjectKey;
+        }
+
+        public void SetCurrentComboLink(ComboLink _comboLink)
+        {
+            currentComboLink = _comboLink;
         }
 
         public void ResetFighter()
@@ -298,6 +294,7 @@ namespace RPGProject.Combat
             return mana;
         }
 
+        //Refactor - move to new script - UnitStatus()
         public void SetPhysicalReflectionDamage(float _damageToSet)
         {
             physicalReflectionDamage = _damageToSet;
@@ -401,6 +398,7 @@ namespace RPGProject.Combat
             else
             {
                 List<Ability> physicalAbilities = new List<Ability>();
+                physicalAbilities.Add(basicAttack);
 
                 foreach (Ability ability in abilities)
                 {

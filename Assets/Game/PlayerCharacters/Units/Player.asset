@@ -14,21 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Player
   baseLevel: 10
-  characterKey: 0
+  characterKey: 1
   unitResources:
     healthPoints: 0
     maxHealthPoints: 100
     manaPoints: 0
     maxManaPoints: 100
   stats:
-    stamina: 20
-    spirit: 20
-    strength: 20
-    skill: 20
-    armor: 20
-    resistance: 20
-    speed: 30
-    luck: 20
+    stamina: 72
+    spirit: 72
+    strength: 72
+    skill: 70
+    armor: 70
+    resistance: 70
+    speed: 100
+    luck: 72
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   abilities:
   - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}
+  - {fileID: 11400000, guid: 85443344a95113a4bbae6e1f92e09480, type: 2}
+  - {fileID: 11400000, guid: 3f3f40d7f05eb4d4e9648ddd4cf47ecd, type: 2}
+  - {fileID: 11400000, guid: 14c67d1c4d72dc64ba518eebd47e1f97, type: 2}

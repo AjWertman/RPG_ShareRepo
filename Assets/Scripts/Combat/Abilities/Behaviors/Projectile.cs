@@ -47,24 +47,19 @@ namespace RPGProject.Combat
             Fighter hitCombatant = other.GetComponent<Fighter>();
             SpellReflector hitSpellReflector = other.GetComponent<SpellReflector>();
 
-            //Refactor put Hit FX somewhere
-
             if (hitCombatant != null && hitCombatant == target)
             {
                 if (!hasAppliedChangeAmount)
                 {
                     hasAppliedChangeAmount = true;
-
-                    //Add heal check? Will there be healing projectiles?
-
-                    target.GetHealth().ChangeHealth(changeAmount, isCritical, false);
-
-                    
+                    SpawnHitFX(aimTransform.position);
+                    target.GetHealth().ChangeHealth(changeAmount, isCritical, false);              
                     OnAbilityDeath();
                 }
             }
             else if(hitSpellReflector != null)
             {
+                if (hitSpellReflector.GetCaster() != target) return;
                 ReflectProjectile();
             }
         }

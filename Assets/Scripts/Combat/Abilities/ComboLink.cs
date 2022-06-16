@@ -7,15 +7,17 @@ namespace RPGProject.Combat
     public class ComboLink
     {
         [SerializeField] string animationID = "";
-        //Refactor? was to be used to limit creating own combos
+
         [SerializeField] int comboPointCost = 1;
+
         [SerializeField] float manaCost = 0f;
         [SerializeField] float enduranceCost = 0f;
 
         [SerializeField] AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
-        //[SerializeField] HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
-        [SerializeField] GameObject hitFXPrefab = null;
+        [SerializeField] SpawnLocation spawnLocationOverride = SpawnLocation.None;
+        [SerializeField] AudioClip abilityClip = null;
 
+        //Refactor?
         //[SerializeField] Buff buffToApply = null;
         //[SerializeField] float chanceToApplyBuff = 0f;
 
@@ -42,6 +44,16 @@ namespace RPGProject.Combat
         public AbilityObjectKey GetAbilityObjectKey()
         {
             return abilityObjectKey;
+        }
+
+        public SpawnLocation GetSpawnLocationOverride()
+        {
+            return spawnLocationOverride;
+        }
+
+        public AudioClip GetAbilityClip()
+        {
+            return abilityClip;
         }
     }
 }

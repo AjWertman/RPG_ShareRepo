@@ -45,12 +45,6 @@ namespace RPGProject.Control
                 CharacterKey characterKey = CharacterKeyComparison.GetCharacterKey(playerKey);
 
                 Unit unit = null;
-                if (characterKey == CharacterKey.Player) 
-                {
-                    EquipmentManager equipmentManager = FindObjectOfType<EquipmentManager>(true);
-                    bool hasSwordEquipped = equipmentManager.HasSwordEquipped();
-                    unit = unitDatabase.SetSelectedPlayerUnit(hasSwordEquipped);
-                }
 
                 unit = unitDatabase.GetUnit(characterKey);
                 TeamInfo teamInfo = new TeamInfo();
@@ -274,15 +268,6 @@ namespace RPGProject.Control
         public void LevelUp()
         {
             level++;
-
-            ////Refactor - Handle leveling up differently from Soulless
-            //foreach (StatType stat in stats.GetAllStats())
-            //{
-            //    if (stat.GetLevelUpPercent() >= RandomGenerator.GetRandomNumber(0, 99))
-            //    {
-            //        stat.IncreaseLevel();
-            //    }
-            //}
         }
 
         public PlayerKey GetPlayerKey()

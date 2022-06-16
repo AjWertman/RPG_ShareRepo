@@ -60,8 +60,8 @@ namespace RPGProject.Control
 
         public void SetupUIManager(List<Fighter> _playerCombatants, List<Fighter> _enemyCombatants, List<Fighter> _turnOrder)
         {
-            SetCurrentCombatantTurn(_turnOrder[0]);
             UpdateUnitLists(_playerCombatants, _enemyCombatants);
+            SetCurrentCombatantTurn(_turnOrder[0]);
 
             battleHUD.UpdateTurnOrderUIItems(_turnOrder, currentCombatantTurn);
         }
@@ -198,6 +198,7 @@ namespace RPGProject.Control
         {
             onPlayerMove(_target, selectedAbility);
 
+            ActivateUnitTurnUI(currentCombatantTurn, false);
             battleHUD.SetupUnitResourcesIndicator(null);
         }
 
@@ -211,27 +212,27 @@ namespace RPGProject.Control
                 ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
             }
         }
-
+       
         public void HighlightTarget(Fighter _combatant)
         {
             if (_combatant == null) return;
             highlightedTarget = _combatant;
 
-            //Refactor UnitUI to be in dict
-            highlightedTarget.GetComponent<UnitUI>().ActivateUnitIndicator(true);
+            UnitUI unitUI = GetUnitUI(highlightedTarget);
+
+            unitUI.ActivateUnitIndicator(true);
+            unitUI.ActivateResourceSliders(true);
             battleHUD.SetupUnitResourcesIndicator(highlightedTarget);
-            
-            //Refactor
-            //Resources UI above head activate
         }
 
         public void UnhighlightTarget()
         {
             if (highlightedTarget == null) return;
-
+            UnitUI unitUI = GetUnitUI(highlightedTarget);
             if (highlightedTarget != currentCombatantTurn)
             {
-                highlightedTarget.GetComponent<UnitUI>().ActivateUnitIndicator(false);
+                unitUI.ActivateUnitIndicator(false);
+                unitUI.ActivateResourceSliders(false);
             }
 
             battleHUD.SetupUnitResourcesIndicator(null);
@@ -248,6 +249,16 @@ namespace RPGProject.Control
         public void SetCurrentCombatantTurn(Fighter _currentCombatantTurn)
         {
             currentCombatantTurn = _currentCombatantTurn;
+            ActivateUnitTurnUI(currentCombatantTurn, true);
+        }
+
+        public void ActivateUnitTurnUI(Fighter _fighter, bool _shouldActivate)
+        {
+            UnitUI unitUI = GetUnitUI(_fighter);
+            if (unitUI == null) return;
+
+            unitUI.ActivateResourceSliders(_shouldActivate);
+            unitUI.ActivateUnitIndicator(_shouldActivate);
         }
 
         public void SetSelectedAbility(Ability _selectedAbility)
@@ -265,11 +276,40 @@ namespace RPGProject.Control
             playerCombatants = _playerUnits;
             enemyCombatants = _enemyUnits;
 
+            UpdateUnitUIDict(_playerUnits, _enemyUnits);
+
             targetSelectMenu.UpdateUnitLists(playerCombatants, enemyCombatants);
+        }
+
+        private void UpdateUnitUIDict(List<Fighter> _playerUnits, List<Fighter> _enemyUnits)
+        {
+            fighterUIDict.Clear();
+            List<Fighter> allFighters = new List<Fighter>();
+
+            foreach(Fighter fighter in _playerUnits)
+            {
+                if (allFighters.Contains(fighter)) continue;
+                allFighters.Add(fighter);
+            }
+            foreach (Fighter fighter in _enemyUnits)
+            {
+                if (allFighters.Contains(fighter)) continue;
+                allFighters.Add(fighter);
+            }
+
+            foreach(Fighter fighter in allFighters)
+            {
+                if (fighterUIDict.ContainsKey(fighter)) continue;
+
+                UnitUI unitUI = fighter.GetComponent<UnitUI>();
+                fighterUIDict.Add(fighter, unitUI);
+            }
         }
 
         public void ResetUIManager()
         {
+            UnhighlightTarget();
+            
             playerCombatants.Clear();
             enemyCombatants.Clear();
 
@@ -289,6 +329,11 @@ namespace RPGProject.Control
         public BattleHUD GetBattleHUD()
         {
             return battleHUD;
+        }
+
+        public UnitUI GetUnitUI(Fighter _fighter)
+        {
+            return fighterUIDict[_fighter];
         }
 
         private void PopulateMenuGODict()

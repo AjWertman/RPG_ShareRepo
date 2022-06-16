@@ -27,7 +27,7 @@ MonoBehaviour:
     skill: 10
     armor: 12
     resistance: 12
-    speed: 100
+    speed: 99
     luck: 48
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   abilities:

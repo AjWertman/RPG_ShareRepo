@@ -32,8 +32,7 @@ namespace RPGProject.Control
 
         public void InitalizeUnitController()
         {
-            //Refactor anim to be on Main only
-            animator = GetComponentInChildren<Animator>();
+            animator = GetComponent<Animator>();
 
             fighter = GetComponent<Fighter>();
             comboLinker = GetComponent<ComboLinker>();
@@ -42,6 +41,7 @@ namespace RPGProject.Control
             mover = GetComponent<CombatMover>();
             unitUI = GetComponent<UnitUI>();
 
+            health.InitalizeHealth();
             fighter.InitalizeFighter();
             mover.InitalizeCombatMover();
             unitUI.InitializeUnitUI();
@@ -173,8 +173,6 @@ namespace RPGProject.Control
             unitResources.SetUnitResources(_unitResources);
             health.SetUnitHealth(unitResources.GetHealthPoints(), unitResources.GetMaxHealthPoints());
             mana.SetMana(unitResources.GetManaPoints(), unitResources.GetMaxManaPoints());
-
-            unitUI.ActivateResourceSliders(true);
         }
 
         public void UpdateStats(Stats _updatedStats)

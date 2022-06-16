@@ -111,6 +111,10 @@ MonoBehaviour:
     abilityPrefab: {fileID: 2410868920286215375, guid: 575647ab0451c484681eb7173b74116a,
       type: 3}
   amountOfAbilityObjects: 4
+  hitFXPrefabs:
+  - hitFXObjectKey: 1
+    hitFXPrefab: {fileID: 2729780067887716723, guid: 3c2e3770131081b48b99d684d0eaee7b,
+      type: 3}
 --- !u!1001 &6394786980111018847
 PrefabInstance:
   m_ObjectHideFlags: 0
