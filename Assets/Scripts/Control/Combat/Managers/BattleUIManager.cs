@@ -196,6 +196,12 @@ namespace RPGProject.Control
 
         public void OnTargetSelect(Fighter _target)
         {
+            if(CombatAssistant.IsAlreadyEffected(selectedAbility.GetAbilityName(), _target.GetUnitStatus()))
+            {
+                StartCoroutine(battleHUD.ActivateCantUseAbilityUI("Target is already effected by that ability"));
+                ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
+                return;
+            }
             onPlayerMove(_target, selectedAbility);
 
             ActivateUnitTurnUI(currentCombatantTurn, false);

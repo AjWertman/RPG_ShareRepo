@@ -122,6 +122,14 @@ namespace RPGProject.Control
             Ability randomAbility = currentUnitFighter.GetRandomAbility();
             Fighter randomTarget = GetRandomTarget(isPlayerAI, randomAbility.GetTargetingType());
 
+            if(randomAbility != null && randomTarget != null)
+            {
+                if (CombatAssistant.IsAlreadyEffected(randomAbility.GetAbilityName(), randomTarget.GetUnitStatus()))
+                {
+                    randomAbility = currentUnitFighter.GetBasicAttack();
+                }
+            }
+
             UseAbility(randomTarget, randomAbility);
             battleUIManager.ActivateUnitTurnUI(currentUnitFighter, false);
         }
@@ -285,7 +293,7 @@ namespace RPGProject.Control
 
         private void ApplyActiveAbilitys(Fighter _fighter)
         {
-            foreach (AbilityBehavior abilityBehavior in _fighter.GetActiveAbilityBehaviors())
+            foreach (AbilityBehavior abilityBehavior in _fighter.GetUnitStatus().GetActiveAbilityBehaviors())
             {
                 abilityBehavior.OnTurnAdvance();
             }

@@ -82,6 +82,7 @@ namespace RPGProject.GameResources
 
         public void ChangeHealth(float _changeAmount, bool _isCritical, bool _isChangeMagical)
         {
+            if (isDead) return;
             float calculatedAmount = CalculateChange(_changeAmount, _isChangeMagical);
 
             healthPoints += calculatedAmount;
@@ -89,13 +90,13 @@ namespace RPGProject.GameResources
             SetCurrentHealthPercentage();
             onHealthChange(_isCritical, calculatedAmount);
 
-            if(calculatedAmount < 0)
+            if (calculatedAmount < 0)
             {
                 soundFXManager.CreateSoundFX(hurtClip, transform, .5f); 
             }
 
             if (DeathCheck()) Die();
-            else animator.Play("TakeDamage"); 
+            else animator.Play("TakeDamage");       
         }
 
         private float CalculateChange(float _changeAmount, bool _isChangeMagical)

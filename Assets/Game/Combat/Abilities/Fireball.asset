@@ -25,14 +25,14 @@ MonoBehaviour:
     manaCost: 20
     enduranceCost: 0
     abilityObjectKey: 1
-    spawnLocationOverride: 4
+    spawnLocationOverride: 1
     abilityClip: {fileID: 0}
   - animationID: Cast0
     comboPointCost: 0
     manaCost: 20
     enduranceCost: 0
     abilityObjectKey: 1
-    spawnLocationOverride: 5
+    spawnLocationOverride: 0
     abilityClip: {fileID: 0}
   abilityResource: 1
   abilityName: Fireball

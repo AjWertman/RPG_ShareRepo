@@ -9,13 +9,13 @@ namespace RPGProject.Combat
             transform.localEulerAngles = Vector3.zero;
             transform.parent = null;
 
-            target.ApplyActiveAbilityBehavior(this);
-            target.SetIsReflectingSpells(true);
+            targetStatus.ApplyActiveAbilityBehavior(this);
+            targetStatus.SetIsReflectingSpells(true);
         }
 
         public override void OnAbilityDeath()
         {
-            target.SetIsReflectingSpells(false);
+            targetStatus.SetIsReflectingSpells(false);
             base.OnAbilityDeath();
         }
     }

@@ -31,6 +31,7 @@ MonoBehaviour:
     luck: 72
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   abilities:
+  - {fileID: 11400000, guid: 5869f318d1e0da0429afba87ad2eacee, type: 2}
   - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}
   - {fileID: 11400000, guid: 85443344a95113a4bbae6e1f92e09480, type: 2}
   - {fileID: 11400000, guid: 3f3f40d7f05eb4d4e9648ddd4cf47ecd, type: 2}

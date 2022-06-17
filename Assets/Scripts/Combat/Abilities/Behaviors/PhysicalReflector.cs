@@ -4,13 +4,13 @@ namespace RPGProject.Combat
     {
         public override void PerformAbilityBehavior()
         {
-            target.ApplyActiveAbilityBehavior(this);
-            target.SetPhysicalReflectionDamage(changeAmount);
+            targetStatus.ApplyActiveAbilityBehavior(this);
+            targetStatus.SetPhysicalReflectionDamage(changeAmount);
         }
 
         public override void OnAbilityDeath()
         {
-            target.SetPhysicalReflectionDamage(0);
+            targetStatus.SetPhysicalReflectionDamage(0);
             base.OnAbilityDeath();
         }
     }

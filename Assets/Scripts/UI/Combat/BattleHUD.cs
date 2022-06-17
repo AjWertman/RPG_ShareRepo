@@ -13,7 +13,7 @@ namespace RPGProject.UI
         [SerializeField] Transform turnOrderContent = null;
         [SerializeField] GameObject turnOrderUIPrefab = null;
 
-        TextMeshProUGUI cantCastText = null;
+        [SerializeField] TextMeshProUGUI cantCastText = null;
 
         int amountOfTurnOrderUIItems = 8;
 
@@ -27,6 +27,9 @@ namespace RPGProject.UI
         private void Awake()
         {
             CreateTurnOrderUIItemPool();
+            
+            cantCastText.text = "";
+            cantCastText.gameObject.SetActive(false);
         }
 
         private void CreateTurnOrderUIItemPool()
@@ -126,7 +129,7 @@ namespace RPGProject.UI
             yield return CantUseAbilityUIBehavior(_reason);
         }
 
-        public IEnumerator CantUseAbilityUIBehavior(string _reason)
+        private IEnumerator CantUseAbilityUIBehavior(string _reason)
         {
             cantCastText.text = _reason;
             cantCastText.gameObject.SetActive(true);

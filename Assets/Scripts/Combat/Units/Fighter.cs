@@ -18,6 +18,7 @@ namespace RPGProject.Combat
         Mana mana = null;
         SoundFXManager soundFXManager = null;
 
+        UnitStatus unitStatus = null;
         UnitInfo unitInfo = new UnitInfo();
         UnitResources unitResources = new UnitResources();
 
@@ -29,18 +30,11 @@ namespace RPGProject.Combat
 
         AbilityObjectPool abilityObjectPool = null;
 
-        List<AbilityBehavior> activeAbilityBehaviors = new List<AbilityBehavior>();
-
         float meleeRange = 0f;
 
         float strength = 0f;
         float skill = 0f;
         float luck = 0f;
-
-        float physicalReflectionDamage = 0f;
-        bool isReflectingSpells = false;
-        bool isSilenced = false;
-        bool hasSubstitute = false;
 
         bool isPlayerFighter = false;
 
@@ -55,6 +49,7 @@ namespace RPGProject.Combat
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
             health = GetComponent<Health>();
             mana = GetComponent<Mana>();
+            unitStatus = GetComponent<UnitStatus>();
 
             //Preset to fit the agents size
             meleeRange = GetComponent<NavMeshAgent>().stoppingDistance;
@@ -128,7 +123,7 @@ namespace RPGProject.Combat
 
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
                     if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior);
-                    float reflectionAmount = -selectedTarget.GetPhysicalReflectionDamage();
+                    float reflectionAmount = -selectedTarget.GetUnitStatus().GetPhysicalReflectionDamage();
                     if (reflectionAmount > 0) health.ChangeHealth(reflectionAmount, false, false);    
                     break;
 
@@ -188,10 +183,6 @@ namespace RPGProject.Combat
             ResetTarget();
             ResetAbility();
             UpdateAttributes(10f, 10f, 10f);
-            physicalReflectionDamage = 0;
-            isReflectingSpells = false;
-            isSilenced = false;
-            hasSubstitute = false;
 
             isPlayerFighter = false;
             unitInfo = new UnitInfo();
@@ -212,38 +203,6 @@ namespace RPGProject.Combat
             selectedAbility = null;
         }
 
-        public void ApplyActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
-        {
-            bool isAlreadyEffected = CombatAssistant.IsAlreadyEffected(_abilityBehavior, this);
-            if (isAlreadyEffected) return;
-            _abilityBehavior.onAbilityDeath += RemoveActiveAbilityBehavior;
-
-            if (activeAbilityBehaviors.Contains(_abilityBehavior)) return;
-            activeAbilityBehaviors.Add(_abilityBehavior);
-        }
-
-        private void RemoveActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
-        {
-            _abilityBehavior.onAbilityDeath -= RemoveActiveAbilityBehavior;
-
-            if (!activeAbilityBehaviors.Contains(_abilityBehavior)) return;
-            activeAbilityBehaviors.Remove(_abilityBehavior);
-        }
-
-        public IEnumerable<AbilityBehavior> GetActiveAbilityBehaviors()
-        {
-            List<AbilityBehavior> abilityBehaviors = new List<AbilityBehavior>();
-
-            foreach (AbilityBehavior abilityBehavior in activeAbilityBehaviors)
-            {
-                abilityBehaviors.Add(abilityBehavior);
-            }
-
-            foreach (AbilityBehavior abilityBehavior in abilityBehaviors)
-            {
-                yield return abilityBehavior;
-            }
-        }
 
         //Animation Events
         void Hit()
@@ -294,45 +253,9 @@ namespace RPGProject.Combat
             return mana;
         }
 
-        //Refactor - move to new script - UnitStatus()
-        public void SetPhysicalReflectionDamage(float _damageToSet)
+        public UnitStatus GetUnitStatus()
         {
-            physicalReflectionDamage = _damageToSet;
-        }
-
-        public float GetPhysicalReflectionDamage()
-        {
-            return physicalReflectionDamage;
-        }
-
-        public void SetIsReflectingSpells(bool _shouldSet)
-        {
-            isReflectingSpells = _shouldSet;
-        }
-
-        public bool IsReflectingSpells()
-        {
-            return isReflectingSpells;
-        }
-
-        public void SetIsSilenced(bool _shouldSet)
-        {
-            isSilenced = _shouldSet;
-        }
-
-        public bool IsSilenced()
-        {
-            return isSilenced;
-        }
-
-        public void SetHasSubsitute(bool _shouldSet)
-        {
-            hasSubstitute = _shouldSet;
-        }
-
-        public bool HasSubstitute()
-        {
-            return hasSubstitute;
+            return unitStatus;
         }
 
         //public void SetAllTargets(List<Fighter> _targets)
@@ -385,7 +308,8 @@ namespace RPGProject.Combat
             Ability[] abilities = unitInfo.GetAbilities();
 
             knownAbilities.Add(basicAttack);
-            if (!IsSilenced())
+
+            if (!unitStatus.IsSilenced())
             {
                 if (abilities.Length == 0 || abilities == null) randomAbility = basicAttack;
                 foreach(Ability ability in abilities)
@@ -411,14 +335,6 @@ namespace RPGProject.Combat
                 randomAbility = physicalAbilities[RandomGenerator.GetRandomNumber(0, physicalAbilities.Count - 1)];
             }
 
-            if(randomAbility.GetCombo().Count == 1)
-            {
-                AbilityObjectKey abilityObjectKey = randomAbility.GetCombo()[0].GetAbilityObjectKey();
-                if (abilityObjectKey == AbilityObjectKey.None) return basicAttack;
-                AbilityBehavior abilityBehavior = abilityObjectPool.GetAbilityInstance(abilityObjectKey);
-                if (CombatAssistant.IsAlreadyEffected(abilityBehavior, selectedTarget)) return basicAttack;
-            }
-           
             return randomAbility;
         }
 
@@ -437,6 +353,12 @@ namespace RPGProject.Combat
 
             return useableAbilities;
         }
+
+        public Ability GetBasicAttack()
+        {
+            return unitInfo.GetBasicAttack();
+        }
+
         public UnitInfo GetUnitInfo()
         {
             return unitInfo;

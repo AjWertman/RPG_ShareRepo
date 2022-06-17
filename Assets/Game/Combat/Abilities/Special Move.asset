@@ -18,7 +18,8 @@ MonoBehaviour:
     manaCost: 0
     enduranceCost: 0
     abilityObjectKey: 8
-    hitFXPrefab: {fileID: 0}
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
   abilityResource: 0
   abilityName: Special Move
   requiredLevel: 1

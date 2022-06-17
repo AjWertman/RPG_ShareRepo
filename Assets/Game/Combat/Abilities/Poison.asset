@@ -18,7 +18,8 @@ MonoBehaviour:
     manaCost: 20
     enduranceCost: 0
     abilityObjectKey: 4
-    hitFXPrefab: {fileID: 0}
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
   abilityResource: 0
   abilityName: Poison
   requiredLevel: 1

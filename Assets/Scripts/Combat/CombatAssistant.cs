@@ -26,7 +26,7 @@ namespace RPGProject.Combat
             }
 
             bool isAbilityMagic = (_selectedAbility.GetAbilityType() != AbilityType.Melee);
-            bool isFighterSilenced = _caster.IsSilenced();
+            bool isFighterSilenced = _caster.GetUnitStatus().IsSilenced();
             if (isAbilityMagic && isFighterSilenced) return "Caster is silenced";
 
             return "";
@@ -71,14 +71,13 @@ namespace RPGProject.Combat
             return "";
         }
 
-        public static bool IsAlreadyEffected(AbilityBehavior _abilityBehavior, Fighter _target)
+        public static bool IsAlreadyEffected(string _abilityName, UnitStatus _targetStatus)
         {
-            //Refactor - doesnt work
-            if (_abilityBehavior == null || _target == null) return false;
+            if (_abilityName == null || _abilityName == "" || _targetStatus == null) return false;
 
-            foreach (AbilityBehavior abilityBehavior in _target.GetActiveAbilityBehaviors())
+            foreach (AbilityBehavior abilityBehavior in _targetStatus.GetActiveAbilityBehaviors())
             {
-                if (abilityBehavior == _abilityBehavior) return true;
+                if (abilityBehavior.GetAbilityName() == _abilityName) return true;
             }
 
             return false;       

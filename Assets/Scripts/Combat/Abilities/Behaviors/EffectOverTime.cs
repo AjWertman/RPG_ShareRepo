@@ -10,7 +10,7 @@ namespace RPGProject.Combat
 
         public override void PerformAbilityBehavior()
         {
-            target.ApplyActiveAbilityBehavior(this);
+            targetStatus.ApplyActiveAbilityBehavior(this);
         }
     }
 }

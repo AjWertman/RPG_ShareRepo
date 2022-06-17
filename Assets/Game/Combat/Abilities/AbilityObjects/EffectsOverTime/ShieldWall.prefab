@@ -147,6 +147,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6484138040869895196, guid: d27408b050f8c094a9315ba413cd35e8,
         type: 3}
+      propertyPath: spawnLocation
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6484138040869895196, guid: d27408b050f8c094a9315ba413cd35e8,
+        type: 3}
       propertyPath: abilityObjectKey
       value: 9
       objectReference: {fileID: 0}

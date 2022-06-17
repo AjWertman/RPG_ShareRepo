@@ -18,7 +18,8 @@ MonoBehaviour:
     manaCost: 20
     enduranceCost: 0
     abilityObjectKey: 9
-    hitFXPrefab: {fileID: 0}
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
   abilityResource: 0
   abilityName: Shield Wall
   requiredLevel: 1

@@ -4,13 +4,13 @@ namespace RPGProject.Combat
     {
         public override void PerformAbilityBehavior()
         {
-            target.ApplyActiveAbilityBehavior(this);
-            target.SetIsSilenced(true);
+            targetStatus.ApplyActiveAbilityBehavior(this);
+            targetStatus.SetIsSilenced(true);
         }
 
         public override void OnAbilityDeath()
         {
-            target.SetIsSilenced(false);
+            targetStatus.SetIsSilenced(false);
             base.OnAbilityDeath();
         }
     }

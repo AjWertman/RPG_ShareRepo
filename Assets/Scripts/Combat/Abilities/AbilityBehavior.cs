@@ -12,6 +12,7 @@ namespace RPGProject.Combat
         [SerializeField] protected HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
         protected Fighter caster = null;
         protected Fighter target = null;
+        protected UnitStatus targetStatus = null;
         protected float changeAmount = 0f;
         protected bool isCritical = false;
 
@@ -26,6 +27,7 @@ namespace RPGProject.Combat
         {
             caster = _caster;
             target = _target;
+            targetStatus = target.GetUnitStatus();
             changeAmount = _changeAmount;
             isCritical = _isCritical;
             abilityLifetime = _lifeTime;
@@ -106,6 +108,11 @@ namespace RPGProject.Combat
             changeAmount = 0;
             isCritical = false;
             abilityLifetime = 0;
+        }
+
+        public string GetAbilityName()
+        {
+            return abilityObjectKey.ToString();
         }
 
         public Fighter GetCaster()
