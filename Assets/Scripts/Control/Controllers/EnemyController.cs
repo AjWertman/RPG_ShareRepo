@@ -2,7 +2,6 @@
 using RPGProject.Saving;
 using RPGProject.Sound;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace RPGProject.Control
 {
@@ -20,8 +19,6 @@ namespace RPGProject.Control
         SoundFXManager soundFXManager = null;
 
         AIMover mover = null;
-
-        //Refactor - use triggers to activate level enemies - possible way to trim down update function calls
 
         bool isActive = true;
         bool isBattling = false;
@@ -41,6 +38,8 @@ namespace RPGProject.Control
             player = FindObjectOfType<PlayerController>();
             soundFXManager = FindObjectOfType<SoundFXManager>();
             enemyTrigger.updateShouldBeDisabled += SetShouldBeDisabled;
+
+            DeactivateEnemy();
         }
 
         private void Update()
@@ -79,7 +78,7 @@ namespace RPGProject.Control
             }
             else
             {
-                DisableEnemy();
+                DeactivateEnemy();
             }
         }
 
@@ -88,7 +87,16 @@ namespace RPGProject.Control
             shouldBeDisabled = _shouldBeDisabled;
         }
 
-        public void DisableEnemy()
+        public void ActivateEnemy()
+        {
+            owMeshObject.SetActive(true);
+            enemyTrigger.gameObject.SetActive(true);
+            capsuleCollider.enabled = true;
+            mover.enabled = true;
+            isActive = true;
+        }
+
+        public void DeactivateEnemy()
         {
             owMeshObject.SetActive(false);
             enemyTrigger.gameObject.SetActive(false);
@@ -124,7 +132,7 @@ namespace RPGProject.Control
 
             if (shouldBeDisabled)
             {
-                DisableEnemy();
+                DeactivateEnemy();
             }
         }
 
