@@ -14,7 +14,7 @@ namespace RPGProject.Combat
 
         Dictionary<CharacterKey, CharacterMesh> uniqueMeshes = new Dictionary<CharacterKey, CharacterMesh>();
 
-        //Refactor - each zone has "Zone enemies"
+        //Refactor - each zone has "Zone enemies" - trigger or on awake in scene? Make non-persistant
         [SerializeField] GameObject[] uniqueEnemyMeshPrefabs = null;
         Dictionary<CharacterKey, List<CharacterMesh>> genericMeshes = new Dictionary<CharacterKey, List<CharacterMesh>>();
 

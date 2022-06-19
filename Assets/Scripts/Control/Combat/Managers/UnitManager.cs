@@ -84,11 +84,10 @@ namespace RPGProject.Control
 
             if (_isPlayerTeam)
             {
-                //Refactor add player level ovverride
-                //unitInfo.SetUnitLevel(teamInfo.GetLevel());
                 PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
                 TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
                 unitResources.SetUnitResources(teamInfo.GetUnitResources());
+                unitInfo.SetUnitLevel(teamInfo.GetLevel());
             }
             else
             {

@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7a1f3970b1ddd488a26e3a60f38eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  footstepsClip: {fileID: 0}
   owMeshObject: {fileID: 0}
   chaseDistance: 15
 --- !u!114 &-7143616735528514833
@@ -163,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18d65270bb25c214d8699f3d1585b6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  footstepsSound: {fileID: 8300000, guid: 9993e4a45f4c5a24699fe278ca426350, type: 3}
 --- !u!1001 &4457191990742106142
 PrefabInstance:
   m_ObjectHideFlags: 0

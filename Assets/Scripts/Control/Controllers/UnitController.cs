@@ -60,15 +60,8 @@ namespace RPGProject.Control
 
             UpdateComponentStats(true);
 
-            //Refactor?
-            if (_isPlayer)
-            {
-                SetUnitResources(_unitResources);
-            }
-            else
-            {
-                CalculateResources();
-            }
+            if (_isPlayer) SetUnitResources(_unitResources);
+            else CalculateResources();
 
             mover.SetStartVariables();
             unitUI.SetupUnitUI();
@@ -101,7 +94,7 @@ namespace RPGProject.Control
 
                     UseAbility(_target, _ability);
 
-                    //AddToRenCopyList(selectedAbility,isRenCopy);
+                    //AddToCopyList(selectedAbility,isRenCopy);
 
                     yield return new WaitForSeconds(moveDurationWOffset);
 
@@ -186,7 +179,6 @@ namespace RPGProject.Control
             health.CalculateMaxHealthPoints(true);
             mana.CalculateMana(true);
 
-            //Refactor
             float healthPoints = health.GetHealthPoints();
             float maxHealthPoints = health.GetMaxHealthPoints();
             float manaPoints = mana.GetManaPoints();

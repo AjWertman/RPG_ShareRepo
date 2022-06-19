@@ -7,7 +7,6 @@ namespace RPGProject.Control
 {
     public class EnemyController : MonoBehaviour, ISaveable, IOverworld
     {
-        [SerializeField] AudioClip footstepsClip = null;
         [SerializeField] GameObject owMeshObject = null;
         [SerializeField] float chaseDistance = 10f;
 
@@ -103,21 +102,6 @@ namespace RPGProject.Control
             capsuleCollider.enabled = false;
             mover.enabled = false;
             isActive = false;
-        }
-
-        public void FootstepBehavior()
-        {
-            soundFXManager.CreateSoundFX(footstepsClip, transform, .75f);
-        }
-
-        void FootR()
-        {
-            FootstepBehavior();
-        }
-
-        void FootL()
-        {
-            FootstepBehavior();
         }
 
         public object CaptureState()

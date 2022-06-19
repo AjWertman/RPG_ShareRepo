@@ -37,8 +37,7 @@ namespace RPGProject.Control
             currentPlayerKeys.Clear();
             playerTeam.Clear();
             foreach (PlayerKey playerKey in _playerKeys)
-            {               
-                
+            {                           
                 currentPlayerKeys.Add(playerKey);
 
                 PlayableCharacter playableCharacter = playableCharacterDatabase.GetPlayableCharacter(playerKey);
@@ -49,7 +48,7 @@ namespace RPGProject.Control
                 unit = unitDatabase.GetUnit(characterKey);
                 TeamInfo teamInfo = new TeamInfo();
                 teamInfo.SetPlayerKey(playerKey);
-
+                teamInfo.SetLevel(unit.GetBaseLevel());
                 teamInfo.SetStats(unit.GetStats());
 
                 float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.GetStats().GetStat(StatType.Stamina));
