@@ -187,11 +187,6 @@ namespace RPGProject.Control
         private IEnumerator EndBattleBehavior(bool? _won)
         {
             StopCoroutine(currentAttack);
-            currentAttack = null;
-            playerTeam.Clear();
-            playerTeamSize = 0;
-            enemyTeam.Clear();
-            enemyTeamSize = 0;
 
             if (_won == true) 
             {
@@ -209,7 +204,7 @@ namespace RPGProject.Control
 
                 //GetComponent<MusicOverride>().ClearOverride();
 
-                //CalculateBattleRewards();
+                CalculateBattleRewards();
 
                 onBattleEnd();
 
@@ -224,6 +219,17 @@ namespace RPGProject.Control
             //{
             //    Refactor Win ending without reward??
             //}
+
+            currentAttack = null;
+            playerTeam.Clear();
+            playerTeamSize = 0;
+            enemyTeam.Clear();
+            enemyTeamSize = 0;
+        }
+
+        private void CalculateBattleRewards()
+        {
+
         }
 
         private void UpdateTeamResources(List<UnitController> _playerUnits)

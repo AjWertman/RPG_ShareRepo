@@ -1,7 +1,6 @@
 ﻿using RPGProject.Core;
 using RPGProject.GameResources;
 using RPGProject.Sound;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
