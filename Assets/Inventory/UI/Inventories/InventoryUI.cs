@@ -1,28 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using GameDevTV.Inventories;
+using RPGProject.Inventories;
 
-namespace GameDevTV.UI.Inventories
+namespace RPGProject.UI
 {
-    /// <summary>
-    /// To be placed on the root of the inventory UI. Handles spawning all the
-    /// inventory slot prefabs.
-    /// </summary>
     public class InventoryUI : MonoBehaviour
     {
-        // CONFIG DATA
-        [SerializeField] InventorySlotUI InventoryItemPrefab = null;
+        [SerializeField] InventorySlotUI inventoryItemPrefab = null;
+        [SerializeField] int amountOfSlotUIsToCreate = 50;
 
-        // CACHE
-        Inventory playerInventory;
+        Inventory inventory;
 
-        // LIFECYCLE METHODS
+        List<InventorySlotUI> inventorySlotUIs = new List<InventorySlotUI>();
 
         private void Awake() 
         {
-            playerInventory = Inventory.GetPlayerInventory();
-            playerInventory.inventoryUpdated += Redraw;
+            inventory = FindObjectOfType<Inventory>();
+            inventory.inventoryUpdated += Redraw;
         }
 
         private void Start()
@@ -30,20 +24,52 @@ namespace GameDevTV.UI.Inventories
             Redraw();
         }
 
-        // PRIVATE
-
         private void Redraw()
         {
-            foreach (Transform child in transform)
+            DisableAllSlots();
+
+            for (int i = 0; i < inventory.GetSize(); i++)
             {
-                Destroy(child.gameObject);
+                InventorySlotUI slotUI = GetAvailableInventorySlotUI();
+                slotUI.Setup(i);
+                slotUI.gameObject.SetActive(true);
+            }
+        }
+
+        private void CreateInventorySlotUIs()
+        {
+            for (int i = 0; i < amountOfSlotUIsToCreate; i++)
+            {
+                InventorySlotUI slotUIInstance = Instantiate(inventoryItemPrefab, transform);
+                slotUIInstance.InitializeSlotUI(inventory);
+                slotUIInstance.ResetSlot();
+                inventorySlotUIs.Add(slotUIInstance);
+            }
+        }
+
+        private void DisableAllSlots()
+        {
+            foreach (InventorySlotUI slotUI in inventorySlotUIs)
+            {
+                slotUI.ResetSlot();
+                slotUI.gameObject.SetActive(false);
+            }
+        }
+
+        private InventorySlotUI GetAvailableInventorySlotUI()
+        {
+            InventorySlotUI slotToGet = null;
+
+            foreach(InventorySlotUI slotUI in inventorySlotUIs)
+            {
+                if (!slotUI.gameObject.activeSelf)
+                {
+                    slotToGet = slotUI;
+                    break;
+                }
             }
 
-            for (int i = 0; i < playerInventory.GetSize(); i++)
-            {
-                var itemUI = Instantiate(InventoryItemPrefab, transform);
-                itemUI.Setup(playerInventory, i);
-            }
+            return slotToGet;
         }
     }
 }

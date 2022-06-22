@@ -15,6 +15,7 @@ namespace RPGProject.Control
         [Header("Menus")]
         [SerializeField] CharacterMenu characterMenu = null;
         [SerializeField] QuestMenu questMenu = null;
+        [SerializeField] GameObject inventoryMenu = null;
 
         [Header("Other UI")]
         [SerializeField] CurrencyUI currencyMenu = null;
@@ -113,6 +114,7 @@ namespace RPGProject.Control
         private void OpenInventoryMenu()
         {
 
+            inventoryMenu.gameObject.SetActive(true);
         }
 
         private void OpenQuestsMenu()
@@ -150,6 +152,7 @@ namespace RPGProject.Control
             yield return characterSelectMenu.gameObject;
             yield return characterMenu.gameObject;
             yield return questMenu.gameObject;
+            yield return inventoryMenu.gameObject;
             yield return currencyMenu.gameObject;
         }
     }

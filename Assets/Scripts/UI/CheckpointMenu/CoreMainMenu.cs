@@ -56,7 +56,7 @@ namespace RPGProject.UI
 
         private void OnInventoryButton()
         {
-            //onMenuButtonSelect(MainMenuButtonType.Inventory);
+            onMenuButtonSelect(MainMenuButtonType.Inventory);
         }
 
         private void OnQuestsButton()

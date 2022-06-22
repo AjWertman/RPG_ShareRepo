@@ -1,4 +1,4 @@
-using RPGProject.Inventory;
+using RPGProject.Inventories;
 using TMPro;
 using UnityEngine;
 

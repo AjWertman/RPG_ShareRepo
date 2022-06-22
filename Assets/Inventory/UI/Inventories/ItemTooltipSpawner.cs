@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using GameDevTV.Core.UI.Tooltips;
+using RPGProject.Inventories;
 
-namespace GameDevTV.UI.Inventories
+namespace RPGProject.UI
 {
-    /// <summary>
-    /// To be placed on a UI slot to spawn and show the correct item tooltip.
-    /// </summary>
     [RequireComponent(typeof(IItemHolder))]
     public class ItemTooltipSpawner : TooltipSpawner
     {

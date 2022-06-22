@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using RPGProject.Saving;
 
-namespace GameDevTV.Inventories
+namespace RPGProject.Inventories
 {
     /// <summary>
     /// Spawns pickups that should exist on first load in a level. This
@@ -9,38 +9,25 @@ namespace GameDevTV.Inventories
     /// </summary>
     public class PickupSpawner : MonoBehaviour, ISaveable
     {
-        // CONFIG DATA
         [SerializeField] InventoryItem item = null;
         [SerializeField] int number = 1;
 
-        // LIFECYCLE METHODS
         private void Awake()
         {
-            // Spawn in Awake so can be destroyed by save system after.
             SpawnPickup();
         }
 
-        // PUBLIC
-
-        /// <summary>
-        /// Returns the pickup spawned by this class if it exists.
-        /// </summary>
-        /// <returns>Returns null if the pickup has been collected.</returns>
         public Pickup GetPickup() 
         { 
             return GetComponentInChildren<Pickup>();
         }
 
-        /// <summary>
-        /// True if the pickup was collected.
-        /// </summary>
         public bool isCollected() 
         { 
             return GetPickup() == null;
         }
 
-        //PRIVATE
-
+        //refactor - change to pool
         private void SpawnPickup()
         {
             var spawnedPickup = item.SpawnPickup(transform.position, number);
@@ -55,12 +42,12 @@ namespace GameDevTV.Inventories
             }
         }
 
-        object ISaveable.CaptureState()
+        public object CaptureState()
         {
             return isCollected();
         }
 
-        void ISaveable.RestoreState(object state)
+        public void RestoreState(object state)
         {
             bool shouldBeCollected = (bool)state;
 

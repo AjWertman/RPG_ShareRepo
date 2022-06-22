@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace RPGProject.Inventory
+namespace RPGProject.Inventories
 {
     public class Currency : MonoBehaviour
     {

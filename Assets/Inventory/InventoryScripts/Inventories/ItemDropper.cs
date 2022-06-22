@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using RPGProject.Saving;
 
-namespace GameDevTV.Inventories
+namespace RPGProject.Inventories
 {
     /// <summary>
     /// To be placed on anything that wishes to drop pickups into the world.

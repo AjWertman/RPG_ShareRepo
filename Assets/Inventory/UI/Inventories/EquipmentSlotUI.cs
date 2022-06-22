@@ -1,31 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using GameDevTV.Core.UI.Dragging;
-using GameDevTV.Inventories;
+using RPGProject.Inventories;
 
-namespace GameDevTV.UI.Inventories
+namespace RPGProject.UI
 {
-    /// <summary>
-    /// An slot for the players equipment.
-    /// </summary>
     public class EquipmentSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
-        // CONFIG DATA
-
         [SerializeField] InventoryItemIcon icon = null;
         [SerializeField] EquipLocation equipLocation = EquipLocation.Weapon;
 
-        // CACHE
         Equipment playerEquipment;
 
-        // LIFECYCLE METHODS
-       
         private void Awake() 
         {
-            var player = GameObject.FindGameObjectWithTag("Player");
-            playerEquipment = player.GetComponent<Equipment>();
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            playerEquipment = player.GetComponentInChildren<Equipment>();
             playerEquipment.equipmentUpdated += RedrawUI;
         }
 
@@ -34,21 +23,24 @@ namespace GameDevTV.UI.Inventories
             RedrawUI();
         }
 
-        // PUBLIC
-
-        public int MaxAcceptable(InventoryItem item)
+        public void AddItems(InventoryItem _item, int _number)
         {
-            EquipableItem equipableItem = item as EquipableItem;
+            playerEquipment.AddItem(equipLocation, (EquipableItem)_item);
+        }
+
+        public void RemoveItems(int _number)
+        {
+            playerEquipment.RemoveItem(equipLocation);
+        }
+
+        public int MaxAcceptable(InventoryItem _item)
+        {
+            EquipableItem equipableItem = _item as EquipableItem;
             if (equipableItem == null) return 0;
             if (equipableItem.GetAllowedEquipLocation() != equipLocation) return 0;
             if (GetItem() != null) return 0;
 
             return 1;
-        }
-
-        public void AddItems(InventoryItem item, int number)
-        {
-            playerEquipment.AddItem(equipLocation, (EquipableItem) item);
         }
 
         public InventoryItem GetItem()
@@ -67,13 +59,6 @@ namespace GameDevTV.UI.Inventories
                 return 0;
             }
         }
-
-        public void RemoveItems(int number)
-        {
-            playerEquipment.RemoveItem(equipLocation);
-        }
-
-        // PRIVATE
 
         void RedrawUI()
         {

@@ -1,42 +1,52 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using GameDevTV.Inventories;
-using GameDevTV.Core.UI.Dragging;
+﻿using GameDevTV.Core.UI.Dragging;
+using UnityEngine;
 
-namespace GameDevTV.UI.Inventories
+namespace RPGProject.Inventories
 {
     public class InventorySlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
-        // CONFIG DATA
         [SerializeField] InventoryItemIcon icon = null;
 
-        // STATE
-        int index;
         InventoryItem item;
         Inventory inventory;
 
-        // PUBLIC
+        int index;
 
-        public void Setup(Inventory inventory, int index)
+        public void InitializeSlotUI(Inventory _inventory)
         {
-            this.inventory = inventory;
-            this.index = index;
-            icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
+            inventory = _inventory;
         }
 
-        public int MaxAcceptable(InventoryItem item)
+        public void Setup(int _index)
         {
-            if (inventory.HasSpaceFor(item))
+            index = _index;
+            icon.SetItem(inventory.GetItemInSlot(_index), inventory.GetNumberInSlot(_index));
+        }
+
+        public void AddItems(InventoryItem _item, int _number)
+        {
+            inventory.AddItemToSlot(index, _item, _number);
+        }
+
+        public void RemoveItems(int number)
+        {
+            inventory.RemoveFromSlot(index, number);
+        }
+
+        public void ResetSlot()
+        {
+            RemoveItems(GetNumber());
+            index = 0;
+            icon.SetItem(null);
+        }
+
+        public int MaxAcceptable(InventoryItem _item)
+        {
+            if (inventory.HasSpaceFor(_item))
             {
                 return int.MaxValue;
             }
             return 0;
-        }
-
-        public void AddItems(InventoryItem item, int number)
-        {
-            inventory.AddItemToSlot(index, item, number);
         }
 
         public InventoryItem GetItem()
@@ -47,11 +57,6 @@ namespace GameDevTV.UI.Inventories
         public int GetNumber()
         {
             return inventory.GetNumberInSlot(index);
-        }
-
-        public void RemoveItems(int number)
-        {
-            inventory.RemoveFromSlot(index, number);
         }
     }
 }
