@@ -825,8 +825,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3828f8622ad6c146b054e041b45ae07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InventoryItemPrefab: {fileID: 3837456068347498526, guid: 4a5f340f2790849408f61c9149ed5909,
+  inventoryItemPrefab: {fileID: 3837456068347498526, guid: 4a5f340f2790849408f61c9149ed5909,
     type: 3}
+  amountOfSlotUIsToCreate: 50
 --- !u!1 &7036428512771798896
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6435852517736538355
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7365093209715263449}
+  - component: {fileID: 4190133150560265479}
+  m_Layer: 0
+  m_Name: AbilityPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7365093209715263449
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435852517736538355}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4190133150560265479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435852517736538355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06fda64ccec9ee44f92774406f38b7f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilityPrefabs:
+  - abilityObjectKey: 1
+    abilityPrefab: {fileID: 1999966156053767337, guid: 235763ff3593b65459bb40600f242a8b,
+      type: 3}
+  - abilityObjectKey: 2
+    abilityPrefab: {fileID: 8216944981133643040, guid: 94fd42d0f42933b418d55184598334ff,
+      type: 3}
+  - abilityObjectKey: 3
+    abilityPrefab: {fileID: 1999966156053767337, guid: ad0e0c7b964866f4cb27ff56c82c1361,
+      type: 3}
+  - abilityObjectKey: 4
+    abilityPrefab: {fileID: 7493834318350501433, guid: 868f98c554101a6419d07d9f53abac9b,
+      type: 3}
+  - abilityObjectKey: 5
+    abilityPrefab: {fileID: 5324438019589189252, guid: ab645bd9c45ccc54c9b207bff8e6dca9,
+      type: 3}
+  - abilityObjectKey: 6
+    abilityPrefab: {fileID: 2498004876097293608, guid: aa73e9abaf969774b92052da3732f36c,
+      type: 3}
+  - abilityObjectKey: 7
+    abilityPrefab: {fileID: 6202032157614960914, guid: 834e9b63e32285b43ad7de3682615c81,
+      type: 3}
+  - abilityObjectKey: 8
+    abilityPrefab: {fileID: 397587535005714845, guid: 06ca79ff456b7e745bf2979663af56b7,
+      type: 3}
+  - abilityObjectKey: 9
+    abilityPrefab: {fileID: 5117204864137538549, guid: b62d2e9abf389684c937eacee9491ff5,
+      type: 3}
+  - abilityObjectKey: 10
+    abilityPrefab: {fileID: 2410868920286215375, guid: 575647ab0451c484681eb7173b74116a,
+      type: 3}
+  amountOfAbilityObjects: 4
+  hitFXPrefabs:
+  - hitFXObjectKey: 1
+    hitFXPrefab: {fileID: 2729780067887716723, guid: 3c2e3770131081b48b99d684d0eaee7b,
+      type: 3}

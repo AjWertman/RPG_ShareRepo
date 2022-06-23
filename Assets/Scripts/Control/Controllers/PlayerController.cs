@@ -1,5 +1,5 @@
-﻿using RPGProject.Combat;
-using RPGProject.Core;
+﻿using RPGProject.Core;
+using RPGProject.Inventories;
 using RPGProject.Movement;
 using RPGProject.Sound;
 using System;
@@ -24,9 +24,11 @@ namespace RPGProject.Control
         FollowCamera followCamera = null;
         PlayerConversant playerConversant = null;
         PlayerMover playerMover = null;
-        PlayerTeamManager playerTeamManager = null;
         SoundFXManager soundFXManager = null;
         UICanvas uiCanvas = null;
+
+        Inventory playerInventory = null;
+        PlayerTeamManager playerTeamManager = null;
 
         BattleZoneTrigger contestedBattleZoneTrigger = null;
         Checkpoint lastCheckpoint = null;
@@ -37,10 +39,10 @@ namespace RPGProject.Control
         private void Awake()
         {
             animator = GetComponent<Animator>();
-
             playerConversant = GetComponent<PlayerConversant>();
-
             playerMover = GetComponent<PlayerMover>();
+
+            playerInventory = GetComponentInChildren<Inventory>();
         }
 
         private void Start()
@@ -265,11 +267,16 @@ namespace RPGProject.Control
             return hits;
         }
 
+        public Inventory GetInventory()
+        {
+            return playerInventory;
+        }
+
         public PlayerMover GetPlayerMover()
         {
             return playerMover;
         }
-
+        
         public Transform GetCamLookTransform()
         {
             return camLookObject.transform;
