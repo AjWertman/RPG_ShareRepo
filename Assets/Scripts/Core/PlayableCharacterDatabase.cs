@@ -9,6 +9,7 @@ namespace RPGProject.Core
 
         Dictionary<PlayerKey, PlayableCharacter> playableCharactersDict = new Dictionary<PlayerKey, PlayableCharacter>();
 
+        //refactor Addressables/Assets Bundles?
         public void PopulateDatabase()
         {
             foreach(PlayableCharacter playableCharacter in playableCharacters)
