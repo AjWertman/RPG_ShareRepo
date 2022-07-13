@@ -2,13 +2,19 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class GridPiece : MonoBehaviour
+public class GridBlock : MonoBehaviour
 {
-    [SerializeField] Transform destination = null;
+    public GridCoordinates gridCoordinates;
+    public PathfindingCostValues pathfindingCostValues;
+
+    public Transform travelDestination = null;
+
+    //Refactor
     [SerializeField] Material lightMaterial = null;
     [SerializeField] Material darkMaterial = null;
     [SerializeField] Material centerMaterial = null;
     [SerializeField] Material unworthyMaterial = null;
+    //
 
     [SerializeField] TextMeshProUGUI coordinatesText = null;
 
@@ -17,15 +23,8 @@ public class GridPiece : MonoBehaviour
     [SerializeField] TextMeshProUGUI gValueText = null;
     [SerializeField] TextMeshProUGUI hValueText = null;
 
-    GridCoordinates gridCoordinates = null;
-
     MeshRenderer meshRenderer = null;
     
-    private void Awake()
-    {
-        SetupGridPiece((int)transform.localPosition.x, (int)transform.localPosition.z);
-    }
-
     public void InitializePiece()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -33,7 +32,7 @@ public class GridPiece : MonoBehaviour
         pathfindingTextContainer.SetActive(false);
     }
 
-    public void SetupGridPiece(int _x, int _z)
+    public void SetupGridBlock(int _x, int _z)
     {
         InitializePiece();
 
@@ -43,7 +42,7 @@ public class GridPiece : MonoBehaviour
         UpdateCoordinatesText(_x, _z);
     }
 
-    private void SetColor(int _x, int _z)
+    public void SetColor(int _x, int _z)
     {
         if (!IsCenter())
         {
@@ -65,6 +64,11 @@ public class GridPiece : MonoBehaviour
             meshRenderer.material = centerMaterial;
             coordinatesText.color = Color.black;
         }
+    }
+
+    public void Highlight()
+    {
+        meshRenderer.material = centerMaterial;
     }
 
     public void UpdateCoordinatesText(int _x, int _z)
@@ -95,16 +99,6 @@ public class GridPiece : MonoBehaviour
     public void SetColorToWhite()
     {
         meshRenderer.material = lightMaterial;
-    }
-
-    public Transform GetDestination()
-    {
-        return destination;
-    }
-
-    public GridCoordinates GetGridCoordinates()
-    {
-        return gridCoordinates;
     }
 
     public bool IsCenter()

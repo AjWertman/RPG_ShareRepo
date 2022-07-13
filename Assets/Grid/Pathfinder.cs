@@ -4,89 +4,195 @@ using UnityEngine;
 
 public class Pathfinder : MonoBehaviour
 {
-    Dictionary<GridCoordinates, GridPiece> gridBlocks = new Dictionary<GridCoordinates, GridPiece>();
-    List<GridPiece> gridPieces = new List<GridPiece>();
+    Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
+
+    List<GridBlock> openList = new List<GridBlock>();
+    List<GridBlock> closedList = new List<GridBlock>();
 
     int maxXCoordinate = -1;
     int maxZCoordinate = -1;
 
-    GridPiece currentBlock = null;
-    GridPiece previousBlock = null;
+    const int straightCost = 10;
+    const int diagonalCost = 14;
 
-    public void InitalizePathfinder(List<GridPiece> _gridPieces)
+    GridBlock currentBlock = null;
+    GridBlock previousBlock = null;
+
+    public void InitalizePathfinder(Dictionary<GridCoordinates, GridBlock> _gridDictionary)
     {
-        gridPieces = _gridPieces;
-        CalculateMaxCoordinates(gridPieces);
+        gridDictionary = _gridDictionary;
     }
 
-    public List<GridPiece> CalculatePath(GridCoordinates _start, GridCoordinates _end)
+    public List<GridBlock> FindPath(GridCoordinates _start, GridCoordinates _end)
     {
-        List<GridPiece> path = new List<GridPiece>();
+        openList.Clear();
+        closedList.Clear();
 
+        GridBlock startBlock = gridDictionary[_start];
+        GridBlock endBlock = gridDictionary[_end];
 
+        ResetPathfindingValues();
 
-        return path;
-    }
+        startBlock.pathfindingCostValues.gCost = 0;
+        startBlock.pathfindingCostValues.hCost = CalculateDistance(_start, _end);
+        startBlock.pathfindingCostValues.CalculateFCost();
+        openList.Add(startBlock);
 
-    private IEnumerable<GridPiece> GetNeighbors(GridCoordinates _gridCoordinates)
-    {
-        int x = _gridCoordinates.GetX();
-        int z = _gridCoordinates.GetZ();
-
-        //Right
-        yield return GetGridPiece(x + 1, z);
-
-        //Left
-        yield return GetGridPiece(x - 1, z);
-
-        //Up
-        yield return GetGridPiece(x, z + 1);
-
-        //Down
-        yield return GetGridPiece(x, z - 1);
-
-        //Right and Up
-        yield return GetGridPiece(x + 1, z + 1);
-
-        //Left and Up 
-        yield return GetGridPiece(x -1 , z + 1);
-
-        //Right and Down
-        yield return GetGridPiece(x + 1, z - 1);
-
-        //Left and Down
-        yield return GetGridPiece(x -1, z -1);
-
-    }
-
-    private GridPiece GetGridPiece(int _x, int _z)
-    {
-        foreach (GridCoordinates coordinates in gridBlocks.Keys)
+        while (openList.Count > 0)
         {
-            int x = coordinates.GetX();
-            int z = coordinates.GetZ();
+            GridBlock currentBlock = GetLowestFCostBlock(openList);
 
-            if (x == _x && z == _z) return gridBlocks[coordinates];
+            if(currentBlock == endBlock)
+            {
+                return CalculatePath(endBlock);
+            }
+
+            openList.Remove(currentBlock);
+            closedList.Add(currentBlock);
+
+            foreach (GridBlock neighborBlock in GetNeighbors(currentBlock.gridCoordinates))
+            {
+                if (neighborBlock == null) continue;
+                if (closedList.Contains(neighborBlock)) continue;
+
+                int distanceToNeighbor = CalculateDistance(currentBlock.gridCoordinates, neighborBlock.gridCoordinates);
+                int tenativeGCost = currentBlock.pathfindingCostValues.gCost + distanceToNeighbor;
+                if (tenativeGCost < neighborBlock.pathfindingCostValues.gCost)
+                {
+                    GridCoordinates gridCoordinates = neighborBlock.gridCoordinates;
+
+                    neighborBlock.pathfindingCostValues.cameFromBlock = currentBlock;
+                    neighborBlock.pathfindingCostValues.gCost = tenativeGCost;
+                    neighborBlock.pathfindingCostValues.hCost = CalculateDistance(gridCoordinates, endBlock.gridCoordinates);
+                    neighborBlock.pathfindingCostValues.CalculateFCost();
+
+                    if(!openList.Contains(neighborBlock))
+                    {
+                        openList.Add(neighborBlock);
+                    }
+                }
+            }
         }
 
         return null;
     }
 
-    private bool DoCoordinatesMatch(GridCoordinates _start, GridCoordinates _end)
+    private List<GridBlock> CalculatePath(GridBlock _endBlock)
     {
-        return _start.GetX() == _end.GetX() && _start.GetZ() == _end.GetZ();
+        List<GridBlock> calculatedPath = new List<GridBlock>();
+
+        calculatedPath.Add(_endBlock);
+
+        GridBlock currentBlock = _endBlock;
+
+        while(currentBlock.pathfindingCostValues.cameFromBlock != null)
+        {
+            GridBlock cameFromBlock = currentBlock.pathfindingCostValues.cameFromBlock;
+            calculatedPath.Add(cameFromBlock);
+
+            currentBlock = cameFromBlock;
+        }
+
+        calculatedPath.Reverse();
+
+        return calculatedPath;
     }
 
-    private void CalculateMaxCoordinates(List<GridPiece> _gridPieces)
+    private GridBlock GetLowestFCostBlock(List<GridBlock> blockList)
     {
-        foreach(GridPiece gridPiece in _gridPieces)
-        {
-            GridCoordinates gridCoordinates = gridPiece.GetGridCoordinates();
-            int x = gridCoordinates.GetX();
-            int z = gridCoordinates.GetZ();
+        GridBlock lowestFCostBlock = blockList[0];
 
-            maxXCoordinate = Mathf.Max(maxXCoordinate, x);
-            maxZCoordinate = Mathf.Max(maxZCoordinate, z);
+        foreach(GridBlock gridBlock in blockList)
+        {
+            if(gridBlock.pathfindingCostValues.fCost < lowestFCostBlock.pathfindingCostValues.fCost)
+            {
+                lowestFCostBlock = gridBlock;
+            }
         }
+
+        return lowestFCostBlock;
+    }
+
+    private void ResetPathfindingValues()
+    {
+        foreach (GridBlock gridBlock in gridDictionary.Values)
+        {
+            gridBlock.pathfindingCostValues.ResetValues();
+        }
+    }
+
+    public IEnumerable<GridBlock> GetNeighbors(GridCoordinates _gridCoordinates)
+    {
+        int x = _gridCoordinates.x;
+        int z = _gridCoordinates.z;
+
+        //Right
+        yield return GetGridBlock(x + 1, z);
+
+        //Left
+        yield return GetGridBlock(x - 1, z);
+
+        //Up
+        yield return GetGridBlock(x, z + 1);
+
+        //Down
+        yield return GetGridBlock(x, z - 1);
+
+        //Right and Up
+        yield return GetGridBlock(x + 1, z + 1);
+
+        //Left and Up 
+        yield return GetGridBlock(x -1 , z + 1);
+
+        //Right and Down
+        yield return GetGridBlock(x + 1, z - 1);
+
+        //Left and Down
+        yield return GetGridBlock(x -1, z -1);
+    }
+
+    private GridBlock GetGridBlock(int _x, int _z)
+    {
+        GridCoordinates gridCoordinates = new GridCoordinates(_x, _z);
+
+        if (gridDictionary.ContainsKey(gridCoordinates)) return gridDictionary[gridCoordinates];
+        else return null;
+    }
+
+    private bool DoCoordinatesMatch(GridCoordinates _start, GridCoordinates _end)
+    {
+        return _start.x == _end.x && _start.z == _end.z;
+    }
+
+    private int CalculateDistance(GridCoordinates _start, GridCoordinates _end)
+    {
+        int xDistance = Mathf.Abs( _start.x - _end.x);
+        int yDistance = Mathf.Abs(_start.z - _end.z);
+        int remainingDistance = Mathf.Abs(xDistance - yDistance);
+
+        int distanceCost = (diagonalCost * Mathf.Min(xDistance, yDistance)) + (straightCost * remainingDistance);
+
+        return distanceCost;
+    }
+}
+
+[Serializable]
+public struct PathfindingCostValues
+{
+    public GridBlock cameFromBlock;
+    public int gCost;
+    public int hCost;
+    public int fCost;
+
+    public void CalculateFCost()
+    {
+        fCost = gCost + hCost;
+    }
+
+    public void ResetValues()
+    {
+        cameFromBlock = null;
+        gCost = int.MaxValue;
+        CalculateFCost();
     }
 }

@@ -9,8 +9,7 @@ public class GridSystem : MonoBehaviour
     Pathfinder pathfinder = null;
     Tilemap tilemap = null;
 
-    //Dictionary<GridCoordinates, GridPiece> gridBlocks = new Dictionary<GridCoordinates, GridPiece>();
-    List<GridPiece> gridPieces = new List<GridPiece>();
+    Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
 
     private void Awake()
     {
@@ -18,114 +17,51 @@ public class GridSystem : MonoBehaviour
         tilemap = GetComponentInChildren<Tilemap>();
     }
 
+    private void Start()
+    {
+        SetupGrid();
+    }
+
     public void SetupGrid()
     {
-        gridPieces.Clear();
+        gridDictionary.Clear();
 
-        foreach(GridPiece gridPiece in GetComponentsInChildren<GridPiece>())
+        foreach(GridBlock gridBlock in GetComponentsInChildren<GridBlock>())
         {
-            Vector3 coordinates = gridPiece.transform.localPosition;
+            Vector3 coordinates = gridBlock.transform.localPosition;
             int x = Mathf.RoundToInt(coordinates.x);
             int z = Mathf.RoundToInt(coordinates.z);
 
-            gridPiece.SetupGridPiece(x, z);
+            gridBlock.SetupGridBlock(x, z);
 
-            gridPieces.Add(gridPiece);
+            GridCoordinates gridCoordinates = gridBlock.gridCoordinates;
+            gridDictionary.Add(gridCoordinates,gridBlock);
         }
+
+        pathfinder.InitalizePathfinder(gridDictionary);
     }
     
     public void DeleteGrid()
     {
-        foreach (GridPiece gridPiece in GetComponentsInChildren<GridPiece>())
+        foreach (GridBlock gridBlock in GetComponentsInChildren<GridBlock>())
         {
-            if (gridPiece == null) continue;
-            DestroyImmediate(gridPiece.gameObject);
+            if (gridBlock == null) continue;
+            DestroyImmediate(gridBlock.gameObject);
         }
 
-        gridPieces.Clear();
+        gridDictionary.Clear();
     }
 }
 
 [Serializable]
-public class GridCoordinates
+public struct GridCoordinates
 {
-    int xCoordinate = 0;
-    int zCoordinate = 0;
+    public int x;
+    public int z;
 
     public GridCoordinates(int _x, int _z)
     {
-
-    }
-
-    public int GetX()
-    {
-        return xCoordinate;
-    }
-
-    public int GetZ()
-    {
-        return zCoordinate;
+        x = _x;
+        z = _z;
     }
 }
-
-//[SerializeField] GridPiece gridPiecePrefab = null;
-
-////[SerializeField] Dictionary<GridPiece, GridCoordinates> grid = new Dictionary<GridPiece, GridCoordinates>();
-//[SerializeField] List<GridPiece> gridPieces = new List<GridPiece>();
-
-////Error here with switching rows
-//int currentHighestX = -1;
-//int currentHighestZ = -1;
-
-//public int GetNextAvailableRow()
-//{
-//    return 0;
-//}
-
-//public void AddGridPiece()
-//{
-//    GridPiece gridInstance = Instantiate(gridPiecePrefab, transform);
-
-//    string formattedName = gridInstance.name.Replace("(Clone)", "");
-//    gridInstance.name = formattedName;
-
-//    gridInstance.UpdateCoordinatesText(0, 0);
-//}
-
-//public void AddRowPiece(int _columnNumber)
-//{
-//    GridPiece gridInstance = Instantiate(gridPiecePrefab, transform);
-
-//    string formattedName = gridInstance.name.Replace("(Clone)", "");
-//    gridInstance.name = formattedName;
-
-//    currentHighestX += 1;
-
-//    Vector3 newPosition = new Vector3(currentHighestX, 0, _columnNumber);
-//    gridInstance.transform.localPosition = newPosition;
-
-//    gridInstance.UpdateCoordinatesText((int)gridInstance.transform.localPosition.x, (int)gridInstance.transform.localPosition.z);
-
-//    gridPieces.Add(gridInstance);
-//}
-
-//public void AddColumnPiece(int _rowNumber)
-//{
-//    GridPiece gridInstance = Instantiate(gridPiecePrefab, transform);
-
-//    string formattedName = gridInstance.name.Replace("(Clone)", "");
-//    gridInstance.name = formattedName;
-
-//    currentHighestZ += 1;
-
-//    Vector3 newPosition = new Vector3(_rowNumber, 0, currentHighestZ);
-//    gridInstance.transform.localPosition = newPosition;
-
-//    gridInstance.UpdateCoordinatesText((int)gridInstance.transform.localPosition.x, (int)gridInstance.transform.localPosition.z);
-
-
-//    gridPieces.Add(gridInstance);
-//}
-
-
-
