@@ -151,7 +151,7 @@ public class Pathfinder : MonoBehaviour
         yield return GetGridBlock(x -1, z -1);
     }
 
-    private GridBlock GetGridBlock(int _x, int _z)
+    public GridBlock GetGridBlock(int _x, int _z)
     {
         GridCoordinates gridCoordinates = new GridCoordinates(_x, _z);
 

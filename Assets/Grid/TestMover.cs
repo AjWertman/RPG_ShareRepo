@@ -6,12 +6,19 @@ using UnityEngine.AI;
 
 public class TestMover : MonoBehaviour
 {
+    [SerializeField] float distanceTolerance = .3f;
+
     List<GridBlock> path = new List<GridBlock>();
+    List<GridBlock> tempPath = new List<GridBlock>();
 
     Pathfinder pathfinder = null;
     NavMeshAgent navMeshAgent = null;
 
-    GridBlock currentHighlightedBlock = null;
+    GridBlock currentBlock = null;
+    int currentIndex = 0;
+
+    bool isSelectingMovement = true;
+    bool isMoving = false;
 
     private void Awake()
     {
@@ -19,44 +26,128 @@ public class TestMover : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
+    private void Start()
+    {
+        currentBlock = pathfinder.GetGridBlock(0, 0);
+    }
+
     private void Update()
     {
+        HandleRaycast();
+    }
+
+    private void HandleRaycast()
+    {
+        if (!isSelectingMovement) return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit))
         {
-
             GridBlock gridBlock = hit.collider.GetComponentInParent<GridBlock>();
 
             if (gridBlock == null) return;
-            if (gridBlock == currentHighlightedBlock) return;
+            if (gridBlock == currentBlock) return;
             ClearPath();
-            GridCoordinates zero = new GridCoordinates(0, 0);
+            tempPath = pathfinder.FindPath(currentBlock.gridCoordinates, gridBlock.gridCoordinates);
 
-            path = pathfinder.FindPath(zero, gridBlock.gridCoordinates);
-
-            for (int i = 0; i < path.Count; i++)
+            for (int i = 0; i < tempPath.Count; i++)
             {
-                string coordinatesString = ("(" + path[i].gridCoordinates.x.ToString() + "," + path[i].gridCoordinates.z.ToString() + ")");
-                print(i.ToString() + " - " + coordinatesString);
-
-                path[i].Highlight();
+                tempPath[i].Highlight();
             }
 
-            //foreach(GridBlock thisBlock in pathfinder.GetNeighbors(gridBlock.gridCoordinates))
-            //{
-            //    if (thisBlock == null) continue;
-            //    thisBlock.BecomeUnworthy();
-            //}
-            //Vector3 piecePosition = gridBlock.travelDestination.position;
-            //navMeshAgent.SetDestination(piecePosition);
+            if (Input.GetMouseButtonDown(0))
+            {
+                isSelectingMovement = false;
+                path = tempPath;
+                StartCoroutine(MoveToBlock(path));
+            }
         }
+    }
+
+    private IEnumerator MoveToBlock(List<GridBlock> _path)
+    {
+        yield return FollowPath(_path);
+    }
+
+    private IEnumerator FollowPath(List<GridBlock> _path)
+    {
+        GridBlock goalBlock = _path[_path.Count - 1];
+        isMoving = true;
+
+        currentIndex = 1;
+        while (isMoving)
+        {
+            GridBlock nextBlock = _path[currentIndex];
+            bool isGoalBlock = goalBlock == nextBlock;
+
+            navMeshAgent.SetDestination(GetGridBlockPosition(nextBlock));         
+
+            bool isAtPosition = IsAtPosition(nextBlock);
+
+            if (isAtPosition)
+            {
+                if (!isGoalBlock)
+                {                   
+                    currentIndex += 1;
+                    if (currentIndex >= path.Count)
+                    {
+                        print("The index is larger than the path count");
+                        yield break;
+                    }
+                    yield return null;
+                }
+                else
+                {
+                    ReachedDestination(goalBlock);
+                    yield break;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    private void ReachedDestination(GridBlock _goalBlock)
+    {
+        currentBlock = _goalBlock;
+        isMoving = false;
+        isSelectingMovement = true;
+        ClearPath();
+        tempPath.Clear();
+        path.Clear();
+        currentIndex = 0;
+    }
+
+    private bool IsAtPosition(GridBlock _gridBlock)
+    {
+        float distanceToBlock = Vector3.Distance(GetGridBlockPosition(_gridBlock), GetPlayerPosition());
+
+        bool isEndGoal = (_gridBlock == path[path.Count - 1]);
+        if (isEndGoal)
+        {
+            return distanceToBlock == 0;
+        }
+        
+        return distanceToBlock < distanceTolerance;
+    }
+
+    private Vector3 GetPlayerPosition()
+    {
+        return new Vector3(transform.position.x, 0, transform.position.z);
+    }
+
+    private Vector3 GetGridBlockPosition(GridBlock _gridBlock)
+    {
+        Vector3 goalDestination = _gridBlock.travelDestination.position;
+
+        return new Vector3(goalDestination.x, 0, goalDestination.z);
     }
 
     private void ClearPath()
     {
-       foreach(GridBlock gridBlock in path)
+       foreach(GridBlock gridBlock in tempPath)
         {
             GridCoordinates gridCoordinates = gridBlock.gridCoordinates;
             gridBlock.SetColor(gridCoordinates.x, gridCoordinates.z);

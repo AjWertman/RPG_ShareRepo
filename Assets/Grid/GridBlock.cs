@@ -69,6 +69,8 @@ public class GridBlock : MonoBehaviour
     public void Highlight()
     {
         meshRenderer.material = centerMaterial;
+        Color32 white = new Color32(255, 255, 255, 255);
+        coordinatesText.color = white;
     }
 
     public void UpdateCoordinatesText(int _x, int _z)

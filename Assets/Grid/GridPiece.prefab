@@ -828,7 +828,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &7776654750715165031
 Transform:
@@ -859,14 +859,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridCoordinates:
-    xCoordinate: 0
-    zCoordinate: 0
+    x: 0
+    z: 0
   pathfindingCostValues:
     cameFromBlock: {fileID: 0}
     gCost: 0
     hCost: 0
     fCost: 0
-  travelDestination: {fileID: 0}
+  travelDestination: {fileID: 18672851117787892}
   lightMaterial: {fileID: 2100000, guid: afafd76093a5c684ab6d2b5822a30fcb, type: 2}
   darkMaterial: {fileID: 2100000, guid: 341f2a782671a514799a7e0d042be039, type: 2}
   centerMaterial: {fileID: 2100000, guid: 36ce50c0c570c834c88ed2d5b5e5add0, type: 2}
