@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.5, y: 1.2, z: 4}
   m_LocalScale: {x: 8.1791, y: 3.1217172, z: 8.1791}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -53,6 +54,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -61,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1073cc77f9e2a5e4b94c99a676ebbf3a, type: 2}
+  - {fileID: 2100000, guid: 4530b7a0e8f05554c8d6b476539e0169, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,11 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a05989e9d9cb8488e8b8d0c15f129f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyClusters: []
+  battleHandlerOverride: {fileID: 0}
   chanceToStartBattle: 10
   isEnemyTrigger: 0
-  enemyTeam:
-  - {fileID: 11400000, guid: 98b40e3192bf5eb449717fd18c75fb74, type: 2}
-  - {fileID: 11400000, guid: d5dc8f09d1477d146b9ed44d46c843c0, type: 2}
-  - {fileID: 11400000, guid: d5dc8f09d1477d146b9ed44d46c843c0, type: 2}
-  - {fileID: 11400000, guid: 98b40e3192bf5eb449717fd18c75fb74, type: 2}
-  sceneToLoad: 1

@@ -159,11 +159,6 @@ public class Pathfinder : MonoBehaviour
         else return null;
     }
 
-    private bool DoCoordinatesMatch(GridCoordinates _start, GridCoordinates _end)
-    {
-        return _start.x == _end.x && _start.z == _end.z;
-    }
-
     private int CalculateDistance(GridCoordinates _start, GridCoordinates _end)
     {
         int xDistance = Mathf.Abs( _start.x - _end.x);

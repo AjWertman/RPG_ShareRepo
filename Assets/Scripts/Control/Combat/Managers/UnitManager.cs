@@ -43,23 +43,18 @@ namespace RPGProject.Control
             playerTeam.Add(_playerUnit);
         }
 
-        public void SetUpUnits(List<Unit> _enemyTeam, List<Transform> _playerPositions, List<Transform> _enemyPositions)
+        public void SetUpUnits(Dictionary<GridBlock, Unit> _playerStartingPositions, Dictionary<GridBlock, Unit> _enemyStartingPositions)
         {
-            enemyTeam = _enemyTeam;
-
-            startingPlayerTeamSize = playerTeam.Count;
-            startingEnemyTeamSize = enemyTeam.Count;
-
-            SetupUnitTeam(playerTeam, _playerPositions, true);
-            SetupUnitTeam(enemyTeam, _enemyPositions, false);
+            SetupUnitTeam(_playerStartingPositions, true);
+            SetupUnitTeam(_enemyStartingPositions, false);
         }
 
-        public void SetupUnitTeam(List<Unit> _team, List<Transform> _teamPositions, bool _isPlayerTeam)
+        public void SetupUnitTeam(Dictionary<GridBlock, Unit> _teamStartingPositions, bool _isPlayerTeam)
         {
-            for (int i = 0; i < _team.Count; i++)
+            foreach(GridBlock startingBlock in _teamStartingPositions.Keys)
             {
-                Unit unit = _team[i];
-                UnitController unitController = SetupNewUnit(unit, _teamPositions[i], _isPlayerTeam);
+                Unit unit = _teamStartingPositions[startingBlock];
+                UnitController unitController = SetupNewUnit(unit, startingBlock.travelDestination, _isPlayerTeam);
 
                 AddUnitToLists(unitController, _isPlayerTeam);
             }
@@ -72,7 +67,7 @@ namespace RPGProject.Control
 
             CharacterKey characterKey = _unit.GetCharacterKey();
 
-            SetUnitTransform(unitController, _teamPosition);
+            SetUnitTransform(unitController, _teamPosition, _isPlayerTeam);
 
             UnitInfo unitInfo = unitController.GetUnitInfo();
             unitInfo.SetUnitInfo(_unit.GetUnitName(), characterKey, _unit.GetBaseLevel(),
@@ -104,10 +99,11 @@ namespace RPGProject.Control
             return unitController;
         }
 
-        private void SetUnitTransform(UnitController _unit, Transform _newTransform)
+        private void SetUnitTransform(UnitController _unit, Transform _newTransform, bool _isPlayer)
         {
             _unit.transform.position = _newTransform.position;
-            _unit.transform.rotation = _newTransform.rotation;
+
+            if (!_isPlayer) _unit.transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
         private void AddUnitToLists(UnitController _unit, bool _isPlayer)

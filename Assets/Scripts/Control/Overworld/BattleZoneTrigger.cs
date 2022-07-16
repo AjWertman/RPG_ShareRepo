@@ -10,14 +10,13 @@ namespace RPGProject.Control
     public class BattleZoneTrigger : MonoBehaviour
     {
         [SerializeField] EnemyCluster[] enemyClusters = null;
-        [SerializeField] BattleHandler battleHandlerOverride = null;
+        [SerializeField] NewBattleHandlerScript battleHandlerOverride = null;
         [Range(0, 99)] [SerializeField] int chanceToStartBattle = 10;
         [SerializeField] bool isEnemyTrigger = false;
 
-        BattleHandler currentBattleHandler = null;
+        NewBattleHandlerScript currentBattleHandler = null;
 
         PlayerTeamManager playerTeam = null;
-        List<Unit> enemyTeam = new List<Unit>();
 
         bool isInTrigger = false;
         bool startedBattle = false;
@@ -27,6 +26,15 @@ namespace RPGProject.Control
         private void Start()
         {
             playerTeam = FindObjectOfType<PlayerTeamManager>();
+        }
+
+        private void Update()
+        {
+            if (startedBattle) return;
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                StartCoroutine(StartBattle());
+            }
         }
 
         public void BattleCheck()
@@ -48,8 +56,6 @@ namespace RPGProject.Control
 
         public IEnumerator StartBattle()
         {
-            enemyTeam.Clear();
-
             if (isEnemyTrigger)
             {
                 updateShouldBeDisabled(true);
@@ -71,9 +77,9 @@ namespace RPGProject.Control
 
             currentBattleHandler.onBattleEnd += EndBattle;
 
-            SetRandomEnemyTeam();
+            UnitStartingPosition[] enemyStartingPositions = GetRandomEnemyTeam();
 
-            yield return currentBattleHandler.SetupBattle(playerTeam, enemyTeam);
+            yield return currentBattleHandler.StartBattle(playerTeam, enemyStartingPositions);
 
             yield return FindObjectOfType<Fader>().FadeIn(2f);
 
@@ -98,14 +104,14 @@ namespace RPGProject.Control
             startedBattle = false;
         }
 
-        private BattleHandler GetClosestBattleHandler()
+        private NewBattleHandlerScript GetClosestBattleHandler()
         {
-            BattleHandler[] battleHandlers = FindObjectsOfType<BattleHandler>();
+            NewBattleHandlerScript[] battleHandlers = FindObjectsOfType<NewBattleHandlerScript>();
 
-            BattleHandler closestBattleHandler = null;
+            NewBattleHandlerScript closestBattleHandler = null;
             float closestDistance = 0f;
 
-            foreach (BattleHandler battleHandler in battleHandlers)
+            foreach (NewBattleHandlerScript battleHandler in battleHandlers)
             {
                 if (closestBattleHandler == null || closestDistance > Vector3.Distance(transform.position, battleHandler.transform.position))
                 {
@@ -117,16 +123,14 @@ namespace RPGProject.Control
             return closestBattleHandler;
         }
 
-        private void SetRandomEnemyTeam()
+        private UnitStartingPosition[] GetRandomEnemyTeam()
         {
             int randomNumber = RandomGenerator.GetRandomNumber(0, enemyClusters.Length - 1);
             EnemyCluster enemyCluster = enemyClusters[randomNumber];
 
-            foreach (Unit enemy in enemyCluster.GetEnemies())
-            {
-                enemyTeam.Add(enemy);
-            }
+            return enemyCluster.enemies;
         }
+
         public bool IsEnemyTrigger()
         {
             return isEnemyTrigger;

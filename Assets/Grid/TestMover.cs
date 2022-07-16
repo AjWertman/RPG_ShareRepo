@@ -11,6 +11,7 @@ public class TestMover : MonoBehaviour
     List<GridBlock> path = new List<GridBlock>();
     List<GridBlock> tempPath = new List<GridBlock>();
 
+    GridSystem gridSystem = null;
     Pathfinder pathfinder = null;
     NavMeshAgent navMeshAgent = null;
 
@@ -22,6 +23,7 @@ public class TestMover : MonoBehaviour
 
     private void Awake()
     {
+        gridSystem = FindObjectOfType<GridSystem>();
         pathfinder = FindObjectOfType<Pathfinder>();
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
@@ -49,13 +51,10 @@ public class TestMover : MonoBehaviour
 
             if (gridBlock == null) return;
             if (gridBlock == currentBlock) return;
-            ClearPath();
+            gridSystem.UnhighlightPath(tempPath);
             tempPath = pathfinder.FindPath(currentBlock.gridCoordinates, gridBlock.gridCoordinates);
 
-            for (int i = 0; i < tempPath.Count; i++)
-            {
-                tempPath[i].Highlight();
-            }
+            gridSystem.HighlightPath(tempPath);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -114,7 +113,7 @@ public class TestMover : MonoBehaviour
         currentBlock = _goalBlock;
         isMoving = false;
         isSelectingMovement = true;
-        ClearPath();
+        gridSystem.UnhighlightPath(tempPath);
         tempPath.Clear();
         path.Clear();
         currentIndex = 0;
@@ -143,14 +142,5 @@ public class TestMover : MonoBehaviour
         Vector3 goalDestination = _gridBlock.travelDestination.position;
 
         return new Vector3(goalDestination.x, 0, goalDestination.z);
-    }
-
-    private void ClearPath()
-    {
-       foreach(GridBlock gridBlock in tempPath)
-        {
-            GridCoordinates gridCoordinates = gridBlock.gridCoordinates;
-            gridBlock.SetColor(gridCoordinates.x, gridCoordinates.z);
-        }
     }
 }

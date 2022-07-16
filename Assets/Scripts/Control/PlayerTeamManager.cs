@@ -13,6 +13,8 @@ namespace RPGProject.Control
         [SerializeField] List<PlayerKey> currentPlayerKeys = new List<PlayerKey>();
         [SerializeField] List<TeamInfo> teamInfos = new List<TeamInfo>();
 
+        public UnitStartingPosition[] playerStartingPositions = null;
+
         PlayableCharacterDatabase playableCharacterDatabase = null;
         UnitDatabase unitDatabase = null;
 
@@ -43,13 +45,14 @@ namespace RPGProject.Control
                 PlayableCharacter playableCharacter = playableCharacterDatabase.GetPlayableCharacter(playerKey);
                 CharacterKey characterKey = CharacterKeyComparison.GetCharacterKey(playerKey);
 
-                Unit unit = null;
+                Unit unit = unitDatabase.GetUnit(characterKey);
 
-                unit = unitDatabase.GetUnit(characterKey);
                 TeamInfo teamInfo = new TeamInfo();
                 teamInfo.SetPlayerKey(playerKey);
                 teamInfo.SetLevel(unit.GetBaseLevel());
                 teamInfo.SetStats(unit.GetStats());
+
+                teamInfo.startingCoordinates = GetStartingPosition(unit);
 
                 float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.GetStats().GetStat(StatType.Stamina));
                 float maxManaPoints = CalculateMaxMana(teamInfo.GetStats().GetStat(StatType.Spirit));
@@ -194,6 +197,20 @@ namespace RPGProject.Control
             return unitDatabase.GetUnit(characterKey);
         }
 
+        private GridCoordinates GetStartingPosition(Unit _unit)
+        {
+            GridCoordinates startingCoordinates = new GridCoordinates();
+
+            foreach (UnitStartingPosition playerStartingPosition in playerStartingPositions)
+            {
+                Unit unit = playerStartingPosition.unit;
+
+                if (unit == _unit) startingCoordinates = playerStartingPosition.startCoordinates;
+            }
+
+            return startingCoordinates;
+        }
+
         private float CalculateMaxHealthPoints(float _stamina)
         {
             float maxHealthPoints = 100f;
@@ -235,6 +252,8 @@ namespace RPGProject.Control
         [SerializeField] UnitInfo unitInfo = new UnitInfo();
         [SerializeField] UnitResources unitResources = new UnitResources();
         [SerializeField] Stats stats = new Stats();
+
+        public GridCoordinates startingCoordinates;
 
         [SerializeField] int level = 1;
         [SerializeField] float experiencePoints = 0f;

@@ -11,21 +11,139 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
-    public enum BattleState { Null, Battling }
+    //public enum BattleState { Null, Battling }
 
-    public class BattleHandler : MonoBehaviour
+    public class NewBattleHandlerScript : MonoBehaviour
     {
-        [SerializeField] Transform camTransform = null;
-
-        BattleManagersPool battleManagersPool = null;
-        AbilityObjectPool abilityObjectPool = null;
-
         BattlePositionManager battlePositionManager = null;
         BattleUIManager battleUIManager = null;
         UnitManager unitManager = null;
         TurnManager turnManager = null;
 
         PlayerTeamManager playerTeamManager = null;
+        GridSystem gridSystem = null;
+
+        GridCoordinates playerZeroCoordinates;
+        GridCoordinates enemyZeroCoordinates;
+
+        private void Start()
+        {
+            battlePositionManager = GetComponentInChildren<BattlePositionManager>();
+            battleUIManager = GetComponentInChildren<BattleUIManager>();
+            unitManager = GetComponentInChildren<UnitManager>();
+            turnManager = GetComponentInChildren<TurnManager>();
+
+            playerTeamManager = FindObjectOfType<PlayerTeamManager>();
+            gridSystem = GetComponentInChildren<GridSystem>();
+
+
+            battleUIManager.InitalizeBattleUIManager();
+            unitManager.InitalizeUnitManager();
+        }
+
+        public IEnumerator StartBattle(PlayerTeamManager _playerTeamManager, UnitStartingPosition[] _enemyTeam)
+        {
+            isBattleOver = false;
+
+            playerTeamManager = _playerTeamManager;        
+            SetupManagers(_enemyTeam);
+
+            //////////////////
+            SetCurrentUnitTurn(turnManager.GetFirstMoveUnit());
+
+            //musicOverride.OverrideMusic();
+
+            battleState = BattleState.Battling;
+
+            StartCoroutine(ExecuteNextTurn());
+
+            yield return null;
+        }
+
+        private void SetupManagers(UnitStartingPosition[] _enemyTeam)
+        {            
+            battlePositionManager.SetUpBattlePositionManager(gridSystem, playerTeamManager.playerStartingPositions, _enemyTeam);
+            SetupUnitManager();
+            //
+
+            SetupTurnManager();
+            SetupUIManager();
+        }
+
+        public void SetupUnitManager()
+        {
+            Dictionary<GridBlock, Unit> playerStartingPositions = battlePositionManager.playerStartingPositionsDict;
+            Dictionary<GridBlock, Unit> enemyStartingPositions = battlePositionManager.enemyStartingPositionsDict;
+
+            unitManager.SetUpUnits(playerStartingPositions, enemyStartingPositions);
+
+            unitManager.onMoveCompletion += AdvanceTurn;
+            unitManager.onTeamWipe += EndBattle;
+            unitManager.onUnitDeath += OnUnitDeath;
+        }
+
+        //private Dictionary<GridCoordinates,Unit> SetupTeams(Dictionary<GridCoordinates, Unit> _enemyTeam)
+        //{
+        //    Dictionary<GridBlock, Unit> startingTeams = new Dictionary<GridBlock, Unit>();
+
+        //    foreach(Unit unit in _enemyTeam.Keys)
+        //    {
+        //        GridCoordinates startingCoordinates = _enemyTeam[unit]
+        //        startingTeams.Add
+        //    }
+
+        //    foreach (PlayableCharacter playableCharacter in _playerTeam)
+        //    {
+        //        PlayerKey playerKey = playableCharacter.GetPlayerKey();
+        //        Unit playerUnit = playerTeamManager.GetUnit(playerKey);
+        //        TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
+
+        //        unitManager.SetupPlayerUnit(playerUnit);
+
+        //        playerTeam.Add(playerUnit);
+        //    }
+
+        //    foreach (Unit enemy in _enemyTeam.Keys)
+        //    {
+        //        enemyTeam.Add(enemy);
+        //    }
+
+        //    playerTeamSize = playerTeam.Count - 1;
+        //    enemyTeamSize = enemyTeam.Count - 1;
+
+        //    return startingTeams;
+        //}
+
+
+        /// <summary>
+        /// ///////////
+        /// </summary>
+
+        public void SetupTurnManager()
+        {
+            turnManager.SetUpTurns(unitManager.GetAllUnits(), unitManager.GetPlayerUnits(), unitManager.GetEnemyUnits());
+            turnManager.onTurnChange += SetCurrentUnitTurn;
+        }
+        public void SetupUIManager()
+        {
+            List<Fighter> _playerCombatants = GetUnitFighters(unitManager.GetPlayerUnits());
+            List<Fighter> _enemyCombatants = GetUnitFighters(unitManager.GetEnemyUnits());
+            List<Fighter> _combatantTurnOrder = GetUnitFighters(turnManager.GetTurnOrder());
+            battleUIManager.SetupUIManager(_playerCombatants, _enemyCombatants, _combatantTurnOrder);
+            battleUIManager.SetUILookAts(camTransform);
+            battleUIManager.onPlayerMove += OnPlayerMove;
+            battleUIManager.onEscape += Escape;
+        }
+
+
+        /// <summary>
+        /// //
+        /// </summary>
+        [SerializeField] Transform camTransform = null;
+
+        BattleManagersPool battleManagersPool = null;
+        AbilityObjectPool abilityObjectPool = null;
+
         List<Unit> playerTeam = new List<Unit>();
         int playerTeamSize = 0;
 
@@ -44,34 +162,34 @@ namespace RPGProject.Control
         public event Action onBattleEnd;
         public event Action<string, UnitResources> onUnitResourcesUpdate;
         
-        private void Start()
-        {
-            battleManagersPool = FindObjectOfType<BattleManagersPool>();
-            abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
-            musicOverride = GetComponent<MusicOverride>();
-        }
+        //private void Start()
+        //{
+        //    battleManagersPool = FindObjectOfType<BattleManagersPool>();
+        //    abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
+        //    musicOverride = GetComponent<MusicOverride>();
+        //}
 
-        public IEnumerator SetupBattle(PlayerTeamManager _playerTeamManager, List<Unit> _enemyTeam)
-        {
-            battleState = BattleState.Null;
-            isBattleOver = false;
+        //public IEnumerator SetupBattle(PlayerTeamManager _playerTeamManager, List<Unit> _enemyTeam)
+        //{
+        //    battleState = BattleState.Null;
+        //    isBattleOver = false;
 
-            SetBattleManagers();
+        //    SetBattleManagers();
 
-            playerTeamManager = _playerTeamManager;
-            SetupTeams(playerTeamManager.GetPlayableCharacters(), _enemyTeam);
-            SetupManagers();
+        //    playerTeamManager = _playerTeamManager;
+        //    SetupTeams(playerTeamManager.GetPlayableCharacters(), _enemyTeam);
+        //    SetupManagers();
 
-            SetCurrentUnitTurn(turnManager.GetFirstMoveUnit());
+        //    SetCurrentUnitTurn(turnManager.GetFirstMoveUnit());
             
-            //musicOverride.OverrideMusic();
+        //    //musicOverride.OverrideMusic();
 
-            battleState = BattleState.Battling;
+        //    battleState = BattleState.Battling;
 
-            StartCoroutine(ExecuteNextTurn());
+        //    StartCoroutine(ExecuteNextTurn());
 
-            yield return null;
-        }
+        //    yield return null;
+        //}
 
         public void OnPlayerMove(Fighter _target, Ability _selectedAbility)
         {
@@ -305,77 +423,7 @@ namespace RPGProject.Control
             }
         }
 
-        private void SetupTeams(List<PlayableCharacter> _playerTeam, List<Unit> _enemyTeam)
-        {
-            foreach (PlayableCharacter playableCharacter in _playerTeam)
-            {
-                PlayerKey playerKey = playableCharacter.GetPlayerKey();
-                Unit playerUnit = playerTeamManager.GetUnit(playerKey);
-                TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
 
-                unitManager.SetupPlayerUnit(playerUnit);
-
-                playerTeam.Add(playerUnit);
-            }
-
-            foreach (Unit enemy in _enemyTeam)
-            {
-                enemyTeam.Add(enemy);
-            }
-
-            playerTeamSize = playerTeam.Count - 1;
-            enemyTeamSize = enemyTeam.Count - 1;
-        }
-        private void SetBattleManagers()
-        {
-            battleManagersPool.transform.parent = transform;
-            battleManagersPool.transform.localPosition = Vector3.zero;
-            battleManagersPool.transform.localEulerAngles = Vector3.zero;
-            battleManagersPool.ActivateManagersPool();
-
-            battlePositionManager = battleManagersPool.GetBattlePositionManager();
-            unitManager = battleManagersPool.GetUnitManager();
-            turnManager = battleManagersPool.GetTurnManager();
-            battleUIManager = battleManagersPool.GetBattleUIManager();
-        }
-        private void SetupManagers()
-        {
-            GameObject battleCamInstance = battleManagersPool.GetBattleCamInstance();
-            battleCamInstance.transform.parent = camTransform;
-            battleCamInstance.transform.localPosition = Vector3.zero;
-            battleCamInstance.transform.localEulerAngles = Vector3.zero;
-
-            SetupPositionManager();
-            SetupUnitManager();
-            SetupTurnManager();
-            SetupUIManager();
-        }
-        public void SetupPositionManager()
-        {
-            //battlePositionManager.SetUpBattlePositionManager(playerTeamSize, enemyTeamSize);
-        }
-        public void SetupUnitManager()
-        {
-            //unitManager.SetUpUnits(enemyTeam, battlePositionManager.GetPlayerPosList(), battlePositionManager.GetEnemyPosList());
-            unitManager.onMoveCompletion += AdvanceTurn;
-            unitManager.onTeamWipe += EndBattle;
-            unitManager.onUnitDeath += OnUnitDeath;
-        }
-        public void SetupTurnManager()
-        {
-            turnManager.SetUpTurns(unitManager.GetAllUnits(), unitManager.GetPlayerUnits(), unitManager.GetEnemyUnits());
-            turnManager.onTurnChange += SetCurrentUnitTurn;
-        }
-        public void SetupUIManager()
-        {
-            List<Fighter> _playerCombatants = GetUnitFighters(unitManager.GetPlayerUnits());
-            List<Fighter> _enemyCombatants = GetUnitFighters(unitManager.GetEnemyUnits());
-            List<Fighter> _combatantTurnOrder = GetUnitFighters(turnManager.GetTurnOrder());
-            battleUIManager.SetupUIManager(_playerCombatants, _enemyCombatants, _combatantTurnOrder);
-            battleUIManager.SetUILookAts(camTransform);
-            battleUIManager.onPlayerMove += OnPlayerMove;
-            battleUIManager.onEscape += Escape;
-        }
 
         private void OnUnitDeath(UnitController _unitThatCausedUpdate)
         {

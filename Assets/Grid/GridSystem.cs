@@ -6,6 +6,16 @@ using UnityEngine.Tilemaps;
 [ExecuteAlways]
 public class GridSystem : MonoBehaviour
 {
+    [SerializeField] Material lightMaterial = null;
+    [SerializeField] Material darkMaterial = null;
+    [SerializeField] Material redMaterial = null;
+    [SerializeField] Material blueMaterial = null;
+
+    [SerializeField] Material highlightMaterial = null;
+
+    public GridCoordinates playerZeroCoordinates;
+    public GridCoordinates enemyZeroCoordinates;
+    
     Pathfinder pathfinder = null;
     Tilemap tilemap = null;
 
@@ -15,10 +25,6 @@ public class GridSystem : MonoBehaviour
     {
         pathfinder = GetComponent<Pathfinder>();
         tilemap = GetComponentInChildren<Tilemap>();
-    }
-
-    private void Start()
-    {
         SetupGrid();
     }
 
@@ -28,13 +34,14 @@ public class GridSystem : MonoBehaviour
 
         foreach(GridBlock gridBlock in GetComponentsInChildren<GridBlock>())
         {
-            Vector3 coordinates = gridBlock.transform.localPosition;
-            int x = Mathf.RoundToInt(coordinates.x);
-            int z = Mathf.RoundToInt(coordinates.z);
+            Vector3 localPosition = gridBlock.transform.localPosition;
+            int x = Mathf.RoundToInt(localPosition.x);
+            int z = Mathf.RoundToInt(localPosition.z);
 
-            gridBlock.SetupGridBlock(x, z);
+            GridCoordinates gridCoordinates = new GridCoordinates(x, z);
 
-            GridCoordinates gridCoordinates = gridBlock.gridCoordinates;
+            SetupGridBlock(gridBlock, gridCoordinates);
+
             gridDictionary.Add(gridCoordinates,gridBlock);
         }
 
@@ -50,6 +57,73 @@ public class GridSystem : MonoBehaviour
         }
 
         gridDictionary.Clear();
+    }
+
+    public void HighlightPath(List<GridBlock> _path)
+    {
+        foreach(GridBlock gridBlock in _path)
+        {
+            gridBlock.SetColors(highlightMaterial, Color.white);
+        }
+    }
+
+    public void UnhighlightPath(List<GridBlock> _path)
+    {
+        foreach (GridBlock gridBlock in _path)
+        {
+            Material newMaterial = GetGridBlockMaterial(gridBlock.gridCoordinates);
+            Color textColor = GetTextColor(newMaterial);
+            gridBlock.SetColors(newMaterial, textColor);
+        }
+    }
+
+    private void SetupGridBlock(GridBlock _gridBlock, GridCoordinates _gridCoordinates)
+    {
+        _gridBlock.gridCoordinates = _gridCoordinates;
+
+        Material newMaterial = GetGridBlockMaterial(_gridCoordinates);
+        Color textColor = Color.white;
+
+        if (newMaterial == lightMaterial) textColor = Color.black;
+
+        _gridBlock.SetupGridBlock(newMaterial, textColor);     
+    }
+
+    public GridBlock GetGridBlock(int _x, int _z)
+    {
+        GridBlock gridBlock = pathfinder.GetGridBlock(_x, _z);
+        return gridBlock;
+    }
+
+    private Material GetGridBlockMaterial(GridCoordinates _gridCoordinates)
+    {
+        if (DoCoordinatesMatch(_gridCoordinates, playerZeroCoordinates)) return blueMaterial;
+        else if (DoCoordinatesMatch(_gridCoordinates, enemyZeroCoordinates)) return redMaterial;
+        else
+        {
+            if (IsLightBlock(_gridCoordinates)) return lightMaterial;
+            else return darkMaterial;
+        }
+    }
+
+    private Color GetTextColor(Material _material)
+    {
+        if (_material == lightMaterial) return Color.black;
+        else return Color.white;
+    }
+
+    private bool DoCoordinatesMatch(GridCoordinates _coordinates0, GridCoordinates _coordinates1)
+    {
+        return _coordinates0.x == _coordinates1.x && _coordinates0.z == _coordinates1.z;
+    }
+
+    private bool IsLightBlock(GridCoordinates _gridCoordinates)
+    {
+        bool isXEven = _gridCoordinates.x % 2 == 0;
+        bool isZEven = _gridCoordinates.z % 2 == 0;
+
+        if (isXEven == isZEven) return true;
+        else return false;
     }
 }
 

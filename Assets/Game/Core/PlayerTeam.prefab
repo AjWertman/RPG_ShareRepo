@@ -46,135 +46,120 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be9b758dc0bf2504da6f17d81e766efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingPlayerKeys: 010000000000000002000000
-  statsTemplate:
-  - statType: 0
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 1
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 2
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 3
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 4
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 5
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 6
-    statLevel: 10
-    levelUpPercent: 0
-  - statType: 7
-    statLevel: 10
-    levelUpPercent: 0
+  currentPlayerKeys: 
   teamInfos:
   - playerKey: 0
-    stats:
+    unitInfo:
+      unitName: 
+      characterKey: 0
+      unitLevel: 0
       stats:
-      - statType: 0
-        statLevel: 10
-        levelUpPercent: 40
-      - statType: 1
-        statLevel: 10
-        levelUpPercent: 55
-      - statType: 2
-        statLevel: 10
-        levelUpPercent: 25
-      - statType: 3
-        statLevel: 10
-        levelUpPercent: 60
-      - statType: 4
-        statLevel: 10
-        levelUpPercent: 25
-      - statType: 5
-        statLevel: 10
-        levelUpPercent: 30
-      - statType: 6
-        statLevel: 10
-        levelUpPercent: 35
-      - statType: 7
-        statLevel: 10
-        levelUpPercent: 20
-    battleUnitResources:
+        stamina: 10
+        spirit: 10
+        strength: 10
+        skill: 10
+        armor: 10
+        resistance: 10
+        speed: 10
+        luck: 10
+    unitResources:
       healthPoints: 0
-      maxHealthPoints: 0
+      maxHealthPoints: 100
       manaPoints: 0
-      maxManaPoints: 0
+      maxManaPoints: 100
+    stats:
+      stamina: 10
+      spirit: 10
+      strength: 10
+      skill: 10
+      armor: 10
+      resistance: 10
+      speed: 10
+      luck: 10
+    startingCoordinates:
+      x: 0
+      z: 0
     level: 1
     experiencePoints: 0
   - playerKey: 0
-    stats:
+    unitInfo:
+      unitName: 
+      characterKey: 0
+      unitLevel: 0
       stats:
-      - statType: 0
-        statLevel: 10
-        levelUpPercent: 40
-      - statType: 1
-        statLevel: 10
-        levelUpPercent: 55
-      - statType: 2
-        statLevel: 10
-        levelUpPercent: 25
-      - statType: 3
-        statLevel: 10
-        levelUpPercent: 60
-      - statType: 4
-        statLevel: 10
-        levelUpPercent: 25
-      - statType: 5
-        statLevel: 10
-        levelUpPercent: 30
-      - statType: 6
-        statLevel: 10
-        levelUpPercent: 35
-      - statType: 7
-        statLevel: 10
-        levelUpPercent: 20
-    battleUnitResources:
+        stamina: 10
+        spirit: 10
+        strength: 10
+        skill: 10
+        armor: 10
+        resistance: 10
+        speed: 10
+        luck: 10
+    unitResources:
       healthPoints: 0
-      maxHealthPoints: 0
+      maxHealthPoints: 100
       manaPoints: 0
-      maxManaPoints: 0
+      maxManaPoints: 100
+    stats:
+      stamina: 10
+      spirit: 10
+      strength: 10
+      skill: 10
+      armor: 10
+      resistance: 10
+      speed: 10
+      luck: 10
+    startingCoordinates:
+      x: 0
+      z: 0
     level: 0
     experiencePoints: 0
   - playerKey: 0
-    stats:
+    unitInfo:
+      unitName: 
+      characterKey: 0
+      unitLevel: 0
       stats:
-      - statType: 0
-        statLevel: 10
-        levelUpPercent: 40
-      - statType: 1
-        statLevel: 10
-        levelUpPercent: 55
-      - statType: 2
-        statLevel: 10
-        levelUpPercent: 25
-      - statType: 3
-        statLevel: 10
-        levelUpPercent: 60
-      - statType: 4
-        statLevel: 10
-        levelUpPercent: 25
-      - statType: 5
-        statLevel: 10
-        levelUpPercent: 30
-      - statType: 6
-        statLevel: 10
-        levelUpPercent: 35
-      - statType: 7
-        statLevel: 10
-        levelUpPercent: 20
-    battleUnitResources:
+        stamina: 10
+        spirit: 10
+        strength: 10
+        skill: 10
+        armor: 10
+        resistance: 10
+        speed: 10
+        luck: 10
+    unitResources:
       healthPoints: 0
-      maxHealthPoints: 0
+      maxHealthPoints: 100
       manaPoints: 0
-      maxManaPoints: 0
+      maxManaPoints: 100
+    stats:
+      stamina: 10
+      spirit: 10
+      strength: 10
+      skill: 10
+      armor: 10
+      resistance: 10
+      speed: 10
+      luck: 10
+    startingCoordinates:
+      x: 0
+      z: 0
     level: 1
     experiencePoints: 0
+  playerStartingPositions:
+  - unit: {fileID: 11400000, guid: 01382343b6a30714eacbbfb1eefb672b, type: 2}
+    startCoordinates:
+      x: 0
+      z: 0
+  - unit: {fileID: 11400000, guid: b68383a98de03b9479a89647193b4aae, type: 2}
+    startCoordinates:
+      x: 2
+      z: 2
+  - unit: {fileID: 11400000, guid: 5dafee8c8f2e11645a50491a8aeef431, type: 2}
+    startCoordinates:
+      x: -2
+      z: -2
 --- !u!114 &4204676130505864477
 MonoBehaviour:
   m_ObjectHideFlags: 0

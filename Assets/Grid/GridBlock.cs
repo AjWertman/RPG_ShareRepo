@@ -1,27 +1,19 @@
-using System;
 using TMPro;
 using UnityEngine;
 
 public class GridBlock : MonoBehaviour
 {
-    public GridCoordinates gridCoordinates;
-    public PathfindingCostValues pathfindingCostValues;
-
-    public Transform travelDestination = null;
-
-    //Refactor
-    [SerializeField] Material lightMaterial = null;
-    [SerializeField] Material darkMaterial = null;
-    [SerializeField] Material centerMaterial = null;
-    [SerializeField] Material unworthyMaterial = null;
-    //
-
     [SerializeField] TextMeshProUGUI coordinatesText = null;
 
     [SerializeField] GameObject pathfindingTextContainer = null;
     [SerializeField] TextMeshProUGUI fValueText = null;
     [SerializeField] TextMeshProUGUI gValueText = null;
     [SerializeField] TextMeshProUGUI hValueText = null;
+
+    public GridCoordinates gridCoordinates;
+    public PathfindingCostValues pathfindingCostValues;
+
+    public Transform travelDestination = null;
 
     MeshRenderer meshRenderer = null;
     
@@ -32,45 +24,17 @@ public class GridBlock : MonoBehaviour
         pathfindingTextContainer.SetActive(false);
     }
 
-    public void SetupGridBlock(int _x, int _z)
+    public void SetupGridBlock(Material _newMaterial, Color _textColor)
     {
         InitializePiece();
-
-        gridCoordinates = new GridCoordinates(_x, _z);
-
-        SetColor(_x, _z);
-        UpdateCoordinatesText(_x, _z);
+        SetColors(_newMaterial, _textColor);
+        UpdateCoordinatesText(gridCoordinates.x, gridCoordinates.z);
     }
 
-    public void SetColor(int _x, int _z)
+    public void SetColors(Material _newMaterial, Color _textColor)
     {
-        if (!IsCenter())
-        {
-            if(IsLightBlock(_x, _z))
-            {
-                meshRenderer.material = lightMaterial;
-                Color32 black = new Color32(0, 0, 0, 255);
-                coordinatesText.color = black;
-            }
-            else
-            {
-                meshRenderer.material  = darkMaterial;
-                Color32 white = new Color32(255, 255, 255, 255);
-                coordinatesText.color = white;
-            }
-        }
-        else
-        {
-            meshRenderer.material = centerMaterial;
-            coordinatesText.color = Color.black;
-        }
-    }
-
-    public void Highlight()
-    {
-        meshRenderer.material = centerMaterial;
-        Color32 white = new Color32(255, 255, 255, 255);
-        coordinatesText.color = white;
+        meshRenderer.material = _newMaterial;
+        coordinatesText.color = _textColor;
     }
 
     public void UpdateCoordinatesText(int _x, int _z)
@@ -90,32 +54,5 @@ public class GridBlock : MonoBehaviour
         fValueText.text = _f.ToString();
         gValueText.text = _g.ToString();
         hValueText.text = _h.ToString();
-    }
-    
-    public void BecomeUnworthy()
-    {
-        pathfindingTextContainer.SetActive(false);
-        meshRenderer.material = unworthyMaterial;
-    }
-
-    public void SetColorToWhite()
-    {
-        meshRenderer.material = lightMaterial;
-    }
-
-    public bool IsCenter()
-    {
-        Vector3 localPosition = transform.localPosition;
-        bool isCenter = (localPosition.x == 0 && localPosition.z == 0);
-        return isCenter;
-    }
-
-    private bool IsLightBlock(int _x, int _z)
-    {
-        bool isXEven = _x % 2 == 0;
-        bool isZEven = _z % 2 == 0;
-
-        if (isXEven == isZEven) return true;
-        else return false;
     }
 }
