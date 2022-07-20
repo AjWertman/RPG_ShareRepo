@@ -11,11 +11,7 @@ namespace RPGProject.Control
     public class UnitManager : MonoBehaviour
     {
         List<UnitController> unitControllers = new List<UnitController>();
-
-        List<Unit> playerTeam = new List<Unit>();
         List<UnitController> playerUnits = new List<UnitController>();
-
-        List<Unit> enemyTeam = new List<Unit>();
         List<UnitController> enemyUnits = new List<UnitController>();
 
         PlayerTeamManager playerTeamManager = null;
@@ -38,15 +34,13 @@ namespace RPGProject.Control
             SetupEvents();
         }
 
-        public void SetupPlayerUnit(Unit _playerUnit)
-        {
-            playerTeam.Add(_playerUnit);
-        }
-
         public void SetUpUnits(Dictionary<GridBlock, Unit> _playerStartingPositions, Dictionary<GridBlock, Unit> _enemyStartingPositions)
         {
             SetupUnitTeam(_playerStartingPositions, true);
             SetupUnitTeam(_enemyStartingPositions, false);
+
+            startingPlayerTeamSize = playerUnits.Count;
+            startingEnemyTeamSize = enemyUnits.Count;
         }
 
         public void SetupUnitTeam(Dictionary<GridBlock, Unit> _teamStartingPositions, bool _isPlayerTeam)
@@ -54,20 +48,20 @@ namespace RPGProject.Control
             foreach(GridBlock startingBlock in _teamStartingPositions.Keys)
             {
                 Unit unit = _teamStartingPositions[startingBlock];
-                UnitController unitController = SetupNewUnit(unit, startingBlock.travelDestination, _isPlayerTeam);
+                UnitController unitController = SetupNewUnit(unit, startingBlock, _isPlayerTeam);
 
                 AddUnitToLists(unitController, _isPlayerTeam);
             }
         }
 
-        private UnitController SetupNewUnit(Unit _unit, Transform _teamPosition, bool _isPlayerTeam)
+        private UnitController SetupNewUnit(Unit _unit, GridBlock _startingBlock, bool _isPlayerTeam)
         {
             UnitController unitController = unitPool.GetAvailableUnit();
             Fighter fighter = unitController.GetFighter();
 
             CharacterKey characterKey = _unit.GetCharacterKey();
 
-            SetUnitTransform(unitController, _teamPosition, _isPlayerTeam);
+            SetUnitTransform(unitController, _startingBlock, _isPlayerTeam);
 
             UnitInfo unitInfo = unitController.GetUnitInfo();
             unitInfo.SetUnitInfo(_unit.GetUnitName(), characterKey, _unit.GetBaseLevel(),
@@ -91,7 +85,7 @@ namespace RPGProject.Control
                 //unitController.SetUnitXPAward(unit.GetXPAward());
             }
 
-            unitController.SetupUnitController(unitInfo, unitResources, _isPlayerTeam, newMesh);
+            unitController.SetupUnitController(unitInfo, unitResources, _startingBlock, _isPlayerTeam, newMesh);
             fighter.SetUnitInfo(unitInfo);
             fighter.SetUnitResources(unitResources);
             unitController.gameObject.SetActive(true);
@@ -99,9 +93,11 @@ namespace RPGProject.Control
             return unitController;
         }
 
-        private void SetUnitTransform(UnitController _unit, Transform _newTransform, bool _isPlayer)
+        private void SetUnitTransform(UnitController _unit, GridBlock _startingBlock, bool _isPlayer)
         {
-            _unit.transform.position = _newTransform.position;
+            _unit.transform.position = _startingBlock.travelDestination.position;
+
+            _startingBlock.contestedFighter = _unit.GetFighter();
 
             if (!_isPlayer) _unit.transform.eulerAngles = new Vector3(0, 180, 0);
         }
@@ -151,11 +147,7 @@ namespace RPGProject.Control
         private void ResetLists()
         {
             unitControllers.Clear();
-
-            playerTeam.Clear();
             playerUnits.Clear();
-
-            enemyTeam.Clear();
             enemyUnits.Clear();
         }
 

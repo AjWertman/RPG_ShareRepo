@@ -26,6 +26,8 @@ namespace RPGProject.Control
         CharacterMesh characterMesh = null;
         UnitUI unitUI = null;
 
+        public GridBlock currentBlock = null;
+
         bool isTurn = false;
 
         public event Action onMoveCompletion;
@@ -45,10 +47,22 @@ namespace RPGProject.Control
             fighter.InitalizeFighter();
             mover.InitalizeCombatMover();
             unitUI.InitializeUnitUI();
+
+            mover.onDestinationReached += ReachedDestination;
+        }
+
+        private void ReachedDestination(GridBlock _newBlock)
+        {
+            currentBlock.contestedFighter = null;
+
+            currentBlock = _newBlock;
+
+            currentBlock.contestedFighter = fighter;
+            onMoveCompletion();
         }
 
         public void SetupUnitController(UnitInfo _unitInfo, UnitResources _unitResources,
-            bool _isPlayer, CharacterMesh _characterMesh)
+            GridBlock _startingBlock, bool _isPlayer, CharacterMesh _characterMesh)
         {
             SetName(_unitInfo.GetUnitName());
             SetCharacterMesh(_characterMesh);
@@ -63,7 +77,8 @@ namespace RPGProject.Control
             if (_isPlayer) SetUnitResources(_unitResources);
             else CalculateResources();
 
-            mover.SetStartVariables();
+            currentBlock = _startingBlock;
+            mover.SetStartVariables(_startingBlock);
             unitUI.SetupUnitUI();
         }
 

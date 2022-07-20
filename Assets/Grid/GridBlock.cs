@@ -1,3 +1,4 @@
+using RPGProject.Combat;
 using TMPro;
 using UnityEngine;
 
@@ -10,13 +11,18 @@ public class GridBlock : MonoBehaviour
     [SerializeField] TextMeshProUGUI gValueText = null;
     [SerializeField] TextMeshProUGUI hValueText = null;
 
+    [SerializeField] bool isMovable = true;
+
     public GridCoordinates gridCoordinates;
     public PathfindingCostValues pathfindingCostValues;
 
     public Transform travelDestination = null;
 
+    public Fighter contestedFighter = null;
+    public Ability activeAbility = null;
+
     MeshRenderer meshRenderer = null;
-    
+
     public void InitializePiece()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -54,5 +60,13 @@ public class GridBlock : MonoBehaviour
         fValueText.text = _f.ToString();
         gValueText.text = _g.ToString();
         hValueText.text = _h.ToString();
+    }
+
+    public bool IsMovable()
+    {
+        if (!isMovable) return false;
+        if (contestedFighter != null) return false;
+
+        return true;
     }
 }

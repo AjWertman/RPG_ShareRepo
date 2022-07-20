@@ -12,6 +12,7 @@ public class GridSystem : MonoBehaviour
     [SerializeField] Material blueMaterial = null;
 
     [SerializeField] Material highlightMaterial = null;
+    [SerializeField] Material unworthyMaterial = null;
 
     public GridCoordinates playerZeroCoordinates;
     public GridCoordinates enemyZeroCoordinates;
@@ -59,11 +60,16 @@ public class GridSystem : MonoBehaviour
         gridDictionary.Clear();
     }
 
-    public void HighlightPath(List<GridBlock> _path)
+    public void HighlightPath(List<GridBlock> _path, int _furthestBlockIndex)
     {
         foreach(GridBlock gridBlock in _path)
-        {
-            gridBlock.SetColors(highlightMaterial, Color.white);
+        { 
+            int currentIndex = _path.IndexOf(gridBlock);
+
+            Material currentHighlightMaterial = highlightMaterial;
+            if (currentIndex > _furthestBlockIndex) currentHighlightMaterial = unworthyMaterial;
+
+            gridBlock.SetColors(currentHighlightMaterial, Color.white);
         }
     }
 

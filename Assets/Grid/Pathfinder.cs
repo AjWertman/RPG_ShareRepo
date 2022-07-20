@@ -23,47 +23,45 @@ public class Pathfinder : MonoBehaviour
         gridDictionary = _gridDictionary;
     }
 
-    public List<GridBlock> FindPath(GridCoordinates _start, GridCoordinates _end)
+    public List<GridBlock> FindPath(GridBlock _startBlock, GridBlock _endBlock)
     {
         openList.Clear();
         closedList.Clear();
 
-        GridBlock startBlock = gridDictionary[_start];
-        GridBlock endBlock = gridDictionary[_end];
-
         ResetPathfindingValues();
 
-        startBlock.pathfindingCostValues.gCost = 0;
-        startBlock.pathfindingCostValues.hCost = CalculateDistance(_start, _end);
-        startBlock.pathfindingCostValues.CalculateFCost();
-        openList.Add(startBlock);
+        _startBlock.pathfindingCostValues.gCost = 0;
+        _startBlock.pathfindingCostValues.hCost = CalculateDistance(_startBlock, _endBlock);
+        _startBlock.pathfindingCostValues.CalculateFCost();
+        openList.Add(_startBlock);
 
         while (openList.Count > 0)
         {
             GridBlock currentBlock = GetLowestFCostBlock(openList);
 
-            if(currentBlock == endBlock)
-            {
-                return CalculatePath(endBlock);
-            }
+            if(currentBlock == _endBlock) return CalculatePath(_endBlock);
 
             openList.Remove(currentBlock);
             closedList.Add(currentBlock);
 
-            foreach (GridBlock neighborBlock in GetNeighbors(currentBlock.gridCoordinates))
+            foreach (GridBlock neighborBlock in GetNeighbors(currentBlock))
             {
                 if (neighborBlock == null) continue;
                 if (closedList.Contains(neighborBlock)) continue;
 
-                int distanceToNeighbor = CalculateDistance(currentBlock.gridCoordinates, neighborBlock.gridCoordinates);
+                if (!neighborBlock.IsMovable())
+                {
+                    closedList.Add(neighborBlock);
+                    continue;
+                }
+
+                int distanceToNeighbor = CalculateDistance(currentBlock, neighborBlock);
                 int tenativeGCost = currentBlock.pathfindingCostValues.gCost + distanceToNeighbor;
                 if (tenativeGCost < neighborBlock.pathfindingCostValues.gCost)
                 {
-                    GridCoordinates gridCoordinates = neighborBlock.gridCoordinates;
-
                     neighborBlock.pathfindingCostValues.cameFromBlock = currentBlock;
                     neighborBlock.pathfindingCostValues.gCost = tenativeGCost;
-                    neighborBlock.pathfindingCostValues.hCost = CalculateDistance(gridCoordinates, endBlock.gridCoordinates);
+                    neighborBlock.pathfindingCostValues.hCost = CalculateDistance(neighborBlock, _endBlock);
                     neighborBlock.pathfindingCostValues.CalculateFCost();
 
                     if(!openList.Contains(neighborBlock))
@@ -121,10 +119,10 @@ public class Pathfinder : MonoBehaviour
         }
     }
 
-    public IEnumerable<GridBlock> GetNeighbors(GridCoordinates _gridCoordinates)
+    public IEnumerable<GridBlock> GetNeighbors(GridBlock _gridBlock)
     {
-        int x = _gridCoordinates.x;
-        int z = _gridCoordinates.z;
+        int x = _gridBlock.gridCoordinates.x;
+        int z = _gridBlock.gridCoordinates.z;
 
         //Right
         yield return GetGridBlock(x + 1, z);
@@ -159,10 +157,13 @@ public class Pathfinder : MonoBehaviour
         else return null;
     }
 
-    private int CalculateDistance(GridCoordinates _start, GridCoordinates _end)
+    private int CalculateDistance(GridBlock _startBlock, GridBlock _endBlock)
     {
-        int xDistance = Mathf.Abs( _start.x - _end.x);
-        int yDistance = Mathf.Abs(_start.z - _end.z);
+        GridCoordinates startCoordinates = _startBlock.gridCoordinates;
+        GridCoordinates endCoordinates = _endBlock.gridCoordinates;
+
+        int xDistance = Mathf.Abs(startCoordinates.x - endCoordinates.x);
+        int yDistance = Mathf.Abs(startCoordinates.z - endCoordinates.z);
         int remainingDistance = Mathf.Abs(xDistance - yDistance);
 
         int distanceCost = (diagonalCost * Mathf.Min(xDistance, yDistance)) + (straightCost * remainingDistance);

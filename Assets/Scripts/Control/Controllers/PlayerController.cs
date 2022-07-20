@@ -58,7 +58,7 @@ namespace RPGProject.Control
         }
 
         private void Update()
-        {
+        { 
             if (!isBattling)
             {
                 playerMover.Move();
@@ -92,7 +92,11 @@ namespace RPGProject.Control
                 playerConversant.Quit();
             }
 
-            followCamera.SetCanRotate(!isInteracting);
+            if(followCamera != null)
+            {
+                followCamera.SetCanRotate(!isInteracting);
+            }
+
             playerMover.SetCanMove(!isInteracting);
             ActivateCursor(isInteracting);
             return isInteracting;
@@ -189,7 +193,12 @@ namespace RPGProject.Control
             isBattling = true;
             animator.enabled = false;
             playerMesh.SetActive(false);
-            followCamera.gameObject.SetActive(false);
+
+            if(followCamera != null)
+            {
+                followCamera.gameObject.SetActive(false);
+            }
+
             ActivateCursor(true);
 
             uiCanvas.DeactivateAllUI();

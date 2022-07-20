@@ -313,7 +313,7 @@ namespace RPGProject.Control
                 Unit playerUnit = playerTeamManager.GetUnit(playerKey);
                 TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
 
-                unitManager.SetupPlayerUnit(playerUnit);
+                //unitManager.SetupPlayerUnit(playerUnit);
 
                 playerTeam.Add(playerUnit);
             }

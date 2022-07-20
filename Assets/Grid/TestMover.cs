@@ -1,3 +1,4 @@
+using RPGProject.Control;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ public class TestMover : MonoBehaviour
     Pathfinder pathfinder = null;
     NavMeshAgent navMeshAgent = null;
 
+    BattleGridManager battleGridManager = null;
+
     GridBlock currentBlock = null;
     int currentIndex = 0;
 
@@ -26,6 +29,8 @@ public class TestMover : MonoBehaviour
         gridSystem = FindObjectOfType<GridSystem>();
         pathfinder = FindObjectOfType<Pathfinder>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+
+        battleGridManager = FindObjectOfType<BattleGridManager>();
     }
 
     private void Start()
@@ -40,29 +45,31 @@ public class TestMover : MonoBehaviour
 
     private void HandleRaycast()
     {
-        if (!isSelectingMovement) return;
+        //if (!isSelectingMovement) return;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
-        {
-            GridBlock gridBlock = hit.collider.GetComponentInParent<GridBlock>();
+        //if (Physics.Raycast(ray, out hit))
+        //{
+        //    GridBlock gridBlock = hit.collider.GetComponentInParent<GridBlock>();
 
-            if (gridBlock == null) return;
-            if (gridBlock == currentBlock) return;
-            gridSystem.UnhighlightPath(tempPath);
-            tempPath = pathfinder.FindPath(currentBlock.gridCoordinates, gridBlock.gridCoordinates);
+        //    if (gridBlock == null) return;
+        //    if (gridBlock == currentBlock) return;
+        //    gridSystem.UnhighlightPath(tempPath);
+        //    tempPath = pathfinder.FindPath(currentBlock, gridBlock);
 
-            gridSystem.HighlightPath(tempPath);
+        //    //gridSystem.HighlightPath(tempPath);
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                isSelectingMovement = false;
-                path = tempPath;
-                StartCoroutine(MoveToBlock(path));
-            }
-        }
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        isSelectingMovement = false;
+        //        path = tempPath;
+
+        //        battleGridManager.GetActionPointsCost(path);
+        //        StartCoroutine(MoveToBlock(path));
+        //    }
+        //}
     }
 
     private IEnumerator MoveToBlock(List<GridBlock> _path)

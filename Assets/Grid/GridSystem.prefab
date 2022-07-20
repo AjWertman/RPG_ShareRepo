@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3565828688734475334}
   - component: {fileID: 5542111522809763491}
   - component: {fileID: 2874777526737954186}
+  - component: {fileID: 2344046264653091761}
   m_Layer: 0
   m_Name: GridSystem
   m_TagString: Untagged
@@ -46,6 +47,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bde4bf7a4739ff4796e99d5de68dc4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightMaterial: {fileID: 0}
+  darkMaterial: {fileID: 0}
+  redMaterial: {fileID: 0}
+  blueMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 0}
+  playerZeroCoordinates:
+    x: 0
+    z: 0
+  enemyZeroCoordinates:
+    x: 0
+    z: 0
 --- !u!114 &2874777526737954186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56,6 +68,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fa537617da5d9c48868893cf095a381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2344046264653091761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3565828688734475335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82986ba1d1267884e8fb1c1e7f3abf61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8667660795022426417

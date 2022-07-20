@@ -1193,6 +1193,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1598296141141935951, guid: 4434c03b94b4c494b9a0ce0027380887,
+        type: 3}
+      propertyPath: m_Name
+      value: EndTurnButton
+      objectReference: {fileID: 0}
     - target: {fileID: 2016927040009514343, guid: 4434c03b94b4c494b9a0ce0027380887,
         type: 3}
       propertyPath: m_fontAsset
@@ -1409,6 +1414,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AbilitiesButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749395258260747733, guid: 4434c03b94b4c494b9a0ce0027380887,
+        type: 3}
+      propertyPath: m_text
+      value: End Turn
       objectReference: {fileID: 0}
     - target: {fileID: 8749395258260747733, guid: 4434c03b94b4c494b9a0ce0027380887,
         type: 3}

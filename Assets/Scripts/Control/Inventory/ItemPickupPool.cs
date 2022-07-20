@@ -24,21 +24,6 @@ namespace RPGProject.Control
             CreateItemMeshPool();
         }
 
-        public Pickup GetAvailablePickup(InventoryItem _inventoryItem, int _number)
-        {
-            Pickup availablePickup = null;
-
-            foreach(Pickup pickup in pickupPool)
-            {
-                if (pickup.gameObject.activeSelf) continue;
-
-                availablePickup = pickup;
-                break;
-            }
-
-            SetupPickup(availablePickup, _inventoryItem, _number);
-            return availablePickup;
-        }
 
         private void SetupPickup(Pickup pickup, InventoryItem _inventoryItem, int _number)
         {
@@ -66,7 +51,7 @@ namespace RPGProject.Control
         {
             for (int i = 0; i < amountOfPickPrefabsToSpawn; i++)
             {
-                Pickup pickup = Instantiate(pickupPrefab);
+                Pickup pickup = Instantiate(pickupPrefab, pickupParent);
                 pickup.onItemPickup += ReturnPickup;
                 
                 pickup.ResetPickup();
@@ -104,6 +89,22 @@ namespace RPGProject.Control
 
                 itemMeshPool.Add(itemMeshPrefab.GetItemMeshKey(), itemMeshes);
             }
+        }
+
+        public Pickup GetAvailablePickup(InventoryItem _inventoryItem, int _number)
+        {
+            Pickup availablePickup = null;
+
+            foreach (Pickup pickup in pickupPool)
+            {
+                if (pickup.gameObject.activeSelf) continue;
+
+                availablePickup = pickup;
+                break;
+            }
+
+            SetupPickup(availablePickup, _inventoryItem, _number);
+            return availablePickup;
         }
 
         [Serializable]

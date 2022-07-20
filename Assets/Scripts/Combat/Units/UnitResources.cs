@@ -12,6 +12,8 @@ namespace RPGProject.Combat
         [SerializeField] float manaPoints = 0;
         [SerializeField] float maxManaPoints = 100;
 
+        public float actionPoints = 4;
+
         public void SetUnitResources(float _healthPoints, float _maxHealthPoints, float _manaPoints, float _maxManaPoints)
         {
             healthPoints = _healthPoints;
