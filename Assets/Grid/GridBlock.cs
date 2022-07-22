@@ -1,4 +1,5 @@
 using RPGProject.Combat;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ public class GridBlock : MonoBehaviour
 
     MeshRenderer meshRenderer = null;
 
+    public event Action<Fighter, GridBlock> onContestedFighterUpdate;
+
     public void InitializePiece()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -35,6 +38,14 @@ public class GridBlock : MonoBehaviour
         InitializePiece();
         SetColors(_newMaterial, _textColor);
         UpdateCoordinatesText(gridCoordinates.x, gridCoordinates.z);
+    }
+
+    public void SetContestedFighter(Fighter _fighter)
+    {
+        contestedFighter = _fighter;
+
+        if (contestedFighter == null) return;
+        onContestedFighterUpdate(contestedFighter, this);
     }
 
     public void SetColors(Material _newMaterial, Color _textColor)

@@ -1,4 +1,5 @@
 using RPGProject.Combat;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,12 @@ namespace RPGProject.Control
 
         UnitController currentUnitTurn = null;
 
+        GridBlock[] gridBlocks = null;
+
+        Dictionary<Fighter, GridBlock> occupiedBlocksDict = new Dictionary<Fighter, GridBlock>(); 
+
         Dictionary<GridBlock, GridBlockStatus> gridBlockStatusDict = new Dictionary<GridBlock, GridBlockStatus>();
+
         List<GridBlock> tempPath = new List<GridBlock>();
 
         bool isFindingPath = false;
@@ -21,10 +27,22 @@ namespace RPGProject.Control
         {
             gridSystem = FindObjectOfType<GridSystem>();
             pathfinder = FindObjectOfType<Pathfinder>();
+            InitializeBattleGridManager();
+        }
+
+        private void InitializeBattleGridManager()
+        {
+            gridBlocks = GetComponentsInChildren<GridBlock>();
+
+            foreach(GridBlock gridBlock in gridBlocks)
+            {
+                gridBlock.onContestedFighterUpdate += SetNewFighterBlock;
+            }
         }
 
         private void Update()
         {
+            //Refactor - Need a check to ask if player is moving. If so, dont look for paths
             if (isFindingPath)
             {
                 //Refactor - Place in combat controller?
@@ -36,23 +54,38 @@ namespace RPGProject.Control
                     GridBlock goalBlock = hit.collider.GetComponentInParent<GridBlock>();
                     GridBlock currentBlock = currentUnitTurn.currentBlock;
 
-                    if (goalBlock == null || goalBlock == currentBlock || !goalBlock.IsMovable()) return;
+                    if (goalBlock != null)
+                    {                     
+                        if (goalBlock == currentBlock || !goalBlock.IsMovable()) return;
 
-                    gridSystem.UnhighlightPath(tempPath);
-                    tempPath = pathfinder.FindPath(currentBlock, goalBlock);
-
-                    float currentAP = currentUnitTurn.GetUnitResources().actionPoints;
-                    int furtherestBlockIndex = GetFurtherestBlockIndex(tempPath, currentAP);
-
-                    gridSystem.HighlightPath(tempPath,furtherestBlockIndex);
-
-                    bool canAffordPath = currentAP >= GetActionPointsCost(tempPath[tempPath.Count - 1]);
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        isFindingPath = false;
-                        StartCoroutine(currentUnitTurn.GetMover().MoveToDestination(tempPath, furtherestBlockIndex));
                         gridSystem.UnhighlightPath(tempPath);
+                        tempPath = pathfinder.FindPath(currentBlock, goalBlock);
+
+                        float currentAP = currentUnitTurn.GetUnitResources().actionPoints;
+                        
+
+                        int furtherestBlockIndex = GetFurtherestBlockIndex(tempPath, currentAP);
+                        float actionPointsCost = GetActionPointsCost(tempPath[furtherestBlockIndex]);
+
+                        gridSystem.HighlightPath(tempPath, furtherestBlockIndex);
+
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            //isFindingPath = false;
+                            StartCoroutine(currentUnitTurn.MoveToPosition(tempPath, furtherestBlockIndex, actionPointsCost));
+                            //StartCoroutine(currentUnitTurn.GetMover().MoveToDestination(tempPath, furtherestBlockIndex));
+                            gridSystem.UnhighlightPath(tempPath);
+                        }
                     }
+
+                    //Fighter fighter = hit.collider.GetComponent<Fighter>();
+
+                    //if(fighter != null)
+                    //{
+                    //    gridSystem.UnhighlightPath(tempPath);
+
+                    //    tempPath = pathfinder.FindPath(currentBlock, GetGridBlockByFighter(fighter));
+                    //}
                 }
             }
         }
@@ -74,6 +107,11 @@ namespace RPGProject.Control
             currentUnitTurn = _unitController;
             if (currentUnitTurn.GetUnitInfo().IsPlayer()) isFindingPath = true;
             else isFindingPath = false;
+        }
+
+        public void SetNewFighterBlock(Fighter _fighter, GridBlock _gridBlock)
+        {
+            occupiedBlocksDict[_fighter] = _gridBlock;
         }
 
         public void OnFighterTurnAdvance(Fighter _contestedFighter)
@@ -127,6 +165,18 @@ namespace RPGProject.Control
             ///
         }
 
+        public GridBlock GetGridBlockByFighter(Fighter _fighter)
+        {
+            foreach(GridBlock gridBlock  in gridBlockStatusDict.Keys)
+            {
+                GridBlockStatus gridBlockStatus = gridBlockStatusDict[gridBlock];
+
+                if (gridBlock.contestedFighter == _fighter) return gridBlock;
+               
+            }
+            return null;
+        }
+
         public float GetActionPointsCost(GridBlock _goalBlock)
         {
             float gCost = _goalBlock.pathfindingCostValues.gCost;
@@ -136,7 +186,7 @@ namespace RPGProject.Control
 
             float actionPointCost = gCost / blockCostForActionPoints;
 
-            return actionPointCost;
+            return Mathf.Round(actionPointCost);
         }
     }
 }

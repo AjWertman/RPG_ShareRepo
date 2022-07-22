@@ -31,6 +31,7 @@ namespace RPGProject.Control
         bool isTurn = false;
 
         public event Action onMoveCompletion;
+        public event Action<Fighter, GridBlock> onCurrentBlockUpdate;
 
         public void InitalizeUnitController()
         {
@@ -51,14 +52,32 @@ namespace RPGProject.Control
             mover.onDestinationReached += ReachedDestination;
         }
 
+        public IEnumerator MoveToPosition(List<GridBlock> _path, int _furtherestBlockIndex, float _actionPointCost)
+        {
+            //Refactor - this with reached desination
+            yield return mover.MoveToDestination(_path, _furtherestBlockIndex);
+            UpdateActionPoints(-_actionPointCost);
+        }
+
         private void ReachedDestination(GridBlock _newBlock)
         {
-            currentBlock.contestedFighter = null;
+            currentBlock.SetContestedFighter(null);
 
             currentBlock = _newBlock;
 
-            currentBlock.contestedFighter = fighter;
-            onMoveCompletion();
+            currentBlock.SetContestedFighter(fighter);
+        }
+
+        private void UpdateActionPoints(float _amountToChange)
+        {
+            print("current - " + unitResources.actionPoints.ToString() + "/ Cost - " + _amountToChange.ToString());
+            unitResources.actionPoints += _amountToChange;
+
+            if(unitResources.actionPoints == 0)
+            {
+                print("out of AP");
+                onMoveCompletion();
+            }
         }
 
         public void SetupUnitController(UnitInfo _unitInfo, UnitResources _unitResources,
@@ -242,6 +261,11 @@ namespace RPGProject.Control
         public void SetIsTurn(bool _isTurn)
         {
             isTurn = _isTurn;
+
+            if (isTurn)
+            {
+                unitResources.actionPoints += 4;
+            }
         }
 
         public void ResetUnit()

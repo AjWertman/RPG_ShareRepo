@@ -164,7 +164,7 @@ MonoBehaviour:
     maxHealthPoints: 100
     manaPoints: 0
     maxManaPoints: 100
-    actionPoints: 4
+    actionPoints: 0
   startingStats:
     stamina: 10
     spirit: 10

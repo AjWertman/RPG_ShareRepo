@@ -97,7 +97,7 @@ namespace RPGProject.Control
         {
             _unit.transform.position = _startingBlock.travelDestination.position;
 
-            _startingBlock.contestedFighter = _unit.GetFighter();
+            _startingBlock.SetContestedFighter(_unit.GetFighter());
 
             if (!_isPlayer) _unit.transform.eulerAngles = new Vector3(0, 180, 0);
         }
