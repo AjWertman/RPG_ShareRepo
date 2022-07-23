@@ -15,7 +15,6 @@ namespace RPGProject.Control
 
     public class NewBattleHandlerScript : MonoBehaviour
     {
-        BattlePositionManager battlePositionManager = null;
         BattleUIManager battleUIManager = null;
         BattleGridManager battleGridManager = null;
         UnitManager unitManager = null;
@@ -27,9 +26,10 @@ namespace RPGProject.Control
         GridCoordinates playerZeroCoordinates;
         GridCoordinates enemyZeroCoordinates;
 
+        public event Action<UnitController> onUnitTurnUpdate;
+
         private void Start()
         {
-            battlePositionManager = GetComponentInChildren<BattlePositionManager>();
             battleUIManager = GetComponentInChildren<BattleUIManager>();
             battleGridManager = GetComponentInChildren<BattleGridManager>();
             unitManager = GetComponentInChildren<UnitManager>();
@@ -50,8 +50,8 @@ namespace RPGProject.Control
             playerTeamManager = _playerTeamManager;        
             SetupManagers(_enemyTeam);
 
-            //////////////////
             SetCurrentUnitTurn(turnManager.GetFirstMoveUnit());
+         
 
             //musicOverride.OverrideMusic();
 
@@ -63,15 +63,15 @@ namespace RPGProject.Control
 
         private void SetupManagers(UnitStartingPosition[] _enemyTeam)
         {            
-            battlePositionManager.SetUpBattlePositionManager(gridSystem, playerTeamManager.playerStartingPositions, _enemyTeam);
+            battleGridManager.SetUpBattlePositionManager(gridSystem, playerTeamManager.playerStartingPositions, _enemyTeam);
             SetupUnitManager();
             SetupTurnManager();
             SetupUIManager();
         }
         public void SetupUnitManager()
         {
-            Dictionary<GridBlock, Unit> playerStartingPositions = battlePositionManager.playerStartingPositionsDict;
-            Dictionary<GridBlock, Unit> enemyStartingPositions = battlePositionManager.enemyStartingPositionsDict;
+            Dictionary<GridBlock, Unit> playerStartingPositions = battleGridManager.playerStartingPositionsDict;
+            Dictionary<GridBlock, Unit> enemyStartingPositions = battleGridManager.enemyStartingPositionsDict;
 
             unitManager.SetUpUnits(playerStartingPositions, enemyStartingPositions);
 
@@ -178,7 +178,7 @@ namespace RPGProject.Control
             currentUnitTurn = _currentUnitTurn;
 
             currentUnitTurn.SetIsTurn(true);
-            battleGridManager.UpdateCurrentUnitTurn(currentUnitTurn);
+            onUnitTurnUpdate(_currentUnitTurn);
             battleUIManager.SetCurrentCombatantTurn(currentUnitTurn.GetFighter());
         }
 
@@ -457,7 +457,6 @@ namespace RPGProject.Control
 
             turnManager.onTurnChange -= SetCurrentUnitTurn;
 
-            battlePositionManager = null;
             unitManager = null;
             battleUIManager = null;
             turnManager = null;

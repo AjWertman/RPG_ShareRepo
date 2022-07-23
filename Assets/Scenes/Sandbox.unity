@@ -4569,32 +4569,32 @@ PrefabInstance:
     - target: {fileID: 4175416042070159965, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 3.420426
+      value: 1.975864
       objectReference: {fileID: 0}
     - target: {fileID: 4175416042070159965, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -5.981577
+      value: -5.774207
       objectReference: {fileID: 0}
     - target: {fileID: 4175416042493613734, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 3.420426
+      value: 1.975864
       objectReference: {fileID: 0}
     - target: {fileID: 4175416042493613734, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -5.981577
+      value: -5.774207
       objectReference: {fileID: 0}
     - target: {fileID: 4175416042835814992, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 3.420426
+      value: 1.975864
       objectReference: {fileID: 0}
     - target: {fileID: 4175416042835814992, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -5.981577
+      value: -5.774207
       objectReference: {fileID: 0}
     - target: {fileID: 4175416042939550801, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
@@ -4659,17 +4659,17 @@ PrefabInstance:
     - target: {fileID: 4175416043780759046, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0647617
+      value: 0.06476169
       objectReference: {fileID: 0}
     - target: {fileID: 4175416043780759046, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.69593096
+      value: -0.695931
       objectReference: {fileID: 0}
     - target: {fileID: 4175416043780759046, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.06326645
+      value: 0.06326644
       objectReference: {fileID: 0}
     - target: {fileID: 4216100701991241084, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
@@ -14973,6 +14973,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleZoneTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 2543012636860639554, guid: 5e038108659141f4bace8455d5c240c8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2543012636860639558, guid: 5e038108659141f4bace8455d5c240c8,
         type: 3}
       propertyPath: m_RootOrder
@@ -18748,6 +18753,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BattleHandler
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099763432026762118, guid: 2f17807c10561384ea07ef28bb66d773,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4039610318694166712, guid: 2f17807c10561384ea07ef28bb66d773,
         type: 3}

@@ -6,48 +6,10 @@ namespace RPGProject.Control
 {
     public class BattlePositionManager : MonoBehaviour
     {
-        public Dictionary<GridBlock, Unit> playerStartingPositionsDict = new Dictionary<GridBlock, Unit>();
-        public Dictionary<GridBlock, Unit> enemyStartingPositionsDict = new Dictionary<GridBlock, Unit>();
 
         GridSystem gridSystem = null;
 
-        public void SetUpBattlePositionManager(GridSystem _gridSystem, UnitStartingPosition[] _playerStartingPositions, UnitStartingPosition[] _enemyStartingPositions)
-        {
-            gridSystem = _gridSystem;
-            GridCoordinates playerZeroCoordinates = gridSystem.playerZeroCoordinates;
-            GridCoordinates enemyZeroCoordinates = gridSystem.enemyZeroCoordinates;
-
-            playerStartingPositionsDict = SetupStartingPositions(playerZeroCoordinates, _playerStartingPositions);
-            enemyStartingPositionsDict = SetupStartingPositions(enemyZeroCoordinates, _enemyStartingPositions);
-        }
-
-        private Dictionary<GridBlock, Unit> SetupStartingPositions(GridCoordinates _zeroCoordinates, UnitStartingPosition[] _unitStartingPositions)
-        {
-            Dictionary<GridBlock, Unit> startingPositionsDict = new Dictionary<GridBlock, Unit>();
-
-            for (int i = 0; i < _unitStartingPositions.Length; i++)
-            {
-                UnitStartingPosition unitStartingPosition = _unitStartingPositions[i];
-                GridCoordinates startingCoordinates = unitStartingPosition.startCoordinates;
-
-                GridBlock startingBlock = GetGridBlock(_zeroCoordinates, startingCoordinates);
-                startingPositionsDict.Add(startingBlock, unitStartingPosition.unit);
-            }
-
-            return startingPositionsDict;
-        }
-
-        private GridBlock GetGridBlock(GridCoordinates _zeroCoordinates, GridCoordinates _gridCoordinates)
-        {
-            GridBlock gridBlock = null;
-
-            int xCoordinate = (_zeroCoordinates.x + _gridCoordinates.x);
-            int zCoordinate = (_zeroCoordinates.z + _gridCoordinates.z);
-
-            gridBlock = gridSystem.GetGridBlock(xCoordinate, zCoordinate);
-
-            return gridBlock;
-        }
+        
 
         // <summary>
         ///////////////////////////////////////////////////////////////

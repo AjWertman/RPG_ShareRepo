@@ -64,12 +64,10 @@ namespace RPGProject.Control
 
         private void UpdateActionPoints(float _amountToChange)
         {
-            print("current = " + unitResources.actionPoints.ToString() + "/ Cost = " + _amountToChange.ToString());
             unitResources.actionPoints += _amountToChange;
 
             if(unitResources.actionPoints == 0)
             {
-                print("out of AP");
                 onMoveCompletion();
             }
         }
@@ -123,7 +121,7 @@ namespace RPGProject.Control
 
                     UseAbility(_target, _ability);
 
-                    //AddToCopyList(selectedAbility,isRenCopy);
+                    //AddToCopyList(selectedAbility,isCopy);
 
                     yield return new WaitForSeconds(moveDurationWOffset);
 
