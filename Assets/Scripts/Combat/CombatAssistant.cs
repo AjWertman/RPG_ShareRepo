@@ -9,13 +9,21 @@ namespace RPGProject.Combat
     {
         public static string CanUseAbilityCheck(Fighter _caster, Ability _selectedAbility)
         {
-            float manaCost = _selectedAbility.GetCombo()[0].GetManaCost();
-            if (manaCost > 0)
+            float apCost = _selectedAbility.actionPointsCost;
+            if (apCost > 0)
             {
-                float manaPoints = _caster.GetMana().GetManaPoints();
-                bool hasEnoughMana = manaPoints >= manaCost;
-                if (!hasEnoughMana) return "Not enough Mana";
+                float actionPoints = _caster.GetUnitResources().actionPoints;
+                bool hasEnoughAP = actionPoints >= apCost;
+                if (!hasEnoughAP) return "Not enough Action Points";
             }
+
+            //float manaCost = _selectedAbility.GetCombo()[0].GetManaCost();
+            //if (manaCost > 0)
+            //{
+            //    float manaPoints = _caster.GetMana().GetManaPoints();
+            //    bool hasEnoughMana = manaPoints >= manaCost;
+            //    if (!hasEnoughMana) return "Not enough Mana";
+            //}
 
             bool isCopyAbility = _selectedAbility.GetAbilityType() == AbilityType.Copy;
             if (isCopyAbility)

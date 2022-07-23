@@ -9955,11 +9955,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleUIManager
       objectReference: {fileID: 0}
-    - target: {fileID: 6811652085499088557, guid: b67c3da3045a1c74a8e8f665970e203e,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6824970407272465882, guid: b67c3da3045a1c74a8e8f665970e203e,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -14861,7 +14856,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: afafd76093a5c684ab6d2b5822a30fcb, type: 2}
+      objectReference: {fileID: 2100000, guid: 36ce50c0c570c834c88ed2d5b5e5add0, type: 2}
     - target: {fileID: 7776654750715165031, guid: 8ee392dcca447ca4aacb239505f576b5,
         type: 3}
       propertyPath: m_RootOrder

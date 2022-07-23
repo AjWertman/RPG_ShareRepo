@@ -10,6 +10,9 @@ namespace RPGProject.Movement
         [SerializeField] Transform retreatTransform = null;
         [SerializeField] float distanceTolerance = .3f;
 
+        public float gCostAllowance = 14;
+        public float gCostPerAP = 24f;
+
         public bool isMoving = false;
 
         Vector3 startPosition = Vector3.zero;
@@ -17,10 +20,12 @@ namespace RPGProject.Movement
 
         float startStoppingDistance = 0;
 
-        GridBlock currentBlock = null;
-        int nextBlockIndex = 0;
+        GridBlock currentBlock = null;       
 
         public event Action<GridBlock> onDestinationReached;
+
+        //Refactor
+        public event Action onAPSpend;
 
         public void InitalizeCombatMover()
         {
@@ -45,9 +50,10 @@ namespace RPGProject.Movement
 
         private IEnumerator FollowPath(List<GridBlock> _path, int _furtherestBlockIndex)
         {
+            GridBlock previousBlock = _path[0];
             GridBlock goalBlock = _path[_furtherestBlockIndex];
             isMoving = true;
-            nextBlockIndex = 1;
+            int nextBlockIndex = 1;
 
             while (isMoving)
             {
@@ -61,6 +67,9 @@ namespace RPGProject.Movement
 
                 if (isAtPosition)
                 {
+                    UseMovementResources(previousBlock, nextBlock);
+
+                    previousBlock = nextBlock;
                     if (!isGoalBlock)
                     {
                         nextBlockIndex += 1;
@@ -81,6 +90,31 @@ namespace RPGProject.Movement
 
                 yield return null;
             }
+        }
+
+        private void UseMovementResources(GridBlock _previousBlock, GridBlock _nextBlock)
+        {
+            float gCost = GetGCost(_previousBlock, _nextBlock);
+            
+            if(gCost > gCostAllowance)
+            {
+                gCost -= gCostAllowance;
+                gCostAllowance = 0;
+
+                onAPSpend();
+                gCostAllowance = gCostPerAP;
+            }
+
+            gCostAllowance -= gCost;
+        }
+
+        private float GetGCost(GridBlock _previousBlock, GridBlock _nextBlock)
+        {
+            GridCoordinates previousCoords = _previousBlock.gridCoordinates;
+            GridCoordinates nextCoords = _nextBlock.gridCoordinates;
+
+            if (previousCoords.x == nextCoords.x || previousCoords.z == nextCoords.z) return 10f;
+            else return 14f;
         }
 
         private bool IsAtPosition(GridBlock _gridBlock, GridBlock _goalBlock)
@@ -118,10 +152,6 @@ namespace RPGProject.Movement
         //    path.Clear();
         //    currentIndex = 0;
         //}
-
-
-
-
 
         //public IEnumerator FollowPath(List<GridBlock> _path)
         //{

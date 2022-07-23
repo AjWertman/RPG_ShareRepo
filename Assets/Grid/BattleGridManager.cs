@@ -61,19 +61,14 @@ namespace RPGProject.Control
                         gridSystem.UnhighlightPath(tempPath);
                         tempPath = pathfinder.FindPath(currentBlock, goalBlock);
 
-                        float currentAP = currentUnitTurn.GetUnitResources().actionPoints;
-                        
-
-                        int furtherestBlockIndex = GetFurtherestBlockIndex(tempPath, currentAP);
-                        float actionPointsCost = GetActionPointsCost(tempPath[furtherestBlockIndex]);
+                        int furtherestBlockIndex = GetFurtherestBlockIndex(tempPath, GetTotalPossibleGCostAllowance(currentUnitTurn));
 
                         gridSystem.HighlightPath(tempPath, furtherestBlockIndex);
 
                         if (Input.GetMouseButtonDown(0))
                         {
                             //isFindingPath = false;
-                            StartCoroutine(currentUnitTurn.MoveToPosition(tempPath, furtherestBlockIndex, actionPointsCost));
-                            //StartCoroutine(currentUnitTurn.GetMover().MoveToDestination(tempPath, furtherestBlockIndex));
+                            StartCoroutine(currentUnitTurn.GetMover().MoveToDestination(tempPath, furtherestBlockIndex));
                             gridSystem.UnhighlightPath(tempPath);
                         }
                     }
@@ -90,11 +85,11 @@ namespace RPGProject.Control
             }
         }
 
-        public int GetFurtherestBlockIndex(List<GridBlock> _path, float _currentAP)
+        public int GetFurtherestBlockIndex(List<GridBlock> _path, float _totalGCostAllowance)
         {
             foreach(GridBlock gridBlock in _path)
             {
-                if (_currentAP >= GetActionPointsCost(gridBlock)) continue;
+                if (_totalGCostAllowance >= gridBlock.pathfindingCostValues.gCost) continue;
 
                 return _path.IndexOf(gridBlock) - 1;
             }
@@ -180,13 +175,32 @@ namespace RPGProject.Control
         public float GetActionPointsCost(GridBlock _goalBlock)
         {
             float gCost = _goalBlock.pathfindingCostValues.gCost;
+            float currentGCostAllowance = currentUnitTurn.GetMover().gCostAllowance;
 
-            //Refactor - Maybe this is  base amount, and based on agility stat, thats how much the people move?
-            float blockCostForActionPoints = 20f;
+            if(gCost < currentGCostAllowance)
+            {
+                return 0;
+            }
+            else
+            {
+                float gCostAfterAllowance = gCost - currentGCostAllowance;
 
-            float actionPointCost = gCost / blockCostForActionPoints;
+                float actionPointCost = gCostAfterAllowance/currentUnitTurn.GetMover().gCostPerAP;
+                return Mathf.CeilToInt(actionPointCost);
+            }
+        }
 
-            return Mathf.Round(actionPointCost);
+        private float GetTotalPossibleGCostAllowance(UnitController _unitController)
+        {
+            float totalPossibleGCostAllowance = 0f;        
+
+            Movement.CombatMover combatMover = _unitController.GetMover();
+            float actionPoints = _unitController.GetUnitResources().actionPoints;
+
+            totalPossibleGCostAllowance += combatMover.gCostAllowance;
+            totalPossibleGCostAllowance += combatMover.gCostPerAP * actionPoints;
+
+            return totalPossibleGCostAllowance;
         }
     }
 }

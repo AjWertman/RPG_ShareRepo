@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
-    public enum PlayerMoveType { None, Attack, AbilitySelect, ItemSelect, Escape }
+    public enum PlayerMoveType { None, Attack, AbilitySelect, ItemSelect, Escape, EndTurn}
 
     public class PlayerMoveSelect : MonoBehaviour
     {
@@ -12,6 +12,7 @@ namespace RPGProject.UI
         [SerializeField] Button abilitySelectButton = null;
         [SerializeField] Button itemSelectButton = null;
         [SerializeField] Button escapeButton = null;
+        [SerializeField] Button endTurnButton = null;
 
         public event Action<PlayerMoveType> onPlayerMoveSelect;
 
@@ -20,7 +21,8 @@ namespace RPGProject.UI
             attackButton.onClick.AddListener(Attack);
             abilitySelectButton.onClick.AddListener(AbilitySelect);
             itemSelectButton.onClick.AddListener(ItemSelect);
-            escapeButton.onClick.AddListener(Escape);
+            //escapeButton.onClick.AddListener(Escape);
+            endTurnButton.onClick.AddListener(EndTurn);
         }
 
         private void Attack()
@@ -41,6 +43,11 @@ namespace RPGProject.UI
         private void Escape()
         {
             onPlayerMoveSelect(PlayerMoveType.Escape);
+        }
+
+        private void EndTurn()
+        {
+            onPlayerMoveSelect(PlayerMoveType.EndTurn);
         }
     }
 }

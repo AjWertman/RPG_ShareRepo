@@ -30,6 +30,7 @@ namespace RPGProject.Control
 
         public event Action<Fighter, Ability> onPlayerMove;
         public event Action onEscape;
+        public event Action onEndTurn;
 
         public void InitalizeBattleUIManager()
         {
@@ -114,6 +115,11 @@ namespace RPGProject.Control
                 case PlayerMoveType.Escape:
 
                     onEscape();
+                    break;
+
+                case PlayerMoveType.EndTurn:
+
+                    onEndTurn();
                     break;
             }
         }
@@ -216,6 +222,10 @@ namespace RPGProject.Control
             if (currentCombatantTurn.GetUnitInfo().IsPlayer())
             {
                 ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
+            }
+            else
+            {
+                DeactivateAllMenus();
             }
         }
        

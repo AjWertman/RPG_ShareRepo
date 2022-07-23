@@ -220,6 +220,8 @@ MonoBehaviour:
   footstepsSound: {fileID: 0}
   retreatTransform: {fileID: 4806116191025221250}
   distanceTolerance: 0.3
+  gCostAllowance: 0
+  gCostPerAP: 24
   isMoving: 0
 --- !u!114 &-3233447754243240660
 MonoBehaviour:

@@ -50,17 +50,11 @@ namespace RPGProject.Control
             unitUI.InitializeUnitUI();
 
             mover.onDestinationReached += ReachedDestination;
-        }
-
-        public IEnumerator MoveToPosition(List<GridBlock> _path, int _furtherestBlockIndex, float _actionPointCost)
-        {
-            //Refactor - this with reached desination
-            yield return mover.MoveToDestination(_path, _furtherestBlockIndex);
-            UpdateActionPoints(-_actionPointCost);
+            mover.onAPSpend += () => UpdateActionPoints(-1);
         }
 
         private void ReachedDestination(GridBlock _newBlock)
-        {
+        { 
             currentBlock.SetContestedFighter(null);
 
             currentBlock = _newBlock;
@@ -70,7 +64,7 @@ namespace RPGProject.Control
 
         private void UpdateActionPoints(float _amountToChange)
         {
-            print("current - " + unitResources.actionPoints.ToString() + "/ Cost - " + _amountToChange.ToString());
+            print("current = " + unitResources.actionPoints.ToString() + "/ Cost = " + _amountToChange.ToString());
             unitResources.actionPoints += _amountToChange;
 
             if(unitResources.actionPoints == 0)
@@ -109,6 +103,7 @@ namespace RPGProject.Control
             {
                 if (!fighter.IsInRange(_ability.GetAbilityType(), _target)) 
                 {
+                    //Refactor - pathfind
                     Vector3 targetPosition = _target.transform.position;
                     Quaternion currentRotation = transform.rotation;
 
@@ -172,6 +167,7 @@ namespace RPGProject.Control
         {
             //mana.SpendManaPoints(_selectedAbility.GetManaCost());
             StartCoroutine(fighter.Attack(_target, _selectedAbility));
+            UpdateActionPoints(_selectedAbility.actionPointsCost);
         }
 
         public void SetName(string _name)

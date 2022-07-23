@@ -75,7 +75,7 @@ namespace RPGProject.Control
 
             unitManager.SetUpUnits(playerStartingPositions, enemyStartingPositions);
 
-            unitManager.onMoveCompletion += AdvanceTurn;
+            unitManager.onMoveCompletion += CheckAP;
             unitManager.onTeamWipe += EndBattle;
             unitManager.onUnitDeath += OnUnitDeath;
         }
@@ -93,6 +93,7 @@ namespace RPGProject.Control
             battleUIManager.SetUILookAts(camTransform);
             battleUIManager.onPlayerMove += OnPlayerMove;
             battleUIManager.onEscape += Escape;
+            battleUIManager.onEndTurn += () => AdvanceTurn();
         }
 
         public void OnPlayerMove(Fighter _target, Ability _selectedAbility)
@@ -124,6 +125,48 @@ namespace RPGProject.Control
             StartCoroutine(currentAttack);
         }
 
+        private void CheckAP()
+        {
+            bool isPlayer = currentUnitTurn.GetUnitInfo().IsPlayer();
+            float currentAP = currentUnitTurn.GetUnitResources().actionPoints;
+            if(currentAP > 0)
+            {
+                if (isPlayer) battleUIManager.ActivatePlayerMoveSelectMenu(true);
+            }
+            else
+            {
+                AdvanceTurn();
+            }
+        }
+
+        private void AdvanceTurn()
+        {
+            if (isBattleOver) return;
+
+            if (turnManager.GetCurrentUnitTurn() != null) turnManager.GetCurrentUnitTurn().GetUnitUI().ActivateUnitIndicator(false);
+
+            turnManager.AdvanceTurn();
+
+            if (battleState == BattleState.Battling)
+            {
+                StartCoroutine(ExecuteNextTurn());
+            }
+        }
+
+        public IEnumerator ExecuteNextTurn()
+        {
+            //if (isTutorial) return;
+            yield return new WaitForSeconds(1f);
+            turnManager.GetCurrentUnitTurn().GetUnitUI().ActivateUnitIndicator(true);
+            List<Fighter> unitFighters = GetUnitFighters(turnManager.GetTurnOrder());
+            battleUIManager.ExecuteNextTurn(unitFighters, currentUnitTurn.GetFighter());
+
+            if (!turnManager.IsPlayerTurn())
+            {
+                AIUseAbility();
+            }
+        }
+
         public void SetCurrentUnitTurn(UnitController _currentUnitTurn)
         {
             if (currentUnitTurn != null)
@@ -138,6 +181,19 @@ namespace RPGProject.Control
             battleGridManager.UpdateCurrentUnitTurn(currentUnitTurn);
             battleUIManager.SetCurrentCombatantTurn(currentUnitTurn.GetFighter());
         }
+
+        public List<Fighter> GetUnitFighters(List<UnitController> _unitControllers)
+        {
+            List<Fighter> unitFighters = new List<Fighter>();
+
+            foreach (UnitController unitController in _unitControllers)
+            {
+                unitFighters.Add(unitController.GetFighter());
+            }
+
+            return unitFighters;
+        }
+
 
         /// <summary>
         /// ///////////
@@ -260,46 +316,6 @@ namespace RPGProject.Control
 
             UseAbility(randomTarget, randomAbility);
             battleUIManager.ActivateUnitTurnUI(currentUnitFighter, false);
-        }
-
-        private void AdvanceTurn()
-        {
-            if (isBattleOver) return;
-
-            if (turnManager.GetCurrentUnitTurn() != null) turnManager.GetCurrentUnitTurn().GetUnitUI().ActivateUnitIndicator(false);
-
-            turnManager.AdvanceTurn();
-
-            if (battleState == BattleState.Battling)
-            {
-                StartCoroutine(ExecuteNextTurn());
-            }
-        }
-
-        public IEnumerator ExecuteNextTurn()
-        {
-            //if (isTutorial) return;
-            yield return new WaitForSeconds(1f);
-            turnManager.GetCurrentUnitTurn().GetUnitUI().ActivateUnitIndicator(true);
-            List<Fighter> unitFighters = GetUnitFighters(turnManager.GetTurnOrder());
-            battleUIManager.ExecuteNextTurn(unitFighters, currentUnitTurn.GetFighter());
-
-            if (!turnManager.IsPlayerTurn())
-            {
-                AIUseAbility();
-            }
-        }
-
-        public List<Fighter> GetUnitFighters(List<UnitController> _unitControllers)
-        {
-            List<Fighter> unitFighters = new List<Fighter>();
-
-            foreach(UnitController unitController in _unitControllers)
-            {
-                unitFighters.Add(unitController.GetFighter());
-            }
-
-            return unitFighters;
         }
 
         private void EndBattle(bool? _won)

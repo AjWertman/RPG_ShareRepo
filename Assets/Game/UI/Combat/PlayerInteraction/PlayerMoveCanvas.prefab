@@ -117,7 +117,8 @@ MonoBehaviour:
   attackButton: {fileID: 864232665280890136}
   abilitySelectButton: {fileID: 8412654878570012667}
   itemSelectButton: {fileID: 1498435200350213621}
-  escapeButton: {fileID: 1598296141141935945}
+  escapeButton: {fileID: 0}
+  endTurnButton: {fileID: 1598296141141935945}
 --- !u!1 &7370002626087812145
 GameObject:
   m_ObjectHideFlags: 0

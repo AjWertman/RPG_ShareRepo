@@ -13,6 +13,10 @@ namespace RPGProject.Combat
         [SerializeField] List<ComboLink> combo = new List<ComboLink>();
         [SerializeField] AbilityResource abilityResource = AbilityResource.None;
 
+        public int actionPointsCost = -1;
+        public bool requiresTarget = false;
+        public float attackRange = 5f;
+
         public List<ComboLink> GetCombo()
         {
             return combo;
