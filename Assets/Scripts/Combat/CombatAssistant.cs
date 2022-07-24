@@ -40,22 +40,16 @@ namespace RPGProject.Combat
             return "";
         }
 
-        public static string CanUseAbilityCheck(Fighter _caster, Fighter _target, Ability _ability)
+        public static string CanUseAbilityCheck(Fighter _caster, Fighter _target, Ability _selectedAbility)
         {
-            float manaCost = _ability.GetCombo()[0].GetManaCost();
-            if(manaCost > 0)
-            {
-                float manaPoints = _caster.GetMana().GetManaPoints();
-                bool hasEnoughMana = manaPoints >= manaCost;
-                if (!hasEnoughMana) return "Not enough Mana";
-            }   
+            string canUseAbilityCheck = CanUseAbilityCheck(_caster, _selectedAbility);
+            if (canUseAbilityCheck != "") return canUseAbilityCheck;
 
-            bool isCopyAbility = _ability.GetAbilityType() == AbilityType.Copy;
-            if (isCopyAbility)
+            float attackRange = _selectedAbility.attackRange;
+            if(attackRange > 0)
             {
-                List<Ability> copyList = new List<Ability>();
-                bool isCopyListNullOrEmpty = (copyList.Count == 0 || copyList == null);
-                if (isCopyAbility && isCopyListNullOrEmpty) return "No copyable abilities used";
+                float distanceToTarget = GetDistance(_caster.transform.position, _target.transform.position);
+                if (distanceToTarget > attackRange) return "Target is too far away";
             }
 
             //if(_selectedAbility.GetAbilityType() == AbilityType.Cast)
@@ -122,6 +116,14 @@ namespace RPGProject.Combat
             }
 
             return calculatedAmount;
+        }
+
+        public static float GetDistance( Vector3 _myPosition, Vector3 _targetPosition)
+        {
+            Vector3 myPosition = new Vector3(_myPosition.x, 0, _myPosition.z);
+            Vector3 targetPosition = new Vector3(_targetPosition.x, 0, _targetPosition.z);
+
+            return Vector3.Distance(myPosition, targetPosition);
         }
     }
 }

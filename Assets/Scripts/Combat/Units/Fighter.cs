@@ -215,20 +215,10 @@ namespace RPGProject.Combat
         }
         //////////
 
-        public bool IsInRange(AbilityType _abilityType, Fighter _target)
+        public bool IsInRange(Ability _selectedAbility, Fighter _target)
         {
-            if (_abilityType == AbilityType.Melee)
-            {
-                float distanceToTarget = GetDistanceToTarget(_target.transform.position);
-                return (distanceToTarget <= meleeRange);
-            }
-
-            return true;
-        }
-
-        private float GetDistanceToTarget(Vector3 _targetPos)
-        {
-            return Vector3.Distance(transform.position, _targetPos);
+            float distanceToTarget = CombatAssistant.GetDistance(transform.position, _target.transform.position);
+            return _selectedAbility.attackRange > distanceToTarget;
         }
 
         public bool HasTarget()

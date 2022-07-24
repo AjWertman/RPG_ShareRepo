@@ -62,6 +62,8 @@ public class GridSystem : MonoBehaviour
 
     public void HighlightPath(List<GridBlock> _path, int _furthestBlockIndex)
     {
+        GridBlock goalBlock = _path[_path.Count - 1];
+
         foreach(GridBlock gridBlock in _path)
         { 
             int currentIndex = _path.IndexOf(gridBlock);
@@ -71,6 +73,8 @@ public class GridSystem : MonoBehaviour
 
             gridBlock.SetColors(currentHighlightMaterial, Color.white);
         }
+
+        if (goalBlock.contestedFighter != null) goalBlock.SetColors(redMaterial, Color.white);
     }
 
     public void UnhighlightPath(List<GridBlock> _path)

@@ -41,17 +41,17 @@ namespace RPGProject.Movement
             startRotation = transform.localRotation;
         }
 
-        public IEnumerator MoveToDestination(List<GridBlock> _path, int _furtherestBlockIndex)
+        public IEnumerator MoveToDestination(List<GridBlock> _path)
         {
             if (_path == null || _path.Count <= 0) yield break;
 
-            yield return FollowPath(_path, _furtherestBlockIndex);
+            yield return FollowPath(_path);
         }
 
-        private IEnumerator FollowPath(List<GridBlock> _path, int _furtherestBlockIndex)
+        private IEnumerator FollowPath(List<GridBlock> _path)
         {
             GridBlock previousBlock = _path[0];
-            GridBlock goalBlock = _path[_furtherestBlockIndex];
+            GridBlock goalBlock = _path[_path.Count -1];
             isMoving = true;
             int nextBlockIndex = 1;
 
@@ -92,22 +92,6 @@ namespace RPGProject.Movement
             }
         }
 
-        private void UseMovementResources(GridBlock _previousBlock, GridBlock _nextBlock)
-        {
-            float gCost = GetGCost(_previousBlock, _nextBlock);
-            
-            if(gCost > gCostAllowance)
-            {
-                gCost -= gCostAllowance;
-                gCostAllowance = 0;
-
-                onAPSpend();
-                gCostAllowance = gCostPerAP;
-            }
-
-            gCostAllowance -= gCost;
-        }
-
         private float GetGCost(GridBlock _previousBlock, GridBlock _nextBlock)
         {
             GridCoordinates previousCoords = _previousBlock.gridCoordinates;
@@ -128,6 +112,22 @@ namespace RPGProject.Movement
             }
 
             return distanceToBlock < distanceTolerance;
+        }
+
+        private void UseMovementResources(GridBlock _previousBlock, GridBlock _nextBlock)
+        {
+            float gCost = GetGCost(_previousBlock, _nextBlock);
+
+            if (gCost > gCostAllowance)
+            {
+                gCost -= gCostAllowance;
+                gCostAllowance = 0;
+
+                onAPSpend();
+                gCostAllowance = gCostPerAP;
+            }
+
+            gCostAllowance -= gCost;
         }
 
         private Vector3 GetPlayerPosition()

@@ -27,6 +27,7 @@ namespace RPGProject.Control
         GridCoordinates enemyZeroCoordinates;
 
         public event Action<UnitController> onUnitTurnUpdate;
+        public event Action<Ability> onAbilitySelect;
 
         private void Start()
         {
@@ -37,7 +38,6 @@ namespace RPGProject.Control
 
             playerTeamManager = FindObjectOfType<PlayerTeamManager>();
             gridSystem = GetComponentInChildren<GridSystem>();
-
 
             battleUIManager.InitalizeBattleUIManager();
             unitManager.InitalizeUnitManager();
@@ -52,7 +52,6 @@ namespace RPGProject.Control
 
             SetCurrentUnitTurn(turnManager.GetFirstMoveUnit());
          
-
             //musicOverride.OverrideMusic();
 
             battleState = BattleState.Battling;
@@ -94,6 +93,11 @@ namespace RPGProject.Control
             battleUIManager.onPlayerMove += OnPlayerMove;
             battleUIManager.onEscape += Escape;
             battleUIManager.onEndTurn += () => AdvanceTurn();
+        }
+
+        public BattleUIManager GetBattleUIManager()
+        {
+            return battleUIManager;
         }
 
         public void OnPlayerMove(Fighter _target, Ability _selectedAbility)

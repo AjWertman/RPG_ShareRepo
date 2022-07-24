@@ -459,7 +459,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858583934336000675}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -471,7 +471,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: afafd76093a5c684ab6d2b5822a30fcb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -858,6 +858,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 422f0eee82960d346bf239a0d43f36dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coordinatesText: {fileID: 4705342392314861957}
+  pathfindingTextContainer: {fileID: 6809352661496385239}
+  fValueText: {fileID: 8559285528161174923}
+  gValueText: {fileID: 7495517113137527199}
+  hValueText: {fileID: 5069409514214156142}
+  isMovable: 1
   gridCoordinates:
     x: 0
     z: 0
@@ -867,12 +873,5 @@ MonoBehaviour:
     hCost: 0
     fCost: 0
   travelDestination: {fileID: 18672851117787892}
-  lightMaterial: {fileID: 2100000, guid: afafd76093a5c684ab6d2b5822a30fcb, type: 2}
-  darkMaterial: {fileID: 2100000, guid: 341f2a782671a514799a7e0d042be039, type: 2}
-  centerMaterial: {fileID: 2100000, guid: 36ce50c0c570c834c88ed2d5b5e5add0, type: 2}
-  unworthyMaterial: {fileID: 2100000, guid: e5cea390deae5984ba8df413651ea142, type: 2}
-  coordinatesText: {fileID: 4705342392314861957}
-  pathfindingTextContainer: {fileID: 6809352661496385239}
-  fValueText: {fileID: 8559285528161174923}
-  gValueText: {fileID: 7495517113137527199}
-  hValueText: {fileID: 5069409514214156142}
+  contestedFighter: {fileID: 0}
+  activeAbility: {fileID: 0}

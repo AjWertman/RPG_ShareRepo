@@ -18,8 +18,12 @@ MonoBehaviour:
     manaCost: 0
     enduranceCost: 0
     abilityObjectKey: 0
-    hitFXPrefab: {fileID: 0}
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
   abilityResource: 0
+  actionPointsCost: -1
+  requiresTarget: 0
+  attackRange: 0
   abilityName: Attack
   requiredLevel: 1
   abilityLifetime: 1
@@ -31,4 +35,3 @@ MonoBehaviour:
   abilityType: 0
   targetingType: 0
   canTargetAll: 0
-  isHeal: 0

@@ -66,7 +66,7 @@ namespace RPGProject.Control
         {
             unitResources.actionPoints += _amountToChange;
 
-            if(unitResources.actionPoints == 0)
+            if(unitResources.actionPoints == 0 && mover.gCostAllowance < 10)
             {
                 onMoveCompletion();
             }
@@ -93,19 +93,38 @@ namespace RPGProject.Control
             unitUI.SetupUnitUI();
         }
 
+        public IEnumerator PathExecution(List<GridBlock> _path)
+        {
+            GridBlock goalBlock = _path[_path.Count - 1];
+
+            Fighter contestedFighter = goalBlock.contestedFighter;
+            
+            if(contestedFighter != null)
+            {
+                print("has fighter");
+                _path.Remove(goalBlock);
+            }
+
+            yield return mover.MoveToDestination(_path);
+
+            if(contestedFighter != null)
+            {
+                yield return UseAbilityBehavior(contestedFighter, fighter.GetBasicAttack());
+            }
+        }
+
         public IEnumerator UseAbilityBehavior(Fighter _target, Ability _ability)
         {
             unitUI.ActivateUnitIndicator(false);
 
             while (isTurn)
             {
-                if (!fighter.IsInRange(_ability.GetAbilityType(), _target)) 
+                if (false)
                 {
-                    //Refactor - pathfind
-                    Vector3 targetPosition = _target.transform.position;
-                    Quaternion currentRotation = transform.rotation;
+                    //Vector3 targetPosition = _target.transform.position;
+                    //Quaternion currentRotation = transform.rotation;
 
-                    yield return mover.JumpToPos(targetPosition, currentRotation, true);
+                    //yield return mover.JumpToPos(targetPosition, currentRotation, true);
 
                     yield return null;
                 }
@@ -125,11 +144,15 @@ namespace RPGProject.Control
 
                     yield return new WaitForSeconds(moveDurationWOffset);
 
+                    animator.CrossFade("Idle", .1f);
+                    //Vector3 travelDestination = new Vector3(currentBlock.travelDestination.position.x, transform.position.y, currentBlock.travelDestination.position.z);
+                    //transform.position = travelDestination;
+
                     if (!health.IsDead())
                     {
                         if (_ability.GetAbilityType() == AbilityType.Melee)
                         {
-                            yield return mover.ReturnToStart();
+                            //yield return mover.ReturnToStart();
                         }
                         else
                         {
@@ -150,7 +173,7 @@ namespace RPGProject.Control
                 }
             }
         }
-
+        
         public IEnumerator UseAbilityOnAllBehavior(List<UnitController> _targetTeam, Ability _selectedAbility)
         {
             List<Fighter> targetFighters = new List<Fighter>();

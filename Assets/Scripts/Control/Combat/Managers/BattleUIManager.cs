@@ -32,6 +32,8 @@ namespace RPGProject.Control
         public event Action onEscape;
         public event Action onEndTurn;
 
+        public event Action<Ability> onAbilitySelect;
+
         public void InitalizeBattleUIManager()
         {
             PopulateMenuGODict();
@@ -99,7 +101,7 @@ namespace RPGProject.Control
                 case PlayerMoveType.Attack:
 
                     Ability basicAttack = currentCombatantTurn.GetUnitInfo().GetBasicAttack();
-                    OnAbilitySelect(basicAttack);
+                    onAbilitySelect(basicAttack);
                     break;
 
                 case PlayerMoveType.AbilitySelect:
@@ -167,37 +169,38 @@ namespace RPGProject.Control
         public void OnAbilitySelect(Ability _ability)
         {
             selectedAbility = _ability;
+            onAbilitySelect(selectedAbility);
 
-            if (selectedAbility.CanTargetAll())
-            {
-                OnTargetSelect(null);
-                return;
-            }
+            //if (selectedAbility.CanTargetAll())
+            //{
+            //    OnTargetSelect(null);
+            //    return;
+            //}
           
-            List<Fighter> targetTeam = new List<Fighter>();
+            //List<Fighter> targetTeam = new List<Fighter>();
 
-            if (selectedAbility.GetTargetingType() == TargetingType.PlayersOnly)
-            {
-                targetTeam = playerCombatants;
-            }
-            else if(selectedAbility.GetTargetingType() == TargetingType.EnemiesOnly)
-            {
-                targetTeam = enemyCombatants;
-            }
-            else if (selectedAbility.GetTargetingType() == TargetingType.SelfOnly)
-            {
-                OnTargetSelect(currentCombatantTurn);
-                return;
-            }
+            //if (selectedAbility.GetTargetingType() == TargetingType.PlayersOnly)
+            //{
+            //    targetTeam = playerCombatants;
+            //}
+            //else if(selectedAbility.GetTargetingType() == TargetingType.EnemiesOnly)
+            //{
+            //    targetTeam = enemyCombatants;
+            //}
+            //else if (selectedAbility.GetTargetingType() == TargetingType.SelfOnly)
+            //{
+            //    OnTargetSelect(currentCombatantTurn);
+            //    return;
+            //}
 
-            if (targetTeam.Count > 1)
-            {
-                ActivateBattleUIMenu(BattleUIMenuKey.TargetSelect);
-            }
-            else
-            {
-                OnTargetSelect(targetTeam[0]);
-            }
+            //if (targetTeam.Count > 1)
+            //{
+            //    ActivateBattleUIMenu(BattleUIMenuKey.TargetSelect);
+            //}
+            //else
+            //{
+            //    OnTargetSelect(targetTeam[0]);
+            //}
         }
 
         public void OnTargetSelect(Fighter _target)

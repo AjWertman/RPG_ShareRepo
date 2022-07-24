@@ -16,6 +16,7 @@ namespace RPGProject.Combat
         public int actionPointsCost = -1;
         public bool requiresTarget = false;
         public float attackRange = 5f;
+        //decent attack for ranged attacks = 6-7  
 
         public List<ComboLink> GetCombo()
         {

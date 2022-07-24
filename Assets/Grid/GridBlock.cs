@@ -76,7 +76,7 @@ public class GridBlock : MonoBehaviour
     public bool IsMovable()
     {
         if (!isMovable) return false;
-        if (contestedFighter != null) return false;
+        if (contestedFighter != null && contestedFighter.GetUnitInfo().IsPlayer()) return false;
 
         return true;
     }
