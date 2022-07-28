@@ -40,7 +40,7 @@ namespace RPGProject.Combat
             return "";
         }
 
-        public static string CanUseAbilityCheck(Fighter _caster, Fighter _target, Ability _selectedAbility)
+        public static string CanUseAbilityCheck(Fighter _caster, CombatTarget _target, Ability _selectedAbility)
         {
             string canUseAbilityCheck = CanUseAbilityCheck(_caster, _selectedAbility);
             if (canUseAbilityCheck != "") return canUseAbilityCheck;
@@ -48,7 +48,8 @@ namespace RPGProject.Combat
             float attackRange = _selectedAbility.attackRange;
             if(attackRange != 0)
             {
-                if (!IsInRange(_caster.transform.position, _target.transform.position, attackRange)) return "Target is too far away";
+                Transform aimTransform = _target.GetAimTransform();
+                if (!IsInRange(_caster.transform.position, aimTransform.position, attackRange)) return "Target is too far away";
             }
 
             //if(_selectedAbility.GetAbilityType() == AbilityType.Cast)

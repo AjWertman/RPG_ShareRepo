@@ -22,7 +22,7 @@ namespace RPGProject.Combat
         UnitResources unitResources = new UnitResources();
 
         Ability selectedAbility = null;
-        Fighter selectedTarget = null;
+        CombatTarget selectedTarget = null;
         List<Fighter> selectedTargets = new List<Fighter>();
         AbilityObjectKey currentAbilityObjectKey = AbilityObjectKey.None;
         ComboLink currentComboLink = null;
@@ -68,7 +68,7 @@ namespace RPGProject.Combat
             characterMesh = _characterMesh;
         }
 
-        public IEnumerator Attack(Fighter _selectedTarget, Ability _selectedAbility)
+        public IEnumerator Attack(CombatTarget _selectedTarget, Ability _selectedAbility)
         {
             selectedTarget = _selectedTarget;
             selectedAbility = _selectedAbility;
@@ -93,6 +93,7 @@ namespace RPGProject.Combat
             float calculatedAmount = CombatAssistant.GetCalculatedAmount(selectedAbility.GetBaseAbilityAmount(), isCriticalHit);
 
             AbilityBehavior abilityBehavior = null;
+            Fighter targetFighter = selectedTarget.GetComponent<Fighter>();
 
             if (currentAbilityObjectKey != AbilityObjectKey.None)
             {
@@ -114,7 +115,12 @@ namespace RPGProject.Combat
                 return;
             }
 
-            Health targetHealth = selectedTarget.GetHealth();
+            Health targetHealth = null;
+
+            if (targetFighter != null)
+            {
+                targetHealth = targetFighter.GetHealth();
+            }
 
             switch (abilityType)
             {
@@ -122,7 +128,7 @@ namespace RPGProject.Combat
 
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
                     if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior);
-                    float reflectionAmount = -selectedTarget.GetUnitStatus().GetPhysicalReflectionDamage();
+                    float reflectionAmount = -targetFighter.GetUnitStatus().GetPhysicalReflectionDamage();
                     if (reflectionAmount > 0) health.ChangeHealth(reflectionAmount, false, false);    
                     break;
 
@@ -358,9 +364,9 @@ namespace RPGProject.Combat
             return unitResources;
         }
 
-        public Vector3 GetAimPosition()
+        public Transform GetAimTransform()
         {
-            return characterMesh.GetAimTransform().position;
+            return characterMesh.GetAimTransform();
         }
     }
 }

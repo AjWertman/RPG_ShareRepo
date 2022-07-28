@@ -96,7 +96,6 @@ namespace RPGProject.Control
         public IEnumerator PathExecution(List<GridBlock> _path)
         {
             GridBlock goalBlock = _path[_path.Count - 1];
-
             Fighter contestedFighter = goalBlock.contestedFighter;
             
             if(contestedFighter != null)
@@ -112,7 +111,7 @@ namespace RPGProject.Control
             }
         }
 
-        public IEnumerator UseAbilityBehavior(Fighter _target, Ability _ability)
+        public IEnumerator UseAbilityBehavior(CombatTarget _target, Ability _ability)
         {
             unitUI.ActivateUnitIndicator(false);
 
@@ -131,7 +130,7 @@ namespace RPGProject.Control
                 {
                     if (!_ability.CanTargetAll())
                     {
-                        fighter.LookAtTarget(_target.transform);
+                        fighter.LookAtTarget(_target.GetAimTransform());
                     }
 
                     float moveDuration = comboLinker.GetFullComboTime(_ability.GetCombo());
@@ -183,7 +182,7 @@ namespace RPGProject.Control
             yield return null;
         }
 
-        public void UseAbility(Fighter _target, Ability _selectedAbility)
+        public void UseAbility(CombatTarget _target, Ability _selectedAbility)
         {
             //mana.SpendManaPoints(_selectedAbility.GetManaCost());
             StartCoroutine(fighter.Attack(_target, _selectedAbility));

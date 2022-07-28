@@ -129,13 +129,12 @@ namespace RPGProject.Control
 
         public GridBlock GetGridBlockByFighter(Fighter _fighter)
         {
-            foreach(GridBlock gridBlock  in gridBlockStatusDict.Keys)
+            foreach(GridBlock gridBlock  in gridBlocks)
             {
-                GridBlockStatus gridBlockStatus = gridBlockStatusDict[gridBlock];
-
                 if (gridBlock.contestedFighter == _fighter) return gridBlock;
                
             }
+
             return null;
         }
 

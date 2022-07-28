@@ -100,7 +100,7 @@ namespace RPGProject.Control
             return battleUIManager;
         }
 
-        public void OnPlayerMove(Fighter _target, Ability _selectedAbility)
+        public void OnPlayerMove(CombatTarget _target, Ability _selectedAbility)
         {
             battleUIManager.DeactivateAllMenus();
 
@@ -117,7 +117,7 @@ namespace RPGProject.Control
             }
         }
 
-        public void UseAbility(Fighter _target, Ability _selectedAbility)
+        public void UseAbility(CombatTarget _target, Ability _selectedAbility)
         {
             if (_selectedAbility.CanTargetAll())
             {

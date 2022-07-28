@@ -21,7 +21,7 @@ public class PlayerCombatController : MonoBehaviour
 
     Ability selectedAbility = null;
 
-    bool isRaycasting = true;
+    bool isRaycasting = false;
 
     private void Awake()
     {
@@ -55,14 +55,16 @@ public class PlayerCombatController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            GridBlock targetBlock = GetTargetBlock(hit.collider);
+            CombatTarget combatTarget = hit.collider.GetComponent<CombatTarget>();
 
-            if (targetBlock != null)
+            if (combatTarget != null)
             {
+                GridBlock targetBlock = GetTargetBlock(combatTarget);
                 HandlePathfinding(targetBlock);
 
                 if (Input.GetMouseButtonDown(0))
                 {
+                    if (tempPath == null) return;
                     path = GetFurthestPath(tempPath, furthestBlockIndex);
                     OnClick(targetBlock);
                 }
@@ -103,25 +105,25 @@ public class PlayerCombatController : MonoBehaviour
         }
     }
 
-    private GridBlock GetTargetBlock(Collider _collider)
+    private GridBlock GetTargetBlock(CombatTarget _combatTarget)
     {
         GridBlock targetBlock = null;
-
-        Fighter fighter = _collider.GetComponent<Fighter>();
-        if(fighter!= null)
+        Fighter fighter = _combatTarget.GetComponent<Fighter>();
+        if (fighter != null)
         {
             targetBlock = battleGridManager.GetGridBlockByFighter(fighter);
         }
         else
         {
-            targetBlock = _collider.GetComponentInParent<GridBlock>();
+            targetBlock = _combatTarget.GetComponent<GridBlock>();            
         }
-
         return targetBlock;
     }
 
     private void HandlePathfinding(GridBlock _targetBlock)
     {
+        if (_targetBlock == null) return;
+
         GridBlock currentBlock = null;
         if (currentUnitTurn != null) currentBlock = currentUnitTurn.currentBlock;
 
@@ -145,9 +147,17 @@ public class PlayerCombatController : MonoBehaviour
         
         if(selectedAbility != null)
         {
-            Fighter target = _targetBlock.contestedFighter;
+            CombatTarget target = _targetBlock;
+            Fighter targetBlockFighter = _targetBlock.contestedFighter;
 
+            if(targetBlockFighter != null)
+            {
+                target = targetBlockFighter;
+            }
+             
             if (target == null) return;
+
+            if (selectedAbility.requiresTarget && targetBlockFighter == null) return;
 
             battleHandler.OnPlayerMove(target, selectedAbility);
             selectedAbility = null;

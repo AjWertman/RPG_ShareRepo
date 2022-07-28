@@ -11,7 +11,7 @@ namespace RPGProject.Combat
         [SerializeField] protected SpawnLocation spawnLocation = SpawnLocation.None;
         [SerializeField] protected HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
         protected Fighter caster = null;
-        protected Fighter target = null;
+        protected CombatTarget target = null;
         protected UnitStatus targetStatus = null;
         protected float changeAmount = 0f;
         protected bool isCritical = false;
@@ -23,11 +23,15 @@ namespace RPGProject.Combat
         public event Action<AbilityBehavior> onAbilityDeath;
         public event Action<HitFXObjectKey, Vector3> hitFXSpawnRequest;
 
-        public void SetupAbility(Fighter _caster, Fighter _target, float _changeAmount, bool _isCritical, int _lifeTime)
+        public void SetupAbility(Fighter _caster, CombatTarget _target, float _changeAmount, bool _isCritical, int _lifeTime)
         {
             caster = _caster;
             target = _target;
-            targetStatus = target.GetUnitStatus();
+
+            Fighter targetFighter = _target.GetComponent<Fighter>();
+
+            if(targetFighter != null) targetStatus = targetFighter.GetUnitStatus();
+
             changeAmount = _changeAmount;
             isCritical = _isCritical;
             abilityLifetime = _lifeTime;
@@ -40,7 +44,7 @@ namespace RPGProject.Combat
             if (_spawnLocation == SpawnLocation.None) return;
 
             CharacterMesh casterMesh = caster.GetCharacterMesh();
-            CharacterMesh targetMesh = target.GetCharacterMesh();
+            Transform aimTransform = target.GetAimTransform();
 
             switch (_spawnLocation)
             {
@@ -62,12 +66,12 @@ namespace RPGProject.Combat
                     break;
 
                 case SpawnLocation.Target:
-                    transform.position = target.transform.position;
+                    transform.position = aimTransform.position;
                     break;
 
                 case SpawnLocation.Target_Parent:
-                    transform.position = target.transform.position;
-                    transform.parent = target.transform;
+                    transform.position = aimTransform.position;
+                    transform.parent = aimTransform;
                     break;
             }
         }
@@ -118,6 +122,11 @@ namespace RPGProject.Combat
         public Fighter GetCaster()
         {
             return caster;
+        }
+
+        protected Fighter GetTargetFighter()
+        {
+            return target.GetComponent<Fighter>();
         }
     }
 }

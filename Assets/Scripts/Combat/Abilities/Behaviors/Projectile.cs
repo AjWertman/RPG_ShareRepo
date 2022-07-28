@@ -25,7 +25,7 @@ namespace RPGProject.Combat
         {
             hasAppliedChangeAmount = false;
 
-            aimTransform = target.GetCharacterMesh().GetAimTransform();
+            aimTransform = target.GetAimTransform();
 
             isSetup = true;
         }
@@ -39,27 +39,35 @@ namespace RPGProject.Combat
         {
             isCritical = false;
             target = caster;
-            aimTransform = target.GetCharacterMesh().GetAimTransform();
+            aimTransform = target.GetAimTransform();
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            Fighter hitCombatant = other.GetComponent<Fighter>();
+            CombatTarget hitTarget = other.GetComponent<CombatTarget>();
             SpellReflector hitSpellReflector = other.GetComponent<SpellReflector>();
 
-            if (hitCombatant != null && hitCombatant == target)
+            Fighter targetFighter = GetTargetFighter();
+
+            if (hitTarget != null && hitTarget == target)
             {
-                if (!hasAppliedChangeAmount)
+                Fighter hitCombatant = hitTarget.GetComponent<Fighter>();
+                if (targetFighter != null || targetFighter != hitCombatant)
                 {
-                    hasAppliedChangeAmount = true;
-                    SpawnHitFX(aimTransform.position);
-                    target.GetHealth().ChangeHealth(changeAmount, isCritical, false);              
-                    OnAbilityDeath();
+                    if(!hasAppliedChangeAmount)
+                    {
+                        hasAppliedChangeAmount = true;
+                        targetFighter.GetHealth().ChangeHealth(changeAmount, isCritical, false);
+                    }
                 }
+
+                SpawnHitFX(aimTransform.position);                                
+                OnAbilityDeath();
+                
             }
             else if(hitSpellReflector != null)
             {
-                if (hitSpellReflector.GetCaster() != target) return;
+                if (hitSpellReflector.GetCaster() != targetFighter) return;
                 ReflectProjectile();
             }
         }

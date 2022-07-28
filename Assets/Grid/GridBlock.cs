@@ -3,7 +3,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class GridBlock : MonoBehaviour
+public class GridBlock : MonoBehaviour,CombatTarget
 {
     [SerializeField] TextMeshProUGUI coordinatesText = null;
 
@@ -79,5 +79,10 @@ public class GridBlock : MonoBehaviour
         if (contestedFighter != null && contestedFighter.GetUnitInfo().IsPlayer()) return false;
 
         return true;
+    }
+
+    public Transform GetAimTransform()
+    {
+        return travelDestination;
     }
 }

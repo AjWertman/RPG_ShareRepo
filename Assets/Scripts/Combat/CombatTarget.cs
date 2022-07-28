@@ -1,6 +1,10 @@
 using UnityEngine;
 
-public interface CombatTarget
+namespace RPGProject.Combat
 {
-    Vector3 GetAimPosition();
+    public interface CombatTarget
+    {
+        Transform GetAimTransform();
+        T GetComponent<T>();
+    }
 }
