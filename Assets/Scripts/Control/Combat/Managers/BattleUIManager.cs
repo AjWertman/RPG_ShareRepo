@@ -169,6 +169,8 @@ namespace RPGProject.Control
         public void OnAbilitySelect(Ability _ability)
         {
             selectedAbility = _ability;
+
+            ActivateAbilitySelectMenu(false);
             onAbilitySelect(selectedAbility);
 
             //if (selectedAbility.CanTargetAll())

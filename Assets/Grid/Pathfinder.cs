@@ -20,6 +20,7 @@ public class Pathfinder : MonoBehaviour
 
     public void InitalizePathfinder(Dictionary<GridCoordinates, GridBlock> _gridDictionary)
     {
+        gridDictionary.Clear();
         gridDictionary = _gridDictionary;
     }
 

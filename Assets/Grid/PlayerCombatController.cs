@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PlayerCombatController : MonoBehaviour
 {
+    BattleGridManager battleGridManager = null;
     NewBattleHandlerScript battleHandler = null;
     GridSystem gridSystem = null;
     Pathfinder pathfinder = null;
@@ -16,6 +17,7 @@ public class PlayerCombatController : MonoBehaviour
 
     List<GridBlock> tempPath = new List<GridBlock>();
     List<GridBlock> path = new List<GridBlock>();
+    int furthestBlockIndex = 0;
 
     Ability selectedAbility = null;
 
@@ -23,6 +25,7 @@ public class PlayerCombatController : MonoBehaviour
 
     private void Awake()
     {
+        battleGridManager = FindObjectOfType<BattleGridManager>();
         battleHandler = GetComponent<NewBattleHandlerScript>();
         gridSystem = FindObjectOfType<GridSystem>();
         pathfinder = FindObjectOfType<Pathfinder>();
@@ -52,26 +55,16 @@ public class PlayerCombatController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            GridBlock goalBlock = hit.collider.GetComponentInParent<GridBlock>();
-            GridBlock currentBlock = null;
+            GridBlock targetBlock = GetTargetBlock(hit.collider);
 
-            if (goalBlock != null)
+            if (targetBlock != null)
             {
-                if (currentUnitTurn != null) currentBlock = currentUnitTurn.currentBlock;
-
-                if (goalBlock == currentBlock || !goalBlock.IsMovable() || currentBlock == null) return;
-
-                gridSystem.UnhighlightPath(tempPath);
-                tempPath = pathfinder.FindPath(currentBlock, goalBlock);
-
-                int furthestBlockIndex = GetFurthestBlockIndex(tempPath, GetTotalPossibleGCostAllowance(currentUnitTurn));
-
-                gridSystem.HighlightPath(tempPath, furthestBlockIndex);
+                HandlePathfinding(targetBlock);
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     path = GetFurthestPath(tempPath, furthestBlockIndex);
-                    OnClick();
+                    OnClick(targetBlock);
                 }
             }
             
@@ -107,14 +100,62 @@ public class PlayerCombatController : MonoBehaviour
             //    //    tempPath = pathfinder.FindPath(currentBlock, GetGridBlockByFighter(fighter));
             //    //}
             //}
-        }     
+        }
     }
 
-    private void OnClick()
+    private GridBlock GetTargetBlock(Collider _collider)
+    {
+        GridBlock targetBlock = null;
+
+        Fighter fighter = _collider.GetComponent<Fighter>();
+        if(fighter!= null)
+        {
+            targetBlock = battleGridManager.GetGridBlockByFighter(fighter);
+        }
+        else
+        {
+            targetBlock = _collider.GetComponentInParent<GridBlock>();
+        }
+
+        return targetBlock;
+    }
+
+    private void HandlePathfinding(GridBlock _targetBlock)
+    {
+        GridBlock currentBlock = null;
+        if (currentUnitTurn != null) currentBlock = currentUnitTurn.currentBlock;
+
+        if (_targetBlock == currentBlock || !_targetBlock.IsMovable() || currentBlock == null)
+        {
+            return;
+        }
+
+        gridSystem.UnhighlightPath(tempPath);
+        tempPath = pathfinder.FindPath(currentBlock, _targetBlock);
+
+        furthestBlockIndex = GetFurthestBlockIndex(tempPath, GetTotalPossibleGCostAllowance(currentUnitTurn));
+
+        gridSystem.HighlightPath(tempPath, furthestBlockIndex);
+    }
+
+    private void OnClick(GridBlock _targetBlock)
     {
         isRaycasting = false;
         gridSystem.UnhighlightPath(tempPath);
-        StartCoroutine(currentUnitTurn.PathExecution(path));
+        
+        if(selectedAbility != null)
+        {
+            Fighter target = _targetBlock.contestedFighter;
+
+            if (target == null) return;
+
+            battleHandler.OnPlayerMove(target, selectedAbility);
+            selectedAbility = null;
+        }
+        else
+        {
+            StartCoroutine(currentUnitTurn.PathExecution(path));
+        }
     }
 
     private List<GridBlock> GetFurthestPath(List<GridBlock> _path, int _furthestBlockIndex)

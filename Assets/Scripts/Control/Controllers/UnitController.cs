@@ -101,7 +101,6 @@ namespace RPGProject.Control
             
             if(contestedFighter != null)
             {
-                print("has fighter");
                 _path.Remove(goalBlock);
             }
 

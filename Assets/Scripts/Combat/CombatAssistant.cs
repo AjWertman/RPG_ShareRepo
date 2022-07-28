@@ -46,10 +46,9 @@ namespace RPGProject.Combat
             if (canUseAbilityCheck != "") return canUseAbilityCheck;
 
             float attackRange = _selectedAbility.attackRange;
-            if(attackRange > 0)
+            if(attackRange != 0)
             {
-                float distanceToTarget = GetDistance(_caster.transform.position, _target.transform.position);
-                if (distanceToTarget > attackRange) return "Target is too far away";
+                if (!IsInRange(_caster.transform.position, _target.transform.position, attackRange)) return "Target is too far away";
             }
 
             //if(_selectedAbility.GetAbilityType() == AbilityType.Cast)
@@ -116,6 +115,13 @@ namespace RPGProject.Combat
             }
 
             return calculatedAmount;
+        }
+
+        public static bool IsInRange(Vector3 _myPosition, Vector3 _targetPosition, float _attackRange)
+        {
+            float distanceToTarget = GetDistance(_myPosition, _targetPosition);
+
+            return distanceToTarget < _attackRange;
         }
 
         public static float GetDistance( Vector3 _myPosition, Vector3 _targetPosition)

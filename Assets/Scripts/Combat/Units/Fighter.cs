@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 namespace RPGProject.Combat
 {
-    public class Fighter : MonoBehaviour
+    public class Fighter : MonoBehaviour, CombatTarget
     {
         Animator animator = null;
         ComboLinker comboLinker = null;
@@ -356,6 +356,11 @@ namespace RPGProject.Combat
         public UnitResources GetUnitResources()
         {
             return unitResources;
+        }
+
+        public Vector3 GetAimPosition()
+        {
+            return characterMesh.GetAimTransform().position;
         }
     }
 }
