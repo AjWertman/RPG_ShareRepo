@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Control
+namespace RPGProject.Control.Combat
 {
     public enum UnitTurnState { Null, Player, Enemy }
 

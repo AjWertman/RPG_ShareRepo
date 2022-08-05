@@ -1,4 +1,5 @@
 ﻿using RPGProject.Combat;
+using RPGProject.Combat.Grid;
 using RPGProject.Core;
 using RPGProject.GameResources;
 using RPGProject.Questing;
@@ -6,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Control
+namespace RPGProject.Control.Combat
 {
     public class UnitManager : MonoBehaviour
     {
@@ -41,6 +42,14 @@ namespace RPGProject.Control
 
             startingPlayerTeamSize = playerUnits.Count;
             startingEnemyTeamSize = enemyUnits.Count;
+
+            foreach(UnitController unit in unitControllers)
+            {
+                bool isPlayerUnit = unit.GetUnitInfo().IsPlayer();
+                List<Fighter> opposingFighters = GetOpposingFighters(isPlayerUnit);
+
+                unit.combatAIBrain.InitalizeAgros(opposingFighters);
+            }
         }
 
         public void SetupUnitTeam(Dictionary<GridBlock, Unit> _teamStartingPositions, bool _isPlayerTeam)
@@ -86,11 +95,31 @@ namespace RPGProject.Control
             }
 
             unitController.SetupUnitController(unitInfo, unitResources, _startingBlock, _isPlayerTeam, newMesh);
+
             fighter.SetUnitInfo(unitInfo);
             fighter.SetUnitResources(unitResources);
+
+            unitController.combatAIBrain.InitalizeCombatAIBrain(fighter);
+
             unitController.gameObject.SetActive(true);
 
             return unitController;
+        }
+
+        private List<Fighter> GetOpposingFighters(bool _isPlayerTeam)
+        {
+            List<UnitController> opposingUnits = new List<UnitController>();
+            List<Fighter> opposingFighters = new List<Fighter>();
+
+            if (_isPlayerTeam) opposingUnits = enemyUnits;
+            else opposingUnits = playerUnits;
+
+            foreach(UnitController unit in opposingUnits)
+            {
+                opposingFighters.Add(unit.GetFighter());
+            }
+
+            return opposingFighters;
         }
 
         private void SetUnitTransform(UnitController _unit, GridBlock _startingBlock, bool _isPlayer)
@@ -155,7 +184,7 @@ namespace RPGProject.Control
         {
             foreach (UnitController unit in unitPool.GetAllUnits())
             {
-                unit.onMoveCompletion += OnMoveCompletion;
+                unit.onMoveCompletion += () => onMoveCompletion();
                 unit.GetHealth().onHealthDeath += TestQuestCompletion;
                 unit.GetHealth().onAnimDeath += OnUnitDeath;
             }
@@ -169,11 +198,6 @@ namespace RPGProject.Control
             {
                 myQuestCompletion.CompleteObjective();
             }
-        }
-
-        public void OnMoveCompletion()
-        {
-            onMoveCompletion();
         }
 
         public List<UnitController> GetAllUnits()

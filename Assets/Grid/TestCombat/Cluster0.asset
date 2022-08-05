@@ -15,13 +15,13 @@ MonoBehaviour:
   enemies:
   - unit: {fileID: 11400000, guid: d28dafea7a8855a4382a29e89b638228, type: 2}
     startCoordinates:
-      x: 2
-      z: 2
+      x: 1
+      z: 1
   - unit: {fileID: 11400000, guid: 108d2e81932fe844c98f22f0d7d30dd8, type: 2}
     startCoordinates:
       x: 0
       z: 0
   - unit: {fileID: 11400000, guid: 7bcc44a958b5e4d40876c31efaef0b33, type: 2}
     startCoordinates:
-      x: 3
-      z: -2
+      x: -2
+      z: 1

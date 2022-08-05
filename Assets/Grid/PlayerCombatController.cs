@@ -1,216 +1,207 @@
 using RPGProject.Combat;
-using RPGProject.Control;
-using System;
+using RPGProject.Combat.Grid;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCombatController : MonoBehaviour
+namespace RPGProject.Control.Combat
 {
-    BattleGridManager battleGridManager = null;
-    NewBattleHandlerScript battleHandler = null;
-    GridSystem gridSystem = null;
-    Pathfinder pathfinder = null;
-
-    UnitController currentUnitTurn = null;
-
-    bool isFindingPath = false;
-
-    List<GridBlock> tempPath = new List<GridBlock>();
-    List<GridBlock> path = new List<GridBlock>();
-    int furthestBlockIndex = 0;
-
-    Ability selectedAbility = null;
-
-    bool isRaycasting = false;
-
-    private void Awake()
+    public class PlayerCombatController : MonoBehaviour
     {
-        battleGridManager = FindObjectOfType<BattleGridManager>();
-        battleHandler = GetComponent<NewBattleHandlerScript>();
-        gridSystem = FindObjectOfType<GridSystem>();
-        pathfinder = FindObjectOfType<Pathfinder>();
+        BattleGridManager battleGridManager = null;
+        BattleHandler battleHandler = null;
+        GridSystem gridSystem = null;
+        Pathfinder pathfinder = null;
 
-        battleHandler.onUnitTurnUpdate += UpdateCurrentUnitTurn;
-    }
-    private void Start()
-    {
-        battleHandler.GetBattleUIManager().onAbilitySelect += SetSelectedAbility;
-    }
+        UnitController currentUnitTurn = null;
 
-    private void SetSelectedAbility(Ability _selectedAbility)
-    {
-        selectedAbility = _selectedAbility;
-    }
+        bool isFindingPath = false;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
+        List<GridBlock> tempPath = new List<GridBlock>();
+        List<GridBlock> path = new List<GridBlock>();
+        int furthestBlockIndex = 0;
+
+        Ability selectedAbility = null;
+
+        bool isRaycasting = false;
+
+        private void Awake()
         {
-            isRaycasting = true;
+            battleGridManager = FindObjectOfType<BattleGridManager>();
+            battleHandler = GetComponent<BattleHandler>();
+            gridSystem = FindObjectOfType<GridSystem>();
+            pathfinder = FindObjectOfType<Pathfinder>();
+
+            battleHandler.onUnitTurnUpdate += UpdateCurrentUnitTurn;
+        }
+        private void Start()
+        {
+            battleHandler.GetBattleUIManager().onAbilitySelect += SetSelectedAbility;
         }
 
-        if (!isRaycasting) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        private void SetSelectedAbility(Ability _selectedAbility)
         {
-            CombatTarget combatTarget = hit.collider.GetComponent<CombatTarget>();
+            selectedAbility = _selectedAbility;
+        }
 
-            if (combatTarget != null)
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.K))
             {
-                GridBlock targetBlock = GetTargetBlock(combatTarget);
-                HandlePathfinding(targetBlock);
+                isRaycasting = true;
+            }
 
-                if (Input.GetMouseButtonDown(0))
+            if (!isRaycasting) return;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                CombatTarget combatTarget = hit.collider.GetComponent<CombatTarget>();
+
+                if (combatTarget != null)
                 {
-                    if (tempPath == null) return;
-                    path = GetFurthestPath(tempPath, furthestBlockIndex);
-                    OnClick(targetBlock);
+                    GridBlock targetBlock = GetTargetBlock(combatTarget);
+                    HandlePathfinding(targetBlock);
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        if (tempPath == null) return;
+                        path = GetFurthestPath(tempPath);
+                        OnClick(targetBlock);
+                    }
                 }
+
+                //if (selectedAbility != null)
+                //{
+                //    float attackRange = selectedAbility.attackRange;
+
+                //    //Melee
+                //    if (attackRange == 0)
+                //    {
+                //        //If click 
+                //        ///move to target
+                //        ///attack
+                //    }
+                //    else
+                //    {
+                //        // if click 
+                //        ///If not in range - dont cast????
+                //        ///If in range - cast
+                //    }
+
+                //    return;
+                //}
+                //else
+                //{
+
+                //    //Fighter fighter = hit.collider.GetComponent<Fighter>();
+
+                //    //if (fighter != null)
+                //    //{
+                //    //    gridSystem.UnhighlightPath(tempPath);
+
+                //    //    tempPath = pathfinder.FindPath(currentBlock, GetGridBlockByFighter(fighter));
+                //    //}
+                //}
             }
-            
-            //if (selectedAbility != null)
-            //{
-            //    float attackRange = selectedAbility.attackRange;
-
-            //    //Melee
-            //    if (attackRange == 0)
-            //    {
-            //        //If click 
-            //        ///move to target
-            //        ///attack
-            //    }
-            //    else
-            //    {
-            //        // if click 
-            //        ///If not in range - dont cast????
-            //        ///If in range - cast
-            //    }
-
-            //    return;
-            //}
-            //else
-            //{
-
-            //    //Fighter fighter = hit.collider.GetComponent<Fighter>();
-
-            //    //if (fighter != null)
-            //    //{
-            //    //    gridSystem.UnhighlightPath(tempPath);
-
-            //    //    tempPath = pathfinder.FindPath(currentBlock, GetGridBlockByFighter(fighter));
-            //    //}
-            //}
-        }
-    }
-
-    private GridBlock GetTargetBlock(CombatTarget _combatTarget)
-    {
-        GridBlock targetBlock = null;
-        Fighter fighter = _combatTarget.GetComponent<Fighter>();
-        if (fighter != null)
-        {
-            targetBlock = battleGridManager.GetGridBlockByFighter(fighter);
-        }
-        else
-        {
-            targetBlock = _combatTarget.GetComponent<GridBlock>();            
-        }
-        return targetBlock;
-    }
-
-    private void HandlePathfinding(GridBlock _targetBlock)
-    {
-        if (_targetBlock == null) return;
-
-        GridBlock currentBlock = null;
-        if (currentUnitTurn != null) currentBlock = currentUnitTurn.currentBlock;
-
-        if (_targetBlock == currentBlock || !_targetBlock.IsMovable() || currentBlock == null)
-        {
-            return;
         }
 
-        gridSystem.UnhighlightPath(tempPath);
-        tempPath = pathfinder.FindPath(currentBlock, _targetBlock);
-
-        furthestBlockIndex = GetFurthestBlockIndex(tempPath, GetTotalPossibleGCostAllowance(currentUnitTurn));
-
-        gridSystem.HighlightPath(tempPath, furthestBlockIndex);
-    }
-
-    private void OnClick(GridBlock _targetBlock)
-    {
-        isRaycasting = false;
-        gridSystem.UnhighlightPath(tempPath);
-        
-        if(selectedAbility != null)
+        private GridBlock GetTargetBlock(CombatTarget _combatTarget)
         {
-            CombatTarget target = _targetBlock;
-            Fighter targetBlockFighter = _targetBlock.contestedFighter;
-
-            if(targetBlockFighter != null)
+            GridBlock targetBlock = null;
+            Fighter fighter = _combatTarget.GetComponent<Fighter>();
+            if (fighter != null)
             {
-                target = targetBlockFighter;
+                targetBlock = battleGridManager.GetGridBlockByFighter(fighter);
             }
-             
-            if (target == null) return;
-
-            if (selectedAbility.requiresTarget && targetBlockFighter == null) return;
-
-            battleHandler.OnPlayerMove(target, selectedAbility);
-            selectedAbility = null;
+            else
+            {
+                targetBlock = _combatTarget.GetComponent<GridBlock>();
+            }
+            return targetBlock;
         }
-        else
+
+        private void HandlePathfinding(GridBlock _targetBlock)
         {
-            StartCoroutine(currentUnitTurn.PathExecution(path));
+            if (_targetBlock == null) return;
+
+            GridBlock currentBlock = null;
+            if (currentUnitTurn != null) currentBlock = currentUnitTurn.currentBlock;
+
+            if (_targetBlock == currentBlock) return;
+            if (!_targetBlock.IsMovable(currentBlock.contestedFighter,_targetBlock)) return;
+            if (currentBlock == null) return;
+
+            gridSystem.UnhighlightPath(tempPath);
+            tempPath = pathfinder.FindPath(currentBlock, _targetBlock);
+
+            furthestBlockIndex = GetFurthestBlockIndex(tempPath);
+
+            if (selectedAbility != null) return;
+            gridSystem.HighlightPath(tempPath, furthestBlockIndex);
         }
-    }
 
-    private List<GridBlock> GetFurthestPath(List<GridBlock> _path, int _furthestBlockIndex)
-    {
-        List<GridBlock> furthestPath = new List<GridBlock>();
-
-        for (int i = 0; i < _path.Count; i++)
+        private void OnClick(GridBlock _targetBlock)
         {
-            furthestPath.Add(_path[i]);
+            isRaycasting = false;
+            gridSystem.UnhighlightPath(tempPath);
 
-            if (i == _furthestBlockIndex) break;
+            if (selectedAbility != null)
+            {
+                CombatTarget target = _targetBlock;
+                Fighter targetBlockFighter = _targetBlock.contestedFighter;
+
+                if (targetBlockFighter != null)
+                {
+                    target = targetBlockFighter;
+                }
+
+                if (target == null) return;
+
+                if (selectedAbility.requiresTarget && targetBlockFighter == null) return;
+
+                battleHandler.OnPlayerMove(target, selectedAbility);
+                selectedAbility = null;
+            }
+            else
+            {
+                StartCoroutine(currentUnitTurn.PathExecution(path));
+            }
         }
 
-        return furthestPath;
-    } 
-
-    public void UpdateCurrentUnitTurn(UnitController _unitController)
-    {
-        currentUnitTurn = _unitController;
-        if (currentUnitTurn.GetUnitInfo().IsPlayer()) isRaycasting = true;
-        else isRaycasting = false;
-    }
-
-    public int GetFurthestBlockIndex(List<GridBlock> _path, float _totalGCostAllowance)
-    {
-        foreach (GridBlock gridBlock in _path)
+        private List<GridBlock> GetFurthestPath(List<GridBlock> _path)
         {
-            if (_totalGCostAllowance >= gridBlock.pathfindingCostValues.gCost) continue;
+            List<GridBlock> furthestPath = new List<GridBlock>();
 
-            return _path.IndexOf(gridBlock) - 1;
+            for (int i = 0; i < _path.Count; i++)
+            {
+                furthestPath.Add(_path[i]);
+
+                if (i == furthestBlockIndex) break;
+            }
+
+            return furthestPath;
         }
 
-        return _path.Count - 1;
-    }
+        public void UpdateCurrentUnitTurn(UnitController _unitController)
+        {
+            currentUnitTurn = _unitController;
+            if (currentUnitTurn.GetUnitInfo().IsPlayer()) isRaycasting = true;
+            else isRaycasting = false;
+        }
 
-    private float GetTotalPossibleGCostAllowance(UnitController _unitController)
-    {
-        float totalPossibleGCostAllowance = 0f;
+        public int GetFurthestBlockIndex(List<GridBlock> _path)
+        {
+            float totalGCostAllowance = currentUnitTurn.GetTotalPossibleGCostAllowance();
 
-        RPGProject.Movement.CombatMover combatMover = _unitController.GetMover();
-        float actionPoints = _unitController.GetUnitResources().actionPoints;
+            foreach (GridBlock gridBlock in _path)
+            {
+                if (totalGCostAllowance >= gridBlock.pathfindingCostValues.gCost) continue;
 
-        totalPossibleGCostAllowance += combatMover.gCostAllowance;
-        totalPossibleGCostAllowance += combatMover.gCostPerAP * actionPoints;
+                return _path.IndexOf(gridBlock) - 1;
+            }
 
-        return totalPossibleGCostAllowance;
+            return _path.Count - 1;
+        }
     }
 }

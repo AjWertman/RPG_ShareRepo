@@ -1,4 +1,5 @@
 ﻿using RPGProject.Combat;
+using RPGProject.Combat.Grid;
 using RPGProject.Core;
 using RPGProject.Progression;
 using RPGProject.Saving;
@@ -190,7 +191,7 @@ namespace RPGProject.Control
 
             return playerUnits;
         }
-
+      
         public Unit GetUnit(PlayerKey _playerKey)
         {
             CharacterKey characterKey = CharacterKeyComparison.GetCharacterKey(_playerKey);

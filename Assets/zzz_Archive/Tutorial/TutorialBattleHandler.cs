@@ -28,13 +28,13 @@ public class TutorialBattleHandler : MonoBehaviour
     [SerializeField] TutorialPhaseKey currentPhase = TutorialPhaseKey.Null;
     [SerializeField] TutorialPhase[] tutorialPhases = null;
 
-    BattleHandler battleHandler = null;
+    OldBattleHandler battleHandler = null;
     BattleUIManager battleUIManager = null;
     TutorialUIHandler tutorialUIHandler = null;
 
     private void Awake()
     {
-        battleHandler = GetComponent<BattleHandler>();
+        battleHandler = GetComponent<OldBattleHandler>();
         //battleHandler.onBattleSetup += SetupTutorial;
         //battleHandler.onAdvanceTutorial += ProgressPhase;
     }

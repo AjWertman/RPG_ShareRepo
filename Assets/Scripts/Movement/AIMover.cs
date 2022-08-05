@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 namespace RPGProject.Movement
 {
-    public enum AIMovementAnimKey { Idle, Jump }
+    public enum AIMovementAnimKey { Idle, Jump , Moving}
 
     public abstract class AIMover : MonoBehaviour
     {

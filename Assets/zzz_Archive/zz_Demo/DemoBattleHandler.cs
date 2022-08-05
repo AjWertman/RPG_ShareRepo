@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class DemoBattleHandler : MonoBehaviour
 {
-    BattleHandler battleHandler = null;
+    OldBattleHandler battleHandler = null;
 
     SceneManagerScript sceneManagerScript = null;
 
     private void Awake()
     {
-        battleHandler = GetComponent<BattleHandler>();
+        battleHandler = GetComponent<OldBattleHandler>();
         battleHandler.onBattleEnd += FinishGame;
     }
 

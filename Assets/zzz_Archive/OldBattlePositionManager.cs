@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
-    public class BattlePositionManager : MonoBehaviour
+    public class OldBattlePositionManager : MonoBehaviour
     {
 
-        GridSystem gridSystem = null;
+        //GridSystem gridSystem = null;
 
         
 

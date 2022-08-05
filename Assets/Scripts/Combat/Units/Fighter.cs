@@ -1,6 +1,7 @@
 ﻿using RPGProject.Core;
 using RPGProject.GameResources;
 using RPGProject.Sound;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace RPGProject.Combat
         UnitResources unitResources = new UnitResources();
 
         Ability selectedAbility = null;
-        CombatTarget selectedTarget = null;
+        public CombatTarget selectedTarget = null;
         List<Fighter> selectedTargets = new List<Fighter>();
         AbilityObjectKey currentAbilityObjectKey = AbilityObjectKey.None;
         ComboLink currentComboLink = null;
@@ -36,6 +37,8 @@ namespace RPGProject.Combat
         float luck = 0f;
 
         bool isPlayerFighter = false;
+
+        public event Action<Fighter, float> onAgroAction;
 
         public void InitalizeFighter()
         {
@@ -120,6 +123,7 @@ namespace RPGProject.Combat
             if (targetFighter != null)
             {
                 targetHealth = targetFighter.GetHealth();
+                targetHealth.onHealthChange += ApplyAgro;
             }
 
             switch (abilityType)
@@ -149,6 +153,13 @@ namespace RPGProject.Combat
                     if(calculatedAmount != 0) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
                     break;
             }
+
+            targetHealth.onHealthChange -= ApplyAgro;
+        }
+
+        private void ApplyAgro(bool _isCritical, float _changeAmount)
+        {
+            onAgroAction(this, _changeAmount);
         }
 
         private void TargetAllTargets(AbilityBehavior _abilityBehavior, float _changeAmount, bool _isCritical)
@@ -253,14 +264,6 @@ namespace RPGProject.Combat
             return unitStatus;
         }
 
-        //public void SetAllTargets(List<Fighter> _targets)
-        //{
-        //    foreach (Fighter fighter in _targets)
-        //    {
-        //        allTargets.Add(target);
-        //    }
-        //}
-
         private float GetStatsModifier(float _changeAmount)
         {
             float newChangeAmount = _changeAmount;
@@ -333,20 +336,42 @@ namespace RPGProject.Combat
             return randomAbility;
         }
 
+        //public List<Ability> GetKnownAbilities()
+        //{
+        //    List<Ability> useableAbilities = new List<Ability>();
+        //    int currentLevel = unitInfo.GetUnitLevel();
+
+        //    foreach (Ability ability in unitInfo.GetAbilities())
+        //    {
+        //        if (currentLevel >= ability.GetRequiredLevel())
+        //        {
+        //            useableAbilities.Add(ability);
+        //        }
+        //    }
+
+        //    return useableAbilities;
+        //}
+
         public List<Ability> GetKnownAbilities()
         {
-            List<Ability> useableAbilities = new List<Ability>();
-            int currentLevel = unitInfo.GetUnitLevel();
+            List<Ability> knownAbilities = new List<Ability>();
 
-            foreach (Ability ability in unitInfo.GetAbilities())
+            Ability basicAttack = unitInfo.GetBasicAttack();
+            knownAbilities.Add(basicAttack);
+
+            Ability[] abilities = unitInfo.GetAbilities();
+
+            foreach(Ability ability in abilities)
             {
-                if (currentLevel >= ability.GetRequiredLevel())
+                //int unitLevel = unitInfo.GetUnitLevel();
+
+                if (1000 >= ability.GetRequiredLevel())
                 {
-                    useableAbilities.Add(ability);
+                    knownAbilities.Add(ability);
                 }
             }
 
-            return useableAbilities;
+            return knownAbilities;
         }
 
         public Ability GetBasicAttack()

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be9b758dc0bf2504da6f17d81e766efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPlayerKeys: 
+  currentPlayerKeys: 0000000000000000
   teamInfos:
   - playerKey: 0
     unitInfo:
@@ -67,72 +67,7 @@ MonoBehaviour:
       maxHealthPoints: 100
       manaPoints: 0
       maxManaPoints: 100
-    stats:
-      stamina: 10
-      spirit: 10
-      strength: 10
-      skill: 10
-      armor: 10
-      resistance: 10
-      speed: 10
-      luck: 10
-    startingCoordinates:
-      x: 0
-      z: 0
-    level: 1
-    experiencePoints: 0
-  - playerKey: 0
-    unitInfo:
-      unitName: 
-      characterKey: 0
-      unitLevel: 0
-      stats:
-        stamina: 10
-        spirit: 10
-        strength: 10
-        skill: 10
-        armor: 10
-        resistance: 10
-        speed: 10
-        luck: 10
-    unitResources:
-      healthPoints: 0
-      maxHealthPoints: 100
-      manaPoints: 0
-      maxManaPoints: 100
-    stats:
-      stamina: 10
-      spirit: 10
-      strength: 10
-      skill: 10
-      armor: 10
-      resistance: 10
-      speed: 10
-      luck: 10
-    startingCoordinates:
-      x: 0
-      z: 0
-    level: 0
-    experiencePoints: 0
-  - playerKey: 0
-    unitInfo:
-      unitName: 
-      characterKey: 0
-      unitLevel: 0
-      stats:
-        stamina: 10
-        spirit: 10
-        strength: 10
-        skill: 10
-        armor: 10
-        resistance: 10
-        speed: 10
-        luck: 10
-    unitResources:
-      healthPoints: 0
-      maxHealthPoints: 100
-      manaPoints: 0
-      maxManaPoints: 100
+      actionPoints: 0
     stats:
       stamina: 10
       spirit: 10
@@ -150,16 +85,16 @@ MonoBehaviour:
   playerStartingPositions:
   - unit: {fileID: 11400000, guid: 01382343b6a30714eacbbfb1eefb672b, type: 2}
     startCoordinates:
-      x: 0
-      z: 0
+      x: -1
+      z: -1
   - unit: {fileID: 11400000, guid: b68383a98de03b9479a89647193b4aae, type: 2}
     startCoordinates:
-      x: 2
-      z: 2
+      x: 0
+      z: 0
   - unit: {fileID: 11400000, guid: 5dafee8c8f2e11645a50491a8aeef431, type: 2}
     startCoordinates:
-      x: -2
-      z: -2
+      x: 1
+      z: -1
 --- !u!114 &4204676130505864477
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 ﻿using RPGProject.Combat;
+using RPGProject.Combat.Grid;
 using RPGProject.GameResources;
 using RPGProject.Movement;
 using RPGProject.Progression;
@@ -8,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Control
+namespace RPGProject.Control.Combat
 {
     public class UnitController : MonoBehaviour
     {
@@ -17,16 +18,19 @@ namespace RPGProject.Control
         [SerializeField] Stats startingStats = new Stats();
         
         Animator animator = null;
+
+        public CombatAIBrain combatAIBrain = null;
+        CombatMover mover = null;
         Fighter fighter = null;
         ComboLinker comboLinker = null;
         Health health = null;
         Mana mana = null;
-        CombatMover mover = null;
- 
+
         CharacterMesh characterMesh = null;
         UnitUI unitUI = null;
 
         public GridBlock currentBlock = null;
+        GridBlock queuedBlock = null;
 
         bool isTurn = false;
 
@@ -37,6 +41,7 @@ namespace RPGProject.Control
         {
             animator = GetComponent<Animator>();
 
+            combatAIBrain = GetComponent<CombatAIBrain>();
             fighter = GetComponent<Fighter>();
             comboLinker = GetComponent<ComboLinker>();
             health = GetComponent<Health>();
@@ -49,27 +54,7 @@ namespace RPGProject.Control
             mover.InitalizeCombatMover();
             unitUI.InitializeUnitUI();
 
-            mover.onDestinationReached += ReachedDestination;
             mover.onAPSpend += () => UpdateActionPoints(-1);
-        }
-
-        private void ReachedDestination(GridBlock _newBlock)
-        { 
-            currentBlock.SetContestedFighter(null);
-
-            currentBlock = _newBlock;
-
-            currentBlock.SetContestedFighter(fighter);
-        }
-
-        private void UpdateActionPoints(float _amountToChange)
-        {
-            unitResources.actionPoints += _amountToChange;
-
-            if(unitResources.actionPoints == 0 && mover.gCostAllowance < 10)
-            {
-                onMoveCompletion();
-            }
         }
 
         public void SetupUnitController(UnitInfo _unitInfo, UnitResources _unitResources,
@@ -89,23 +74,59 @@ namespace RPGProject.Control
             else CalculateResources();
 
             currentBlock = _startingBlock;
-            mover.SetStartVariables(_startingBlock);
             unitUI.SetupUnitUI();
+        }
+
+        public float GetTotalPossibleGCostAllowance()
+        {
+            float totalPossibleGCostAllowance = 0f;
+
+            float actionPoints = unitResources.actionPoints;
+
+            totalPossibleGCostAllowance += mover.gCostAllowance;
+            totalPossibleGCostAllowance += mover.gCostPerAP * actionPoints;
+
+            return totalPossibleGCostAllowance;
+        }
+
+        private void UpdateCurrentBlock(GridBlock _newBlock)
+        { 
+            currentBlock.SetContestedFighter(null);
+            currentBlock = _newBlock;
+            currentBlock.SetContestedFighter(fighter);
+        }
+
+        private void UpdateActionPoints(float _amountToChange)
+        {
+            unitResources.actionPoints += _amountToChange;
+
+            if(unitResources.actionPoints == 0 && mover.gCostAllowance < 10)
+            {
+                onMoveCompletion();
+            }
         }
 
         public IEnumerator PathExecution(List<GridBlock> _path)
         {
             GridBlock goalBlock = _path[_path.Count - 1];
             Fighter contestedFighter = goalBlock.contestedFighter;
-            
-            if(contestedFighter != null)
+            bool isContested = (contestedFighter != null);
+
+            if(isContested)
             {
                 _path.Remove(goalBlock);
+                goalBlock = _path[_path.Count - 1];
             }
 
-            yield return mover.MoveToDestination(_path);
+            if(_path.Count > 0)
+            {
+                List<Transform> travelDestinations = GridSystem.GetTravelDestinations(_path);
+                yield return mover.MoveToDestination(travelDestinations);
 
-            if(contestedFighter != null)
+                UpdateCurrentBlock(goalBlock);
+            }
+
+            if (isContested)
             {
                 yield return UseAbilityBehavior(contestedFighter, fighter.GetBasicAttack());
             }
@@ -117,58 +138,45 @@ namespace RPGProject.Control
 
             while (isTurn)
             {
-                if (false)
+                if (!_ability.CanTargetAll())
                 {
-                    //Vector3 targetPosition = _target.transform.position;
-                    //Quaternion currentRotation = transform.rotation;
-
-                    //yield return mover.JumpToPos(targetPosition, currentRotation, true);
-
-                    yield return null;
+                    fighter.LookAtTarget(_target.GetAimTransform());
                 }
-                else
+
+                float moveDuration = comboLinker.GetFullComboTime(_ability.GetCombo());
+                float moveDurationWOffset = moveDuration * 1.1f;
+
+                UseAbility(_target, _ability);
+
+                //AddToCopyList(selectedAbility,isCopy);
+
+                yield return new WaitForSeconds(moveDurationWOffset);
+
+                animator.CrossFade("Idle", .1f);
+                //Vector3 travelDestination = new Vector3(currentBlock.travelDestination.position.x, transform.position.y, currentBlock.travelDestination.position.z);
+                //transform.position = travelDestination;
+
+                if (!health.IsDead())
                 {
-                    if (!_ability.CanTargetAll())
+                    if (_ability.GetAbilityType() == AbilityType.Melee)
                     {
-                        fighter.LookAtTarget(_target.GetAimTransform());
+                        //yield return mover.ReturnToStart();
                     }
-
-                    float moveDuration = comboLinker.GetFullComboTime(_ability.GetCombo());
-                    float moveDurationWOffset = moveDuration * 1.1f;
-
-                    UseAbility(_target, _ability);
-
-                    //AddToCopyList(selectedAbility,isCopy);
-
-                    yield return new WaitForSeconds(moveDurationWOffset);
-
-                    animator.CrossFade("Idle", .1f);
-                    //Vector3 travelDestination = new Vector3(currentBlock.travelDestination.position.x, transform.position.y, currentBlock.travelDestination.position.z);
-                    //transform.position = travelDestination;
-
-                    if (!health.IsDead())
+                    else
                     {
-                        if (_ability.GetAbilityType() == AbilityType.Melee)
-                        {
-                            //yield return mover.ReturnToStart();
-                        }
-                        else
-                        {
-                            transform.localRotation = mover.GetStartRotation();
-                            animator.CrossFade("Idle", .1f);
-                        }
+                        transform.localRotation = mover.GetStartRotation();
+                        animator.CrossFade("Idle", .1f);
                     }
-
-                    //DecrementSpellLifetimes
-                    yield return new WaitForSeconds(1.5f);
-
-                    fighter.ResetTarget();
-                    fighter.ResetAbility();
-
-                    onMoveCompletion();
-
-                    yield break;
                 }
+
+                //DecrementSpellLifetimes
+                yield return new WaitForSeconds(1.5f);
+
+                fighter.ResetTarget();
+                fighter.ResetAbility();
+
+                onMoveCompletion();
+                yield break;
             }
         }
         

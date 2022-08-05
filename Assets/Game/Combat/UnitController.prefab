@@ -52,6 +52,7 @@ GameObject:
   - component: {fileID: 3504165519863861257}
   - component: {fileID: 4292025080150459303}
   - component: {fileID: 2304397834848362312}
+  - component: {fileID: 723103457998062764}
   m_Layer: 0
   m_Name: UnitController
   m_TagString: Untagged
@@ -89,7 +90,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.25
   m_Speed: 6
-  m_Acceleration: 500
+  m_Acceleration: 400
   avoidancePriority: 50
   m_AngularSpeed: 10000
   m_StoppingDistance: 0
@@ -174,6 +175,7 @@ MonoBehaviour:
     resistance: 10
     speed: 10
     luck: 10
+  combatAIBrain: {fileID: 0}
   currentBlock: {fileID: 0}
 --- !u!114 &4170302240818230691
 MonoBehaviour:
@@ -217,11 +219,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb7afec5e882c9d498bf90157ed7ce6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepsSound: {fileID: 0}
+  footstepsSound: {fileID: 8300000, guid: 9993e4a45f4c5a24699fe278ca426350, type: 3}
   retreatTransform: {fileID: 4806116191025221250}
   distanceTolerance: 0.3
   gCostAllowance: 0
-  gCostPerAP: 24
+  gCostPerAP: 54
   isMoving: 0
 --- !u!114 &-3233447754243240660
 MonoBehaviour:
@@ -275,6 +277,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f08b736e5df8a4f9c93bcdeb13840e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &723103457998062764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642788015177014662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd186ea982e37ef4c9998e4a7bf09108, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agros: []
 --- !u!1 &4569020565003744689
 GameObject:
   m_ObjectHideFlags: 0

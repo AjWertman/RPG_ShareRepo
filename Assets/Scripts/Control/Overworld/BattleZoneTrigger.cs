@@ -1,20 +1,20 @@
 ﻿using RPGProject.Combat;
+using RPGProject.Combat.Grid;
 using RPGProject.Core;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Control
+namespace RPGProject.Control.Combat
 {
     public class BattleZoneTrigger : MonoBehaviour
     {
         [SerializeField] EnemyCluster[] enemyClusters = null;
-        [SerializeField] NewBattleHandlerScript battleHandlerOverride = null;
+        [SerializeField] BattleHandler battleHandlerOverride = null;
         [Range(0, 99)] [SerializeField] int chanceToStartBattle = 10;
         [SerializeField] bool isEnemyTrigger = false;
 
-        NewBattleHandlerScript currentBattleHandler = null;
+        BattleHandler currentBattleHandler = null;
 
         PlayerTeamManager playerTeam = null;
 
@@ -82,12 +82,6 @@ namespace RPGProject.Control
             yield return currentBattleHandler.StartBattle(playerTeam, enemyStartingPositions);
 
             yield return FindObjectOfType<Fader>().FadeIn(2f);
-
-            //Refactor
-            //if(!currentBattleHandler.IsTutorial())
-            //{
-            //    currentBattleHandler.ExecuteNextTurn();
-            //}
         }
 
         //Refactor EndBattle(Reward reward)
@@ -104,14 +98,14 @@ namespace RPGProject.Control
             startedBattle = false;
         }
 
-        private NewBattleHandlerScript GetClosestBattleHandler()
+        private BattleHandler GetClosestBattleHandler()
         {
-            NewBattleHandlerScript[] battleHandlers = FindObjectsOfType<NewBattleHandlerScript>();
+            BattleHandler[] battleHandlers = FindObjectsOfType<BattleHandler>();
 
-            NewBattleHandlerScript closestBattleHandler = null;
+            BattleHandler closestBattleHandler = null;
             float closestDistance = 0f;
 
-            foreach (NewBattleHandlerScript battleHandler in battleHandlers)
+            foreach (BattleHandler battleHandler in battleHandlers)
             {
                 if (closestBattleHandler == null || closestDistance > Vector3.Distance(transform.position, battleHandler.transform.position))
                 {

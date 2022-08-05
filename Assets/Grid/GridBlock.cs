@@ -1,88 +1,125 @@
-using RPGProject.Combat;
 using System;
 using TMPro;
 using UnityEngine;
 
-public class GridBlock : MonoBehaviour,CombatTarget
+namespace RPGProject.Combat.Grid
 {
-    [SerializeField] TextMeshProUGUI coordinatesText = null;
-
-    [SerializeField] GameObject pathfindingTextContainer = null;
-    [SerializeField] TextMeshProUGUI fValueText = null;
-    [SerializeField] TextMeshProUGUI gValueText = null;
-    [SerializeField] TextMeshProUGUI hValueText = null;
-
-    [SerializeField] bool isMovable = true;
-
-    public GridCoordinates gridCoordinates;
-    public PathfindingCostValues pathfindingCostValues;
-
-    public Transform travelDestination = null;
-
-    public Fighter contestedFighter = null;
-    public Ability activeAbility = null;
-
-    MeshRenderer meshRenderer = null;
-
-    public event Action<Fighter, GridBlock> onContestedFighterUpdate;
-
-    public void InitializePiece()
+    public class GridBlock : MonoBehaviour, CombatTarget
     {
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
+        [SerializeField] TextMeshProUGUI coordinatesText = null;
 
-        pathfindingTextContainer.SetActive(false);
-    }
+        [SerializeField] GameObject pathfindingTextContainer = null;
+        [SerializeField] TextMeshProUGUI fValueText = null;
+        [SerializeField] TextMeshProUGUI gValueText = null;
+        [SerializeField] TextMeshProUGUI hValueText = null;
 
-    public void SetupGridBlock(Material _newMaterial, Color _textColor)
-    {
-        InitializePiece();
-        SetColors(_newMaterial, _textColor);
-        UpdateCoordinatesText(gridCoordinates.x, gridCoordinates.z);
-    }
+        [SerializeField] bool isMovable = true;
 
-    public void SetContestedFighter(Fighter _fighter)
-    {
-        contestedFighter = _fighter;
+        public GridCoordinates gridCoordinates;
+        public PathfindingCostValues pathfindingCostValues;
 
-        if (contestedFighter == null) return;
-        onContestedFighterUpdate(contestedFighter, this);
-    }
+        public Transform travelDestination = null;
 
-    public void SetColors(Material _newMaterial, Color _textColor)
-    {
-        meshRenderer.material = _newMaterial;
-        coordinatesText.color = _textColor;
-    }
+        public Fighter contestedFighter = null;
+        public Ability activeAbility = null;
 
-    public void UpdateCoordinatesText(int _x, int _z)
-    {
-        if (!coordinatesText.gameObject.activeSelf) return;
-        string coordinates = "(" + _x.ToString() + "," + _z.ToString() + ")";
-        coordinatesText.text = coordinates;
-    }
+        MeshRenderer meshRenderer = null;
 
-    public void UpdatePathfindingValueTexts(int _f, int _g, int _h)
-    {
-        if (!pathfindingTextContainer.activeSelf)
+        public event Action<Fighter, GridBlock> onContestedFighterUpdate;
+
+        public void InitializePiece()
         {
-            pathfindingTextContainer.SetActive(true);
+            meshRenderer = GetComponentInChildren<MeshRenderer>();
+
+            pathfindingTextContainer.SetActive(false);
         }
 
-        fValueText.text = _f.ToString();
-        gValueText.text = _g.ToString();
-        hValueText.text = _h.ToString();
+        public void SetupGridBlock(Material _newMaterial, Color _textColor)
+        {
+            InitializePiece();
+            SetColors(_newMaterial, _textColor);
+            UpdateCoordinatesText(gridCoordinates.x, gridCoordinates.z);
+        }
+
+        public void SetContestedFighter(Fighter _fighter)
+        {
+            contestedFighter = _fighter;
+
+            if (contestedFighter == null) return;
+            onContestedFighterUpdate(contestedFighter, this);
+        }
+
+        public void SetColors(Material _newMaterial, Color _textColor)
+        {
+            meshRenderer.material = _newMaterial;
+            coordinatesText.color = _textColor;
+        }
+
+        public void UpdateCoordinatesText(int _x, int _z)
+        {
+            if (!coordinatesText.gameObject.activeSelf) return;
+            string coordinates = "(" + _x.ToString() + "," + _z.ToString() + ")";
+            coordinatesText.text = coordinates;
+        }
+
+        public void UpdatePathfindingValueTexts(int _f, int _g, int _h)
+        {
+            if (!pathfindingTextContainer.activeSelf)
+            {
+                pathfindingTextContainer.SetActive(true);
+            }
+
+            fValueText.text = _f.ToString();
+            gValueText.text = _g.ToString();
+            hValueText.text = _h.ToString();
+        }
+
+        public bool IsMovable(Fighter _currentFighter, GridBlock _targetBlock)
+        {
+            if (!isMovable) return false;
+            if (contestedFighter != null)
+            {
+                bool isCurrentPlayer = _currentFighter.GetUnitInfo().IsPlayer();
+                if (isCurrentPlayer == contestedFighter.GetUnitInfo().IsPlayer()) return false;
+
+                if (isCurrentPlayer)
+                {
+                    if (contestedFighter != _targetBlock.contestedFighter) return false;
+                }
+                else
+                {
+                    if (_currentFighter.selectedTarget != (CombatTarget)contestedFighter) return false;
+                }
+            }
+
+            return true;
+        }
+
+        public Transform GetAimTransform()
+        {
+            return travelDestination;
+        }
     }
 
-    public bool IsMovable()
+    [Serializable]
+    public struct GridBlockStatus
     {
-        if (!isMovable) return false;
-        if (contestedFighter != null && contestedFighter.GetUnitInfo().IsPlayer()) return false;
-
-        return true;
+        public Fighter contestedFighter;
+        public Ability currentEffect;
+        //public GridItem currentItem; 
+        ///Barrels/Crystals for explosion?
     }
 
-    public Transform GetAimTransform()
+    [Serializable]
+    public struct GridCoordinates
     {
-        return travelDestination;
+        public int x;
+        public int z;
+
+        public GridCoordinates(int _x, int _z)
+        {
+            x = _x;
+            z = _z;
+        }
     }
 }

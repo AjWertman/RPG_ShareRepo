@@ -1,23 +1,27 @@
 using UnityEngine;
 using UnityEditor;
+using RPGProject.Control.Combat;
 
-[CustomEditor(typeof(GridSystem))]
-public class GridEditor : Editor
+namespace RPGProject.Control
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(GridSystem))]
+    public class GridEditor : Editor
     {
-        base.OnInspectorGUI();
-
-        GridSystem gridSystem = (GridSystem)target;
-
-        if (GUILayout.Button("Generate Grid"))
+        public override void OnInspectorGUI()
         {
-            gridSystem.SetupGrid();
-        }
-    
-        if (GUILayout.Button("Delete Grid"))
-        {
-            gridSystem.DeleteGrid();
+            base.OnInspectorGUI();
+
+            GridSystem gridSystem = (GridSystem)target;
+
+            if (GUILayout.Button("Generate Grid"))
+            {
+                gridSystem.SetupGrid();
+            }
+
+            if (GUILayout.Button("Delete Grid"))
+            {
+                gridSystem.DeleteGrid();
+            }
         }
     }
 }

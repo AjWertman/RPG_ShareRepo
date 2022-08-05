@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Control
+namespace RPGProject.Control.Combat
 {
-    //Creates the unit controllers for combat
     public class UnitPool : MonoBehaviour
     {
         [SerializeField] GameObject unitPrefab = null;

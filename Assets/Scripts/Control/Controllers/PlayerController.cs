@@ -1,4 +1,5 @@
-﻿using RPGProject.Core;
+﻿using RPGProject.Control.Combat;
+using RPGProject.Core;
 using RPGProject.Inventories;
 using RPGProject.Movement;
 using RPGProject.Sound;
@@ -154,40 +155,6 @@ namespace RPGProject.Control
             uiCanvas.DeactivateCheckpointMenu();
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
-            if (battleZoneTrigger != null)
-            {
-                bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
-                if (isEnemyTrigger)
-                {
-                    if (!hasStartedBattle)
-                    {
-                        hasStartedBattle = true;
-                        StartCoroutine(battleZoneTrigger.StartBattle());
-                    }
-                }
-                else
-                {
-                    contestedBattleZoneTrigger = battleZoneTrigger;
-                }
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
-            if (battleZoneTrigger != null)
-            {
-                bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
-                if (!isEnemyTrigger)
-                {
-                    contestedBattleZoneTrigger = null;
-                }
-            }
-        }
-
         public void BattleStartBehavior()
         {
             isBattling = true;
@@ -259,6 +226,40 @@ namespace RPGProject.Control
         public void FootL()
         {
             FootStepBehavior();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
+            if (battleZoneTrigger != null)
+            {
+                bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
+                if (isEnemyTrigger)
+                {
+                    if (!hasStartedBattle)
+                    {
+                        hasStartedBattle = true;
+                        StartCoroutine(battleZoneTrigger.StartBattle());
+                    }
+                }
+                else
+                {
+                    contestedBattleZoneTrigger = battleZoneTrigger;
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
+            if (battleZoneTrigger != null)
+            {
+                bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
+                if (!isEnemyTrigger)
+                {
+                    contestedBattleZoneTrigger = null;
+                }
+            }
         }
 
         private RaycastHit[] RaycastAllSorted(Ray ray)

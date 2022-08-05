@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGProject.Control
+namespace RPGProject.Control.Combat
 {
-    //Creates all the necessary managers for combat to run
     public class BattleManagersPool : MonoBehaviour
     {
         [SerializeField] GameObject battlePositionManagerPrefab = null;
@@ -13,7 +12,7 @@ namespace RPGProject.Control
 
         [SerializeField] GameObject battleCamGameObject= null;
 
-        BattlePositionManager battlePositionManager = null;
+        OldBattlePositionManager battlePositionManager = null;
         UnitManager unitManager = null;
         BattleUIManager battleUIManager = null;
         TurnManager turnManager = null;
@@ -29,7 +28,7 @@ namespace RPGProject.Control
         private void CreateManagers()
         {
             GameObject positionInstance = Instantiate(battlePositionManagerPrefab, transform);
-            battlePositionManager = positionInstance.GetComponent<BattlePositionManager>();
+            battlePositionManager = positionInstance.GetComponent<OldBattlePositionManager>();
 
             GameObject unitInstance = Instantiate(unitManagerPrefab, transform);
             unitManager = unitInstance.GetComponent<UnitManager>();
@@ -80,7 +79,7 @@ namespace RPGProject.Control
             }
         }
 
-        public BattlePositionManager GetBattlePositionManager()
+        public OldBattlePositionManager GetBattlePositionManager()
         {
             return battlePositionManager;
         }

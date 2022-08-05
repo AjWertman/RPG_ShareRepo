@@ -1,6 +1,6 @@
 using System;
 
-namespace RPGProject.Combat
+namespace RPGProject.Combat.Grid
 {
     [Serializable]
     public struct UnitStartingPosition
