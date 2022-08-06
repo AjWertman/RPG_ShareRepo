@@ -8,7 +8,7 @@ public class CombatAIBrain : MonoBehaviour
 {
     [SerializeField] List<Agro> agros = new List<Agro>();
 
-    [SerializeField] float agroPercentagePerDamagePercentage = 1f;
+    [SerializeField] int agroPercentagePerDamagePercentage = 1;
 
     Fighter fighter = null;
 
@@ -22,7 +22,7 @@ public class CombatAIBrain : MonoBehaviour
 
     public void InitalizeAgros(List<Fighter> _enemyFighters)
     {
-        float initAgroPercentage = 100 / _enemyFighters.Count;
+        int initAgroPercentage = 100 / _enemyFighters.Count;
         foreach(Fighter fighter in _enemyFighters)
         {
             Agro newAgro = new Agro(fighter, initAgroPercentage);
@@ -37,31 +37,69 @@ public class CombatAIBrain : MonoBehaviour
         Fighter agressorTarget = (Fighter)_agressor.selectedTarget;
         if (fighter != agressorTarget) return;
 
-        //Refactor - Sometimes causes total agro% to go above 100%
-        float percentageChange = GetPercentageOfHealthChange(fighter.GetHealth(), _changeAmount);
-        float agroPercentage = percentageChange * agroPercentagePerDamagePercentage;
+        int percentageChange = GetPercentageOfHealthChange(fighter.GetHealth(), _changeAmount);
+        int agroPercentage = percentageChange * agroPercentagePerDamagePercentage;
 
-        float agroToTakeFromOthers = GetEvenAgroSplit(percentageChange);
+        int agroToTakeFromOthers = GetEvenAgroSplit(percentageChange);
 
         for (int i = 0; i < agros.Count; i++)
         {
             Agro agro = agros[i];
 
-            float newAgroPercentage;
+            int newAgroPercentage;
 
             if (agro.fighter == _agressor) newAgroPercentage = agro.percentageOfAgro + percentageChange;
             else newAgroPercentage = agro.percentageOfAgro -= agroToTakeFromOthers;
 
             agros[i] = new Agro(agro.fighter, newAgroPercentage);
         }
+
+        FormatAgros(_agressor);
+    }
+
+    private void FormatAgros(Fighter _agressor)
+    {
+        int totalPercentageAmount = 0;
+        for (int i = 0; i < agros.Count; i++)
+        {
+            totalPercentageAmount += agros[i].percentageOfAgro;
+        }
+
+        int excessPercentage= 0;
+        if (totalPercentageAmount > 100)
+        {
+            excessPercentage = totalPercentageAmount - 100;
+
+            int splitAgro = GetEvenAgroSplit(excessPercentage);
+            for (int i = 0; i < agros.Count; i++)
+            {
+                Agro agro = agros[i];
+                agro.percentageOfAgro -= splitAgro;
+
+                agros[i] = agro;
+            }
+        }
+        else if (totalPercentageAmount < 100)
+        {
+            excessPercentage = 100 - totalPercentageAmount;
+            for (int i = 0; i < agros.Count; i++)
+            {
+                if(agros[i].fighter == _agressor)
+                {
+                    Agro agressorAgro = agros[i];
+                    agressorAgro.percentageOfAgro += excessPercentage;
+                    agros[i] = agressorAgro;
+                }
+            }
+        }
     }
 
     public void RemoveFromAgrosList(Fighter _deadFighter)
     {
-        float agroToRedistribute = GetAgroPercentage(_deadFighter);
+        int agroToRedistribute = GetAgroPercentage(_deadFighter);
         agros.Remove(GetAgro(_deadFighter));
 
-        float evenSplit = GetEvenAgroSplit(agroToRedistribute);
+        int evenSplit = GetEvenAgroSplit(agroToRedistribute);
 
         for (int i = 0; i < agros.Count - 1; i++)
         {
@@ -115,30 +153,32 @@ public class CombatAIBrain : MonoBehaviour
         return highestAgroFighter;
     }
 
-    private float GetEvenAgroSplit(float _percentageChange)
+    private int GetEvenAgroSplit(int _percentageChange)
     {
-        int enemyFighterCount = agros.Count;
-        float splitAgro = (_percentageChange / enemyFighterCount);
+        int enemyFighterCount = (agros.Count-1);
+        int splitAgro = (_percentageChange / enemyFighterCount);
 
         return splitAgro;
     }
 
-    private float GetPercentageOfHealthChange(Health _health, float _changeAmount)
+    private int GetPercentageOfHealthChange(Health _health, float _changeAmount)
     {
-        float percentageBeforeDamage = _health.GetMaxHealthPoints() / (_health.GetHealthPoints() + _changeAmount);
-        float percentageAfterDamage = _health.GetHealthPercentage();
-        float percentageChangeAmount = (Mathf.Abs(percentageBeforeDamage - percentageAfterDamage)) * 100f;
+        bool isDamage = _changeAmount < 0;
 
+        float percentageBeforeDamage = _health.GetMaxHealthPoints() / (_health.GetHealthPoints() + Mathf.Abs(_changeAmount));
+        float  percentageAfterDamage =_health.GetHealthPercentage();
+
+        int percentageChangeAmount = (int)((Mathf.Abs(percentageBeforeDamage - percentageAfterDamage)) * 100f);
         return percentageChangeAmount;
     }
 
-    private float GetAgroPercentage(Fighter _fighter)
+    private int GetAgroPercentage(Fighter _fighter)
     {
         foreach(Agro agro in agros)
         {
             if (agro.fighter == _fighter) return agro.percentageOfAgro;
         }
 
-        return 0f;
+        return 0;
     }
 }

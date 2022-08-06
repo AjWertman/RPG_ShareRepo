@@ -6,17 +6,12 @@ namespace RPGProject.Combat
     public struct Agro
     {
         public Fighter fighter;
-        public float percentageOfAgro;
+        public int percentageOfAgro;
 
-        public Agro(Fighter _fighter, float _percentageOfAgro)
+        public Agro(Fighter _fighter, int _percentageOfAgro)
         {
             fighter = _fighter;
             percentageOfAgro = _percentageOfAgro;
-        }
-
-        public void SetPercentageOfAgro(float _newPercentage)
-        {
-            percentageOfAgro = _newPercentage;
         }
     }
 }
