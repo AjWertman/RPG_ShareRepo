@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class CombatAIBrain : MonoBehaviour
 {
+    [SerializeField] CombatAIBehavior combatAIBehavior;
     [SerializeField] List<Agro> agros = new List<Agro>();
 
     [SerializeField] int agroPercentagePerDamagePercentage = 1;
@@ -32,26 +33,52 @@ public class CombatAIBrain : MonoBehaviour
         }
     }
 
+    public void PlanNextMove(List<Fighter> _allFighters)
+    {
+        Fighter randomTarget = GetRandomTarget();
+        if (randomTarget == null) return;
+
+        Health targetHealth = randomTarget.GetHealth();
+
+        //How many AP to spend to get in attack range? 
+        //Is target below X percentage of health? Can I kill them on this turn? 
+        //What is the best move for me to use on my target? Would my best moves be overkill?
+        //Do I know my targets strengths/weaknesses? Can I exploit them?
+
+        //Whats my role in combat? 
+        ///IDEA - create different behaviors (Tank, mDamage, rDamage, Healer/Support)
+        ///Each has a percentage of different actions (based on combatAIBrain.GetRandomTarget()) and randomly executes each one
+        ///Should above list be Dynamically changing based on battle conditions?
+        ///
+
+        //Do any of my teammates need support?
+        //Whats my health at? Should/Can I heal myself?
+        //How can I make my/my teammates next turn easier
+        //Whos the best teammate of mine? How can I make them even better?
+
+        //If I am gonna move to X, is there anything in my way? Does it hurt or benefit me?
+        //Am I too close/far from my enemies? Should I move somewhere else?
+    }
+
     public void UpdateAgro(Fighter _agressor, float _changeAmount)
     {
         Fighter agressorTarget = (Fighter)_agressor.selectedTarget;
         if (fighter != agressorTarget) return;
 
         int percentageChange = GetPercentageOfHealthChange(fighter.GetHealth(), _changeAmount);
+
         int agroPercentage = percentageChange * agroPercentagePerDamagePercentage;
 
         int agroToTakeFromOthers = GetEvenAgroSplit(percentageChange);
+        //print("agro to take from others " + agroToTakeFromOthers.ToString());
 
         for (int i = 0; i < agros.Count; i++)
         {
             Agro agro = agros[i];
+            if (agro.fighter == _agressor)agro.percentageOfAgro += percentageChange;
+            else agro.percentageOfAgro -= agroToTakeFromOthers;
 
-            int newAgroPercentage;
-
-            if (agro.fighter == _agressor) newAgroPercentage = agro.percentageOfAgro + percentageChange;
-            else newAgroPercentage = agro.percentageOfAgro -= agroToTakeFromOthers;
-
-            agros[i] = new Agro(agro.fighter, newAgroPercentage);
+            agros[i] = agro;
         }
 
         FormatAgros(_agressor);
@@ -65,9 +92,12 @@ public class CombatAIBrain : MonoBehaviour
             totalPercentageAmount += agros[i].percentageOfAgro;
         }
 
+        //print("total = " + totalPercentageAmount.ToString());
+
         int excessPercentage= 0;
         if (totalPercentageAmount > 100)
         {
+            //print("Total > 100");
             excessPercentage = totalPercentageAmount - 100;
 
             int splitAgro = GetEvenAgroSplit(excessPercentage);
@@ -81,6 +111,7 @@ public class CombatAIBrain : MonoBehaviour
         }
         else if (totalPercentageAmount < 100)
         {
+            //print("Total < 100");
             excessPercentage = 100 - totalPercentageAmount;
             for (int i = 0; i < agros.Count; i++)
             {
@@ -123,7 +154,6 @@ public class CombatAIBrain : MonoBehaviour
     public Fighter GetRandomTarget()
     {
         float randomPercentage = RandomGenerator.GetRandomNumber(0f, 100f);
-
         float currentPercentageMax = 0f;
 
         foreach(Agro agro in agros)
@@ -164,11 +194,13 @@ public class CombatAIBrain : MonoBehaviour
     private int GetPercentageOfHealthChange(Health _health, float _changeAmount)
     {
         bool isDamage = _changeAmount < 0;
+        float percentageBeforeDamage = ((_health.GetHealthPoints() + Mathf.Abs(_changeAmount)) / _health.GetMaxHealthPoints());
 
-        float percentageBeforeDamage = _health.GetMaxHealthPoints() / (_health.GetHealthPoints() + Mathf.Abs(_changeAmount));
+        //print(percentageBeforeDamage);
         float  percentageAfterDamage =_health.GetHealthPercentage();
 
         int percentageChangeAmount = (int)((Mathf.Abs(percentageBeforeDamage - percentageAfterDamage)) * 100f);
+
         return percentageChangeAmount;
     }
 

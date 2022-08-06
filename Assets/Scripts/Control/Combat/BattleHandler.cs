@@ -16,6 +16,8 @@ namespace RPGProject.Control.Combat
 
     public class BattleHandler : MonoBehaviour
     {
+        [SerializeField] List<CombatAIBehavior> combatAIBehaviors = new List<CombatAIBehavior>();
+
         BattleUIManager battleUIManager = null;
         BattleGridManager battleGridManager = null;
         UnitManager unitManager = null;
@@ -135,7 +137,7 @@ namespace RPGProject.Control.Combat
             bool isPlayer = currentUnitTurn.GetUnitInfo().IsPlayer();
             float currentAP = currentUnitTurn.GetUnitResources().actionPoints;
 
-            if (!isPlayer) AdvanceTurn();
+            if(!isPlayer) AdvanceTurn();
             if(currentAP > 0)
             {
                 if (isPlayer) battleUIManager.ActivatePlayerMoveSelectMenu(true);
@@ -204,7 +206,7 @@ namespace RPGProject.Control.Combat
         /// <summary>
         /// //
         /// </summary>
-        [SerializeField] Transform camTransform = null;
+        Transform camTransform = null;
 
         BattleManagersPool battleManagersPool = null;
         AbilityObjectPool abilityObjectPool = null;
@@ -245,10 +247,9 @@ namespace RPGProject.Control.Combat
             bool isPlayerAI = currentUnitTurn.GetUnitInfo().IsPlayer();
 
             Ability randomAbility = currentUnitFighter.GetRandomAbility();
-            UnitController randomTarget = GetRandomTarget(isPlayerAI, randomAbility.GetTargetingType());
+            Fighter randomTarget = currentUnitTurn.combatAIBrain.GetRandomTarget();
 
             randomAbility = currentUnitFighter.GetBasicAttack();
-            currentUnitTurn.GetFighter().selectedTarget = randomTarget.GetFighter();
             //if (randomAbility != null && randomTarget != null)
             //{
             //    if (CombatAssistant.IsAlreadyEffected(randomAbility.GetAbilityName(), randomTarget.GetUnitStatus()))
@@ -258,7 +259,7 @@ namespace RPGProject.Control.Combat
             // }
             Pathfinder pathfinder = GetComponentInChildren<Pathfinder>();
 
-            List<GridBlock> path = pathfinder.FindPath(currentUnitTurn.currentBlock, randomTarget.currentBlock);
+            List<GridBlock> path = pathfinder.FindPath(currentUnitTurn.currentBlock, battleGridManager.GetGridBlockByFighter(randomTarget));
 
             yield return currentUnitTurn.PathExecution(path);
 

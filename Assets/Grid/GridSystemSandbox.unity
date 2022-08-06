@@ -7961,7 +7961,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1b02aa5a137a4343b80388244fe1bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camTransform: {fileID: 0}
+  combatAIBehaviors:
+  - aiType: 0
+    aiBehaviors:
+      attack: 25
+      agro: 65
+      heal: 0
+      support: 10
+      runaway: 0
+  - aiType: 1
+    aiBehaviors:
+      attack: 80
+      agro: 0
+      heal: 0
+      support: 20
+      runaway: 0
+  - aiType: 2
+    aiBehaviors:
+      attack: 0
+      agro: 0
+      heal: 0
+      support: 0
+      runaway: 0
+  - aiType: 3
+    aiBehaviors:
+      attack: 0
+      agro: 0
+      heal: 60
+      support: 0
+      runaway: 0
 --- !u!114 &425164819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12769,17 +12797,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51e92a7283afbf342806430b52e50fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceTolerance: 0.4
-  path: []
-  tempPath: []
-  gridSystem: {fileID: 0}
-  pathfinder: {fileID: 0}
-  navMeshAgent: {fileID: 0}
-  battleGridManager: {fileID: 0}
-  currentBlock: {fileID: 0}
-  currentIndex: 0
-  isSelectingMovement: 1
-  isMoving: 0
 --- !u!136 &1263384832
 CapsuleCollider:
   m_ObjectHideFlags: 0

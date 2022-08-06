@@ -130,12 +130,7 @@ namespace RPGProject.Control.Combat
 
         public GridBlock GetGridBlockByFighter(Fighter _fighter)
         {
-            foreach(GridBlock gridBlock  in gridBlocks)
-            {
-                if (gridBlock.contestedFighter == _fighter) return gridBlock;         
-            }
-
-            return null;
+            return occupiedBlocksDict[_fighter];
         }
     }
 }

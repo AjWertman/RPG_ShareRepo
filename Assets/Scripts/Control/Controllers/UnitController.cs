@@ -118,7 +118,7 @@ namespace RPGProject.Control.Combat
                 goalBlock = _path[_path.Count - 1];
             }
 
-            if(_path.Count > 0)
+            if(_path.Count > 1)
             {
                 List<Transform> travelDestinations = GridSystem.GetTravelDestinations(_path);
                 yield return mover.MoveToDestination(travelDestinations);

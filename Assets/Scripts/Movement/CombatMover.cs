@@ -46,6 +46,9 @@ namespace RPGProject.Movement
             while (isMoving)
             {
                 Transform nextTransform = _path[nextBlockIndex];
+
+                if (nextTransform == null) yield break;
+
                 bool isGoalBlock = (goalTransform == nextTransform);
 
                 navMeshAgent.SetDestination(GetOffsetPosition(nextTransform));
