@@ -17,14 +17,6 @@ namespace RPGProject.Combat
                 if (!hasEnoughAP) return "Not enough Action Points";
             }
 
-            //float manaCost = _selectedAbility.GetCombo()[0].GetManaCost();
-            //if (manaCost > 0)
-            //{
-            //    float manaPoints = _caster.GetMana().GetManaPoints();
-            //    bool hasEnoughMana = manaPoints >= manaCost;
-            //    if (!hasEnoughMana) return "Not enough Mana";
-            //}
-
             bool isCopyAbility = _selectedAbility.GetAbilityType() == AbilityType.Copy;
             if (isCopyAbility)
             {
@@ -51,24 +43,6 @@ namespace RPGProject.Combat
                 Transform aimTransform = _target.GetAimTransform();
                 if (!IsInRange(_caster.transform.position, aimTransform.position, attackRange)) return "Target is too far away";
             }
-
-            //if(_selectedAbility.GetAbilityType() == AbilityType.Cast)
-            //{
-            //    PhysicalReflector physReflector = abilityPrefab.GetComponent<PhysicalReflector>();
-            //    bool isPhysReflector = (physReflector != null);
-            //    bool isTargetReflectingPhys = (_target.GetPhysicalReflectionDamage() > 0);
-            //    if (isPhysReflector && isTargetReflectingPhys) return "Target is already reflecting physical damage";
-
-            //    SpellReflector spellReflector = abilityPrefab.GetComponent<SpellReflector>();
-            //    bool isSpellReflector = (spellReflector != null);
-            //    bool isTargetReflectingSpells = (_target.IsReflectingSpells());
-            //    if (isSpellReflector && isTargetReflectingSpells) return "Target is already reflecting spells";
-
-            //    Silence silence = abilityPrefab.GetComponent<Silence>();
-            //    bool isSilence = (silence != null);
-            //    bool isTargetSilenced = (_target.IsSilenced());
-            //    if (isSilence && isTargetSilenced) return "Target is already silenced";
-            //}
 
             return "";
         }

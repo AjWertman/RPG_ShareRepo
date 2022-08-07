@@ -1,10 +1,7 @@
-using RPGProject.Combat.Grid;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
-namespace RPGProject.Control.Combat
+namespace RPGProject.Combat.Grid
 {
     [ExecuteAlways]
     public class GridSystem : MonoBehaviour
@@ -17,26 +14,27 @@ namespace RPGProject.Control.Combat
         [SerializeField] Material highlightMaterial = null;
         [SerializeField] Material unworthyMaterial = null;
 
+        public GridBlock[] gridBlocks = null;
+
         public GridCoordinates playerZeroCoordinates;
         public GridCoordinates enemyZeroCoordinates;
 
         Pathfinder pathfinder = null;
-        Tilemap tilemap = null;
 
         Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
 
         private void Awake()
         {
             pathfinder = GetComponent<Pathfinder>();
-            tilemap = GetComponentInChildren<Tilemap>();
             SetupGrid();
         }
 
         public void SetupGrid()
         {
             gridDictionary.Clear();
+            gridBlocks = GetComponentsInChildren<GridBlock>();
 
-            foreach (GridBlock gridBlock in GetComponentsInChildren<GridBlock>())
+            foreach (GridBlock gridBlock in gridBlocks)
             {
                 Vector3 localPosition = gridBlock.transform.localPosition;
                 int x = Mathf.RoundToInt(localPosition.x);
@@ -90,6 +88,23 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        public GridBlock GetGridBlock(int _x, int _z)
+        {
+            return pathfinder.GetGridBlock(_x, _z);
+        }
+
+        public static List<Transform> GetTravelDestinations(List<GridBlock> _gridBlocks)
+        {
+            List<Transform> travelDestinations = new List<Transform>();
+
+            foreach (GridBlock gridBlock in _gridBlocks)
+            {
+                travelDestinations.Add(gridBlock.travelDestination);
+            }
+
+            return travelDestinations;
+        }
+
         private void SetupGridBlock(GridBlock _gridBlock, GridCoordinates _gridCoordinates)
         {
             _gridBlock.gridCoordinates = _gridCoordinates;
@@ -102,33 +117,10 @@ namespace RPGProject.Control.Combat
             _gridBlock.SetupGridBlock(newMaterial, textColor);
         }
 
-        public static List<Transform> GetTravelDestinations(List<GridBlock> _gridBlocks)
-        {
-            List<Transform> travelDestinations = new List<Transform>();
-
-            foreach(GridBlock gridBlock in _gridBlocks)
-            {
-                travelDestinations.Add(gridBlock.travelDestination);
-            }
-
-            return travelDestinations;
-        }
-
-        public GridBlock GetGridBlock(int _x, int _z)
-        {
-            GridBlock gridBlock = pathfinder.GetGridBlock(_x, _z);
-            return gridBlock;
-        }
-
         private Material GetGridBlockMaterial(GridCoordinates _gridCoordinates)
         {
-            //if (DoCoordinatesMatch(_gridCoordinates, playerZeroCoordinates)) return blueMaterial;
-            //else if (DoCoordinatesMatch(_gridCoordinates, enemyZeroCoordinates)) return redMaterial;
-            //else
-            //{
             if (IsLightBlock(_gridCoordinates)) return lightMaterial;
             else return darkMaterial;
-            //}
         }
 
         private Color GetTextColor(Material _material)

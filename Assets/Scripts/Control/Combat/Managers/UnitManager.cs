@@ -68,13 +68,13 @@ namespace RPGProject.Control.Combat
             UnitController unitController = unitPool.GetAvailableUnit();
             Fighter fighter = unitController.GetFighter();
 
-            CharacterKey characterKey = _unit.GetCharacterKey();
+            CharacterKey characterKey = _unit.characterKey;
 
             SetUnitTransform(unitController, _startingBlock, _isPlayerTeam);
 
             UnitInfo unitInfo = unitController.GetUnitInfo();
-            unitInfo.SetUnitInfo(_unit.GetUnitName(), characterKey, _unit.GetBaseLevel(),
-                _isPlayerTeam, _unit.GetStats(), _unit.GetBasicAttack(), _unit.GetAbilities());
+            unitInfo.SetUnitInfo(_unit.unitName, characterKey, _unit.baseLevel,
+                _isPlayerTeam, _unit.stats, _unit.basicAttack, _unit.abilities);
 
             UnitResources unitResources = unitController.GetUnitResources();
 

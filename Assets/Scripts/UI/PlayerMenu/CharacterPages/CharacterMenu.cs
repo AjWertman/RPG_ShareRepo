@@ -36,8 +36,8 @@ namespace RPGProject.UI
         public void SetupCharacterMenu(PlayableCharacter _character, Unit _unit, int _level ,UnitResources _unitResources)
         {
             characterPage.SetupCharacterPage(_character, _level);
-            abilityPage.SetupAbilityPage(_unit.GetAbilities());
-            statsPage.SetupStatPageUI(_character, _level, _unit.GetStats(), _unitResources);
+            abilityPage.SetupAbilityPage(_unit.abilities);
+            statsPage.SetupStatPageUI(_character, _level, _unit.stats, _unitResources);
             ActivatePage(characterTab, characterPage.gameObject);
         }
 

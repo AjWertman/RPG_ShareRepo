@@ -7,12 +7,6 @@ namespace RPGProject.Combat.Grid
     public class GridBlock : MonoBehaviour, CombatTarget
     {
         [SerializeField] TextMeshProUGUI coordinatesText = null;
-
-        [SerializeField] GameObject pathfindingTextContainer = null;
-        [SerializeField] TextMeshProUGUI fValueText = null;
-        [SerializeField] TextMeshProUGUI gValueText = null;
-        [SerializeField] TextMeshProUGUI hValueText = null;
-
         [SerializeField] bool isMovable = true;
 
         public GridCoordinates gridCoordinates;
@@ -27,16 +21,14 @@ namespace RPGProject.Combat.Grid
 
         public event Action<Fighter, GridBlock> onContestedFighterUpdate;
 
-        public void InitializePiece()
+        public void InitializeBlock()
         {
             meshRenderer = GetComponentInChildren<MeshRenderer>();
-
-            pathfindingTextContainer.SetActive(false);
         }
 
         public void SetupGridBlock(Material _newMaterial, Color _textColor)
         {
-            InitializePiece();
+            InitializeBlock();
             SetColors(_newMaterial, _textColor);
             UpdateCoordinatesText(gridCoordinates.x, gridCoordinates.z);
         }
@@ -55,26 +47,7 @@ namespace RPGProject.Combat.Grid
             coordinatesText.color = _textColor;
         }
 
-        public void UpdateCoordinatesText(int _x, int _z)
-        {
-            if (!coordinatesText.gameObject.activeSelf) return;
-            string coordinates = "(" + _x.ToString() + "," + _z.ToString() + ")";
-            coordinatesText.text = coordinates;
-        }
-
-        public void UpdatePathfindingValueTexts(int _f, int _g, int _h)
-        {
-            if (!pathfindingTextContainer.activeSelf)
-            {
-                pathfindingTextContainer.SetActive(true);
-            }
-
-            fValueText.text = _f.ToString();
-            gValueText.text = _g.ToString();
-            hValueText.text = _h.ToString();
-        }
-
-        public bool IsMovable(Fighter _currentFighter, GridBlock _targetBlock)
+        public bool IsMovable(Fighter _currentFighter)
         {
             if (!isMovable) return false;
             if (contestedFighter != null)
@@ -82,11 +55,7 @@ namespace RPGProject.Combat.Grid
                 bool isCurrentPlayer = _currentFighter.GetUnitInfo().IsPlayer();
                 if (isCurrentPlayer == contestedFighter.GetUnitInfo().IsPlayer()) return false;
 
-                if (isCurrentPlayer)
-                {
-                    if (contestedFighter != _targetBlock.contestedFighter) return false;
-                }
-                else
+                if (!isCurrentPlayer)
                 {
                     if (_currentFighter.selectedTarget != (CombatTarget)contestedFighter) return false;
                 }
@@ -98,6 +67,13 @@ namespace RPGProject.Combat.Grid
         public Transform GetAimTransform()
         {
             return travelDestination;
+        }
+
+        private void UpdateCoordinatesText(int _x, int _z)
+        {
+            if (!coordinatesText.gameObject.activeSelf) return;
+            string coordinates = "(" + _x.ToString() + "," + _z.ToString() + ")";
+            coordinatesText.text = coordinates;
         }
     }
 

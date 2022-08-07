@@ -43,6 +43,7 @@ namespace RPGProject.Control.Combat
             gridSystem = GetComponentInChildren<GridSystem>();
 
             battleUIManager.InitalizeBattleUIManager();
+            battleGridManager.InitializeBattleGridManager();
             unitManager.InitalizeUnitManager();
         }
 

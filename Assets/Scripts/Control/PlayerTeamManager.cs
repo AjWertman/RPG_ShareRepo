@@ -50,8 +50,8 @@ namespace RPGProject.Control
 
                 TeamInfo teamInfo = new TeamInfo();
                 teamInfo.SetPlayerKey(playerKey);
-                teamInfo.SetLevel(unit.GetBaseLevel());
-                teamInfo.SetStats(unit.GetStats());
+                teamInfo.SetLevel(unit.baseLevel);
+                teamInfo.SetStats(unit.stats);
 
                 teamInfo.startingCoordinates = GetStartingPosition(unit);
 

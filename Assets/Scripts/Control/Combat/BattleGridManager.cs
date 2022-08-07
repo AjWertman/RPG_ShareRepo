@@ -7,6 +7,9 @@ namespace RPGProject.Control.Combat
 {
     public class BattleGridManager : MonoBehaviour
     {
+        public Dictionary<GridBlock, Unit> playerStartingPositionsDict = new Dictionary<GridBlock, Unit>();
+        public Dictionary<GridBlock, Unit> enemyStartingPositionsDict = new Dictionary<GridBlock, Unit>();
+
         GridSystem gridSystem = null;
         Pathfinder pathfinder = null;
 
@@ -15,46 +18,29 @@ namespace RPGProject.Control.Combat
         Dictionary<Fighter, GridBlock> occupiedBlocksDict = new Dictionary<Fighter, GridBlock>(); 
         Dictionary<GridBlock, GridBlockStatus> gridBlockStatusDict = new Dictionary<GridBlock, GridBlockStatus>();
 
-        public Dictionary<GridBlock, Unit> playerStartingPositionsDict = new Dictionary<GridBlock, Unit>();
-        public Dictionary<GridBlock, Unit> enemyStartingPositionsDict = new Dictionary<GridBlock, Unit>();
-
-        private void Awake()
+        public void InitializeBattleGridManager()
         {
-            InitializeBattleGridManager();
-        }
+            gridSystem = GetComponentInChildren<GridSystem>();
+            pathfinder = GetComponentInChildren<Pathfinder>();
 
-        private void InitializeBattleGridManager()
-        {
-            gridSystem = FindObjectOfType<GridSystem>();
-            pathfinder = FindObjectOfType<Pathfinder>();
-            gridBlocks = GetComponentsInChildren<GridBlock>();
-
-            foreach(GridBlock gridBlock in gridBlocks)
+            foreach (GridBlock gridBlock in gridSystem.gridBlocks)
             {
                 gridBlock.onContestedFighterUpdate += SetNewFighterBlock;
             }
         }
 
+        public void SetUpBattleGridManager(UnitStartingPosition[] _playerStartingPositions, UnitStartingPosition[] _enemyStartingPositions)
+        {
+            GridCoordinates playerZeroCoordinates = gridSystem.playerZeroCoordinates;
+            GridCoordinates enemyZeroCoordinates = gridSystem.enemyZeroCoordinates;
+
+            playerStartingPositionsDict = SetupStartingPositions(playerZeroCoordinates, _playerStartingPositions);
+            enemyStartingPositionsDict = SetupStartingPositions(enemyZeroCoordinates, _enemyStartingPositions);
+        }
+
         public void SetNewFighterBlock(Fighter _fighter, GridBlock _gridBlock)
         {
             occupiedBlocksDict[_fighter] = _gridBlock;
-        }
-
-        public void OnFighterTurnAdvance(Fighter _contestedFighter)
-        {
-            GridBlockStatus contestedStatus = new GridBlockStatus();
-            foreach (GridBlockStatus gridBlockStatus in gridBlockStatusDict.Values)
-            {
-                if (gridBlockStatus.contestedFighter == _contestedFighter)
-                {
-                    contestedStatus = gridBlockStatus;
-                }
-            }
-
-            if (contestedStatus.currentEffect != null)
-            {
-                PerformAbility(contestedStatus.currentEffect, contestedStatus.contestedFighter);
-            }
         }
 
         public void OnGridBlockEnter(Fighter _newFighter, GridBlock _gridBlockToTest)
@@ -77,9 +63,25 @@ namespace RPGProject.Control.Combat
             //    else
             //    {
             //        bool IsStrongEnoughToReplace();
-
             //    }
             //}
+        }
+
+        public void OnFighterTurnAdvance(Fighter _contestedFighter)
+        {
+            GridBlockStatus contestedStatus = new GridBlockStatus();
+            foreach (GridBlockStatus gridBlockStatus in gridBlockStatusDict.Values)
+            {
+                if (gridBlockStatus.contestedFighter == _contestedFighter)
+                {
+                    contestedStatus = gridBlockStatus;
+                }
+            }
+
+            if (contestedStatus.currentEffect != null)
+            {
+                PerformAbility(contestedStatus.currentEffect, contestedStatus.contestedFighter);
+            }
         }
 
         public void PerformAbility(Ability _currentEffect, Fighter _contestFighter)
@@ -91,13 +93,9 @@ namespace RPGProject.Control.Combat
             ///
         }
 
-        public void SetUpBattleGridManager(UnitStartingPosition[] _playerStartingPositions, UnitStartingPosition[] _enemyStartingPositions)
+        public GridBlock GetGridBlockByFighter(Fighter _fighter)
         {
-            GridCoordinates playerZeroCoordinates = gridSystem.playerZeroCoordinates;
-            GridCoordinates enemyZeroCoordinates = gridSystem.enemyZeroCoordinates;
-
-            playerStartingPositionsDict = SetupStartingPositions(playerZeroCoordinates, _playerStartingPositions);
-            enemyStartingPositionsDict = SetupStartingPositions(enemyZeroCoordinates, _enemyStartingPositions);
+            return occupiedBlocksDict[_fighter];
         }
 
         private Dictionary<GridBlock, Unit> SetupStartingPositions(GridCoordinates _zeroCoordinates, UnitStartingPosition[] _unitStartingPositions)
@@ -126,11 +124,6 @@ namespace RPGProject.Control.Combat
             gridBlock = gridSystem.GetGridBlock(xCoordinate, zCoordinate);
 
             return gridBlock;
-        }
-
-        public GridBlock GetGridBlockByFighter(Fighter _fighter)
-        {
-            return occupiedBlocksDict[_fighter];
         }
     }
 }

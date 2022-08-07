@@ -14,7 +14,7 @@ namespace RPGProject.Combat
         {
             foreach (Unit unit in units)
             {
-                CharacterKey characterKey = unit.GetCharacterKey();
+                CharacterKey characterKey = unit.characterKey;
                 unitsDict.Add(characterKey, unit);
             }
         }

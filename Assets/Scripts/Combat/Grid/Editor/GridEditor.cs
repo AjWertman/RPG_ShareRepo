@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEditor;
-using RPGProject.Control.Combat;
 
-namespace RPGProject.Control
+namespace RPGProject.Combat.Grid
 {
     [CustomEditor(typeof(GridSystem))]
     public class GridEditor : Editor

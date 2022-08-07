@@ -6,19 +6,19 @@ namespace RPGProject.Combat.Grid
 {
     public class Pathfinder : MonoBehaviour
     {
-        Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
-
-        List<GridBlock> openList = new List<GridBlock>();
-        List<GridBlock> closedList = new List<GridBlock>();
+        const int straightCost = 10;
+        const int diagonalCost = 14;
 
         int maxXCoordinate = -1;
         int maxZCoordinate = -1;
 
-        const int straightCost = 10;
-        const int diagonalCost = 14;
-
         GridBlock currentBlock = null;
         GridBlock previousBlock = null;
+
+        Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
+
+        List<GridBlock> openList = new List<GridBlock>();
+        List<GridBlock> closedList = new List<GridBlock>();
 
         public void InitalizePathfinder(Dictionary<GridCoordinates, GridBlock> _gridDictionary)
         {
@@ -52,7 +52,7 @@ namespace RPGProject.Combat.Grid
                     if (neighborBlock == null) continue;
                     if (closedList.Contains(neighborBlock)) continue;
 
-                    if (!neighborBlock.IsMovable(_startBlock.contestedFighter, _endBlock))
+                    if (!neighborBlock.IsMovable(_startBlock.contestedFighter))
                     {
                         closedList.Add(neighborBlock);
                         continue;
@@ -76,6 +76,14 @@ namespace RPGProject.Combat.Grid
             }
 
             return new List<GridBlock>();
+        }
+
+        public GridBlock GetGridBlock(int _x, int _z)
+        {
+            GridCoordinates gridCoordinates = new GridCoordinates(_x, _z);
+
+            if (gridDictionary.ContainsKey(gridCoordinates)) return gridDictionary[gridCoordinates];
+            else return null;
         }
 
         private List<GridBlock> CalculatePath(GridBlock _endBlock)
@@ -122,7 +130,7 @@ namespace RPGProject.Combat.Grid
             }
         }
 
-        public IEnumerable<GridBlock> GetNeighbors(GridBlock _gridBlock)
+        private IEnumerable<GridBlock> GetNeighbors(GridBlock _gridBlock)
         {
             int x = _gridBlock.gridCoordinates.x;
             int z = _gridBlock.gridCoordinates.z;
@@ -150,14 +158,6 @@ namespace RPGProject.Combat.Grid
 
             //Left and Down
             yield return GetGridBlock(x - 1, z - 1);
-        }
-
-        public GridBlock GetGridBlock(int _x, int _z)
-        {
-            GridCoordinates gridCoordinates = new GridCoordinates(_x, _z);
-
-            if (gridDictionary.ContainsKey(gridCoordinates)) return gridDictionary[gridCoordinates];
-            else return null;
         }
 
         private int CalculateDistance(GridBlock _startBlock, GridBlock _endBlock)
@@ -192,6 +192,7 @@ namespace RPGProject.Combat.Grid
         {
             cameFromBlock = null;
             gCost = int.MaxValue;
+            hCost = int.MaxValue;
             CalculateFCost();
         }
     }
