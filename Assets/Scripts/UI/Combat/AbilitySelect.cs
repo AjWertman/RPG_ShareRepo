@@ -60,7 +60,7 @@ namespace RPGProject.UI
             {
                 AbilityButton availableAbilityButton = GetAvailableAbilityButton();
 
-                bool isCopyAbility = (ability.GetAbilityType() == AbilityType.Copy);
+                bool isCopyAbility = (ability.abilityType== AbilityType.Copy);
 
                 string cantUseAbilityReason = CombatAssistant.CanUseAbilityCheck(_caster, ability);
 
@@ -128,7 +128,7 @@ namespace RPGProject.UI
 
         private void ActivateSpellTooltip(Ability _ability)
         {
-            if (_ability.GetAbilityType() == AbilityType.Melee) return;
+            if (_ability.abilityType == AbilityType.Melee) return;
             spellTooltip.SetupTooltip(_ability);
 
             if (unusableAbilities.ContainsKey(_ability))

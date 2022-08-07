@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace RPGProject.Combat
@@ -57,7 +56,7 @@ namespace RPGProject.Combat
                     if(!hasAppliedChangeAmount)
                     {
                         hasAppliedChangeAmount = true;
-                        targetFighter.GetHealth().ChangeHealth(changeAmount, isCritical, false);
+                        targetFighter.health.ChangeHealth(changeAmount, isCritical, false);
                     }
                 }
 
@@ -67,7 +66,7 @@ namespace RPGProject.Combat
             }
             else if(hitSpellReflector != null)
             {
-                if (hitSpellReflector.GetCaster() != targetFighter) return;
+                if (hitSpellReflector.caster != targetFighter) return;
                 ReflectProjectile();
             }
         }

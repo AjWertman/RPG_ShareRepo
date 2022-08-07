@@ -70,7 +70,7 @@ namespace RPGProject.UI
 
         private void ActivateAbilityTooltip(Ability _ability)
         {
-            abilityDescription.text = _ability.GetDescription();
+            abilityDescription.text = _ability.description;
         }
 
         private void DeactivateAbilityTooltip()

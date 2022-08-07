@@ -27,9 +27,9 @@ namespace RPGProject.UI
         {
             if (_ability == null) return;
             myAbility = _ability;
-            text.text = myAbility.GetAbilityName();
-            text.color = myAbility.GetTextColor();
-            image.color = myAbility.GetButtonColor();
+            text.text = myAbility.abilityName;
+            text.color = myAbility.textColor;
+            image.color = myAbility.buttonColor;
         }
 
         public void ResetSpellButton()

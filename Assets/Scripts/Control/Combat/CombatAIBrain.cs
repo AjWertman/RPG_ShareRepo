@@ -38,7 +38,7 @@ public class CombatAIBrain : MonoBehaviour
         Fighter randomTarget = GetRandomTarget();
         if (randomTarget == null) return;
 
-        Health targetHealth = randomTarget.GetHealth();
+        Health targetHealth = randomTarget.health;
 
         //How many AP to spend to get in attack range? 
         //Is target below X percentage of health? Can I kill them on this turn? 
@@ -65,7 +65,7 @@ public class CombatAIBrain : MonoBehaviour
         Fighter agressorTarget = (Fighter)_agressor.selectedTarget;
         if (fighter != agressorTarget) return;
 
-        int percentageChange = GetPercentageOfHealthChange(fighter.GetHealth(), _changeAmount);
+        int percentageChange = GetPercentageOfHealthChange(fighter.health, _changeAmount);
 
         int agroPercentage = percentageChange * agroPercentagePerDamagePercentage;
 
@@ -194,10 +194,9 @@ public class CombatAIBrain : MonoBehaviour
     private int GetPercentageOfHealthChange(Health _health, float _changeAmount)
     {
         bool isDamage = _changeAmount < 0;
-        float percentageBeforeDamage = ((_health.GetHealthPoints() + Mathf.Abs(_changeAmount)) / _health.GetMaxHealthPoints());
 
-        //print(percentageBeforeDamage);
-        float  percentageAfterDamage =_health.GetHealthPercentage();
+        float percentageBeforeDamage = ((_health.healthPoints + Mathf.Abs(_changeAmount)) / _health.maxHealthPoints);
+        float percentageAfterDamage =_health.healthPercentage;
 
         int percentageChangeAmount = (int)((Mathf.Abs(percentageBeforeDamage - percentageAfterDamage)) * 100f);
 

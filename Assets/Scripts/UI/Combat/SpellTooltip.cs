@@ -20,23 +20,23 @@ namespace RPGProject.UI
 
             SetupColors(_ability);
 
-            abilityNameText.text = _ability.GetAbilityName();
-            descriptionText.text = _ability.GetDescription();
+            abilityNameText.text = _ability.abilityName;
+            descriptionText.text = _ability.description;
         }
 
         private void SetupColors(Ability _ability)
         {
-            background.color = _ability.GetButtonColor();
+            background.color = _ability.buttonColor;
             foreach (TextMeshProUGUI text in GetComponentsInChildren<TextMeshProUGUI>())
             {
-                text.color = _ability.GetTextColor();
+                text.color = _ability.textColor;
             }
         }
 
-        public void SetupCantCast(string reason)
+        public void SetupCantCast(string _reason)
         {
             cantCastObject.SetActive(true);
-            cantCastReasonText.text = reason;
+            cantCastReasonText.text = _reason;
         }
     }
 }

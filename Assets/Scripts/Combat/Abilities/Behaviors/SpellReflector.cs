@@ -10,12 +10,12 @@ namespace RPGProject.Combat
             transform.parent = null;
 
             targetStatus.ApplyActiveAbilityBehavior(this);
-            targetStatus.SetIsReflectingSpells(true);
+            targetStatus.isReflectingSpells = true;
         }
 
         public override void OnAbilityDeath()
         {
-            targetStatus.SetIsReflectingSpells(false);
+            targetStatus.isReflectingSpells = false;
             base.OnAbilityDeath();
         }
     }

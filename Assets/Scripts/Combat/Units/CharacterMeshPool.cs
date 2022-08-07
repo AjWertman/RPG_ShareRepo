@@ -29,56 +29,13 @@ namespace RPGProject.Combat
             CreateGenericEnemyMeshes();
         }
 
-        private void CreateUniqueMeshes()
+        public void ResetCharacterMeshPool()
         {
-            CreatePlayerMeshes();
-            CreateUniqueEnemyMesh();
-        }
-
-        private void CreatePlayerMeshes()
-        {
-            foreach (GameObject playerMesh in playerMeshPrefabs)
+            foreach (CharacterMesh mesh in GetAllMeshes())
             {
-                GameObject playerMeshInstance = Instantiate(playerMesh, transform);
-                CharacterMesh characterMesh = playerMeshInstance.GetComponent<CharacterMesh>();
-                CharacterKey characterKey = characterMesh.GetCharacterKey();
-
-                uniqueMeshes.Add(characterKey, characterMesh);
-
-                playerMeshInstance.SetActive(false);
-            }
-        }
-
-        private void CreateUniqueEnemyMesh()
-        {
-            foreach (GameObject uniqueEnemyMesh in uniqueEnemyMeshPrefabs)
-            {
-                GameObject enemyMeshInstance = Instantiate(uniqueEnemyMesh, transform);
-                CharacterMesh characterMesh = enemyMeshInstance.GetComponent<CharacterMesh>();
-                CharacterKey characterKey = characterMesh.GetCharacterKey();
-
-                uniqueMeshes.Add(characterKey, characterMesh);
-
-                enemyMeshInstance.SetActive(false);
-            }
-        }
-
-        private void CreateGenericEnemyMeshes()
-        {
-            foreach (GameObject genericEnemyMesh in genericEnemyMeshPrefabs)
-            {
-                CharacterKey characterKey = genericEnemyMesh.GetComponent<CharacterMesh>().GetCharacterKey();
-                List<CharacterMesh> genericMeshList = new List<CharacterMesh>();
-
-                for (int i = 0; i < amountOfGenericsToCreate; i++)
-                {
-                    GameObject enemyMeshInstance = Instantiate(genericEnemyMesh, transform);
-                    CharacterMesh characterMesh = enemyMeshInstance.GetComponent<CharacterMesh>();
-                    genericMeshList.Add(characterMesh);
-                    enemyMeshInstance.SetActive(false);
-                }
-
-                genericMeshes.Add(characterKey, genericMeshList);
+                mesh.transform.parent = transform;
+                mesh.transform.localPosition = Vector3.zero;
+                mesh.gameObject.SetActive(false);
             }
         }
 
@@ -104,13 +61,56 @@ namespace RPGProject.Combat
             return newMesh;
         }
 
-        public void ResetCharacterMeshPool()
+        private void CreateUniqueMeshes()
         {
-            foreach (CharacterMesh mesh in GetAllMeshes())
+            CreatePlayerMeshes();
+            CreateUniqueEnemyMesh();
+        }
+
+        private void CreatePlayerMeshes()
+        {
+            foreach (GameObject playerMesh in playerMeshPrefabs)
             {
-                mesh.transform.parent = transform;
-                mesh.transform.localPosition = Vector3.zero;
-                mesh.gameObject.SetActive(false);
+                GameObject playerMeshInstance = Instantiate(playerMesh, transform);
+                CharacterMesh characterMesh = playerMeshInstance.GetComponent<CharacterMesh>();
+                CharacterKey characterKey = characterMesh.characterKey;
+
+                uniqueMeshes.Add(characterKey, characterMesh);
+
+                playerMeshInstance.SetActive(false);
+            }
+        }
+
+        private void CreateUniqueEnemyMesh()
+        {
+            foreach (GameObject uniqueEnemyMesh in uniqueEnemyMeshPrefabs)
+            {
+                GameObject enemyMeshInstance = Instantiate(uniqueEnemyMesh, transform);
+                CharacterMesh characterMesh = enemyMeshInstance.GetComponent<CharacterMesh>();
+                CharacterKey characterKey = characterMesh.characterKey;
+
+                uniqueMeshes.Add(characterKey, characterMesh);
+
+                enemyMeshInstance.SetActive(false);
+            }
+        }
+
+        private void CreateGenericEnemyMeshes()
+        {
+            foreach (GameObject genericEnemyMesh in genericEnemyMeshPrefabs)
+            {
+                CharacterKey characterKey = genericEnemyMesh.GetComponent<CharacterMesh>().characterKey;
+                List<CharacterMesh> genericMeshList = new List<CharacterMesh>();
+
+                for (int i = 0; i < amountOfGenericsToCreate; i++)
+                {
+                    GameObject enemyMeshInstance = Instantiate(genericEnemyMesh, transform);
+                    CharacterMesh characterMesh = enemyMeshInstance.GetComponent<CharacterMesh>();
+                    genericMeshList.Add(characterMesh);
+                    enemyMeshInstance.SetActive(false);
+                }
+
+                genericMeshes.Add(characterKey, genericMeshList);
             }
         }
 

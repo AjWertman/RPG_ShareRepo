@@ -32,8 +32,8 @@ namespace RPGProject.UI
         {
             index = _index;
             combatant = _combatant;
-            facePic = combatant.GetCharacterMesh().GetFaceImage();
-            isPlayer = combatant.GetUnitInfo().IsPlayer();
+            facePic = combatant.characterMesh.faceImage;
+            isPlayer = combatant.unitInfo.isPlayer;
 
             SetSize(index);
             SetImage(facePic);

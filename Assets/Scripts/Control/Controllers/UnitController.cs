@@ -24,7 +24,6 @@ namespace RPGProject.Control.Combat
         Fighter fighter = null;
         ComboLinker comboLinker = null;
         Health health = null;
-        Mana mana = null;
 
         CharacterMesh characterMesh = null;
         UnitUI unitUI = null;
@@ -45,7 +44,6 @@ namespace RPGProject.Control.Combat
             fighter = GetComponent<Fighter>();
             comboLinker = GetComponent<ComboLinker>();
             health = GetComponent<Health>();
-            mana = GetComponent<Mana>();
             mover = GetComponent<CombatMover>();
             unitUI = GetComponent<UnitUI>();
 
@@ -60,13 +58,13 @@ namespace RPGProject.Control.Combat
         public void SetupUnitController(UnitInfo _unitInfo, UnitResources _unitResources,
             GridBlock _startingBlock, bool _isPlayer, CharacterMesh _characterMesh)
         {
-            SetName(_unitInfo.GetUnitName());
+            SetName(_unitInfo.unitName);
             SetCharacterMesh(_characterMesh);
 
             comboLinker.SetupComboLinker();
 
-            unitInfo.SetUnitInfo(_unitInfo);
-            startingStats.SetStats(unitInfo.GetStats());
+            unitInfo = _unitInfo;
+            startingStats.SetStats(unitInfo.stats);
 
             UpdateComponentStats(true);
 
@@ -96,7 +94,7 @@ namespace RPGProject.Control.Combat
             currentBlock.SetContestedFighter(fighter);
         }
 
-        private void UpdateActionPoints(float _amountToChange)
+        private void UpdateActionPoints(int _amountToChange)
         {
             unitResources.actionPoints += _amountToChange;
 
@@ -138,12 +136,12 @@ namespace RPGProject.Control.Combat
 
             while (isTurn)
             {
-                if (!_ability.CanTargetAll())
+                if (!_ability.canTargetAll)
                 {
                     fighter.LookAtTarget(_target.GetAimTransform());
                 }
 
-                float moveDuration = comboLinker.GetFullComboTime(_ability.GetCombo());
+                float moveDuration = comboLinker.GetFullComboTime(_ability.combo);
                 float moveDurationWOffset = moveDuration * 1.1f;
 
                 UseAbility(_target, _ability);
@@ -156,9 +154,9 @@ namespace RPGProject.Control.Combat
                 //Vector3 travelDestination = new Vector3(currentBlock.travelDestination.position.x, transform.position.y, currentBlock.travelDestination.position.z);
                 //transform.position = travelDestination;
 
-                if (!health.IsDead())
+                if (!health.isDead)
                 {
-                    if (_ability.GetAbilityType() == AbilityType.Melee)
+                    if (_ability.abilityType == AbilityType.Melee)
                     {
                         //yield return mover.ReturnToStart();
                     }
@@ -172,8 +170,8 @@ namespace RPGProject.Control.Combat
                 //DecrementSpellLifetimes
                 yield return new WaitForSeconds(1.5f);
 
-                fighter.ResetTarget();
-                fighter.ResetAbility();
+                fighter.selectedTarget = null;
+                fighter.selectedAbility = null;
 
                 onMoveCompletion();
                 yield break;
@@ -210,38 +208,34 @@ namespace RPGProject.Control.Combat
             characterMesh.transform.localPosition = Vector3.zero;
             characterMesh.transform.localRotation = Quaternion.identity;
 
-            animator.runtimeAnimatorController = characterMesh.GetAnimatorController();
-            animator.avatar = _characterMesh.GetAvatar();
+            animator.runtimeAnimatorController = characterMesh.animatorController;
+            animator.avatar = _characterMesh.avatar;
 
-            fighter.SetCharacterMesh(characterMesh);
+            fighter.characterMesh = characterMesh;
 
             characterMesh.gameObject.SetActive(true);
         }
 
         public void SetUnitResources(UnitResources _unitResources)
         {
-            unitResources.SetUnitResources(_unitResources);
-            health.SetUnitHealth(unitResources.GetHealthPoints(), unitResources.GetMaxHealthPoints());
-            mana.SetMana(unitResources.GetManaPoints(), unitResources.GetMaxManaPoints());
+            unitResources = _unitResources;
+            health.SetUnitHealth(unitResources.healthPoints, unitResources.maxHealthPoints);
         }
 
         public void UpdateStats(Stats _updatedStats)
         {
-            unitInfo.GetStats().SetStats(_updatedStats);
+            unitInfo.stats.SetStats(_updatedStats);
             UpdateComponentStats(false);
         }
 
         public void CalculateResources()
         {
             health.CalculateMaxHealthPoints(true);
-            mana.CalculateMana(true);
 
-            float healthPoints = health.GetHealthPoints();
-            float maxHealthPoints = health.GetMaxHealthPoints();
-            float manaPoints = mana.GetManaPoints();
-            float maxManaPoints = mana.GetMaxManaPoints();
-            UnitResources newUnitResources = new UnitResources();
-            newUnitResources.SetUnitResources(healthPoints, maxHealthPoints, manaPoints, maxManaPoints);
+            float healthPoints = health.healthPoints;
+            float maxHealthPoints = health.maxHealthPoints;
+
+            UnitResources newUnitResources = new UnitResources(maxHealthPoints);
 
             SetUnitResources(newUnitResources);
         }
@@ -255,7 +249,7 @@ namespace RPGProject.Control.Combat
 
         private void UpdateFighterStats()
         {
-            Stats stats = unitInfo.GetStats();
+            Stats stats = unitInfo.stats;
             fighter.UpdateAttributes
                 (
                 stats.GetStat(StatType.Strength),
@@ -266,7 +260,7 @@ namespace RPGProject.Control.Combat
 
         private void UpdateHealthStats(bool _isInitialUpdate)
         {
-            Stats stats = unitInfo.GetStats();
+            Stats stats = unitInfo.stats;
             health.UpdateAttributes
                 (
                stats.GetStat(StatType.Stamina),
@@ -277,8 +271,7 @@ namespace RPGProject.Control.Combat
 
         private void UpdateManaStats()
         {
-            Stats stats = unitInfo.GetStats();
-            mana.UpdateAttributes(stats.GetStat(StatType.Spirit));
+            Stats stats = unitInfo.stats;
         }
 
         public void SetIsTurn(bool _isTurn)
@@ -304,12 +297,11 @@ namespace RPGProject.Control.Combat
         {
             fighter.ResetFighter();
             health.ResetHealth();
-            mana.ResetMana();
         }
 
         public int GetStat(StatType _statType)
         {
-            return unitInfo.GetStats().GetStat(_statType);
+            return unitInfo.stats.GetStat(_statType);
         }
 
         public UnitInfo GetUnitInfo()
@@ -335,11 +327,6 @@ namespace RPGProject.Control.Combat
         public Health GetHealth()
         {
             return health;
-        }
-
-        public Mana GetMana()
-        {
-            return mana;
         }
 
         public Animator GetAnimator()

@@ -50,7 +50,7 @@ namespace RPGProject.Control.Combat
 
         public void UpdateTurnOrder(UnitController _unit)
         {
-            bool newUnitDeathStatus = _unit.GetHealth().IsDead();
+            bool newUnitDeathStatus = _unit.GetHealth().isDead;
 
             if (newUnitDeathStatus)
             {
@@ -172,7 +172,7 @@ namespace RPGProject.Control.Combat
 
         public UnitTurnState GetUnitTurnState()
         {
-            bool isPlayer = GetUnitTurn().GetUnitInfo().IsPlayer();
+            bool isPlayer = GetUnitTurn().GetUnitInfo().isPlayer;
 
             if (isPlayer) return UnitTurnState.Player;
             else return UnitTurnState.Enemy;
@@ -180,7 +180,7 @@ namespace RPGProject.Control.Combat
 
         public UnitTurnState GetNextUnitTurnState()
         {
-            bool isPlayer = GetNextUnitTurn().GetUnitInfo().IsPlayer();
+            bool isPlayer = GetNextUnitTurn().GetUnitInfo().isPlayer;
 
             if (isPlayer) return UnitTurnState.Player;
             else return UnitTurnState.Enemy;

@@ -5,12 +5,12 @@ namespace RPGProject.Combat
         public override void PerformAbilityBehavior()
         {
             targetStatus.ApplyActiveAbilityBehavior(this);
-            targetStatus.SetPhysicalReflectionDamage(changeAmount);
+            targetStatus.physicalReflectionDamage = changeAmount;
         }
 
         public override void OnAbilityDeath()
         {
-            targetStatus.SetPhysicalReflectionDamage(0);
+            targetStatus.physicalReflectionDamage = 0;
             base.OnAbilityDeath();
         }
     }

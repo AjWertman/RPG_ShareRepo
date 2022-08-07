@@ -19,16 +19,15 @@ namespace RPGProject.UI
         {
             if (_fighter != null)
             {
-                UnitInfo unitInfo = _fighter.GetUnitInfo();
-                SetBackgroundColor(unitInfo.IsPlayer());
+                UnitInfo unitInfo = _fighter.unitInfo;
+                SetBackgroundColor(unitInfo.isPlayer);
 
-                nameText.text = unitInfo.GetUnitName();
-                faceImage.sprite = _fighter.GetCharacterMesh().GetFaceImage();
+                nameText.text = unitInfo.unitName;
+                faceImage.sprite = _fighter.characterMesh.faceImage;
 
-                Health unitHealth = _fighter.GetHealth();
-                Mana unitMana = _fighter.GetMana();
-                healthText.text = ("Health: " + unitHealth.GetHealthPoints() + "/" + unitHealth.GetMaxHealthPoints());
-                manaText.text = ("Mana: " + unitMana.GetManaPoints() + "/" + unitMana.GetMaxManaPoints());
+                Health unitHealth = _fighter.health;
+
+                healthText.text = ("Health: " + unitHealth.healthPoints.ToString()+ "/" + unitHealth.maxHealthPoints.ToString());
             }
             else
             {

@@ -49,19 +49,17 @@ namespace RPGProject.Control
                 Unit unit = unitDatabase.GetUnit(characterKey);
 
                 TeamInfo teamInfo = new TeamInfo();
-                teamInfo.SetPlayerKey(playerKey);
-                teamInfo.SetLevel(unit.baseLevel);
-                teamInfo.SetStats(unit.stats);
+                teamInfo.playerKey = playerKey;
+                teamInfo.level = unit.baseLevel;
+                teamInfo.stats = unit.stats;
 
                 teamInfo.startingCoordinates = GetStartingPosition(unit);
 
-                float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.GetStats().GetStat(StatType.Stamina));
-                float maxManaPoints = CalculateMaxMana(teamInfo.GetStats().GetStat(StatType.Spirit));
+                float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.stats.GetStat(StatType.Stamina));
+                float maxManaPoints = CalculateMaxMana(teamInfo.stats.GetStat(StatType.Spirit));
 
-                UnitResources unitResources = new UnitResources();
-                unitResources.SetUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxManaPoints);
-
-                teamInfo.SetUnitResources(unitResources);
+                UnitResources unitResources = new UnitResources(maxHealthPoints);
+                teamInfo.unitResources = unitResources;
 
                 teamInfos.Add(teamInfo);
                 playerTeam.Add(playableCharacter);
@@ -72,10 +70,10 @@ namespace RPGProject.Control
         {
             foreach (TeamInfo teamInfo in teamInfos)
             {
-                if (teamInfo.GetPlayerKey() == _playerKey)
+                if (teamInfo.playerKey == _playerKey)
                 {
-                    UnitResources unitResources = teamInfo.GetUnitResources();
-                    teamInfo.SetUnitResources(_unitResources);
+                    UnitResources unitResources = teamInfo.unitResources;
+                    teamInfo.unitResources = _unitResources;
                 }
             }
         }
@@ -86,7 +84,7 @@ namespace RPGProject.Control
             bool hasKey = false;
             foreach(TeamInfo teamInfo in teamInfos)
             {
-                PlayerKey playerKey = teamInfo.GetPlayerKey();
+                PlayerKey playerKey = teamInfo.playerKey;
                 if (playerKey == _playerKey) hasKey = true;
             }
 
@@ -104,7 +102,7 @@ namespace RPGProject.Control
             bool hasKey = false;
             foreach (TeamInfo teamInfo in teamInfos)
             {
-                PlayerKey playerKey = teamInfo.GetPlayerKey();
+                PlayerKey playerKey = teamInfo.playerKey;
                 if (playerKey == _playerKey) hasKey = true;
             }
 
@@ -119,11 +117,7 @@ namespace RPGProject.Control
         {
             foreach (TeamInfo teamInfo in teamInfos)
             {
-                UnitResources unitResources = teamInfo.GetUnitResources();
-                float maxHealthPoints = unitResources.GetMaxHealthPoints();
-                float maxManaPoints = unitResources.GetMaxManaPoints();
-
-                unitResources.SetUnitResources(maxHealthPoints, maxHealthPoints, maxManaPoints, maxHealthPoints);
+                teamInfo.unitResources.RestoreHealth();             
             }
         }
 
@@ -139,13 +133,13 @@ namespace RPGProject.Control
 
         private void HandleLevelingUp(TeamInfo _teamInfo)
         {
-            int currentLevel = _teamInfo.GetLevel();
-            int updatedLevel = progressionHandler.GetLevel(_teamInfo.GetXP());
+            int currentLevel = _teamInfo.level;
+            int updatedLevel = progressionHandler.GetLevel(_teamInfo.experiencePoints);
             int levelsGained = updatedLevel - currentLevel;
 
             for (int i = 0; i < levelsGained; i++)
             {
-                _teamInfo.LevelUp();
+                _teamInfo.level++;
             }
         }
 
@@ -170,7 +164,7 @@ namespace RPGProject.Control
 
             foreach (TeamInfo teamInfo in teamInfos)
             {
-                if (teamInfo.GetPlayerKey() == _playerKey)
+                if (teamInfo.playerKey == _playerKey)
                 {
                     newInfo = teamInfo;
                 }
@@ -248,80 +242,20 @@ namespace RPGProject.Control
     [Serializable]
     public class TeamInfo
     {
-        [SerializeField] PlayerKey playerKey = PlayerKey.None;
+        public PlayerKey playerKey = PlayerKey.None;
 
-        [SerializeField] UnitInfo unitInfo = new UnitInfo();
-        [SerializeField] UnitResources unitResources = new UnitResources();
-        [SerializeField] Stats stats = new Stats();
+        public UnitInfo unitInfo = new UnitInfo();
+        public UnitResources unitResources = new UnitResources();
+        public Stats stats = new Stats();
 
         public GridCoordinates startingCoordinates;
 
-        [SerializeField] int level = 1;
-        [SerializeField] float experiencePoints = 0f;
-
-        public void SetPlayerKey(PlayerKey _playerKey)
-        {
-            playerKey = _playerKey;
-        }
-
-        public void SetUnitInfo(UnitInfo _unitInfo)
-        {
-            unitInfo.SetUnitInfo(unitInfo);
-        }
-
-        public void SetUnitResources(UnitResources _unitResources)
-        {
-            unitResources.SetUnitResources(_unitResources);
-        }
-
-        public void SetStats(Stats _stats)
-        {
-            stats.SetStats(_stats);
-        }
-
-        public void SetLevel(int _level)
-        {
-            level = _level;
-        }
-
-        public void LevelUp()
-        {
-            level++;
-        }
-
-        public PlayerKey GetPlayerKey()
-        {
-            return playerKey;
-        }
+        public int level = 1;
+        public float experiencePoints = 0f;
 
         public string GetName()
         {
             return playerKey.ToString();
-        }
-
-        public UnitInfo GetUnitInfo()
-        {
-            return unitInfo;
-        }
-
-        public UnitResources GetUnitResources()
-        {
-            return unitResources;
-        }
-
-        public Stats GetStats()
-        {
-            return stats;
-        }
-
-        public int GetLevel()
-        {
-            return level;
-        }
-
-        public float GetXP()
-        {
-            return experiencePoints;
         }
 
         public void GainXP(float _xpToGain)

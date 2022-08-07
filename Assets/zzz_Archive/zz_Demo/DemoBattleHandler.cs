@@ -1,17 +1,18 @@
 using System;
 using RPGProject.Control;
+using RPGProject.Control.Combat;
 using RPGProject.Core;
 using UnityEngine;
 
 public class DemoBattleHandler : MonoBehaviour
 {
-    OldBattleHandler battleHandler = null;
+    BattleHandler battleHandler = null;
 
     SceneManagerScript sceneManagerScript = null;
 
     private void Awake()
     {
-        battleHandler = GetComponent<OldBattleHandler>();
+        battleHandler = GetComponent<BattleHandler>();
         battleHandler.onBattleEnd += FinishGame;
     }
 

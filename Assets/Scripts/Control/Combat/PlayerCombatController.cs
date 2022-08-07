@@ -13,6 +13,7 @@ namespace RPGProject.Control.Combat
         GridSystem gridSystem = null;
         Pathfinder pathfinder = null;
 
+        CombatCamera combatCamera = null;
         Raycaster raycaster = null;
 
         List<GridBlock> tempPath = new List<GridBlock>();
@@ -31,6 +32,8 @@ namespace RPGProject.Control.Combat
             gridSystem = GetComponentInChildren<GridSystem>();
             pathfinder = GetComponentInChildren<Pathfinder>();
 
+            combatCamera = FindObjectOfType<CombatCamera>();
+
             battleHandler.onUnitTurnUpdate += UpdateCurrentUnitTurn;
         }
 
@@ -48,8 +51,32 @@ namespace RPGProject.Control.Combat
             }
             //
 
+            HandleCameraControl();
+
             if (!raycaster.isRaycasting) return;
 
+            HandleRaycasting();
+        }
+
+        private void HandleCameraControl()
+        {
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                combatCamera.RotateFreeLook(true);
+            }
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                combatCamera.RotateFreeLook(false);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                combatCamera.RecenterCamera();
+            }
+        }
+
+        private void HandleRaycasting()
+        {
             RaycastHit hit = raycaster.GetRaycastHit();
             if (hit.collider == null) return;
 
@@ -117,7 +144,7 @@ namespace RPGProject.Control.Combat
         private void UpdateCurrentUnitTurn(UnitController _unitController)
         {
             currentUnitTurn = _unitController;
-            if (currentUnitTurn.GetUnitInfo().IsPlayer()) raycaster.isRaycasting = true;
+            if (currentUnitTurn.GetUnitInfo().isPlayer) raycaster.isRaycasting = true;
             else raycaster.isRaycasting = false;
         }
 

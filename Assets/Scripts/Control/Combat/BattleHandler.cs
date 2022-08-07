@@ -84,13 +84,13 @@ namespace RPGProject.Control.Combat
         }
         public void SetupTurnManager()
         {
-            turnManager.SetUpTurns(unitManager.GetAllUnits(), unitManager.GetPlayerUnits(), unitManager.GetEnemyUnits());
+            turnManager.SetUpTurns(unitManager.unitControllers, unitManager.playerUnits, unitManager.enemyUnits);
             turnManager.onTurnChange += SetCurrentUnitTurn;
         }
         public void SetupUIManager()
         {
-            List<Fighter> _playerCombatants = GetUnitFighters(unitManager.GetPlayerUnits());
-            List<Fighter> _enemyCombatants = GetUnitFighters(unitManager.GetEnemyUnits());
+            List<Fighter> _playerCombatants = GetUnitFighters(unitManager.playerUnits);
+            List<Fighter> _enemyCombatants = GetUnitFighters(unitManager.enemyUnits);
             List<Fighter> _combatantTurnOrder = GetUnitFighters(turnManager.GetTurnOrder());
             battleUIManager.SetupUIManager(_playerCombatants, _enemyCombatants, _combatantTurnOrder);
             battleUIManager.SetUILookAts(camTransform);
@@ -123,7 +123,7 @@ namespace RPGProject.Control.Combat
 
         public void UseAbility(CombatTarget _target, Ability _selectedAbility)
         {
-            if (_selectedAbility.CanTargetAll())
+            if (_selectedAbility.canTargetAll)
             {
                 TargetAll(_selectedAbility);
                 return;
@@ -135,7 +135,7 @@ namespace RPGProject.Control.Combat
 
         private void CheckAP()
         {
-            bool isPlayer = currentUnitTurn.GetUnitInfo().IsPlayer();
+            bool isPlayer = currentUnitTurn.GetUnitInfo().isPlayer;
             float currentAP = currentUnitTurn.GetUnitResources().actionPoints;
 
             if(!isPlayer) AdvanceTurn();
@@ -232,10 +232,10 @@ namespace RPGProject.Control.Combat
 
         private void TargetAll(Ability _selectedAbility)
         {
-            List<UnitController> targetTeam = unitManager.GetEnemyUnits();
-            if(_selectedAbility.GetTargetingType() == TargetingType.PlayersOnly)
+            List<UnitController> targetTeam = unitManager.enemyUnits;
+            if(_selectedAbility.targetingType == TargetingType.PlayersOnly)
             {
-                targetTeam = unitManager.GetPlayerUnits();
+                targetTeam = unitManager.playerUnits;
             }
 
             currentAttack = currentUnitTurn.UseAbilityOnAllBehavior(targetTeam, _selectedAbility);
@@ -245,7 +245,7 @@ namespace RPGProject.Control.Combat
         public IEnumerator AIUseAbility()
         {
             Fighter currentUnitFighter = currentUnitTurn.GetFighter();
-            bool isPlayerAI = currentUnitTurn.GetUnitInfo().IsPlayer();
+            bool isPlayerAI = currentUnitTurn.GetUnitInfo().isPlayer;
 
             Ability randomAbility = currentUnitFighter.GetRandomAbility();
             Fighter randomTarget = currentUnitTurn.combatAIBrain.GetRandomTarget();
@@ -286,7 +286,7 @@ namespace RPGProject.Control.Combat
             {
                 yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
 
-                UpdateTeamResources(unitManager.GetPlayerUnits());
+                UpdateTeamResources(unitManager.playerUnits);
 
                 yield return new WaitForSeconds(1f);
 
@@ -344,12 +344,12 @@ namespace RPGProject.Control.Combat
             {
                 UnitResources unitResources = UpdateUnitResources(unit);
 
-                if (unit.GetHealth().IsDead())
+                if (unit.GetHealth().isDead)
                 {
-                    unitResources.SetHealthPoints(1f);
+                    unitResources.healthPoints = 1f;
                 }
 
-                CharacterKey characterKey = unit.GetUnitInfo().GetCharacterKey();
+                CharacterKey characterKey = unit.GetUnitInfo().characterKey;
                 PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
                 playerTeamManager.UpdateTeamInfo(playerKey, unitResources);
             }
@@ -360,15 +360,8 @@ namespace RPGProject.Control.Combat
             UnitResources unitResources = _unit.GetUnitResources();
 
             Health unitHealth = _unit.GetHealth();
-            Mana unitMana = _unit.GetMana();
-            unitResources.SetUnitResources
-                (
-                unitHealth.GetHealthPoints(),
-                unitHealth.GetMaxHealthPoints(),
-                unitMana.GetManaPoints(),
-                unitMana.GetMaxManaPoints()
-                );
-
+            unitResources.maxHealthPoints = unitHealth.maxHealthPoints;
+            unitResources.healthPoints = unitHealth.healthPoints;
             return unitResources;
         }
 
@@ -379,7 +372,7 @@ namespace RPGProject.Control.Combat
 
         private IEnumerator EscapeBehavior()
         {
-            foreach (UnitController player in unitManager.GetPlayerUnits())
+            foreach (UnitController player in unitManager.playerUnits)
             {
                 //StartCoroutine(player.GetMover().Retreat());
             }
@@ -392,7 +385,7 @@ namespace RPGProject.Control.Combat
 
         private void ApplyActiveAbilitys(Fighter _fighter)
         {
-            foreach (AbilityBehavior abilityBehavior in _fighter.GetUnitStatus().GetActiveAbilityBehaviors())
+            foreach (AbilityBehavior abilityBehavior in _fighter.unitStatus.GetActiveAbilityBehaviors())
             {
                 abilityBehavior.OnTurnAdvance();
             }
@@ -402,8 +395,8 @@ namespace RPGProject.Control.Combat
 
         private void OnUnitDeath(UnitController _unitThatCausedUpdate)
         {
-            List<Fighter> playerCombatants = GetUnitFighters(unitManager.GetPlayerUnits());
-            List<Fighter> enemyCombatants = GetUnitFighters(unitManager.GetEnemyUnits());
+            List<Fighter> playerCombatants = GetUnitFighters(unitManager.playerUnits);
+            List<Fighter> enemyCombatants = GetUnitFighters(unitManager.enemyUnits);
 
             battleUIManager.UpdateUnitLists(playerCombatants, enemyCombatants);
             turnManager.UpdateTurnOrder(_unitThatCausedUpdate);

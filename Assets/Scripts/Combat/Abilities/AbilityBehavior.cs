@@ -10,7 +10,9 @@ namespace RPGProject.Combat
         [SerializeField] protected AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
         [SerializeField] protected SpawnLocation spawnLocation = SpawnLocation.None;
         [SerializeField] protected HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
-        protected Fighter caster = null;
+
+        public Fighter caster = null;
+
         protected CombatTarget target = null;
         protected UnitStatus targetStatus = null;
         protected float changeAmount = 0f;
@@ -30,7 +32,7 @@ namespace RPGProject.Combat
 
             Fighter targetFighter = _target.GetComponent<Fighter>();
 
-            if(targetFighter != null) targetStatus = targetFighter.GetUnitStatus();
+            if(targetFighter != null) targetStatus = targetFighter.unitStatus;
 
             changeAmount = _changeAmount;
             isCritical = _isCritical;
@@ -43,17 +45,17 @@ namespace RPGProject.Combat
         {
             if (_spawnLocation == SpawnLocation.None) return;
 
-            CharacterMesh casterMesh = caster.GetCharacterMesh();
+            CharacterMesh casterMesh = caster.characterMesh;
             Transform aimTransform = target.GetAimTransform();
 
             switch (_spawnLocation)
             {
                 case SpawnLocation.LHand:
-                    transform.position = casterMesh.GetLHandTransform().position;
+                    transform.position = casterMesh.lHandTransform.position;
                     break;
 
                 case SpawnLocation.RHand:
-                    transform.position = casterMesh.GetRHandTransform().position;
+                    transform.position = casterMesh.rHandTransform.position;
                     break;
 
                 case SpawnLocation.Caster:
@@ -89,10 +91,20 @@ namespace RPGProject.Combat
             DecrementLifetime();
         }
 
+        public string GetAbilityName()
+        {
+            return abilityObjectKey.ToString();
+        }
+
         protected void SpawnHitFX(Vector3 _position)
         {
             if (hitFXObjectKey == HitFXObjectKey.None) return;
             hitFXSpawnRequest(hitFXObjectKey, _position);
+        }
+
+        protected Fighter GetTargetFighter()
+        {
+            return target.GetComponent<Fighter>();
         }
 
         private void DecrementLifetime()
@@ -112,21 +124,6 @@ namespace RPGProject.Combat
             changeAmount = 0;
             isCritical = false;
             abilityLifetime = 0;
-        }
-
-        public string GetAbilityName()
-        {
-            return abilityObjectKey.ToString();
-        }
-
-        public Fighter GetCaster()
-        {
-            return caster;
-        }
-
-        protected Fighter GetTargetFighter()
-        {
-            return target.GetComponent<Fighter>();
         }
     }
 }

@@ -49,8 +49,8 @@ namespace RPGProject.UI
 
             UnitResources unitResources = _unitResources;
 
-            float health = unitResources.GetHealthPoints();
-            float maxHealth = unitResources.GetMaxHealthPoints();
+            float health = unitResources.healthPoints;
+            float maxHealth = unitResources.maxHealthPoints;
 
             float sliderAmount = health / maxHealth;
             statPageUI.GetSlider().value = sliderAmount;
@@ -63,8 +63,10 @@ namespace RPGProject.UI
 
             UnitResources unitResources = _unitResources;
 
-            float mana = unitResources.GetManaPoints();
-            float maxMana = unitResources.GetMaxManaPoints();
+            //float mana = unitResources.GetManaPoints();
+            //float maxMana = unitResources.GetMaxManaPoints();
+            float mana = 0f;
+            float maxMana = 0f;
 
             float sliderAmount = mana / maxMana;
             statPageUI.GetSlider().value = sliderAmount;

@@ -9,14 +9,14 @@ namespace RPGProject.GameResources
         [SerializeField] AudioClip hurtClip = null;
         [SerializeField] AudioClip deathClip = null;
 
-        [SerializeField] float healthPoints = 0f;
-        [SerializeField] float maxHealthPoints = 100f;
+        public float healthPoints = 0f;
+        public float maxHealthPoints = 100f;
+
+        public float healthPercentage = 1f;
+        public bool isDead = false;
 
         Animator animator = null;
         SoundFXManager soundFXManager = null;
-
-        float healthPercentage = 1f;
-        bool isDead = false;
 
         float baseMaxHealthPoints = 0f;
         float stamina = 10f;
@@ -99,36 +99,6 @@ namespace RPGProject.GameResources
             else animator.Play("TakeDamage");       
         }
 
-        private float CalculateChange(float _changeAmount, bool _isChangeMagical)
-        {
-            if (_changeAmount > 0) return _changeAmount;
-
-            float newDamageAmount = 0f;
-            float statsModifier = 0f;
-
-            if (!_isChangeMagical)
-            {
-                statsModifier = armor - 10f;
-            }
-            else
-            { 
-                statsModifier = resistance - 10f;
-            }
-
-            if (statsModifier == 0)
-            {
-                newDamageAmount = _changeAmount;
-            }
-            else
-            {
-                float defensivePercentage = 1f - (statsModifier * .01f);
-
-                newDamageAmount = _changeAmount * defensivePercentage;
-            }
-
-            return newDamageAmount;
-        }
-
         public void Die()
         {
             if (!isDead)
@@ -145,35 +115,45 @@ namespace RPGProject.GameResources
             onAnimDeath(this);
         }
 
+        public void SetCurrentHealthPercentage()
+        {
+            healthPercentage = healthPoints / maxHealthPoints;
+        }
+
         public bool DeathCheck()
         {
             if (healthPoints <= 0) return true;
             else return false;
         }
 
-        public bool IsDead()
+        private float CalculateChange(float _changeAmount, bool _isChangeMagical)
         {
-            return isDead;
-        }
+            if (_changeAmount > 0) return _changeAmount;
 
-        public float GetHealthPoints()
-        {
-            return healthPoints;
-        }
+            float newDamageAmount = 0f;
+            float statsModifier = 0f;
 
-        public float GetMaxHealthPoints()
-        {
-            return maxHealthPoints;
-        }
+            if (!_isChangeMagical)
+            {
+                statsModifier = armor - 10f;
+            }
+            else
+            {
+                statsModifier = resistance - 10f;
+            }
 
-        public void SetCurrentHealthPercentage()
-        {
-            healthPercentage = healthPoints / maxHealthPoints;
-        }
+            if (statsModifier == 0)
+            {
+                newDamageAmount = _changeAmount;
+            }
+            else
+            {
+                float defensivePercentage = 1f - (statsModifier * .01f);
 
-        public float GetHealthPercentage()
-        {
-            return healthPercentage;
+                newDamageAmount = _changeAmount * defensivePercentage;
+            }
+
+            return newDamageAmount;
         }
     }
 }

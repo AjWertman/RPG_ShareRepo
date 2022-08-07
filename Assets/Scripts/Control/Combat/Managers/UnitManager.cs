@@ -11,21 +11,21 @@ namespace RPGProject.Control.Combat
 {
     public class UnitManager : MonoBehaviour
     {
-        List<UnitController> unitControllers = new List<UnitController>();
-        List<UnitController> playerUnits = new List<UnitController>();
-        List<UnitController> enemyUnits = new List<UnitController>();
+        public List<UnitController> unitControllers = new List<UnitController>();
+        public List<UnitController> playerUnits = new List<UnitController>();
+        public List<UnitController> enemyUnits = new List<UnitController>();
 
         PlayerTeamManager playerTeamManager = null;
 
         UnitPool unitPool = null;
         CharacterMeshPool characterMeshPool = null;
 
+        int startingPlayerTeamSize = 0;
+        int startingEnemyTeamSize = 0;
+
         public event Action onMoveCompletion;
         public event Action<bool?> onTeamWipe;
         public event Action<UnitController> onUnitDeath;
-
-        int startingPlayerTeamSize = 0;
-        int startingEnemyTeamSize = 0;
 
         public void InitalizeUnitManager()
         {
@@ -45,7 +45,7 @@ namespace RPGProject.Control.Combat
 
             foreach(UnitController unit in unitControllers)
             {
-                bool isPlayerUnit = unit.GetUnitInfo().IsPlayer();
+                bool isPlayerUnit = unit.GetUnitInfo().isPlayer;
                 List<Fighter> opposingFighters = GetOpposingFighters(isPlayerUnit);
 
                 unit.combatAIBrain.InitalizeAgros(opposingFighters);
@@ -63,6 +63,13 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        public void ResetUnitManager()
+        {
+            characterMeshPool.ResetCharacterMeshPool();
+            unitPool.ResetUnitPool();
+            ResetLists();
+        }
+
         private UnitController SetupNewUnit(Unit _unit, GridBlock _startingBlock, bool _isPlayerTeam)
         {
             UnitController unitController = unitPool.GetAvailableUnit();
@@ -73,10 +80,11 @@ namespace RPGProject.Control.Combat
             SetUnitTransform(unitController, _startingBlock, _isPlayerTeam);
 
             UnitInfo unitInfo = unitController.GetUnitInfo();
-            unitInfo.SetUnitInfo(_unit.unitName, characterKey, _unit.baseLevel,
+            unitInfo = new UnitInfo(_unit.unitName, characterKey, _unit.baseLevel,
                 _isPlayerTeam, _unit.stats, _unit.basicAttack, _unit.abilities);
 
             UnitResources unitResources = unitController.GetUnitResources();
+            unitResources = new UnitResources(unitController.GetHealth().maxHealthPoints);
 
             CharacterMesh newMesh = characterMeshPool.GetMesh(characterKey);
 
@@ -84,8 +92,9 @@ namespace RPGProject.Control.Combat
             {
                 PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
                 TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
-                unitResources.SetUnitResources(teamInfo.GetUnitResources());
-                unitInfo.SetUnitLevel(teamInfo.GetLevel());
+                unitResources = teamInfo.unitResources;
+                print(unitResources.healthPoints);
+                unitInfo.unitLevel = teamInfo.level;
             }
             else
             {
@@ -96,14 +105,86 @@ namespace RPGProject.Control.Combat
 
             unitController.SetupUnitController(unitInfo, unitResources, _startingBlock, _isPlayerTeam, newMesh);
 
-            fighter.SetUnitInfo(unitInfo);
-            fighter.SetUnitResources(unitResources);
+            fighter.unitInfo = unitInfo;
+            fighter.unitResources = unitResources;
 
             unitController.combatAIBrain.InitalizeCombatAIBrain(fighter);
 
             unitController.gameObject.SetActive(true);
 
             return unitController;
+        }
+
+        public List<UnitController> GetDeadPlayerUnits()
+        {
+            List<UnitController> deadPlayerUnits = new List<UnitController>();
+
+            foreach (UnitController playerUnit in playerUnits)
+            {
+                if (playerUnit.GetHealth().isDead)
+                {
+                    deadPlayerUnits.Add(playerUnit);
+                }
+            }
+
+            return deadPlayerUnits;
+        }
+
+        public List<UnitController> GetDeadEnemyUnits()
+        {
+            List<UnitController> deadEnemyUnits = new List<UnitController>();
+
+            foreach (UnitController enemyUnit in enemyUnits)
+            {
+                if (enemyUnit.GetHealth().isDead)
+                {
+                    deadEnemyUnits.Add(enemyUnit);
+                }
+            }
+
+            return deadEnemyUnits;
+        }
+
+        public UnitController GetRandomPlayerUnit()
+        {
+            int randomInt = RandomGenerator.GetRandomNumber(0, playerUnits.Count - 1);
+
+            return playerUnits[randomInt];
+        }
+
+        public UnitController GetRandomEnemyUnit()
+        {
+            int randomInt = RandomGenerator.GetRandomNumber(0, enemyUnits.Count - 1);
+
+            return enemyUnits[randomInt];
+        }
+
+        public UnitController GetRandomAlivePlayerUnit()
+        {
+            List<UnitController> livingPlayerUnits = new List<UnitController>();
+            foreach (UnitController playerUnit in playerUnits)
+            {
+                if (playerUnit.GetHealth().isDead) continue;
+
+                livingPlayerUnits.Add(playerUnit);
+            }
+
+            int randomInt = RandomGenerator.GetRandomNumber(0, livingPlayerUnits.Count - 1);
+            return playerUnits[randomInt];
+        }
+
+        public UnitController GetRandomAliveEnemyUnit()
+        {
+            List<UnitController> livingEnemyUnits = new List<UnitController>();
+            foreach (UnitController enemyUnit in enemyUnits)
+            {
+                if (enemyUnit.GetHealth().isDead) continue;
+
+                livingEnemyUnits.Add(enemyUnit);
+            }
+
+            int randomInt = RandomGenerator.GetRandomNumber(0, livingEnemyUnits.Count - 1);
+            return playerUnits[randomInt];
         }
 
         private List<Fighter> GetOpposingFighters(bool _isPlayerTeam)
@@ -166,13 +247,6 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        public void ResetUnitManager()
-        {
-            characterMeshPool.ResetCharacterMeshPool();
-            unitPool.ResetUnitPool();
-            ResetLists();
-        }
-
         private void ResetLists()
         {
             unitControllers.Clear();
@@ -190,6 +264,7 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        //Refactor
         private void TestQuestCompletion(Health _health)
         {
             QuestCompletion myQuestCompletion = _health.GetComponentInChildren<QuestCompletion>();
@@ -198,93 +273,6 @@ namespace RPGProject.Control.Combat
             {
                 myQuestCompletion.CompleteObjective();
             }
-        }
-
-        public List<UnitController> GetAllUnits()
-        {
-            return unitControllers;
-        }
-
-        public List<UnitController> GetPlayerUnits()
-        {
-            return playerUnits;
-        }
-
-        public List<UnitController> GetDeadPlayerUnits()
-        {
-            List<UnitController> deadPlayerUnits = new List<UnitController>();
-
-            foreach (UnitController playerUnit in playerUnits)
-            {
-                if (playerUnit.GetHealth().IsDead())
-                {
-                    deadPlayerUnits.Add(playerUnit);
-                }
-            }
-
-            return deadPlayerUnits;
-        }
-
-        public List<UnitController> GetEnemyUnits()
-        {
-            return enemyUnits;
-        }
-
-        public List<UnitController> GetDeadEnemyUnits()
-        {
-            List<UnitController> deadEnemyUnits = new List<UnitController>();
-
-            foreach (UnitController enemyUnit in enemyUnits)
-            {
-                if (enemyUnit.GetHealth().IsDead())
-                {
-                    deadEnemyUnits.Add(enemyUnit);
-                }
-            }
-
-            return deadEnemyUnits;
-        }
-
-        public UnitController GetRandomPlayerUnit()
-        {
-            int randomInt = RandomGenerator.GetRandomNumber(0, playerUnits.Count - 1);
-
-            return playerUnits[randomInt];
-        }
-
-        public UnitController GetRandomEnemyUnit()
-        {
-            int randomInt = RandomGenerator.GetRandomNumber(0, enemyUnits.Count - 1);
-
-            return enemyUnits[randomInt];
-        }
-
-        public UnitController GetRandomAlivePlayerUnit()
-        {
-            List<UnitController> livingPlayerUnits = new List<UnitController>();
-            foreach(UnitController playerUnit in playerUnits)
-            {
-                if (playerUnit.GetHealth().IsDead()) continue;
-
-                livingPlayerUnits.Add(playerUnit);
-            }
-
-            int randomInt = RandomGenerator.GetRandomNumber(0, livingPlayerUnits.Count - 1);
-            return playerUnits[randomInt];
-        }
-
-        public UnitController GetRandomAliveEnemyUnit()
-        {
-            List<UnitController> livingEnemyUnits = new List<UnitController>();
-            foreach (UnitController enemyUnit in enemyUnits)
-            {
-                if (enemyUnit.GetHealth().IsDead()) continue;
-
-                livingEnemyUnits.Add(enemyUnit);
-            }
-
-            int randomInt = RandomGenerator.GetRandomNumber(0, livingEnemyUnits.Count - 1);
-            return playerUnits[randomInt];
-        }
+        } 
     }
 }

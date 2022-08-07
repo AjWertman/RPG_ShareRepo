@@ -1778,6 +1778,12 @@ PrefabInstance:
       propertyPath: rHandTransform
       value: 
       objectReference: {fileID: 4018930881205111}
+    - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
+        type: 3}
+      propertyPath: animatorController
+      value: 
+      objectReference: {fileID: 22100000, guid: cce47a98a6d3cc1479d8754036d4adfb,
+        type: 2}
     - target: {fileID: 5319519476176398369, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}
       propertyPath: m_RootOrder

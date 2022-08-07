@@ -469,7 +469,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: afafd76093a5c684ab6d2b5822a30fcb, type: 2}
+  - {fileID: 2100000, guid: 34c6b2ca12e04cd4fb247b4079e4d195, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -846,10 +846,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coordinatesText: {fileID: 4705342392314861957}
-  pathfindingTextContainer: {fileID: 6809352661496385239}
-  fValueText: {fileID: 8559285528161174923}
-  gValueText: {fileID: 7495517113137527199}
-  hValueText: {fileID: 5069409514214156142}
   isMovable: 1
   gridCoordinates:
     x: 0

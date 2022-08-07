@@ -29,7 +29,7 @@ namespace RPGProject.UI
         public void SetupTargetButton(Fighter _target)
         {
             assignedTarget = _target;
-            buttonText.text = assignedTarget.GetUnitInfo().GetUnitName();
+            buttonText.text = assignedTarget.unitInfo.unitName;
         }
 
         public void OnSelect()

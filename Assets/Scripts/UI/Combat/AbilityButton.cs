@@ -30,9 +30,9 @@ namespace RPGProject.UI
         {
             button.interactable = true;
             assignedAbility = _abilityToSet;
-            button.image.color = assignedAbility.GetButtonColor();
-            buttonText.text = assignedAbility.GetAbilityName();
-            buttonText.color = assignedAbility.GetTextColor();
+            button.image.color = assignedAbility.buttonColor;
+            buttonText.text = assignedAbility.abilityName;
+            buttonText.color = assignedAbility.textColor;
         }
 
         public void ResetAbilityButton()

@@ -47,6 +47,24 @@ namespace RPGProject.Control
             currencyMenu.gameObject.SetActive(_shouldActivate);
         }
 
+        public void DeactivateAllMenus()
+        {
+            foreach (GameObject menu in GetAllMenus())
+            {
+                menu.SetActive(false);
+            }
+        }
+
+        public IEnumerable<GameObject> GetAllMenus()
+        {
+            yield return coreMainMenu.gameObject;
+            yield return characterSelectMenu.gameObject;
+            yield return characterMenu.gameObject;
+            yield return questMenu.gameObject;
+            yield return inventoryMenu.gameObject;
+            yield return currencyMenu.gameObject;
+        }
+
         private void BackToMainMenu()
         {
             DeactivateAllMenus();
@@ -107,7 +125,7 @@ namespace RPGProject.Control
             characterSelectMenu.gameObject.SetActive(false);
 
             TeamInfo newTeamInfo = playerTeam.GetTeamInfo(_character.GetPlayerKey());
-            characterMenu.SetupCharacterMenu(_character, unit, teamInfo.GetLevel(), newTeamInfo.GetUnitResources());
+            characterMenu.SetupCharacterMenu(_character, unit, teamInfo.level, newTeamInfo.unitResources);
             characterMenu.gameObject.SetActive(true);
         }
 
@@ -136,24 +154,6 @@ namespace RPGProject.Control
         private void DirectToMainMenu()
         {
             FindObjectOfType<SceneManagerScript>().LoadMainMenu();
-        }
-
-        public void DeactivateAllMenus()
-        {
-            foreach (GameObject menu in GetAllMenus())
-            {
-                menu.SetActive(false);
-            }
-        }
-
-        public IEnumerable<GameObject> GetAllMenus()
-        {
-            yield return coreMainMenu.gameObject;
-            yield return characterSelectMenu.gameObject;
-            yield return characterMenu.gameObject;
-            yield return questMenu.gameObject;
-            yield return inventoryMenu.gameObject;
-            yield return currencyMenu.gameObject;
         }
     }
 }

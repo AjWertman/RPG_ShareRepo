@@ -100,7 +100,7 @@ namespace RPGProject.Control
             {
                 case PlayerMoveType.Attack:
 
-                    Ability basicAttack = currentCombatantTurn.GetUnitInfo().GetBasicAttack();
+                    Ability basicAttack = currentCombatantTurn.unitInfo.basicAttack;
                     onAbilitySelect(basicAttack);
                     break;
 
@@ -155,7 +155,7 @@ namespace RPGProject.Control
 
             if (_shouldActivate)
             {
-                TargetingType targetingType = selectedAbility.GetTargetingType();
+                TargetingType targetingType = selectedAbility.targetingType;
                 targetSelectMenu.SetupTargetSelectMenu(activeMenuKey, targetingType);
             }
             else
@@ -207,7 +207,7 @@ namespace RPGProject.Control
 
         public void OnTargetSelect(Fighter _target)
         {
-            if(CombatAssistant.IsAlreadyEffected(selectedAbility.GetAbilityName(), _target.GetUnitStatus()))
+            if(CombatAssistant.IsAlreadyEffected(selectedAbility.abilityName, _target.unitStatus))
             {
                 StartCoroutine(battleHUD.ActivateCantUseAbilityUI("Target is already effected by that ability"));
                 ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
@@ -224,7 +224,7 @@ namespace RPGProject.Control
             SetCurrentCombatantTurn(_currentCombatantTurn);
             battleHUD.UpdateTurnOrderUIItems(_turnOrder, currentCombatantTurn);
 
-            if (currentCombatantTurn.GetUnitInfo().IsPlayer())
+            if (currentCombatantTurn.unitInfo.isPlayer)
             {
                 ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
             }

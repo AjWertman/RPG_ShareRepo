@@ -5,10 +5,10 @@ namespace RPGProject.Combat
 {
     public class UnitStatus : MonoBehaviour
     {
-        float physicalReflectionDamage = 0f;
-        bool isReflectingSpells = false;
-        bool isSilenced = false;
-        bool hasSubstitute = false;
+        public float physicalReflectionDamage = 0f;
+        public bool isReflectingSpells = false;
+        public bool isSilenced = false;
+        public bool hasSubstitute = false;
 
         List<AbilityBehavior> activeAbilityBehaviors = new List<AbilityBehavior>();
 
@@ -20,14 +20,6 @@ namespace RPGProject.Combat
 
             if (activeAbilityBehaviors.Contains(_abilityBehavior)) return;
             activeAbilityBehaviors.Add(_abilityBehavior);
-        }
-
-        private void RemoveActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
-        {
-            _abilityBehavior.onAbilityDeath -= RemoveActiveAbilityBehavior;
-
-            if (!activeAbilityBehaviors.Contains(_abilityBehavior)) return;
-            activeAbilityBehaviors.Remove(_abilityBehavior);
         }
 
         public void ResetUnitStatus()
@@ -53,44 +45,12 @@ namespace RPGProject.Combat
             }
         }
 
-        public void SetPhysicalReflectionDamage(float _damageToSet)
+        private void RemoveActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
-            physicalReflectionDamage = _damageToSet;
-        }
+            _abilityBehavior.onAbilityDeath -= RemoveActiveAbilityBehavior;
 
-        public float GetPhysicalReflectionDamage()
-        {
-            return physicalReflectionDamage;
-        }
-
-        public void SetIsReflectingSpells(bool _shouldSet)
-        {
-            isReflectingSpells = _shouldSet;
-        }
-
-        public bool IsReflectingSpells()
-        {
-            return isReflectingSpells;
-        }
-
-        public void SetIsSilenced(bool _shouldSet)
-        {
-            isSilenced = _shouldSet;
-        }
-
-        public bool IsSilenced()
-        {
-            return isSilenced;
-        }
-
-        public void SetHasSubsitute(bool _shouldSet)
-        {
-            hasSubstitute = _shouldSet;
-        }
-
-        public bool HasSubstitute()
-        {
-            return hasSubstitute;
+            if (!activeAbilityBehaviors.Contains(_abilityBehavior)) return;
+            activeAbilityBehaviors.Remove(_abilityBehavior);
         }
     }
 }

@@ -52,8 +52,8 @@ namespace RPGProject.Combat.Grid
             if (!isMovable) return false;
             if (contestedFighter != null)
             {
-                bool isCurrentPlayer = _currentFighter.GetUnitInfo().IsPlayer();
-                if (isCurrentPlayer == contestedFighter.GetUnitInfo().IsPlayer()) return false;
+                bool isCurrentPlayer = _currentFighter.unitInfo.isPlayer;
+                if (isCurrentPlayer == contestedFighter.unitInfo.isPlayer) return false;
 
                 if (!isCurrentPlayer)
                 {

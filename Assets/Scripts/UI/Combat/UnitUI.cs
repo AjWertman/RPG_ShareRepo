@@ -14,7 +14,6 @@ namespace RPGProject.UI
         [SerializeField] UIHealthChange uiHealthChange = null;
 
         Health health = null;
-        Mana mana = null;
         Fighter fighter = null;
 
         public void InitializeUnitUI()
@@ -22,22 +21,19 @@ namespace RPGProject.UI
             fighter = GetComponent<Fighter>();
 
             health = GetComponent<Health>();
-            mana = GetComponent<Mana>();
 
             health.onHealthChange += UpdateHealthUI;
-            mana.onManaChange += UpdateManaUI;
         }
 
         public void SetupUnitUI()
         {
             healthSlider.UpdateSliderValue(GetHealthPercentage());
-            manaSlider.UpdateSliderValue(GetManaPercentage());
             ActivateResourceSliders(false);
         }
 
         public void ActivateUnitIndicator(bool _shouldActivate)
         {
-            if (_shouldActivate) unitIndicator.ActivateIndicator(fighter.GetUnitInfo().IsPlayer());
+            if (_shouldActivate) unitIndicator.ActivateIndicator(fighter.unitInfo.isPlayer);
             else unitIndicator.DeactivateIndicator();
         }
 
@@ -55,11 +51,6 @@ namespace RPGProject.UI
             yield return new WaitForSeconds(1f);
 
             uiHealthChange.DeactivateHealthChange();
-        }
-
-        private void UpdateManaUI()
-        {
-            manaSlider.UpdateSliderValue(GetManaPercentage());
         }
 
         public void ActivateResourceSliders(bool _shouldActivate)
@@ -80,12 +71,7 @@ namespace RPGProject.UI
 
         public float GetHealthPercentage()
         {
-            return health.GetHealthPercentage();
-        }
-        
-        public float GetManaPercentage()
-        {
-            return mana.GetManaPercentage();
+            return health.healthPercentage;
         }
     }
 }

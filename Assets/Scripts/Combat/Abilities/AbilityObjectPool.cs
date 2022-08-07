@@ -21,6 +21,33 @@ namespace RPGProject.Combat
             CreateHitFXPool();
         }
 
+        public void ResetAbilityObjectPool()
+        {
+            foreach (List<AbilityBehavior> abilityBehaviors in abilityPool.Values)
+            {
+                foreach (AbilityBehavior abilityBehavior in abilityBehaviors)
+                {
+                    ResetAbilityBehavior(abilityBehavior);
+                }
+            }
+        }
+
+        public AbilityBehavior GetAbilityInstance(AbilityObjectKey _abilityObjectKey)
+        {
+            AbilityBehavior availableAbilityBehavior = null;
+
+            foreach (AbilityBehavior abilityBehavior in abilityPool[_abilityObjectKey])
+            {
+                if (!abilityBehavior.gameObject.activeSelf)
+                {
+                    availableAbilityBehavior = abilityBehavior;
+                    break;
+                }
+            }
+
+            return availableAbilityBehavior;
+        }
+
         private void CreateAbilityPool()
         {
             foreach(AbilityPrefab abilityPrefab in abilityPrefabs)
@@ -29,7 +56,7 @@ namespace RPGProject.Combat
 
                 for (int i = 0; i < 4; i++)
                 {
-                    GameObject abilityInstance = Instantiate(abilityPrefab.GetAbilityPrefab(), transform);
+                    GameObject abilityInstance = Instantiate(abilityPrefab.abilityPrefab, transform);
                     AbilityBehavior abilityBehavior = abilityInstance.GetComponent<AbilityBehavior>();
                     abilityBehavior.onAbilityDeath += ResetAbilityBehavior;
                     abilityBehavior.hitFXSpawnRequest += SpawnHitFX;
@@ -37,7 +64,7 @@ namespace RPGProject.Combat
                     abilityBehaviorInstances.Add(abilityBehavior);
                 }
 
-                abilityPool.Add(abilityPrefab.GetAbilityObjectKey(), abilityBehaviorInstances);
+                abilityPool.Add(abilityPrefab.abilityObjectKey, abilityBehaviorInstances);
             }
 
             ResetAbilityObjectPool();
@@ -47,8 +74,8 @@ namespace RPGProject.Combat
         {
             foreach (HitFXPrefab hitFXPrefab in hitFXPrefabs)
             {
-                GameObject hitFXInstance = Instantiate(hitFXPrefab.GetHitFXPrefab(), transform);
-                HitFXObjectKey hitFXObjectKey = hitFXPrefab.GetHitFXObjectKey();
+                GameObject hitFXInstance = Instantiate(hitFXPrefab.hitFXPrefab, transform);
+                HitFXObjectKey hitFXObjectKey = hitFXPrefab.hitFXObjectKey;
                 hitFXInstance.GetComponent<ReturnAfterEffect>().onEffectCompletion += ReturnToPool;
 
                 hitFXPool.Add(hitFXObjectKey, hitFXInstance);
@@ -77,66 +104,19 @@ namespace RPGProject.Combat
             _returnAfterEffect.transform.localPosition = Vector3.zero;
             _returnAfterEffect.gameObject.SetActive(false);
         }
-
-        public void ResetAbilityObjectPool()
-        {
-            foreach (List<AbilityBehavior> abilityBehaviors in abilityPool.Values)
-            {
-                foreach (AbilityBehavior abilityBehavior in abilityBehaviors)
-                {
-                    ResetAbilityBehavior(abilityBehavior);
-                }
-            }
-        }
-
-        public AbilityBehavior GetAbilityInstance(AbilityObjectKey _abilityObjectKey)
-        {
-            AbilityBehavior availableAbilityBehavior = null;
-
-            foreach (AbilityBehavior abilityBehavior in abilityPool[_abilityObjectKey])
-            {
-                if (!abilityBehavior.gameObject.activeSelf)
-                {
-                    availableAbilityBehavior = abilityBehavior;
-                    break;
-                }
-            }
-
-            return availableAbilityBehavior;
-        }
     }
 
     [Serializable]
     public class AbilityPrefab
     {
-        [SerializeField] AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
-        [SerializeField] GameObject abilityPrefab = null;
-
-        public AbilityObjectKey GetAbilityObjectKey()
-        {
-            return abilityObjectKey;
-        }
-
-        public GameObject GetAbilityPrefab()
-        {
-            return abilityPrefab;
-        }
+        public AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
+        public GameObject abilityPrefab = null;
     }
 
     [Serializable]
     public class HitFXPrefab
     {
-        [SerializeField] HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
-        [SerializeField] GameObject hitFXPrefab = null;
-
-        public HitFXObjectKey GetHitFXObjectKey()
-        {
-            return hitFXObjectKey;
-        }
-
-        public GameObject GetHitFXPrefab()
-        {
-            return hitFXPrefab;
-        }
+        public HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
+        public GameObject hitFXPrefab = null;
     }
 }

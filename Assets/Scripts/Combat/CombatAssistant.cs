@@ -12,12 +12,12 @@ namespace RPGProject.Combat
             float apCost = _selectedAbility.actionPointsCost;
             if (apCost > 0)
             {
-                float actionPoints = _caster.GetUnitResources().actionPoints;
+                float actionPoints = _caster.unitResources.actionPoints;
                 bool hasEnoughAP = actionPoints >= apCost;
                 if (!hasEnoughAP) return "Not enough Action Points";
             }
 
-            bool isCopyAbility = _selectedAbility.GetAbilityType() == AbilityType.Copy;
+            bool isCopyAbility = _selectedAbility.abilityType == AbilityType.Copy;
             if (isCopyAbility)
             {
                 List<Ability> copyList = new List<Ability>();
@@ -25,8 +25,8 @@ namespace RPGProject.Combat
                 if (isCopyAbility && isCopyListNullOrEmpty) return "No copyable abilities used";
             }
 
-            bool isAbilityMagic = (_selectedAbility.GetAbilityType() != AbilityType.Melee);
-            bool isFighterSilenced = _caster.GetUnitStatus().IsSilenced();
+            bool isAbilityMagic = (_selectedAbility.abilityType!= AbilityType.Melee);
+            bool isFighterSilenced = _caster.unitStatus.isSilenced;
             if (isAbilityMagic && isFighterSilenced) return "Caster is silenced";
 
             return "";

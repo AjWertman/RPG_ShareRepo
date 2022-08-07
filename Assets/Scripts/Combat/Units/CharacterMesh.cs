@@ -5,58 +5,16 @@ namespace RPGProject.Combat
 {
     public class CharacterMesh : MonoBehaviour
     {
-        [SerializeField] CharacterKey characterKey = CharacterKey.None;
+        public CharacterKey characterKey = CharacterKey.None;
+        public Sprite faceImage = null;
 
-        [SerializeField] Sprite faceImage = null;
+        public AnimatorOverrideController animatorController = null;
+        public Avatar avatar = null;
 
-        [SerializeField] AnimatorOverrideController controller = null;
-        [SerializeField] Avatar avatar = null;
+        public Transform aimTransform = null;
+        public Transform rHandTransform = null;
+        public Transform lHandTransform = null;
 
-        [SerializeField] Transform aimTransform = null;
-
-        [SerializeField] Transform rHandTransform = null;
-        [SerializeField] Transform lHandTransform = null;
-
-        [SerializeField] Transform particleExpander = null;
-
-        public CharacterKey GetCharacterKey()
-        {
-            return characterKey;
-        }
-
-        public Sprite GetFaceImage()
-        {
-            return faceImage;
-        }
-
-        public AnimatorOverrideController GetAnimatorController()
-        {
-            return controller;
-        }
-
-        public Avatar GetAvatar()
-        {
-            return avatar;
-        }
-
-        public Transform GetAimTransform()
-        {
-            return aimTransform;
-        }
-
-        public Transform GetRHandTransform()
-        {
-            return rHandTransform;
-        }
-        
-        public Transform GetLHandTransform()
-        {
-            return lHandTransform;
-        }
-
-        public Transform GetParticleExpander()
-        {
-            return particleExpander;
-        }
+        public Transform particleExpander = null;
     }
 }

@@ -1,90 +1,36 @@
 using RPGProject.Core;
 using RPGProject.Progression;
 using System;
-using UnityEngine;
 
 namespace RPGProject.Combat
 {
     [Serializable]
-    public class UnitInfo
+    public struct UnitInfo
     {
-        [SerializeField] string unitName = "";
-        [SerializeField] CharacterKey characterKey = CharacterKey.None;
-        [SerializeField] int unitLevel = 0;
+        public string unitName;
+        public CharacterKey characterKey;
+        public int unitLevel;
 
-        [SerializeField] Stats stats = new Stats();
+        public Stats stats;
 
-        Ability basicAttack = null;
-        Ability[] abilities = null;
+        public Ability basicAttack;
+        public Ability[] abilities;
 
-        bool isPlayer = true;
+        public bool isPlayer;
 
-        public void SetUnitInfo(string _unitName, CharacterKey _characterKey, int _unitLevel, bool _isPlayer,
+        public UnitInfo(string _unitName, CharacterKey _characterKey, int _unitLevel, bool _isPlayer,
             Stats _stats, Ability _basicAttack, Ability[] _abilities)
         {
             unitName = _unitName;
             characterKey = _characterKey;
             unitLevel = _unitLevel;
             isPlayer = _isPlayer;
+            stats = new Stats();
             stats.SetStats(_stats);
-            SetAbilities(_basicAttack, _abilities);
-        }
-
-        public void SetUnitInfo(UnitInfo _unitInfo)
-        {
-            unitName = _unitInfo.GetUnitName();
-            unitLevel = _unitInfo.GetUnitLevel();
-            isPlayer = _unitInfo.IsPlayer();
-            stats.SetStats(_unitInfo.GetStats());
-            SetAbilities(_unitInfo.GetBasicAttack(), _unitInfo.GetAbilities());
-        }
-
-        public void SetUnitLevel(int _unitLevel)
-        {
-            unitLevel = _unitLevel;
-        }
-
-        public void SetAbilities(Ability _basicAttack, Ability[] _ability)
-        {
             basicAttack = _basicAttack;
-            abilities = _ability;
+            abilities = _abilities;
         }
-
-        public CharacterKey GetCharacterKey()
-        {
-            return characterKey;
-        }
-
-        public string GetUnitName()
-        {
-            return unitName;
-        }
-
-        public int GetUnitLevel()
-        {
-            return unitLevel;
-        }
-
-        public Stats GetStats()
-        {
-            return stats;
-        }
-
-        public Ability GetBasicAttack()
-        {
-            return basicAttack;
-        }
-
-        public Ability[] GetAbilities()
-        {
-            return abilities;
-        }
-
-        public bool IsPlayer()
-        {
-            return isPlayer;
-        }
-
+   
         public void ResetUnitInfo()
         {
             characterKey = CharacterKey.None;
@@ -92,7 +38,8 @@ namespace RPGProject.Combat
             unitLevel = 0;
             isPlayer = false;
             stats.ResetStats();
-            SetAbilities(null, null);
+            basicAttack = null;
+            abilities = null;
         }
     }
 }
