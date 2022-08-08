@@ -1,5 +1,6 @@
 ﻿using RPGProject.Sound;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace RPGProject.GameResources
@@ -154,6 +155,6 @@ namespace RPGProject.GameResources
             }
 
             return newDamageAmount;
-        }
+        }       
     }
 }

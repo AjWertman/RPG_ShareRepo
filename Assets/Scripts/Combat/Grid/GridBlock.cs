@@ -44,24 +44,40 @@ namespace RPGProject.Combat.Grid
         public void SetColors(Material _newMaterial, Color _textColor)
         {
             meshRenderer.material = _newMaterial;
-            coordinatesText.color = _textColor;
+            coordinatesText.color = Color.white;
+            //coordinatesText.color = _textColor;
         }
 
-        public bool IsMovable(Fighter _currentFighter)
+        public bool IsMovable(GridBlock _currentBlock, GridBlock _targetBlock)
         {
             if (!isMovable) return false;
             if (contestedFighter != null)
             {
-                bool isCurrentPlayer = _currentFighter.unitInfo.isPlayer;
-                if (isCurrentPlayer == contestedFighter.unitInfo.isPlayer) return false;
+                Fighter currentFighter = _currentBlock.contestedFighter;
+                Fighter targetBlockFighter = _targetBlock.contestedFighter;
+                bool isCurrentPlayer = currentFighter.unitInfo.isPlayer;
+                bool isMyFighterPlayer = contestedFighter.unitInfo.isPlayer;
 
-                if (!isCurrentPlayer)
+                bool isSameTeam = isCurrentPlayer == isMyFighterPlayer;
+
+                if (isSameTeam) return false;
+
+                if (isCurrentPlayer)
                 {
-                    if (_currentFighter.selectedTarget != (CombatTarget)contestedFighter) return false;
+                    if (contestedFighter != targetBlockFighter) return false;
+                }
+                else
+                {
+                    if (currentFighter.selectedTarget != (CombatTarget)contestedFighter) return false;
                 }
             }
 
             return true;
+        }
+
+        public void ActivateMeshRenderer(bool _shouldActivate)
+        {
+            meshRenderer.enabled = _shouldActivate;
         }
 
         public Transform GetAimTransform()

@@ -52,7 +52,7 @@ namespace RPGProject.Combat.Grid
                     if (neighborBlock == null) continue;
                     if (closedList.Contains(neighborBlock)) continue;
 
-                    if (!neighborBlock.IsMovable(_startBlock.contestedFighter))
+                    if (!neighborBlock.IsMovable(_startBlock, _endBlock))
                     {
                         closedList.Add(neighborBlock);
                         continue;

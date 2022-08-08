@@ -131,7 +131,7 @@ namespace RPGProject.Control.Combat
             if (currentBlock == null) return;
             if (_targetBlock == currentBlock) return;
 
-            if (!_targetBlock.IsMovable(currentBlock.contestedFighter)) return;
+            if (_targetBlock.IsMovable(currentBlock, _targetBlock) == false) return;
 
             gridSystem.UnhighlightPath(tempPath);
             tempPath = pathfinder.FindPath(currentBlock, _targetBlock);

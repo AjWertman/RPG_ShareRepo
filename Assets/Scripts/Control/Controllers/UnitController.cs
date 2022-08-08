@@ -129,7 +129,6 @@ namespace RPGProject.Control.Combat
             {
                 List<Transform> travelDestinations = GridSystem.GetTravelDestinations(_path);
                 yield return mover.MoveToDestination(travelDestinations);
-
                 UpdateCurrentBlock(goalBlock);
             }
 

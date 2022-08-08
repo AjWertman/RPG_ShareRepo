@@ -44,6 +44,8 @@ namespace RPGProject.Combat.Grid
 
                 SetupGridBlock(gridBlock, gridCoordinates);
 
+                gridBlock.ActivateMeshRenderer(false);
+
                 gridDictionary.Add(gridCoordinates, gridBlock);
             }
 
@@ -73,6 +75,7 @@ namespace RPGProject.Combat.Grid
                 if (currentIndex > _furthestBlockIndex) currentHighlightMaterial = unworthyMaterial;
 
                 gridBlock.SetColors(currentHighlightMaterial, Color.white);
+                gridBlock.ActivateMeshRenderer(true);
             }
 
             if (goalBlock.contestedFighter != null) goalBlock.SetColors(redMaterial, Color.white);
@@ -85,6 +88,7 @@ namespace RPGProject.Combat.Grid
                 Material newMaterial = GetGridBlockMaterial(gridBlock.gridCoordinates);
                 Color textColor = GetTextColor(newMaterial);
                 gridBlock.SetColors(newMaterial, textColor);
+                gridBlock.ActivateMeshRenderer(false);
             }
         }
 

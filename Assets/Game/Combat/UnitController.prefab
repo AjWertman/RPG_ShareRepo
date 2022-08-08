@@ -46,7 +46,6 @@ GameObject:
   - component: {fileID: 2617675497947377198}
   - component: {fileID: 7051265770026340352}
   - component: {fileID: 4170302240818230691}
-  - component: {fileID: 1646649399447466939}
   - component: {fileID: 509161126029126438}
   - component: {fileID: -3233447754243240660}
   - component: {fileID: 3504165519863861257}
@@ -128,7 +127,7 @@ Animator:
   m_Controller: {fileID: 22100000, guid: cce47a98a6d3cc1479d8754036d4adfb, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -160,12 +159,14 @@ MonoBehaviour:
       resistance: 10
       speed: 10
       luck: 10
+    basicAttack: {fileID: 0}
+    abilities: []
+    isPlayer: 0
   unitResources:
     healthPoints: 0
     maxHealthPoints: 100
-    manaPoints: 0
-    maxManaPoints: 100
     actionPoints: 0
+    gCostAllowance: 0
   startingStats:
     stamina: 10
     spirit: 10
@@ -193,20 +194,8 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: 1a4dfee53881a784680f03108acf9ba1, type: 3}
   healthPoints: 0
   maxHealthPoints: 100
---- !u!114 &1646649399447466939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642788015177014662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0f65bfcf0c321249909b90829c2fa74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  manaPoints: 0
-  maxManaPoints: 100
+  healthPercentage: 1
+  isDead: 0
 --- !u!114 &509161126029126438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,9 +209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footstepsSound: {fileID: 8300000, guid: 9993e4a45f4c5a24699fe278ca426350, type: 3}
-  retreatTransform: {fileID: 4806116191025221250}
   distanceTolerance: 0.3
-  gCostAllowance: 0
   gCostPerAP: 54
   isMoving: 0
 --- !u!114 &-3233447754243240660
@@ -237,6 +224,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ff99147c9681f48aaa9a8cae376f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitStatus: {fileID: 0}
+  unitInfo:
+    unitName: 
+    characterKey: 0
+    unitLevel: 0
+    stats:
+      stamina: 0
+      spirit: 0
+      strength: 0
+      skill: 0
+      armor: 0
+      resistance: 0
+      speed: 0
+      luck: 0
+    basicAttack: {fileID: 0}
+    abilities: []
+    isPlayer: 0
+  unitResources:
+    healthPoints: 0
+    maxHealthPoints: 0
+    actionPoints: 0
+    gCostAllowance: 0
+  characterMesh: {fileID: 0}
+  selectedAbility: {fileID: 0}
 --- !u!114 &3504165519863861257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +288,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f08b736e5df8a4f9c93bcdeb13840e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physicalReflectionDamage: 0
+  isReflectingSpells: 0
+  isSilenced: 0
+  hasSubstitute: 0
 --- !u!114 &723103457998062764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,7 +304,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd186ea982e37ef4c9998e4a7bf09108, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combatAIBehavior:
+    aiType: 0
+    aiBehaviors:
+      attack: 0
+      agro: 0
+      heal: 0
+      support: 0
+      runaway: 0
   agros: []
+  agroPercentagePerDamagePercentage: 1
 --- !u!1 &4569020565003744689
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,6 +33,7 @@ namespace RPGProject.Movement
             Transform previousTransform = _path[0];
             Transform goalTransform = _path[_path.Count -1];
             isMoving = true;
+            UpdateAnimator(true);
             int nextBlockIndex = 1;
 
             navMeshAgent.stoppingDistance = 0;
@@ -67,6 +68,8 @@ namespace RPGProject.Movement
                     }
                     else
                     {
+                        UpdateAnimator(false);
+                        isMoving = false;
                         yield break;
                     }
                 }
@@ -85,6 +88,11 @@ namespace RPGProject.Movement
             {
                 navMeshAgent.stoppingDistance = startStoppingDistance;
             }
+        }
+
+        private void UpdateAnimator(bool _isMoving)
+        {
+            animator.SetBool("isMoving", _isMoving);
         }
 
         private bool IsAtPosition(Transform _gridBlock, Transform _goalBlock)
