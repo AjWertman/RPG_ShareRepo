@@ -4,7 +4,7 @@ using UnityEngine;
 namespace RPGProject.Saving
 {
     [Serializable]
-    public class SerializableVector3
+    public struct SerializableVector3
     {
         float x, y, z;
 

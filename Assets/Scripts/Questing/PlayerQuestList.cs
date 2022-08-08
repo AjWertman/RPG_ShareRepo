@@ -61,7 +61,7 @@ namespace RPGProject.Questing
 
             foreach (QuestStatus status in questStatuses)
             {
-                if (status.GetQuest() == _quest)
+                if (status.quest == _quest)
                 {
                     return status;
                 }
@@ -72,7 +72,7 @@ namespace RPGProject.Questing
 
         private void GiveReward(Quest _quest)
         {
-            foreach (var reward in _quest.GetRewards())
+            foreach (var reward in _quest.rewards)
             {
                 //bool success = GetComponent<Inventory>().AddToFirstEmptySlot(reward.item, reward.number);
                 //if (!success)
@@ -81,7 +81,7 @@ namespace RPGProject.Questing
                 //}
             }
 
-            onAward(_quest.GetXPAward());
+            onAward(_quest.xpAward);
             //playerTeam.AwardTeamXP(_quest.GetXPAward());
         }
 

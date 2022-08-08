@@ -13,11 +13,11 @@ namespace RPGProject.Progression
 
             foreach (UniversalCharProgression universalCharProgression in universalCharProgressions)
             {
-                if (_xp >= universalCharProgression.GetXPRequirement())
+                if (_xp >= universalCharProgression.xpRequirement)
                 {
-                    if (level < universalCharProgression.GetLevel())
+                    if (level < universalCharProgression.level)
                     {
-                        level = universalCharProgression.GetLevel();
+                        level = universalCharProgression.level;
                     }
                     else
                     {
@@ -35,19 +35,9 @@ namespace RPGProject.Progression
     }
 
     [Serializable]
-    public class UniversalCharProgression
+    public struct UniversalCharProgression
     {
-        [SerializeField] int level = 0;
-        [SerializeField] float xpRequirement = 0f;
-
-        public int GetLevel()
-        {
-            return level;
-        }
-
-        public float GetXPRequirement()
-        {
-            return xpRequirement;
-        }
+        public int level;
+        public float xpRequirement;
     }
 }

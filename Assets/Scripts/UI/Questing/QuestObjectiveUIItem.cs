@@ -17,15 +17,15 @@ namespace RPGProject.UI
             int amountCompleted = 0;
             int amountToComplete = 0;
 
-            amountCompleted = _status.GetInProgressObjectives()[_objective.GetReference()];
-            amountToComplete = _objective.GetAmountToComplete();
+            amountCompleted = _status.GetInProgressObjectives()[_objective.reference];
+            amountToComplete = _objective.amountToComplete;
 
             bool isCompleted = amountCompleted >= amountToComplete;
             SetUIImage(isCompleted);
 
             string progressString = amountCompleted.ToString() + "/" + amountToComplete.ToString();
 
-            descriptionText.text = _objective.GetDescription();
+            descriptionText.text = _objective.description;
             progressText.text = progressString;
         }
 

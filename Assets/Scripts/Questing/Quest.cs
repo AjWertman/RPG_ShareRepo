@@ -7,48 +7,28 @@ namespace RPGProject.Questing
     [CreateAssetMenu(fileName = "Quest", menuName = "Quest/Create New Quest", order = 1)]
     public class Quest : ScriptableObject
     {        
-        [SerializeField] string questDescription = "";
+        public string questDescription = "";
 
-        [SerializeField] List<Objective> objectives = new List<Objective>();
-        [SerializeField] List<Reward> rewards = new List<Reward>();
-        [SerializeField] float xpAward = 100f;
+        public List<Objective> objectives = new List<Objective>();
+        public List<Reward> rewards = new List<Reward>();
+        public float xpAward = 100f;
 
         public string GetTitle()
         {
             return name;
         }
 
-        public string GetDescription()
-        {
-            return questDescription;
-        }
-
         public Objective GetObjective(string _objectiveRef)
         {
             foreach (Objective objective in objectives)
             {
-                if (objective.GetReference() == _objectiveRef)
+                if (objective.reference == _objectiveRef)
                 {
                     return objective;
                 }
             }
 
             return null;
-        }
-
-        public IEnumerable<Objective> GetObjectives()
-        {
-            return objectives;
-        }
-
-        public IEnumerable<Reward> GetRewards()
-        {
-            return rewards;
-        }
-
-        public float GetXPAward()
-        {
-            return xpAward;
         }
 
         public int GetObjectiveCount()
@@ -60,7 +40,7 @@ namespace RPGProject.Questing
         {
             foreach (var objective in objectives)
             {
-                if (objective.GetReference() == _objectiveRef)
+                if (objective.reference == _objectiveRef)
                 {
                     return true;
                 }
@@ -85,46 +65,16 @@ namespace RPGProject.Questing
     [Serializable]
     public class Objective
     {
-        [SerializeField] string reference;
-        [SerializeField] int amountToComplete = 1;
-        [SerializeField] string description;
-        [SerializeField] string[] requiredObjectives;
-
-        public string GetReference()
-        {
-            return reference;
-        }
-
-        public int GetAmountToComplete()
-        {
-            return amountToComplete;
-        }
-
-        public string GetDescription()
-        {
-            return description;
-        }
-
-        public string[] GetRequiredObjectives()
-        {
-            return requiredObjectives;
-        }
+        public string reference;
+        public int amountToComplete = 1;
+        public string description;
+        public string[] requiredObjectives;
     }
 
     [Serializable]
     public class Reward
     {
-        [SerializeField] int rewardAmount;
-        //[SerializeField] InventoryItem inventoryItem;
-
-        public int GetRewardAmount()
-        {
-            return rewardAmount;
-        }
-
-        //public InventoryItem GetInventoryItem()
-        //{
-        //    return inventoryItem;
-        //}
+        public int rewardAmount;
+        //public InventoryItem inventoryItem;
     }
 }

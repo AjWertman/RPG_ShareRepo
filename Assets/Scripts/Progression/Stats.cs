@@ -6,157 +6,71 @@ namespace RPGProject.Progression
     public enum StatType { Stamina, Spirit, Strength, Skill, Armor, Resistance, Speed, Luck }
 
     [Serializable]
-    public class Stats
+    public struct Stats
     {
-        [Range(10, 100)] [SerializeField] int stamina = 10;
-        [Range(10, 100)] [SerializeField] int spirit = 10;
-        [Range(10, 100)] [SerializeField] int strength = 10;
-        [Range(10, 100)] [SerializeField] int skill = 10;
-        [Range(10, 100)] [SerializeField] int armor = 10;
-        [Range(10, 100)] [SerializeField] int resistance = 10;
-        [Range(10, 100)] [SerializeField] int speed = 10;
-        [Range(10, 100)] [SerializeField] int luck = 10;
+        [Range(10, 100)] public int stamina;
+        [Range(10, 100)] public int spirit;
+        [Range(10, 100)] public int strength;
+        [Range(10, 100)] public int skill;
+        [Range(10, 100)] public int armor;
+        [Range(10, 100)] public int resistance;
+        [Range(10, 100)] public int speed;
+        [Range(10, 100)] public int luck;
 
-        int baseStatLevel = 10;
-
-        public int GetStat(StatType _statType)
+        public Stats(Stats _stats)
         {
-            int stat = 0;
-
-            switch (_statType)
-            {
-                case StatType.Stamina:
-                    stat = stamina;
-                    break;
-
-                case StatType.Spirit:
-                    stat = spirit;
-                    break;
-
-                case StatType.Strength:
-                    stat = strength;
-                    break;
-
-                case StatType.Skill:
-                    stat = skill;
-                    break;
-
-                case StatType.Armor:
-                    stat = armor;
-                    break;
-
-                case StatType.Resistance:
-                    stat = resistance;
-                    break;
-
-                case StatType.Speed:
-                    stat = speed;
-                    break;
-
-                case StatType.Luck:
-                    stat = luck;
-                    break;
-            }
-
-            return stat;
+            stamina = _stats.stamina;
+            spirit = _stats.spirit;
+            strength = _stats.strength;
+            skill = _stats.skill;
+            armor = _stats.armor;
+            resistance = _stats.resistance;
+            speed = _stats.speed;
+            luck = _stats.luck;
         }
 
-        public void SetStat(StatType _statType, int _level)
+        public int GetStatLevel(StatType _statType)
         {
             switch (_statType)
             {
                 case StatType.Stamina:
-                    stamina = _level;
-                    break;
+                    return stamina;
 
                 case StatType.Spirit:
-                    spirit = _level;
-                    break;
+                    return spirit;
 
                 case StatType.Strength:
-                    strength = _level;
-                    break;
+                    return strength;
 
                 case StatType.Skill:
-                    skill = _level;
-                    break;
+                    return skill;
 
                 case StatType.Armor:
-                    armor = _level;
-                    break;
+                    return armor;
 
                 case StatType.Resistance:
-                    resistance = _level;
-                    break;
+                    return resistance;
 
                 case StatType.Speed:
-                    speed = _level;
-                    break;
+                    return speed;
 
                 case StatType.Luck:
-                    luck = _level;
-                    break;
+                    return luck;
             }
-        }
 
-        public void SetStats(Stats _stats)
-        {
-            foreach(StatType statType in GetStatTypes())
-            {
-                int statLevel = _stats.GetStat(statType);
-                SetStat(statType, statLevel);
-            }
+            return 0;
         }
 
         public void ResetStats()
-        {          
-            foreach (StatType statType in GetStatTypes())
-            {
-                SetStat(statType, baseStatLevel);
-            }
-        }
-
-        private StatType[] GetStatTypes()
         {
-            return (StatType[])Enum.GetValues(typeof(StatType));
+            stamina = 10;
+            spirit = 10;
+            strength = 10;
+            skill = 10;
+            armor = 10;
+            resistance = 10;
+            speed = 10;
+            luck = 10;
         }
     }
-
-    //[Serializable]
-    //public class Stat
-    //{
-    //    [SerializeField] StatType statType = StatType.Stamina;
-    //    [Range(10, 100)] [SerializeField] int statLevel = 10;
-    //    [SerializeField] int levelUpPercent = 50;
-
-    //    public void SetStatType(StatType _statType)
-    //    {
-    //        statType = _statType;
-    //    }
-
-    //    public void SetStatLevel(int _newLevel)
-    //    {
-    //        statLevel = _newLevel;
-    //    }
-
-    //    public void IncreaseLevel()
-    //    {
-    //        statLevel++;
-    //    }
-
-    //    public StatType GetStatType()
-    //    {
-    //        return statType;
-    //    }
-
-    //    public int GetStatLevel()
-    //    {
-    //        return statLevel;
-    //    }
-
-    //    public int GetLevelUpPercent()
-    //    {
-    //        return levelUpPercent;
-    //    }
-    //}
 }

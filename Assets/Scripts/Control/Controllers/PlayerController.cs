@@ -78,8 +78,9 @@ namespace RPGProject.Control
 
         private bool InteractWithUI()
         {
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0) return true;
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 3) return true;
+            //Refactor - turn back on when ready
+            return false;
+
             bool isInteracting = false;
 
             //if (uiCanvas.IsTutorialActive()) isInteracting = true;

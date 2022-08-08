@@ -25,8 +25,7 @@ namespace RPGProject.Combat
             characterKey = _characterKey;
             unitLevel = _unitLevel;
             isPlayer = _isPlayer;
-            stats = new Stats();
-            stats.SetStats(_stats);
+            stats = _stats;
             basicAttack = _basicAttack;
             abilities = _abilities;
         }

@@ -55,8 +55,8 @@ namespace RPGProject.Control
 
                 teamInfo.startingCoordinates = GetStartingPosition(unit);
 
-                float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.stats.GetStat(StatType.Stamina));
-                float maxManaPoints = CalculateMaxMana(teamInfo.stats.GetStat(StatType.Spirit));
+                float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.stats.GetStatLevel(StatType.Stamina));
+                float maxManaPoints = CalculateMaxMana(teamInfo.stats.GetStatLevel(StatType.Spirit));
 
                 UnitResources unitResources = new UnitResources(maxHealthPoints);
                 teamInfo.unitResources = unitResources;

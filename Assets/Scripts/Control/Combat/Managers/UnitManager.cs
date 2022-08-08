@@ -93,7 +93,6 @@ namespace RPGProject.Control.Combat
                 PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
                 TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
                 unitResources = teamInfo.unitResources;
-                print(unitResources.healthPoints);
                 unitInfo.unitLevel = teamInfo.level;
             }
             else

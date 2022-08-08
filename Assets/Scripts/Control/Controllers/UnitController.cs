@@ -64,7 +64,7 @@ namespace RPGProject.Control.Combat
             comboLinker.SetupComboLinker();
 
             unitInfo = _unitInfo;
-            startingStats.SetStats(unitInfo.stats);
+            startingStats = unitInfo.stats;
 
             UpdateComponentStats(true);
 
@@ -160,21 +160,7 @@ namespace RPGProject.Control.Combat
                 yield return new WaitForSeconds(moveDurationWOffset);
 
                 animator.CrossFade("Idle", .1f);
-                //Vector3 travelDestination = new Vector3(currentBlock.travelDestination.position.x, transform.position.y, currentBlock.travelDestination.position.z);
-                //transform.position = travelDestination;
 
-                if (!health.isDead)
-                {
-                    if (_ability.abilityType == AbilityType.Melee)
-                    {
-                        //yield return mover.ReturnToStart();
-                    }
-                    else
-                    {
-                        transform.localRotation = mover.GetStartRotation();
-                        animator.CrossFade("Idle", .1f);
-                    }
-                }
 
                 //DecrementSpellLifetimes
                 yield return new WaitForSeconds(1.5f);
@@ -184,6 +170,26 @@ namespace RPGProject.Control.Combat
 
                 onMoveCompletion();
                 yield break;
+            }
+        }
+
+        private void SpendActionPoints(int _apCost)
+        {
+            //Refactor - does not prevent someone from doing something if they dont have enough ap
+            ///Combat Assistant?
+            int apAfterSpend = unitResources.actionPoints - _apCost;
+
+            if(apAfterSpend < 0)
+            {
+                print("Does not have enough points");
+                return;
+            }
+
+            unitResources.actionPoints -= _apCost;
+
+            if(unitResources.actionPoints == 0)
+            {
+                onMoveCompletion();
             }
         }
         
@@ -201,7 +207,7 @@ namespace RPGProject.Control.Combat
         {
             //mana.SpendManaPoints(_selectedAbility.GetManaCost());
             StartCoroutine(fighter.Attack(_target, _selectedAbility));
-            UseMovementResources(_selectedAbility.actionPointsCost);
+            SpendActionPoints(_selectedAbility.actionPointsCost); 
         }
 
         public void SetName(string _name)
@@ -233,7 +239,7 @@ namespace RPGProject.Control.Combat
 
         public void UpdateStats(Stats _updatedStats)
         {
-            unitInfo.stats.SetStats(_updatedStats);
+            unitInfo.stats = _updatedStats;
             UpdateComponentStats(false);
         }
 
@@ -261,9 +267,9 @@ namespace RPGProject.Control.Combat
             Stats stats = unitInfo.stats;
             fighter.UpdateAttributes
                 (
-                stats.GetStat(StatType.Strength),
-                stats.GetStat(StatType.Skill),
-                stats.GetStat(StatType.Luck)
+                stats.GetStatLevel(StatType.Strength),
+                stats.GetStatLevel(StatType.Skill),
+                stats.GetStatLevel(StatType.Luck)
                 );
         }
 
@@ -272,9 +278,9 @@ namespace RPGProject.Control.Combat
             Stats stats = unitInfo.stats;
             health.UpdateAttributes
                 (
-               stats.GetStat(StatType.Stamina),
-                stats.GetStat(StatType.Armor),
-               stats.GetStat(StatType.Resistance)
+               stats.GetStatLevel(StatType.Stamina),
+                stats.GetStatLevel(StatType.Armor),
+               stats.GetStatLevel(StatType.Resistance)
                 );
         }
 
@@ -310,7 +316,7 @@ namespace RPGProject.Control.Combat
 
         public int GetStat(StatType _statType)
         {
-            return unitInfo.stats.GetStat(_statType);
+            return unitInfo.stats.GetStatLevel(_statType);
         }
 
         public UnitInfo GetUnitInfo()

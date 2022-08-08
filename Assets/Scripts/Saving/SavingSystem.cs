@@ -77,7 +77,7 @@ namespace RPGProject.Saving
         {
             foreach (SaveableEntity saveableEntity in FindObjectsOfType<SaveableEntity>())
             {
-                _state[saveableEntity.GetUniqueIdentifier()] = saveableEntity.CaptureState();
+                _state[saveableEntity.uniqueIdentifier] = saveableEntity.CaptureState();
             }
 
             _state["lastSceneBuildIndex"] = SceneManager.GetActiveScene().buildIndex;
@@ -87,7 +87,7 @@ namespace RPGProject.Saving
         {
             foreach (SaveableEntity saveableEntity in FindObjectsOfType<SaveableEntity>())
             {
-                string id = saveableEntity.GetUniqueIdentifier();
+                string id = saveableEntity.uniqueIdentifier;
 
                 if (_state.ContainsKey(id))
                 {

@@ -33,7 +33,7 @@ namespace RPGProject.UI
                 else
                 {
                     Stats stats = _stats;
-                    int statLevel = stats.GetStat(statPageUI.GetStatType());
+                    int statLevel = stats.GetStatLevel(statPageUI.GetStatType());
 
                     float sliderAmount = statLevel / 100f;
 

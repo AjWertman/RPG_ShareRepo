@@ -18,7 +18,7 @@ namespace RPGProject.UI
         public void SetupQuestItemUI(QuestStatus _status)
         {
             currentQuestStatus = _status;
-            title.text = currentQuestStatus.GetQuest().name;
+            title.text = currentQuestStatus.quest.GetTitle();
         }
 
         public void ResetQuestItemUI()

@@ -14,7 +14,7 @@ namespace RPGProject.Progression
 
             foreach (XP_Reward xp_Reward in xp_Rewards)
             {
-                if (xp_Reward.GetUnit() == _unit)
+                if (xp_Reward.unit == _unit)
                 {
                     xp_RewardToGet = xp_Reward;
                     break;
@@ -22,24 +22,14 @@ namespace RPGProject.Progression
             }
 
             if (xp_RewardToGet == null) return 0;
-            return xp_RewardToGet.GetXPReward();
+            return xp_RewardToGet.xpReward;
         }
     }
 
     [Serializable]
     public class XP_Reward
     {
-        [SerializeField] Unit unit = null;
-        [SerializeField] float xpReward = 5f;
-
-        public Unit GetUnit()
-        {
-            return unit;
-        }
-
-        public float GetXPReward()
-        {
-            return xpReward;
-        }
+        public Unit unit = null;
+        public float xpReward = 5f;
     }
 }

@@ -7,7 +7,7 @@ namespace RPGProject.Saving
     [ExecuteAlways]
     public class SaveableEntity : MonoBehaviour
     {
-        [SerializeField] string uniqueIdentifier = "";
+        public string uniqueIdentifier = "";
         static Dictionary<string, SaveableEntity> globalIDLookup = new Dictionary<string, SaveableEntity>();
 
 #if UNITY_EDITOR
@@ -47,18 +47,13 @@ namespace RPGProject.Saving
                 return true;
             }
 
-            if (globalIDLookup[_stringToTest].GetUniqueIdentifier() != _stringToTest)
+            if (globalIDLookup[_stringToTest].uniqueIdentifier != _stringToTest)
             {
                 globalIDLookup.Remove(_stringToTest);
                 return true;
             }
 
             return false;
-        }
-
-        public string GetUniqueIdentifier()
-        {
-            return uniqueIdentifier;
         }
 
         public object CaptureState()

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace RPGProject.Questing
 {
     public class QuestStatus
     {     
-        Quest quest = null;
+        public Quest quest = null;
 
         Dictionary<string, int> inProgressObjectives = new Dictionary<string, int>();
         List<string> completedObjectives = new List<string>();
@@ -14,31 +13,26 @@ namespace RPGProject.Questing
         public QuestStatus(Quest _quest)
         {
             quest = _quest;
-            foreach (var objective in _quest.GetObjectives())
+            foreach (var objective in _quest.objectives)
             {
-                inProgressObjectives.Add(objective.GetReference(), 0);
+                inProgressObjectives.Add(objective.reference, 0);
             }
         }
 
         public QuestStatus(object _objectState)
         {
             QuestStatusRecord state = _objectState as QuestStatusRecord;
-            quest = Quest.GetByName(state.GetQuestName());
-            completedObjectives = state.GetCompletedObjectives();
-            inProgressObjectives = state.GetInProgressObjectives();
-        }
-
-        public Quest GetQuest()
-        {
-            return quest;
+            quest = Quest.GetByName(state.questName);
+            completedObjectives = state.completedObjectives;
+            inProgressObjectives = state.inProgressObjectives;
         }
 
         public bool IsComplete()
         {
             if (completedObjectives.Count == 0) return false;
-            foreach (var objective in quest.GetObjectives())
+            foreach (var objective in quest.objectives)
             {
-                string objRef = objective.GetReference();
+                string objRef = objective.reference;
                 if (!completedObjectives.Contains(objRef))
                 {
                     return false;
@@ -58,7 +52,7 @@ namespace RPGProject.Questing
             {
                 inProgressObjectives[_objectiveToComplete] = inProgressObjectives[_objectiveToComplete] + 1;
 
-                if (inProgressObjectives[_objectiveToComplete] == quest.GetObjective(_objectiveToComplete).GetAmountToComplete())
+                if (inProgressObjectives[_objectiveToComplete] == quest.GetObjective(_objectiveToComplete).amountToComplete)
                 {
                     completedObjectives.Add(_objectiveToComplete);
                 }
@@ -79,9 +73,9 @@ namespace RPGProject.Questing
         {
             QuestStatusRecord state = new QuestStatusRecord();
 
-            state.SetQuestName(quest.name);
-            state.SetCompletedObjectives(completedObjectives);
-            state.SetInProgressObjectives(inProgressObjectives);
+            state.questName = quest.name;
+            state.completedObjectives = completedObjectives;
+            state.inProgressObjectives = inProgressObjectives;
 
             return state;
         }
@@ -90,38 +84,9 @@ namespace RPGProject.Questing
     [Serializable]
     class QuestStatusRecord
     {
-        [SerializeField] string questName = "";
-        [SerializeField] Dictionary<string, int> inProgressObjectives = new Dictionary<string, int>();
-        [SerializeField] List<string> completedObjectives = new List<string>();
+        public string questName = "";
 
-        public void SetQuestName(string _questName)
-        {
-            questName = _questName;
-        }
-
-        public void SetInProgressObjectives(Dictionary<string, int> _inProgressObjectives)
-        {
-            inProgressObjectives = _inProgressObjectives;
-        }
-
-        public void SetCompletedObjectives(List<string> _completedObjectives)
-        {
-            completedObjectives = _completedObjectives;
-        }
-
-        public string GetQuestName()
-        {
-            return questName;
-        }
-
-        public Dictionary<string, int> GetInProgressObjectives()
-        {
-            return inProgressObjectives;
-        }
-
-        public List<string> GetCompletedObjectives()
-        {
-            return completedObjectives;
-        }
+        public Dictionary<string, int> inProgressObjectives = new Dictionary<string, int>();
+        public List<string> completedObjectives = new List<string>();
     }
 }

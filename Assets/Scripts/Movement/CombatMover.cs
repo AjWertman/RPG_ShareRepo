@@ -7,14 +7,10 @@ namespace RPGProject.Movement
 {
     public class CombatMover : AIMover
     {
-        [SerializeField] Transform retreatTransform = null;
         [SerializeField] float distanceTolerance = .3f;
 
         public float gCostPerAP = 24f;
         public bool isMoving = false;
-
-        Vector3 startPosition = Vector3.zero;
-        Quaternion startRotation = Quaternion.identity;
 
         float startStoppingDistance = 0;
 
@@ -107,16 +103,6 @@ namespace RPGProject.Movement
         private Vector3 GetOffsetPosition(Transform _transform)
         {
             return new Vector3(_transform.position.x, 0, _transform.position.z);
-        }
-
-        public Vector3 GetStartPosition()
-        {
-            return startPosition;
-        }
-
-        public Quaternion GetStartRotation()
-        {
-            return startRotation;
         }
 
         private float GetGCost(Transform _previousTransform, Transform _nextTransform)

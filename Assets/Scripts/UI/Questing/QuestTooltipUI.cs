@@ -30,9 +30,9 @@ namespace RPGProject.UI
 
         public void SetupTooltip(QuestStatus _status)
         {
-            Quest quest = _status.GetQuest();
+            Quest quest = _status.quest;
             title.text = quest.name;
-            description.text = quest.GetDescription();
+            description.text = quest.questDescription;
 
             PopulateObjectives(_status);
          
@@ -44,14 +44,14 @@ namespace RPGProject.UI
         {           
             DeactivateObjectiveObjects();
 
-            Quest quest = _status.GetQuest();
+            Quest quest = _status.quest;
 
-            foreach (Objective objective in quest.GetObjectives())
+            foreach (Objective objective in quest.objectives)
             {
                 QuestObjectiveUIItem questObjectiveUIItem = GetAvailableObjectiveInstance();
                 bool shouldActivateObjective = false;
 
-                if (objective.GetRequiredObjectives().Length <= 0)
+                if (objective.requiredObjectives.Length <= 0)
                 {
                     shouldActivateObjective = true;
                     questObjectiveUIItem = GetAvailableObjectiveInstance();
@@ -60,7 +60,7 @@ namespace RPGProject.UI
                 {
                     bool hasAllRequiredObjectives = true;
 
-                    foreach (string requiredObjective in objective.GetRequiredObjectives())
+                    foreach (string requiredObjective in objective.requiredObjectives)
                     {
                         if (_status.IsObjectiveComplete(requiredObjective)) continue;
                         else
