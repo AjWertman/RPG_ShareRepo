@@ -25,7 +25,7 @@ namespace RPGProject.UI
                 nameText.text = unitInfo.unitName;
                 faceImage.sprite = _fighter.characterMesh.faceImage;
 
-                Health unitHealth = _fighter.health;
+                Health unitHealth = _fighter.GetHealthComponent();
 
                 healthText.text = ("Health: " + unitHealth.healthPoints.ToString()+ "/" + unitHealth.maxHealthPoints.ToString());
             }

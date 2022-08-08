@@ -26,7 +26,7 @@ namespace RPGProject.Dialogue
         {
             dialogueNode = _dialogueNode;
             button.interactable = true;
-            text.text = dialogueNode.GetNodeText();
+            text.text = dialogueNode.nodeText;
         }
 
         public void ResetDialogueButton()

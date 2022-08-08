@@ -11,12 +11,11 @@ namespace RPGProject.Combat
 {
     public class Fighter : MonoBehaviour, CombatTarget
     {
-        public CharacterMesh characterMesh = null;
-        public Health health = null;
-
         public UnitStatus unitStatus = null;
         public UnitInfo unitInfo = new UnitInfo();
         public UnitResources unitResources = new UnitResources();
+
+        public CharacterMesh characterMesh = null;
 
         public Ability selectedAbility = null;
         public CombatTarget selectedTarget = null;
@@ -24,6 +23,8 @@ namespace RPGProject.Combat
         Animator animator = null;
         ComboLinker comboLinker = null;
         SoundFXManager soundFXManager = null;
+
+        Health health = null;
 
         List<Fighter> selectedTargets = new List<Fighter>();
         AbilityObjectKey currentAbilityObjectKey = AbilityObjectKey.None;
@@ -191,6 +192,11 @@ namespace RPGProject.Combat
             }
 
             return knownAbilities;
+        }
+
+        public Health GetHealthComponent()
+        {
+            return health;
         }
 
         public Ability GetBasicAttack()

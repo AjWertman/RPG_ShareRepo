@@ -31,7 +31,7 @@ namespace RPGProject.Inventories
             else
             {
                 iconImage.enabled = true;
-                iconImage.sprite = _item.GetIcon();
+                iconImage.sprite = _item.icon;
             }
 
             if (_number <= 1)

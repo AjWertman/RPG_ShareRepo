@@ -14,7 +14,7 @@ namespace RPGProject.Core
         {
             foreach(PlayableCharacter playableCharacter in playableCharacters)
             {
-                PlayerKey playerKey = playableCharacter.GetPlayerKey();
+                PlayerKey playerKey = playableCharacter.playerKey;
                 playableCharactersDict.Add(playerKey, playableCharacter);
             }
         }

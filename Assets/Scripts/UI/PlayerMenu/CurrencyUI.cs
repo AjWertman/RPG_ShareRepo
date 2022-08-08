@@ -23,7 +23,7 @@ namespace RPGProject.UI
 
         public void UpdateCurrencyText()
         {
-            currencyText.text = ("Gold: " + currency.GetGold().ToString());
+            currencyText.text = ("Gold: " + currency.gold.ToString());
         }
     }
 }

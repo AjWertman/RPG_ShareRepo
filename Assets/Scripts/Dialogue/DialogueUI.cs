@@ -50,7 +50,7 @@ namespace RPGProject.Dialogue
                 return;
             }
 
-            quitButton.interactable = !playerConversant.GetCurrentDialogue().IsEssentialDialogue();
+            quitButton.interactable = !playerConversant.GetCurrentDialogue().isEssentialDialogue;
 
             SetConversantName();
 
@@ -81,7 +81,7 @@ namespace RPGProject.Dialogue
 
         private void SetConversantName()
         {
-            string overrideName = playerConversant.GetCurrentDialogueNode().GetOverrideName();
+            string overrideName = playerConversant.GetCurrentDialogueNode().overrideConversantName;
 
             if (overrideName == "")
             {

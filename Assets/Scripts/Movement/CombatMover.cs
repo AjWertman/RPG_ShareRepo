@@ -10,9 +10,7 @@ namespace RPGProject.Movement
         [SerializeField] Transform retreatTransform = null;
         [SerializeField] float distanceTolerance = .3f;
 
-        public float gCostAllowance = 14;
         public float gCostPerAP = 24f;
-
         public bool isMoving = false;
 
         Vector3 startPosition = Vector3.zero;
@@ -20,7 +18,7 @@ namespace RPGProject.Movement
 
         float startStoppingDistance = 0;
 
-        public event Action onAPSpend;
+        public event Action<float> onBlockReached;
 
         public void InitalizeCombatMover()
         {
@@ -57,7 +55,8 @@ namespace RPGProject.Movement
 
                 if (isAtPosition)
                 {
-                    UseMovementResources(previousTransform, nextTransform);
+                    float gCost = GetGCost(previousTransform, nextTransform);
+                    onBlockReached(gCost);
 
                     previousTransform = nextTransform;
                     if (!isGoalBlock)
@@ -78,22 +77,6 @@ namespace RPGProject.Movement
 
                 yield return null;
             }
-        }
-
-        private void UseMovementResources(Transform _previousBlock, Transform _nextBlock)
-        {
-            float gCost = GetGCost(_previousBlock, _nextBlock);
-
-            if (gCost > gCostAllowance)
-            {
-                gCost -= gCostAllowance;
-                gCostAllowance = 0;
-
-                onAPSpend();
-                gCostAllowance = gCostPerAP;
-            }
-
-            gCostAllowance -= gCost;
         }
 
         public void UpdateStoppingDistance(bool _isZero)

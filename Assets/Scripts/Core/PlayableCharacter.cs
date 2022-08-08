@@ -1,4 +1,3 @@
-using RPGProject.Core;
 using UnityEngine;
 
 namespace RPGProject.Core
@@ -7,49 +6,14 @@ namespace RPGProject.Core
     public class PlayableCharacter : ScriptableObject
     {
         [Header("Character Design")]
-        [SerializeField] string characterName = "";
-        [SerializeField] PlayerKey playerKey = PlayerKey.None;
-        [SerializeField] int age = 0;
-        [TextArea(10, 10)] [SerializeField] string summaryText = "";
+        public string characterName = "";
+        public PlayerKey playerKey = PlayerKey.None;
+        public int age = 0;
+        public string summaryText = "";
         
         [Header("UI Design")]
-        [SerializeField] Sprite backgroundImage = null;
-        [SerializeField] Sprite faceImage = null;
-        [SerializeField] Sprite fullBodyImage = null;
-
-        public string GetName()
-        {
-            return characterName;
-        }
-
-        public PlayerKey GetPlayerKey()
-        {
-            return playerKey;
-        }
-
-        public int GetAge()
-        {
-            return age;
-        }
-
-        public string GetSummary()
-        {
-            return summaryText;
-        }
-
-        public Sprite GetBackgroundImage()
-        {
-            return backgroundImage;
-        }
-
-        public Sprite GetFaceImage()
-        {
-            return backgroundImage;
-        }
-
-        public Sprite GetFullBodyImage()
-        {
-            return backgroundImage;
-        }
+        public Sprite backgroundImage = null;
+        public Sprite faceImage = null;
+        public Sprite fullBodyImage = null;
     }
 }

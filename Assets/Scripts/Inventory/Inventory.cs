@@ -130,7 +130,7 @@ namespace RPGProject.Inventories
 
         private int FindStack(InventoryItem _item)
         {
-            if (!_item.IsStackable())
+            if (!_item.isStackable)
             {
                 return -1;
             }
@@ -152,7 +152,7 @@ namespace RPGProject.Inventories
             {
                 if (slots[i].item != null)
                 {
-                    slotStrings[i].itemID = slots[i].item.GetItemID();
+                    slotStrings[i].itemID = slots[i].item.itemID;
                     slotStrings[i].number = slots[i].number;
                 }
             }

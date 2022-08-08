@@ -19,6 +19,7 @@ namespace RPGProject.Core
 
         private void Update()
         {
+            //Refactor -- Testing;
             if (Input.GetKeyDown(KeyCode.R))
             {
                 LoadMainMenu();

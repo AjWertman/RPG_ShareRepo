@@ -56,7 +56,7 @@ namespace RPGProject.Combat
                     if(!hasAppliedChangeAmount)
                     {
                         hasAppliedChangeAmount = true;
-                        targetFighter.health.ChangeHealth(changeAmount, isCritical, false);
+                        targetFighter.GetHealthComponent().ChangeHealth(changeAmount, isCritical, false);
                     }
                 }
 

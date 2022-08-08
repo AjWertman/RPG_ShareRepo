@@ -14,9 +14,7 @@ namespace RPGProject.Combat
         public int requiredLevel = 1;
         public int abilityLifetime = 1;
         public float baseAbilityAmount = 40;
-
-        [TextArea(10, 10)]
-        public string description = "";
+        [TextArea(10, 10)] public string description = "";
 
         [Header("Design")]
         public bool shouldExpand = false;

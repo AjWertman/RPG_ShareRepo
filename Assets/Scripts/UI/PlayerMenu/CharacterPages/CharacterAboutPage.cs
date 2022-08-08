@@ -23,9 +23,9 @@ namespace RPGProject.UI
 
         public void SetupCharacterPage(PlayableCharacter _character, int _level)
         {
-            ChangeNameTexts(_character.GetName());
-            characterImage.sprite = _character.GetFullBodyImage();
-            descriptionText.text = _character.GetSummary();
+            ChangeNameTexts(_character.characterName);
+            characterImage.sprite = _character.fullBodyImage;
+            descriptionText.text = _character.summaryText;
             ChangeExtraInfoTexts(_character, _level);
         }
 
@@ -40,7 +40,7 @@ namespace RPGProject.UI
             string levelString = ("Level: " + _level.ToString());
             levelText.text = levelString;
 
-            string ageString = ("Age: " + _character.GetAge().ToString());
+            string ageString = ("Age: " + _character.age.ToString());
             ageText.text = ageString;
 
             //classText.text = _character.GetClass().ToString();

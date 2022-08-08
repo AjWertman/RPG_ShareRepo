@@ -9,51 +9,16 @@ namespace RPGProject.Dialogue
     [Serializable]
     public class DialogueNode : ScriptableObject
     {
-        [SerializeField] bool isPlayerNode = false;
-        [SerializeField] string overrideConversantName = "";
-        [TextArea(10, 10)] [SerializeField] string text;
-        [SerializeField] List<string> children = new List<string>();
-        [SerializeField] Rect rect = new Rect(0, 0, 200, 100);
+        public bool isPlayerNode = false;
+        public string overrideConversantName = "";
+        [TextArea(10, 10)] public string nodeText;
+        public List<string> children = new List<string>();
+        public Rect rect = new Rect(0, 0, 200, 100);
 
-        [SerializeField] string onEnterAction = "";
-        [SerializeField] string onExitAction = "";
+        public string onEnterAction = "";
+        public string onExitAction = "";
 
-        [SerializeField] Condition condition;
-
-        public bool IsPlayerSpeaking()
-        {
-            return isPlayerNode;
-        }
-
-        public string GetOverrideName()
-        {
-            return overrideConversantName;
-        }
-
-        public string GetNodeText()
-        {
-            return text;
-        }
-
-        public List<string> GetNodeChildren()
-        {
-            return children;
-        }
-
-        public Rect GetNodeRect()
-        {
-            return rect;
-        }
-
-        public string GetOnEnterAction()
-        {
-            return onEnterAction;
-        }
-
-        public string GetOnExitAction()
-        {
-            return onExitAction;
-        }
+        public Condition condition;
 
         public bool CheckCondition(IEnumerable<IPredicateEvaluator> evaluators)
         {
@@ -71,10 +36,10 @@ namespace RPGProject.Dialogue
 
         public void SetNodeText(string _newText)
         {
-            if (_newText != text)
+            if (_newText != nodeText)
             {
                 Undo.RecordObject(this, "Node Text Change");
-                text = _newText;
+                nodeText = _newText;
                 EditorUtility.SetDirty(this);
             }
         }

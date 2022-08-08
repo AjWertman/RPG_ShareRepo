@@ -11,7 +11,7 @@ namespace RPGProject.Dialogue
         public void Trigger(string _action)
         {
             DialogueAction dialogueAction = GetDialogueAction(_action);
-            dialogueAction.GetOnTrigger().Invoke();
+            dialogueAction.onTrigger.Invoke();
         }
 
         private DialogueAction GetDialogueAction(string _action)
@@ -20,7 +20,7 @@ namespace RPGProject.Dialogue
 
             foreach (DialogueAction dialogueAction in dialogueActions)
             {
-                if (dialogueAction.GetAction() == _action)
+                if (dialogueAction.action == _action)
                 {
                     dialogueActionToGet = dialogueAction;
                     break;
@@ -34,17 +34,7 @@ namespace RPGProject.Dialogue
     [Serializable]
     public class DialogueAction
     {
-        [SerializeField] string action = null;
-        [SerializeField] UnityEvent onTrigger;
-
-        public string GetAction()
-        {
-            return action;
-        }
-
-        public UnityEvent GetOnTrigger()
-        {
-            return onTrigger;
-        }
+        public string action = null;
+        public UnityEvent onTrigger;
     }
 }

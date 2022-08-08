@@ -87,6 +87,7 @@ namespace RPGProject.Control.Combat
                 GridBlock targetBlock = GetTargetBlock(combatTarget);
                 HandlePathfinding(targetBlock);
 
+                combatCamera.SetFollowTarget(targetBlock.travelDestination);
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (tempPath == null) return;

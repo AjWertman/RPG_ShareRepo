@@ -8,12 +8,12 @@ namespace RPGProject.Inventories
 
     public abstract class InventoryItem : ScriptableObject, ISerializationCallbackReceiver
     {
-        [SerializeField] string itemID = null;
-        [SerializeField] string displayName = null;
-        [SerializeField][TextArea] string description = null;
-        [SerializeField] Sprite icon = null;
-        [SerializeField] ItemMeshKey itemMeshKey = ItemMeshKey.None;
-        [SerializeField] bool stackable = false;
+        public string itemID = null;
+        public string displayName = null;
+        [TextArea] public string description = null;
+        public Sprite icon = null;
+        public ItemMeshKey itemMeshKey = ItemMeshKey.None;
+        public bool isStackable = false;
 
         static Dictionary<string, InventoryItem> itemLookupCache;
 
@@ -38,36 +38,6 @@ namespace RPGProject.Inventories
 
             if (_itemID == null || !itemLookupCache.ContainsKey(_itemID)) return null;
             return itemLookupCache[_itemID];
-        }
-
-        public Sprite GetIcon()
-        {
-            return icon;
-        }
-
-        public ItemMeshKey GetItemMeshKey()
-        {
-            return itemMeshKey;
-        }
-
-        public string GetItemID()
-        {
-            return itemID;
-        }
-
-        public bool IsStackable()
-        {
-            return stackable;
-        }
-        
-        public string GetDisplayName()
-        {
-            return displayName;
-        }
-
-        public string GetDescription()
-        {
-            return description;
         }
 
         void ISerializationCallbackReceiver.OnBeforeSerialize()

@@ -9,7 +9,7 @@ namespace RPGProject.Control
 {
     public class ItemDropper : MonoBehaviour, ISaveable
     {
-        [SerializeField] Transform itemSpawnTransform = null;
+        public Transform itemDropTransform = null;
 
         PickupSpawner pickupSpawner = null;
 
@@ -23,12 +23,12 @@ namespace RPGProject.Control
 
         public void DropItem(InventoryItem _inventoryItem, int _number)
         {
-            SpawnPickup(GetDropLocation(), _inventoryItem, _number);
+            SpawnPickup(itemDropTransform, _inventoryItem, _number);
         }
 
         public void DropItem(InventoryItem _inventoryItem)
         {
-            SpawnPickup(GetDropLocation(), _inventoryItem, 1);
+            SpawnPickup(itemDropTransform, _inventoryItem, 1);
         }
 
         public void SpawnPickup(Transform _spawnTransform, InventoryItem _inventoryItem, int _number)
@@ -44,12 +44,6 @@ namespace RPGProject.Control
 
             droppedItems.Add(pickup);
         }
-
-        protected Transform GetDropLocation()
-        {
-            return itemSpawnTransform;
-        }
-
 
         //Refactor below
         [Serializable]
@@ -69,7 +63,7 @@ namespace RPGProject.Control
             foreach (Pickup pickup in droppedItems)
             {
                 var droppedItem = new DropRecord();
-                droppedItem.itemID = pickup.GetItem().GetItemID();
+                droppedItem.itemID = pickup.GetItem().itemID;
                 droppedItem.position = new SerializableVector3(pickup.transform.position);
                 droppedItem.number = pickup.GetNumber();
                 droppedItem.sceneBuildIndex = buildIndex;

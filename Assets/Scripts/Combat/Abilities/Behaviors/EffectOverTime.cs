@@ -4,7 +4,7 @@ namespace RPGProject.Combat
     {
         public override void OnTurnAdvance()
         {
-            GetTargetFighter().health.ChangeHealth(changeAmount, false, true);
+            GetTargetFighter().GetHealthComponent().ChangeHealth(changeAmount, false, true);
             base.OnTurnAdvance();
         }
 

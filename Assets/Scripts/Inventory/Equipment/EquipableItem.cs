@@ -5,11 +5,6 @@ namespace RPGProject.Inventories
     [CreateAssetMenu(menuName = ("Inventory/Equipable Item"))]
     public class EquipableItem : InventoryItem
     {
-        [SerializeField] EquipmentSlot equipmentSlot = EquipmentSlot.None;
-
-        public EquipmentSlot GetEquipmentSlot()
-        {
-            return equipmentSlot;
-        }
+        public EquipmentSlot equipmentSlot = EquipmentSlot.None;
     }
 }

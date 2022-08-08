@@ -27,7 +27,7 @@ namespace RPGProject.Control
 
         private void SetupPickup(Pickup pickup, InventoryItem _inventoryItem, int _number)
         {
-            ItemMeshKey itemMeshKey = _inventoryItem.GetItemMeshKey();
+            ItemMeshKey itemMeshKey = _inventoryItem.itemMeshKey;
             GameObject availableMesh = GetAvailableItemMesh(itemMeshKey);
             pickup.Setup(_inventoryItem, availableMesh, _number);
         }

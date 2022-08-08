@@ -16,7 +16,7 @@ namespace RPGProject.Control
         {
             item = _item;
             itemMesh = _itemMesh;
-            if (!item.IsStackable())
+            if (!item.isStackable)
             {
                 _number = 1;
             }
@@ -52,7 +52,7 @@ namespace RPGProject.Control
 
         public string WhatToActivate()
         {
-            return "Pickup " + item.GetDisplayName() + "?";
+            return "Pickup " + item.displayName + "?";
         }
 
         public void WhatToDoOnClick(PlayerController _playerController)

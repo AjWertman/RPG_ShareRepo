@@ -98,7 +98,7 @@ namespace RPGProject.Control
                 followCamera.SetCanRotate(!isInteracting);
             }
 
-            playerMover.SetCanMove(!isInteracting);
+            playerMover.canMove = !isInteracting;
             ActivateCursor(isInteracting);
             return isInteracting;
         }

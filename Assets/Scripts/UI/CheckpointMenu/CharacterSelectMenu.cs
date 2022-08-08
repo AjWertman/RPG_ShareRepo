@@ -51,7 +51,7 @@ namespace RPGProject.UI
             foreach (PlayableCharacter character in _characters)
             {
                 Button button = GetAvailableCharacterButton();
-                button.GetComponentInChildren<TextMeshProUGUI>().text = character.GetName();
+                button.GetComponentInChildren<TextMeshProUGUI>().text = character.characterName;
                 characterButtons[button] = character;
                 button.gameObject.SetActive(true);
             }

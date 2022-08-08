@@ -59,7 +59,7 @@ namespace RPGProject.Inventories
                 EquipableItem equippedItem = equippedItems[equipmentSlot];
                 string itemID = "";
 
-                if (equippedItem != null) itemID = equippedItem.GetItemID();
+                if (equippedItem != null) itemID = equippedItem.itemID;
 
                 equippedItemsForSerialization[equipmentSlot] = itemID;
             }

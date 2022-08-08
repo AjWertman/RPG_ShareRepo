@@ -37,7 +37,7 @@ namespace RPGProject.UI
         {
             EquipableItem equipableItem = _item as EquipableItem;
             if (equipableItem == null) return 0;
-            if (equipableItem.GetEquipmentSlot() != equipmentSlot) return 0;
+            if (equipableItem.equipmentSlot != equipmentSlot) return 0;
             if (GetItem() != null) return 0;
 
             return 1;

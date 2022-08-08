@@ -63,17 +63,17 @@ namespace RPGProject.Control
 
         private void TriggerEnterAction()
         {
-            if (currentNode != null && currentNode.GetOnEnterAction() != "")
+            if (currentNode != null && currentNode.onEnterAction != "")
             {
-                TriggerAction(currentNode.GetOnEnterAction());
+                TriggerAction(currentNode.onEnterAction);
             }
         }
 
         private void TriggerExitAction()
         {
-            if (currentNode != null && currentNode.GetOnExitAction() != "")
+            if (currentNode != null && currentNode.onExitAction!= "")
             {
-                TriggerAction(currentNode.GetOnExitAction());
+                TriggerAction(currentNode.onExitAction);
             }
         }
 
@@ -125,7 +125,7 @@ namespace RPGProject.Control
                 return "";
             }
 
-            return currentNode.GetNodeText();
+            return currentNode.nodeText;
         }
 
         public IEnumerable<DialogueNode> GetChoices()

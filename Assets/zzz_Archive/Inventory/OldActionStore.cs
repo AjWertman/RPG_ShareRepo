@@ -62,7 +62,7 @@ namespace RPGProject.Inventories
             if (dockedItems.ContainsKey(index))
             {
                 dockedItems[index].item.Use(user);
-                if (dockedItems[index].item.IsConsumable())
+                if (dockedItems[index].item.isConsumable)
                 {
                     RemoveItems(index, 1);
                 }
@@ -108,7 +108,7 @@ namespace RPGProject.Inventories
             {
                 return 0;
             }
-            if (actionItem.IsConsumable())
+            if (actionItem.isConsumable)
             {
                 return int.MaxValue;
             }
@@ -133,7 +133,7 @@ namespace RPGProject.Inventories
             foreach (var pair in dockedItems)
             {
                 var record = new DockedItemRecord();
-                record.itemID = pair.Value.item.GetItemID();
+                record.itemID = pair.Value.item.itemID;
                 record.number = pair.Value.number;
                 state[pair.Key] = record;
             }

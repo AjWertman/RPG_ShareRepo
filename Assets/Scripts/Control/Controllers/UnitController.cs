@@ -52,7 +52,7 @@ namespace RPGProject.Control.Combat
             mover.InitalizeCombatMover();
             unitUI.InitializeUnitUI();
 
-            mover.onAPSpend += () => UpdateActionPoints(-1);
+            mover.onBlockReached += UseMovementResources;
         }
 
         public void SetupUnitController(UnitInfo _unitInfo, UnitResources _unitResources,
@@ -81,7 +81,7 @@ namespace RPGProject.Control.Combat
 
             float actionPoints = unitResources.actionPoints;
 
-            totalPossibleGCostAllowance += mover.gCostAllowance;
+            totalPossibleGCostAllowance += unitResources.gCostAllowance;
             totalPossibleGCostAllowance += mover.gCostPerAP * actionPoints;
 
             return totalPossibleGCostAllowance;
@@ -94,11 +94,20 @@ namespace RPGProject.Control.Combat
             currentBlock.SetContestedFighter(fighter);
         }
 
-        private void UpdateActionPoints(int _amountToChange)
+        private void UseMovementResources(float _gCost)
         {
-            unitResources.actionPoints += _amountToChange;
+            if (_gCost > unitResources.gCostAllowance)
+            {
+                _gCost -= unitResources.gCostAllowance;
+                unitResources.gCostAllowance = 0;
 
-            if(unitResources.actionPoints == 0 && mover.gCostAllowance < 10)
+                unitResources.actionPoints--;
+                unitResources.gCostAllowance = mover.gCostPerAP;
+            }
+
+            unitResources.gCostAllowance -= _gCost;
+
+            if(unitResources.actionPoints == 0 && unitResources.gCostAllowance < 10)
             {
                 onMoveCompletion();
             }
@@ -192,7 +201,7 @@ namespace RPGProject.Control.Combat
         {
             //mana.SpendManaPoints(_selectedAbility.GetManaCost());
             StartCoroutine(fighter.Attack(_target, _selectedAbility));
-            UpdateActionPoints(_selectedAbility.actionPointsCost);
+            UseMovementResources(_selectedAbility.actionPointsCost);
         }
 
         public void SetName(string _name)

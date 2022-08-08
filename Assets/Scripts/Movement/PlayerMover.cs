@@ -9,13 +9,13 @@ namespace RPGProject.Movement
         [SerializeField] float turnSmoothness = .1f;
         [SerializeField] float gravity = 20f;
 
+        public bool canMove = false;
+
         Animator animator = null;
         CharacterController characterController = null;
 
         Vector3 direction = Vector3.zero;
         float turnSmoothVelocity;
-
-        bool canMove = false;
 
         private void Awake()
         {
@@ -52,16 +52,6 @@ namespace RPGProject.Movement
             float forwardSpeed = localVelocity.z;
 
             animator.SetFloat("forwardSpeed", forwardSpeed);
-        }
-
-        public void SetCanMove(bool _canMove)
-        {
-            canMove = _canMove;
-        }
-
-        public bool CanMove()
-        {
-            return canMove;
         }
 
         public CharacterController GetCharacterController()

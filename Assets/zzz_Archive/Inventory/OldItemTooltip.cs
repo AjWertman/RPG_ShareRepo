@@ -9,7 +9,7 @@ public class OldItemTooltip : MonoBehaviour
 
     public void Setup(InventoryItem _item)
     {
-        titleText.text = _item.GetDisplayName();
-        bodyText.text = _item.GetDescription();
+        titleText.text = _item.displayName;
+        bodyText.text = _item.description;
     }
 }

@@ -5,7 +5,7 @@ namespace RPGProject.Inventories
 {
     public class Currency : MonoBehaviour
     {
-        [SerializeField] float gold = 0;
+        public float gold = 0;
 
         public event Action onCurrencyChange;
 
@@ -20,11 +20,6 @@ namespace RPGProject.Inventories
         {
             gold += _amountToGain;
             onCurrencyChange();
-        }
-
-        public float GetGold()
-        {
-            return gold;
         }
 
         public bool HasEnoughGold(float _amountToTest)

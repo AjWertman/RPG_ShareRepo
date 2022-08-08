@@ -123,7 +123,7 @@ namespace RPGProject.Dialogue
 
                 if (draggingNode != null)
                 {
-                    draggingOffset = draggingNode.GetNodeRect().position - Event.current.mousePosition;
+                    draggingOffset = draggingNode.rect.position - Event.current.mousePosition;
                     Selection.activeObject = draggingNode;
                 }
                 else
@@ -157,11 +157,11 @@ namespace RPGProject.Dialogue
 
         private void DrawConnections(DialogueNode _dialogueNode)
         {
-            Vector3 startPos = new Vector2(_dialogueNode.GetNodeRect().xMax, _dialogueNode.GetNodeRect().center.y);
+            Vector3 startPos = new Vector2(_dialogueNode.rect.xMax, _dialogueNode.rect.center.y);
 
             foreach (DialogueNode childNode in selectedDialogue.GetAllChildrenNodes(_dialogueNode))
             {
-                Vector3 endPos = new Vector2(childNode.GetNodeRect().xMin, childNode.GetNodeRect().center.y);
+                Vector3 endPos = new Vector2(childNode.rect.xMin, childNode.rect.center.y);
                 Vector3 controlPointOffset = endPos - startPos;
                 controlPointOffset.y = 0;
                 controlPointOffset.x *= 0.8f;
@@ -181,7 +181,7 @@ namespace RPGProject.Dialogue
 
             foreach (DialogueNode node in selectedDialogue.GetAllDialogueNodes())
             {
-                if (node.GetNodeRect().Contains(_mousePosition))
+                if (node.rect.Contains(_mousePosition))
                 {
                     foundNode = node;
                 }
@@ -193,14 +193,14 @@ namespace RPGProject.Dialogue
         private void DrawNode(DialogueNode _dialogueNode)
         {
             GUIStyle style = nodeStyle;
-            if (_dialogueNode.IsPlayerSpeaking())
+            if (_dialogueNode.isPlayerNode)
             {
                 style = playerNodeStyle;
             }
 
-            GUILayout.BeginArea(new Rect(_dialogueNode.GetNodeRect()), style);
+            GUILayout.BeginArea(new Rect(_dialogueNode.rect), style);
 
-            _dialogueNode.SetNodeText(EditorGUILayout.TextField(_dialogueNode.GetNodeText()));
+            _dialogueNode.SetNodeText(EditorGUILayout.TextField(_dialogueNode.nodeText));
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("x"))
@@ -235,7 +235,7 @@ namespace RPGProject.Dialogue
                     linkingParentNode = null;
                 }
             }
-            else if (linkingParentNode.GetNodeChildren().Contains(_dialogueNode.name))
+            else if (linkingParentNode.children.Contains(_dialogueNode.name))
             {
                 if (GUILayout.Button("Unlink"))
                 {

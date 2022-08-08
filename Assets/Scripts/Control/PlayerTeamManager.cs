@@ -178,8 +178,8 @@ namespace RPGProject.Control
             List<Unit> playerUnits = new List<Unit>();
             
             foreach(PlayableCharacter playableCharacter in playerTeam)
-            {            
-                Unit playerUnit = GetUnit(playableCharacter.GetPlayerKey());
+            {
+                Unit playerUnit = GetUnit(playableCharacter.playerKey);
                 playerUnits.Add(playerUnit);
             }
 

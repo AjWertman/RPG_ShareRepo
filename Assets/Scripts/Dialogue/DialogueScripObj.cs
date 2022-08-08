@@ -10,7 +10,8 @@ namespace RPGProject.Dialogue
         [SerializeField] Vector2 newNodeOffset = new Vector2(250, 0);
 
         [SerializeField] List<DialogueNode> dialogueNodes = new List<DialogueNode>();
-        [SerializeField] bool isEssentialDialogue = false;
+
+        public bool isEssentialDialogue = false;
 
         Dictionary<string, DialogueNode> nodeLookup = new Dictionary<string, DialogueNode>();
 
@@ -34,14 +35,9 @@ namespace RPGProject.Dialogue
             return dialogueNodes;
         }
 
-        public bool IsEssentialDialogue()
-        {
-            return isEssentialDialogue;
-        }
-
         public IEnumerable<DialogueNode> GetAllChildrenNodes(DialogueNode _parentNode)
         {
-            foreach (string childID in _parentNode.GetNodeChildren())
+            foreach (string childID in _parentNode.children)
             {
                 if (nodeLookup.ContainsKey(childID))
                 {
@@ -54,7 +50,7 @@ namespace RPGProject.Dialogue
         {
             foreach (DialogueNode node in GetAllChildrenNodes(_currentNode))
             {
-                if (node.IsPlayerSpeaking())
+                if (node.isPlayerNode)
                 {
                     yield return node;
                 }
@@ -65,7 +61,7 @@ namespace RPGProject.Dialogue
         {
             foreach (DialogueNode node in GetAllChildrenNodes(_currentNode))
             {
-                if (!node.IsPlayerSpeaking())
+                if (!node.isPlayerNode)
                 {
                     yield return node;
                 }
@@ -110,8 +106,8 @@ namespace RPGProject.Dialogue
             if (_parentNode != null)
             {
                 _parentNode.AddNodeChild(newNode.name);
-                newNode.SetPlayerSpeaking(!_parentNode.IsPlayerSpeaking());
-                newNode.SetNodePosition(_parentNode.GetNodeRect().position + newNodeOffset);
+                newNode.SetPlayerSpeaking(!_parentNode.isPlayerNode);
+                newNode.SetNodePosition(_parentNode.rect.position + newNodeOffset);
             }
 
             return newNode;
