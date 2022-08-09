@@ -49,9 +49,10 @@ namespace RPGProject.Control.Combat
 
         private void Update()
         {
+            //Refactor - testing
             if (Input.GetKeyDown(KeyCode.L))
             {
-                AIBehavior.GetViableActions(unitManager.enemyUnits[1], GetUnitFighters(unitManager.unitControllers));
+                AIBehavior.GetViableActions(unitManager.enemyUnits[1], unitManager.unitControllers);
             }
         }
 

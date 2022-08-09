@@ -8,13 +8,14 @@ public class BattleCamera : MonoBehaviour
 
     CinemachineFreeLook freeLook = null;
 
-    [SerializeField] Transform centerOfBattle = null;
-
     public Transform followTarget = null;
+    Transform currentTarget = null;
 
     float turnSmoothVelocity;
 
     int minX, minZ, maxX, maxZ;
+
+    bool canMove = true;
 
     //Future ideas
     //1. have a recenter button
@@ -26,6 +27,16 @@ public class BattleCamera : MonoBehaviour
         freeLook = GetComponent<CinemachineFreeLook>();
     }
 
+    private void Update()
+    {
+        if (currentTarget == followTarget) return;
+
+        if(followTarget.position != currentTarget.position)
+        {
+            followTarget.position = currentTarget.position;
+        }
+    }
+
     public void InitalizeBattleCamera(int _minX, int _minZ, int _maxX, int _maxZ)
     {
         minX = _minX;
@@ -34,7 +45,10 @@ public class BattleCamera : MonoBehaviour
         maxZ = _maxZ;
 
         RecenterCamera();
-        SetFollowTarget(centerOfBattle);
+        freeLook.Follow = followTarget;
+        freeLook.LookAt = followTarget;
+
+        SetFollowTarget(followTarget);
     }
 
     public void RotateFreeLook(bool _rotateClockwise)
@@ -55,18 +69,17 @@ public class BattleCamera : MonoBehaviour
         freeLook.m_XAxis.Value = 0f;
     }
 
-    public void SetFollowTarget(Transform _followTarget)
+    public void SetFollowTarget(Transform _newTarget)
     {
-        if (followTarget == _followTarget) return;
+        if (currentTarget == _newTarget) return;
+        currentTarget = _newTarget;
 
-        followTarget = _followTarget;
-
-        freeLook.LookAt = followTarget;
-        freeLook.Follow = followTarget;
+        followTarget.transform.position = currentTarget.transform.position;
     }
 
     public void MoveFollowTransform(Vector3 _inputDirection)
     {
+        if (currentTarget != followTarget) SetFollowTarget(followTarget);
         float aimAngle = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg + transform.eulerAngles.y;
         float angle = Mathf.SmoothDampAngle(followTarget.eulerAngles.y, aimAngle, ref turnSmoothVelocity, .1f);
 

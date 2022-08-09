@@ -86,6 +86,30 @@ namespace RPGProject.Combat.Grid
             else return null;
         }
 
+        public static int CalculateDistance(GridBlock _startBlock, GridBlock _endBlock)
+        {
+            GridCoordinates startCoordinates = _startBlock.gridCoordinates;
+            GridCoordinates endCoordinates = _endBlock.gridCoordinates;
+
+            int xDistance = Mathf.Abs(startCoordinates.x - endCoordinates.x);
+            int yDistance = Mathf.Abs(startCoordinates.z - endCoordinates.z);
+            int remainingDistance = Mathf.Abs(xDistance - yDistance);
+
+            int distanceCost = (diagonalCost * Mathf.Min(xDistance, yDistance)) + (straightCost * remainingDistance);
+
+            return distanceCost;
+        }
+
+        public bool IsNeighborBlock(GridBlock _targetBlock, GridBlock _possibleNeighbor)
+        {
+            foreach(GridBlock gridBlock in GetNeighbors(_targetBlock))
+            {
+                if (gridBlock == _possibleNeighbor) return true;
+            }
+
+            return false;
+        }
+
         private List<GridBlock> CalculatePath(GridBlock _endBlock)
         {
             List<GridBlock> calculatedPath = new List<GridBlock>();
@@ -158,20 +182,6 @@ namespace RPGProject.Combat.Grid
 
             //Left and Down
             yield return GetGridBlock(x - 1, z - 1);
-        }
-
-        private int CalculateDistance(GridBlock _startBlock, GridBlock _endBlock)
-        {
-            GridCoordinates startCoordinates = _startBlock.gridCoordinates;
-            GridCoordinates endCoordinates = _endBlock.gridCoordinates;
-
-            int xDistance = Mathf.Abs(startCoordinates.x - endCoordinates.x);
-            int yDistance = Mathf.Abs(startCoordinates.z - endCoordinates.z);
-            int remainingDistance = Mathf.Abs(xDistance - yDistance);
-
-            int distanceCost = (diagonalCost * Mathf.Min(xDistance, yDistance)) + (straightCost * remainingDistance);
-
-            return distanceCost;
         }
     }
 

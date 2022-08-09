@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,12 +45,9 @@ namespace RPGProject.Combat.Grid
 
                 GridCoordinates gridCoordinates = new GridCoordinates(x, z);
 
-                SetBoundaries(gridCoordinates);
-
+                BoundaryCheck(gridCoordinates);
                 SetupGridBlock(gridBlock, gridCoordinates);
-
                 gridBlock.ActivateMeshRenderer(false);
-
                 gridDictionary.Add(gridCoordinates, gridBlock);
             }
 
@@ -127,7 +123,7 @@ namespace RPGProject.Combat.Grid
             _gridBlock.SetupGridBlock(newMaterial, textColor);
         }
 
-        private void SetBoundaries(GridCoordinates _gridCoordinates)
+        private void BoundaryCheck(GridCoordinates _gridCoordinates)
         {
             int x = _gridCoordinates.x;
             int z = _gridCoordinates.z;

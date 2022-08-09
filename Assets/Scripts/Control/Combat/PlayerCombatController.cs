@@ -106,6 +106,13 @@ namespace RPGProject.Control.Combat
                     path = GetFurthestPath(tempPath);
                     OnPlayerClick(targetBlock);
                 }
+                else if (Input.GetMouseButtonDown(1))
+                {
+                    Fighter fighter = (Fighter)combatTarget;
+
+                    if (fighter == null) return;
+                    battleCamera.SetFollowTarget(fighter.transform);
+                }
             }
         }
 
