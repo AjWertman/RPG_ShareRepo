@@ -13,22 +13,21 @@ namespace RPGProject.Control.Combat
 {
     public class UnitController : MonoBehaviour
     {
-        [SerializeField] UnitInfo unitInfo = new UnitInfo();
-        [SerializeField] UnitResources unitResources = new UnitResources();
-        [SerializeField] Stats startingStats = new Stats();
-        
-        Animator animator = null;
+        public UnitInfo unitInfo = new UnitInfo();
+        public UnitResources unitResources = new UnitResources();
+        public Stats startingStats = new Stats();
 
-        public CombatAIBrain combatAIBrain = null;
+        public GridBlock currentBlock = null;
+
+        Animator animator = null;
+        CombatAIBrain combatAIBrain = null;
         CombatMover mover = null;
         Fighter fighter = null;
         ComboLinker comboLinker = null;
         Health health = null;
-
         CharacterMesh characterMesh = null;
         UnitUI unitUI = null;
 
-        public GridBlock currentBlock = null;
         GridBlock queuedBlock = null;
 
         bool isTurn = false;
@@ -246,6 +245,8 @@ namespace RPGProject.Control.Combat
         {
             health.CalculateMaxHealthPoints(true);
 
+            //Refactor - setting player health if already have some damage?
+            
             float healthPoints = health.healthPoints;
             float maxHealthPoints = health.maxHealthPoints;
 
@@ -258,7 +259,6 @@ namespace RPGProject.Control.Combat
         {
             UpdateFighterStats();
             UpdateHealthStats(_isInitialUpdated);
-            UpdateManaStats();
         }
 
         private void UpdateFighterStats()
@@ -281,11 +281,6 @@ namespace RPGProject.Control.Combat
                 stats.GetStatLevel(StatType.Armor),
                stats.GetStatLevel(StatType.Resistance)
                 );
-        }
-
-        private void UpdateManaStats()
-        {
-            Stats stats = unitInfo.stats;
         }
 
         public void SetIsTurn(bool _isTurn)
@@ -318,14 +313,9 @@ namespace RPGProject.Control.Combat
             return unitInfo.stats.GetStatLevel(_statType);
         }
 
-        public UnitInfo GetUnitInfo()
-        { 
-            return unitInfo;
-        }
-
-        public UnitResources GetUnitResources()
+        public CombatAIBrain GetCombatAIBrain()
         {
-            return unitResources;
+            return combatAIBrain;
         }
 
         public CombatMover GetMover()

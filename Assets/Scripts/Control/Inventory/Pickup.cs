@@ -6,9 +6,10 @@ namespace RPGProject.Control
 {
     public class Pickup : MonoBehaviour, IRaycastable
     {
-        InventoryItem item;
+        public InventoryItem item;
+        public int number = 1;
+
         GameObject itemMesh = null;
-        int number = 1;
 
         public event Action<Pickup, GameObject> onItemPickup;
 
@@ -33,16 +34,6 @@ namespace RPGProject.Control
         {
             item = null;
             number = 0;
-        }
-
-        public InventoryItem GetItem()
-        {
-            return item;
-        }
-
-        public int GetNumber()
-        {
-            return number;
         }
 
         public bool HandleRaycast(PlayerController _playerController)

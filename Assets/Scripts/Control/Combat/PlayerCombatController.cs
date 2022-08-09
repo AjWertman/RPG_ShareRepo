@@ -1,6 +1,7 @@
 using RPGProject.Combat;
 using RPGProject.Combat.Grid;
 using RPGProject.Core;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace RPGProject.Control.Combat
         GridSystem gridSystem = null;
         Pathfinder pathfinder = null;
 
-        CombatCamera combatCamera = null;
+        BattleCamera battleCamera = null;
         Raycaster raycaster = null;
 
         List<GridBlock> tempPath = new List<GridBlock>();
@@ -32,7 +33,7 @@ namespace RPGProject.Control.Combat
             gridSystem = GetComponentInChildren<GridSystem>();
             pathfinder = GetComponentInChildren<Pathfinder>();
 
-            combatCamera = FindObjectOfType<CombatCamera>();
+            battleCamera = FindObjectOfType<BattleCamera>();
 
             battleHandler.onUnitTurnUpdate += UpdateCurrentUnitTurn;
         }
@@ -40,6 +41,7 @@ namespace RPGProject.Control.Combat
         private void Start()
         {
             battleHandler.GetBattleUIManager().onAbilitySelect += SetSelectedAbility;
+            SetupBattleCamera();
         }
 
         private void Update()
@@ -60,18 +62,29 @@ namespace RPGProject.Control.Combat
 
         private void HandleCameraControl()
         {
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            float vertical = Input.GetAxisRaw("Vertical");
+            float horizontal = Input.GetAxisRaw("Horizontal");
+
+            Vector3 inputDirection = new Vector3(horizontal, 0f, vertical).normalized;
+            
+            if(inputDirection.magnitude > .01f)
             {
-                combatCamera.RotateFreeLook(true);
-            }
-            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            {
-                combatCamera.RotateFreeLook(false);
+                battleCamera.MoveFollowTransform(inputDirection);
             }
 
+            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                battleCamera.RotateFreeLook(true);
+            }
+            else if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
+            {
+                battleCamera.RotateFreeLook(false);
+            }
+
+            //R
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                combatCamera.RecenterCamera();
+                battleCamera.RecenterCamera();
             }
         }
 
@@ -87,7 +100,6 @@ namespace RPGProject.Control.Combat
                 GridBlock targetBlock = GetTargetBlock(combatTarget);
                 HandlePathfinding(targetBlock);
 
-                combatCamera.SetFollowTarget(targetBlock.travelDestination);
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (tempPath == null) return;
@@ -142,10 +154,18 @@ namespace RPGProject.Control.Combat
             gridSystem.HighlightPath(tempPath, furthestBlockIndex);
         }
 
+        private void SetupBattleCamera()
+        {
+            GridCoordinates minCoordinates = gridSystem.minCoordinates;
+            GridCoordinates maxCoordinates = gridSystem.maxCoordinates;
+
+            battleCamera.InitalizeBattleCamera(minCoordinates.x, minCoordinates.z, maxCoordinates.x, maxCoordinates.z);
+        }
+
         private void UpdateCurrentUnitTurn(UnitController _unitController)
         {
             currentUnitTurn = _unitController;
-            if (currentUnitTurn.GetUnitInfo().isPlayer) raycaster.isRaycasting = true;
+            if (currentUnitTurn.unitInfo.isPlayer) raycaster.isRaycasting = true;
             else raycaster.isRaycasting = false;
         }
 

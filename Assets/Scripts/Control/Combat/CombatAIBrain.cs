@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class CombatAIBrain : MonoBehaviour
 {
+    [SerializeField] CombatAIType combatAIType = CombatAIType.mDamage;
     [SerializeField] CombatAIBehavior combatAIBehavior;
     [SerializeField] List<Agro> agros = new List<Agro>();
 
@@ -39,6 +40,8 @@ public class CombatAIBrain : MonoBehaviour
         if (randomTarget == null) return;
 
         Health targetHealth = randomTarget.GetHealthComponent();
+
+        //https://docs.larian.game/Combat_AI
 
         //How many AP to spend to get in attack range? 
         //Is target below X percentage of health? Can I kill them on this turn? 

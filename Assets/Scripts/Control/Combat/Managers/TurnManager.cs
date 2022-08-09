@@ -9,13 +9,12 @@ namespace RPGProject.Control.Combat
 
     public class TurnManager : MonoBehaviour
     {
+        public List<UnitController> turnOrder = new List<UnitController>();
+        public UnitController currentUnitTurn = null;
+
         List<UnitController> allUnits = new List<UnitController>();
         List<UnitController> playerUnits = new List<UnitController>();
         List<UnitController> enemyUnits = new List<UnitController>();
-
-        List<UnitController> turnOrder = new List<UnitController>();
-
-        UnitController currentUnitTurn = null;
 
         UnitTurnState unitTurnState = UnitTurnState.Null;
         UnitTurnState firstUnitTurnState = UnitTurnState.Null;
@@ -172,7 +171,7 @@ namespace RPGProject.Control.Combat
 
         public UnitTurnState GetUnitTurnState()
         {
-            bool isPlayer = GetUnitTurn().GetUnitInfo().isPlayer;
+            bool isPlayer = GetUnitTurn().unitInfo.isPlayer;
 
             if (isPlayer) return UnitTurnState.Player;
             else return UnitTurnState.Enemy;
@@ -180,20 +179,10 @@ namespace RPGProject.Control.Combat
 
         public UnitTurnState GetNextUnitTurnState()
         {
-            bool isPlayer = GetNextUnitTurn().GetUnitInfo().isPlayer;
+            bool isPlayer = GetNextUnitTurn().unitInfo.isPlayer;
 
             if (isPlayer) return UnitTurnState.Player;
             else return UnitTurnState.Enemy;
-        }
-
-        public List<UnitController> GetTurnOrder()
-        {
-            return turnOrder;
-        }
-
-        public UnitController GetCurrentUnitTurn()
-        {
-            return currentUnitTurn;
         }
 
         private int GetTurnIndex(UnitController _unit)

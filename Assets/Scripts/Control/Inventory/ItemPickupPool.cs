@@ -80,14 +80,14 @@ namespace RPGProject.Control
             {
                 List<GameObject> itemMeshes = new List<GameObject>();
 
-                for (int i = 0; i < itemMeshPrefab.GetAmountToSpawn(); i++)
+                for (int i = 0; i < itemMeshPrefab.amountToSpawn; i++)
                 {
-                    GameObject itemMesh = Instantiate(itemMeshPrefab.GetItemMeshPrefab(), meshParent);
+                    GameObject itemMesh = Instantiate(itemMeshPrefab.itemMeshPrefab, meshParent);
                     itemMeshes.Add(itemMesh);
                     itemMesh.gameObject.SetActive(false);
                 }
 
-                itemMeshPool.Add(itemMeshPrefab.GetItemMeshKey(), itemMeshes);
+                itemMeshPool.Add(itemMeshPrefab.itemMeshKey, itemMeshes);
             }
         }
 
@@ -110,24 +110,9 @@ namespace RPGProject.Control
         [Serializable]
         private class ItemMeshPrefab
         {
-            [SerializeField] ItemMeshKey itemMeshKey = ItemMeshKey.None;
-            [SerializeField] GameObject itemMeshPrefab = null;
-            [SerializeField] int amountToSpawn = 4;
-            
-            public ItemMeshKey GetItemMeshKey()
-            {
-                return itemMeshKey;
-            }
-
-            public GameObject GetItemMeshPrefab()
-            {
-                return itemMeshPrefab;
-            }
-
-            public int GetAmountToSpawn()
-            {
-                return amountToSpawn;
-            }
+            public ItemMeshKey itemMeshKey = ItemMeshKey.None;
+            public GameObject itemMeshPrefab = null;
+            public int amountToSpawn = 4;
         }
     }
 

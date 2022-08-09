@@ -3,9 +3,22 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AIBehavior : MonoBehaviour
+public static class AIBehavior
 {
-    public event Action<Fighter, Ability> onAIMoveSelection;
+    public static void PlanMove(Fighter _fighter)
+    {
+        List<Ability> abilities = _fighter.GetKnownAbilities();
 
-    public abstract void PlanMove(List<Fighter> _allFighters);
+        List<Ability> usableAbilities = GetUsableAbilities(_fighter, abilities);
+
+    }
+
+    private static List<Ability> GetUsableAbilities(Fighter _fighter, List<Ability> abilities)
+    {
+        List<Ability> usableAbilities = new List<Ability>();
+
+
+
+        return usableAbilities;
+    }
 }

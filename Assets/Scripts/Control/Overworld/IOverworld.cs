@@ -5,5 +5,4 @@
         void BattleStartBehavior();
         void BattleEndBehavior();
     }
-
 }

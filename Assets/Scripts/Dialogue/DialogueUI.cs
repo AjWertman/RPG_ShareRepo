@@ -50,14 +50,16 @@ namespace RPGProject.Dialogue
                 return;
             }
 
-            quitButton.interactable = !playerConversant.GetCurrentDialogue().isEssentialDialogue;
+            quitButton.interactable = !playerConversant.currentDialogue.isEssentialDialogue;
 
             SetConversantName();
 
-            aiResponseRoot.SetActive(!playerConversant.IsChoosing());
-            choiceRoot.gameObject.SetActive(playerConversant.IsChoosing());
+            bool isChoosing = playerConversant.isChoosing;
 
-            if (playerConversant.IsChoosing())
+            aiResponseRoot.SetActive(!isChoosing);
+            choiceRoot.gameObject.SetActive(isChoosing);
+
+            if (isChoosing)
             {
                 BuildChoiceList();
             }
@@ -81,7 +83,7 @@ namespace RPGProject.Dialogue
 
         private void SetConversantName()
         {
-            string overrideName = playerConversant.GetCurrentDialogueNode().overrideConversantName;
+            string overrideName = playerConversant.currentNode.overrideConversantName;
 
             if (overrideName == "")
             {

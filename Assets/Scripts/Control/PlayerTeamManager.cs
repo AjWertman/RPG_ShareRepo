@@ -11,17 +11,16 @@ namespace RPGProject.Control
 {
     public class PlayerTeamManager : MonoBehaviour, ISaveable
     {
-        [SerializeField] List<PlayerKey> currentPlayerKeys = new List<PlayerKey>();
-        [SerializeField] List<TeamInfo> teamInfos = new List<TeamInfo>();
-
+        public List<TeamInfo> teamInfos = new List<TeamInfo>();
         public UnitStartingPosition[] playerStartingPositions = null;
+        public List<PlayableCharacter> playerTeam = new List<PlayableCharacter>();
+
+        List<PlayerKey> currentPlayerKeys = new List<PlayerKey>();
 
         PlayableCharacterDatabase playableCharacterDatabase = null;
         UnitDatabase unitDatabase = null;
 
         ProgressionHandler progressionHandler = null;
-
-        List<PlayableCharacter> playerTeam = new List<PlayableCharacter>();
 
         private void Awake()
         {
@@ -56,7 +55,6 @@ namespace RPGProject.Control
                 teamInfo.startingCoordinates = GetStartingPosition(unit);
 
                 float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.stats.GetStatLevel(StatType.Stamina));
-                float maxManaPoints = CalculateMaxMana(teamInfo.stats.GetStatLevel(StatType.Spirit));
 
                 UnitResources unitResources = new UnitResources(maxHealthPoints);
                 teamInfo.unitResources = unitResources;
@@ -143,19 +141,9 @@ namespace RPGProject.Control
             }
         }
 
-        public List<PlayableCharacter> GetPlayableCharacters()
-        {
-            return playerTeam;
-        }
-
         public PlayableCharacter GetPlayableCharacter(PlayerKey _playerKey)
         {
             return playableCharacterDatabase.GetPlayableCharacter(_playerKey);
-        }
-
-        public List<TeamInfo> GetTeamInfos()
-        { 
-            return teamInfos;
         }
 
         public TeamInfo GetTeamInfo(PlayerKey _playerKey)
@@ -215,17 +203,6 @@ namespace RPGProject.Control
             maxHealthPoints += 10f * nonBaseStamina;
 
             return maxHealthPoints;
-        }
-
-        private float CalculateMaxMana(float _mana)
-        {
-            float maxMana = 100f;
-
-            float nonBaseMana = _mana - 10f;
-
-            maxMana += 10f * nonBaseMana;
-
-            return maxMana;
         }
 
         public object CaptureState()

@@ -26,8 +26,8 @@ namespace RPGProject.Control
             foreach(ItemSpawnLocation itemSpawnLocation in FindObjectsOfType<ItemSpawnLocation>())
             {
                 Transform spawnLocation = itemSpawnLocation.transform;
-                InventoryItem inventoryItem = itemSpawnLocation.GetInventoryItem();
-                int number = itemSpawnLocation.GetNumber();
+                InventoryItem inventoryItem = itemSpawnLocation.item;
+                int number = itemSpawnLocation.number;
                 SpawnPickup(spawnLocation, inventoryItem, number);
             }
         }

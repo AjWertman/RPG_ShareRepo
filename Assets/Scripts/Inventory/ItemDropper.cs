@@ -63,9 +63,9 @@ namespace RPGProject.Control
             foreach (Pickup pickup in droppedItems)
             {
                 var droppedItem = new DropRecord();
-                droppedItem.itemID = pickup.GetItem().itemID;
+                droppedItem.itemID = pickup.item.itemID;
                 droppedItem.position = new SerializableVector3(pickup.transform.position);
-                droppedItem.number = pickup.GetNumber();
+                droppedItem.number = pickup.number;
                 droppedItem.sceneBuildIndex = buildIndex;
                 droppedItemsList.Add(droppedItem);
             }

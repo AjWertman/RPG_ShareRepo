@@ -28,7 +28,7 @@ namespace RPGProject.Control
         {
             player.ForceDeactivateCheckpointMenu();
 
-            Transform teleportLocation = _fastTravelPoint.GetTeleportLocation();
+            Transform teleportLocation = _fastTravelPoint.teleportLocation;
             StartCoroutine(Teleport(teleportLocation));
         }
 

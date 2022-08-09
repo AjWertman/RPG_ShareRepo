@@ -45,10 +45,10 @@ namespace RPGProject.Control.Combat
 
             foreach(UnitController unit in unitControllers)
             {
-                bool isPlayerUnit = unit.GetUnitInfo().isPlayer;
+                bool isPlayerUnit = unit.unitInfo.isPlayer;
                 List<Fighter> opposingFighters = GetOpposingFighters(isPlayerUnit);
 
-                unit.combatAIBrain.InitalizeAgros(opposingFighters);
+                unit.GetCombatAIBrain().InitalizeAgros(opposingFighters);
             }
         }
 
@@ -79,11 +79,11 @@ namespace RPGProject.Control.Combat
 
             SetUnitTransform(unitController, _startingBlock, _isPlayerTeam);
 
-            UnitInfo unitInfo = unitController.GetUnitInfo();
+            UnitInfo unitInfo = unitController.unitInfo;
             unitInfo = new UnitInfo(_unit.unitName, characterKey, _unit.baseLevel,
                 _isPlayerTeam, _unit.stats, _unit.basicAttack, _unit.abilities);
 
-            UnitResources unitResources = unitController.GetUnitResources();
+            UnitResources unitResources = unitController.unitResources;
             unitResources = new UnitResources(unitController.GetHealth().maxHealthPoints);
 
             CharacterMesh newMesh = characterMeshPool.GetMesh(characterKey);
@@ -107,7 +107,7 @@ namespace RPGProject.Control.Combat
             fighter.unitInfo = unitInfo;
             fighter.unitResources = unitResources;
 
-            unitController.combatAIBrain.InitalizeCombatAIBrain(fighter);
+            unitController.GetCombatAIBrain().InitalizeCombatAIBrain(fighter);
 
             unitController.gameObject.SetActive(true);
 

@@ -106,7 +106,7 @@ namespace RPGProject.Control
 
         private void OpenCharacterSelectMenu()
         {
-            characterSelectMenu.SetupCharacterSelectMenu(playerTeam.GetPlayableCharacters());
+            characterSelectMenu.SetupCharacterSelectMenu(playerTeam.playerTeam);
             characterSelectMenu.gameObject.SetActive(true);
         }
 

@@ -12,7 +12,7 @@ namespace RPGProject.Control.Combat
 
         [SerializeField] GameObject battleCamGameObject= null;
 
-        OldBattlePositionManager battlePositionManager = null;
+        BattleGridManager battleGridManager = null;
         UnitManager unitManager = null;
         BattleUIManager battleUIManager = null;
         TurnManager turnManager = null;
@@ -27,8 +27,8 @@ namespace RPGProject.Control.Combat
 
         private void CreateManagers()
         {
-            GameObject positionInstance = Instantiate(battlePositionManagerPrefab, transform);
-            battlePositionManager = positionInstance.GetComponent<OldBattlePositionManager>();
+            GameObject gridInstance = Instantiate(battlePositionManagerPrefab, transform);
+            battleGridManager = gridInstance.GetComponent<BattleGridManager>();
 
             GameObject unitInstance = Instantiate(unitManagerPrefab, transform);
             unitManager = unitInstance.GetComponent<UnitManager>();
@@ -65,7 +65,6 @@ namespace RPGProject.Control.Combat
 
         private void ResetManagers()
         {
-            battlePositionManager.ResetPositionManager();
             unitManager.ResetUnitManager();
             battleUIManager.ResetUIManager();
             turnManager.ResetTurnManager();
@@ -79,9 +78,9 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        public OldBattlePositionManager GetBattlePositionManager()
+        public BattleGridManager GetBattlePositionManager()
         {
-            return battlePositionManager;
+            return battleGridManager;
         }
 
         public UnitManager GetUnitManager()
@@ -106,7 +105,7 @@ namespace RPGProject.Control.Combat
 
         public IEnumerable<GameObject> GetAllManagers()
         {
-            yield return battlePositionManager.gameObject;
+            yield return battleGridManager.gameObject;
             yield return unitManager.gameObject;
             yield return battleUIManager.gameObject;
             yield return turnManager.gameObject;

@@ -11,12 +11,12 @@ namespace RPGProject.Control
     {
         [SerializeField] string playerName = "Conversant";
 
-        DialogueScripObj currentDialogue = null;
-        DialogueNode currentNode = null;
+        public DialogueScripObj currentDialogue = null;
+        public DialogueNode currentNode = null;
+
+        public bool isChoosing = false;
 
         AIConversant currentConversant = null;
-
-        bool isChoosing = false;
 
         public event Action onConversationUpdated;
 
@@ -103,11 +103,6 @@ namespace RPGProject.Control
             return FilterOnCondition(currentDialogue.GetAllChildrenNodes(currentNode)).Count() > 0;
         }
 
-        public bool IsChoosing()
-        {
-            return isChoosing;
-        }
-
         public bool IsChatting()
         {
             if (currentDialogue != null)
@@ -153,18 +148,8 @@ namespace RPGProject.Control
             }
             else
             {
-                return currentConversant.GetName();
+                return currentConversant.conversantName;
             }
-        }
-
-        public DialogueScripObj GetCurrentDialogue()
-        {
-            return currentDialogue;
-        }
-
-        public DialogueNode GetCurrentDialogueNode()
-        {
-            return currentNode;
         }
 
         private IEnumerable<IPredicateEvaluator> GetPredicateEvaluators()

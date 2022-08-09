@@ -234,7 +234,7 @@ namespace RPGProject.Control
             BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
             if (battleZoneTrigger != null)
             {
-                bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
+                bool isEnemyTrigger = battleZoneTrigger.isEnemyTrigger;
                 if (isEnemyTrigger)
                 {
                     if (!hasStartedBattle)
@@ -255,7 +255,7 @@ namespace RPGProject.Control
             BattleZoneTrigger battleZoneTrigger = other.GetComponent<BattleZoneTrigger>();
             if (battleZoneTrigger != null)
             {
-                bool isEnemyTrigger = battleZoneTrigger.IsEnemyTrigger();
+                bool isEnemyTrigger = battleZoneTrigger.isEnemyTrigger;
                 if (!isEnemyTrigger)
                 {
                     contestedBattleZoneTrigger = null;

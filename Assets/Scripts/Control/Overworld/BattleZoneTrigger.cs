@@ -12,10 +12,10 @@ namespace RPGProject.Control.Combat
         [SerializeField] EnemyCluster[] enemyClusters = null;
         [SerializeField] BattleHandler battleHandlerOverride = null;
         [Range(0, 99)] [SerializeField] int chanceToStartBattle = 10;
-        [SerializeField] bool isEnemyTrigger = false;
+
+        public bool isEnemyTrigger = false;
 
         BattleHandler currentBattleHandler = null;
-
         PlayerTeamManager playerTeam = null;
 
         bool isInTrigger = false;
@@ -39,7 +39,7 @@ namespace RPGProject.Control.Combat
 
         public void BattleCheck()
         {
-            int randomInt = GetRandomPercentage();
+            int randomInt = RandomGenerator.GetRandomNumber(0,100);
 
             if (randomInt <= chanceToStartBattle)
             {
@@ -123,16 +123,6 @@ namespace RPGProject.Control.Combat
             EnemyCluster enemyCluster = enemyClusters[randomNumber];
 
             return enemyCluster.enemies;
-        }
-
-        public bool IsEnemyTrigger()
-        {
-            return isEnemyTrigger;
-        }
-
-        private int GetRandomPercentage()
-        {
-            return RandomGenerator.GetRandomNumber(0, 99);
         }
     }
 }

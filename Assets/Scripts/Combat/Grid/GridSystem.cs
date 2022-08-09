@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,9 @@ namespace RPGProject.Combat.Grid
 
         public GridCoordinates playerZeroCoordinates;
         public GridCoordinates enemyZeroCoordinates;
+
+        public GridCoordinates minCoordinates;
+        public GridCoordinates maxCoordinates;
 
         Pathfinder pathfinder = null;
 
@@ -41,6 +45,8 @@ namespace RPGProject.Combat.Grid
                 int z = Mathf.RoundToInt(localPosition.z);
 
                 GridCoordinates gridCoordinates = new GridCoordinates(x, z);
+
+                SetBoundaries(gridCoordinates);
 
                 SetupGridBlock(gridBlock, gridCoordinates);
 
@@ -119,6 +125,18 @@ namespace RPGProject.Combat.Grid
             if (newMaterial == lightMaterial) textColor = Color.black;
 
             _gridBlock.SetupGridBlock(newMaterial, textColor);
+        }
+
+        private void SetBoundaries(GridCoordinates _gridCoordinates)
+        {
+            int x = _gridCoordinates.x;
+            int z = _gridCoordinates.z;
+
+            if (x < minCoordinates.x) minCoordinates.x = x;
+            if (x > maxCoordinates.x) maxCoordinates.x = x;
+
+            if (z < minCoordinates.z) minCoordinates.z = z;
+            if (z > maxCoordinates.z) maxCoordinates.z = z;
         }
 
         private Material GetGridBlockMaterial(GridCoordinates _gridCoordinates)

@@ -1,7 +1,4 @@
-﻿using RPGProject.Core;
-using RPGProject.Saving;
-using RPGProject.UI;
-using System;
+﻿using RPGProject.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -106,7 +103,7 @@ namespace RPGProject.Control
 
             foreach (FastTravelPoint fastTravelPoint in fastTravelPoints)
             {
-                string pointName = fastTravelPoint.GetName();
+                string pointName = fastTravelPoint.pointName;
                 fastTravelDictionary.Add(pointName, fastTravelPoint);
             }
         }

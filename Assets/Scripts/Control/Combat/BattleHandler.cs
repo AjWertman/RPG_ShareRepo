@@ -32,7 +32,7 @@ namespace RPGProject.Control.Combat
         public event Action<UnitController> onUnitTurnUpdate;
         public event Action<Ability> onAbilitySelect;
 
-        private void Start()
+        private void Awake()
         {
             battleUIManager = GetComponentInChildren<BattleUIManager>();
             battleGridManager = GetComponentInChildren<BattleGridManager>();
@@ -91,9 +91,9 @@ namespace RPGProject.Control.Combat
         {
             List<Fighter> _playerCombatants = GetUnitFighters(unitManager.playerUnits);
             List<Fighter> _enemyCombatants = GetUnitFighters(unitManager.enemyUnits);
-            List<Fighter> _combatantTurnOrder = GetUnitFighters(turnManager.GetTurnOrder());
+            List<Fighter> _combatantTurnOrder = GetUnitFighters(turnManager.turnOrder);
             battleUIManager.SetupUIManager(_playerCombatants, _enemyCombatants, _combatantTurnOrder);
-            battleUIManager.SetUILookAts(camTransform);
+            battleUIManager.SetUILookAts(Camera.main.transform);
             battleUIManager.onPlayerMove += OnPlayerMove;
             battleUIManager.onEscape += Escape;
             battleUIManager.onEndTurn += () => AdvanceTurn();
@@ -135,8 +135,8 @@ namespace RPGProject.Control.Combat
 
         private void CheckAP()
         {
-            bool isPlayer = currentUnitTurn.GetUnitInfo().isPlayer;
-            float currentAP = currentUnitTurn.GetUnitResources().actionPoints;
+            bool isPlayer = currentUnitTurn.unitInfo.isPlayer;
+            float currentAP = currentUnitTurn.unitResources.actionPoints;
 
             if(!isPlayer) AdvanceTurn();
             if(currentAP > 0)
@@ -153,7 +153,7 @@ namespace RPGProject.Control.Combat
         {
             if (isBattleOver) return;
 
-            if (turnManager.GetCurrentUnitTurn() != null) turnManager.GetCurrentUnitTurn().GetUnitUI().ActivateUnitIndicator(false);
+            if (turnManager.currentUnitTurn != null) turnManager.currentUnitTurn.GetUnitUI().ActivateUnitIndicator(false);
 
             turnManager.AdvanceTurn();
 
@@ -167,8 +167,8 @@ namespace RPGProject.Control.Combat
         {
             //if (isTutorial) return;
             yield return new WaitForSeconds(1f);
-            turnManager.GetCurrentUnitTurn().GetUnitUI().ActivateUnitIndicator(true);
-            List<Fighter> unitFighters = GetUnitFighters(turnManager.GetTurnOrder());
+            turnManager.currentUnitTurn.GetUnitUI().ActivateUnitIndicator(true);
+            List<Fighter> unitFighters = GetUnitFighters(turnManager.turnOrder);
             battleUIManager.ExecuteNextTurn(unitFighters, currentUnitTurn.GetFighter());
 
             if (!turnManager.IsPlayerTurn())
@@ -207,7 +207,6 @@ namespace RPGProject.Control.Combat
         /// <summary>
         /// //
         /// </summary>
-        Transform camTransform = null;
 
         BattleManagersPool battleManagersPool = null;
         AbilityObjectPool abilityObjectPool = null;
@@ -245,10 +244,10 @@ namespace RPGProject.Control.Combat
         public IEnumerator AIUseAbility()
         {
             Fighter currentUnitFighter = currentUnitTurn.GetFighter();
-            bool isPlayerAI = currentUnitTurn.GetUnitInfo().isPlayer;
+            bool isPlayerAI = currentUnitTurn.unitInfo.isPlayer;
 
             Ability randomAbility = currentUnitFighter.GetRandomAbility();
-            Fighter randomTarget = currentUnitTurn.combatAIBrain.GetRandomTarget();
+            Fighter randomTarget = currentUnitTurn.GetCombatAIBrain().GetRandomTarget();
 
             randomAbility = currentUnitFighter.GetBasicAttack();
             //if (randomAbility != null && randomTarget != null)
@@ -349,7 +348,7 @@ namespace RPGProject.Control.Combat
                     unitResources.healthPoints = 1f;
                 }
 
-                CharacterKey characterKey = unit.GetUnitInfo().characterKey;
+                CharacterKey characterKey = unit.unitInfo.characterKey;
                 PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
                 playerTeamManager.UpdateTeamInfo(playerKey, unitResources);
             }
@@ -357,7 +356,7 @@ namespace RPGProject.Control.Combat
 
         private UnitResources UpdateUnitResources(UnitController _unit)
         {
-            UnitResources unitResources = _unit.GetUnitResources();
+            UnitResources unitResources = _unit.unitResources;
 
             Health unitHealth = _unit.GetHealth();
             unitResources.maxHealthPoints = unitHealth.maxHealthPoints;
@@ -382,7 +381,6 @@ namespace RPGProject.Control.Combat
             EndBattle(null);
         }
 
-
         private void ApplyActiveAbilitys(Fighter _fighter)
         {
             foreach (AbilityBehavior abilityBehavior in _fighter.unitStatus.GetActiveAbilityBehaviors())
@@ -390,8 +388,6 @@ namespace RPGProject.Control.Combat
                 abilityBehavior.OnTurnAdvance();
             }
         }
-
-
 
         private void OnUnitDeath(UnitController _unitThatCausedUpdate)
         {
