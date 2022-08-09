@@ -17,15 +17,17 @@ namespace RPGProject.Control.Combat
         public UnitResources unitResources = new UnitResources();
         public Stats startingStats = new Stats();
 
+        public CombatAIType combatAIType = CombatAIType.mDamage;
+
         public GridBlock currentBlock = null;
 
         Animator animator = null;
-        CombatAIBrain combatAIBrain = null;
         CombatMover mover = null;
         Fighter fighter = null;
         ComboLinker comboLinker = null;
         Health health = null;
         CharacterMesh characterMesh = null;
+        UnitAgro unitAgro = null;
         UnitUI unitUI = null;
 
         GridBlock queuedBlock = null;
@@ -39,11 +41,11 @@ namespace RPGProject.Control.Combat
         {
             animator = GetComponent<Animator>();
 
-            combatAIBrain = GetComponent<CombatAIBrain>();
             fighter = GetComponent<Fighter>();
             comboLinker = GetComponent<ComboLinker>();
             health = GetComponent<Health>();
             mover = GetComponent<CombatMover>();
+            unitAgro = GetComponent<UnitAgro>();
             unitUI = GetComponent<UnitUI>();
 
             health.InitalizeHealth();
@@ -313,11 +315,6 @@ namespace RPGProject.Control.Combat
             return unitInfo.stats.GetStatLevel(_statType);
         }
 
-        public CombatAIBrain GetCombatAIBrain()
-        {
-            return combatAIBrain;
-        }
-
         public CombatMover GetMover()
         {
             return mover;
@@ -341,6 +338,11 @@ namespace RPGProject.Control.Combat
         public CharacterMesh GetCharacterMesh()
         {
             return characterMesh;
+        }
+
+        public UnitAgro GetUnitAgro()
+        {
+            return unitAgro;
         }
 
         public UnitUI GetUnitUI()

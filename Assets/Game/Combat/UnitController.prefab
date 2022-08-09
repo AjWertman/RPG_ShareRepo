@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 3504165519863861257}
   - component: {fileID: 4292025080150459303}
   - component: {fileID: 2304397834848362312}
-  - component: {fileID: 723103457998062764}
+  - component: {fileID: 4136358189517395625}
   m_Layer: 0
   m_Name: UnitController
   m_TagString: Untagged
@@ -176,7 +176,7 @@ MonoBehaviour:
     resistance: 10
     speed: 10
     luck: 10
-  combatAIBrain: {fileID: 0}
+  combatAIType: 1
   currentBlock: {fileID: 0}
 --- !u!114 &4170302240818230691
 MonoBehaviour:
@@ -292,7 +292,7 @@ MonoBehaviour:
   isReflectingSpells: 0
   isSilenced: 0
   hasSubstitute: 0
---- !u!114 &723103457998062764
+--- !u!114 &4136358189517395625
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -301,19 +301,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1642788015177014662}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd186ea982e37ef4c9998e4a7bf09108, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fbc943b76c24954cb5b298d8c3f6dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  combatAIBehavior:
-    aiType: 0
-    aiBehaviors:
-      attack: 0
-      agro: 0
-      heal: 0
-      support: 0
-      runaway: 0
-  agros: []
   agroPercentagePerDamagePercentage: 1
+  agros: []
 --- !u!1 &4569020565003744689
 GameObject:
   m_ObjectHideFlags: 0

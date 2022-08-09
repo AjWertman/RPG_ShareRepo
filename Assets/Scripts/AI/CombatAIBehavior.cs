@@ -1,3 +1,5 @@
+using RPGProject.Combat;
+using RPGProject.Combat.Grid;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +12,22 @@ public struct CombatAIBehavior
 {
     public CombatAIType aiType;
     public AIBehaviorPercentages aiBehaviors;
+}
+
+[Serializable]
+public struct AICombatAction
+{
+    public float actionScore;
+
+    public GridCoordinates targetCoordinates;
+    public Ability selectedAbility;
+
+    public AICombatAction(float _actionScore, GridCoordinates _targetCoordinates, Ability _selectedAbility)
+    {
+        actionScore = _actionScore;
+        targetCoordinates = _targetCoordinates;
+        selectedAbility = _selectedAbility;
+    }
 }
 
 public enum AIBehaviorType { Attack, Agro, Heal, Support, Runaway}

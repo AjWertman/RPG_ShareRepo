@@ -29,6 +29,6 @@ MonoBehaviour:
   abilityType: 0
   targetingType: 0
   attackRange: 0
-  actionPointsCost: 2
+  actionPointsCost: 0
   requiresTarget: 0
   canTargetAll: 0

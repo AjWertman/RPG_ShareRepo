@@ -47,6 +47,14 @@ namespace RPGProject.Control.Combat
             unitManager.InitalizeUnitManager();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                AIBehavior.GetViableActions(unitManager.enemyUnits[1], GetUnitFighters(unitManager.unitControllers));
+            }
+        }
+
         public IEnumerator StartBattle(PlayerTeamManager _playerTeamManager, UnitStartingPosition[] _enemyTeam)
         {
             isBattleOver = false;
@@ -247,7 +255,8 @@ namespace RPGProject.Control.Combat
             bool isPlayerAI = currentUnitTurn.unitInfo.isPlayer;
 
             Ability randomAbility = currentUnitFighter.GetRandomAbility();
-            Fighter randomTarget = currentUnitTurn.GetCombatAIBrain().GetRandomTarget();
+            // Fighter randomTarget = currentUnitTurn.GetCombatAIBrain().GetRandomTarget();
+            Fighter randomTarget = null;
 
             randomAbility = currentUnitFighter.GetBasicAttack();
             //if (randomAbility != null && randomTarget != null)

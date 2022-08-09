@@ -10,6 +10,7 @@ namespace RPGProject.Combat
         public string unitName = "";
         public int baseLevel = 1;
         public CharacterKey characterKey = CharacterKey.None;
+        public CombatAIType combatAIType = CombatAIType.mDamage;
 
         public UnitResources unitResources = new UnitResources();
         public Stats stats = new Stats();
