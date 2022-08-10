@@ -85,6 +85,7 @@ namespace RPGProject.Control.Combat
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 battleCamera.RecenterCamera();
+                //battleCamera.SetFollowTarget(currentUnitTurn.transform);
             }
         }
 

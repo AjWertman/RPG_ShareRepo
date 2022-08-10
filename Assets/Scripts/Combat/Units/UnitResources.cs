@@ -9,14 +9,14 @@ namespace RPGProject.Combat
         public float maxHealthPoints;
 
         public int actionPoints;
-        public float gCostAllowance;
+        public int gCostMoveAllowance;
 
         public UnitResources(float _maxHealthPoints)
         {
             maxHealthPoints = _maxHealthPoints;
             healthPoints = maxHealthPoints;
 
-            gCostAllowance = 14;
+            gCostMoveAllowance = 14;
             actionPoints = 0;
         }
 

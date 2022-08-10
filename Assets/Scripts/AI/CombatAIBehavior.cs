@@ -17,13 +17,13 @@ public struct CombatAIBehavior
 [Serializable]
 public struct AICombatAction
 {
-    public GridCoordinates targetCoordinates;
+    public GridBlock targetBlock;
     public Fighter target;
     public Ability selectedAbility;
 
-    public AICombatAction(GridCoordinates _targetCoordinates, Fighter _target, Ability _selectedAbility)
+    public AICombatAction(GridBlock _targetBlock, Fighter _target, Ability _selectedAbility)
     {
-        targetCoordinates = _targetCoordinates;
+        targetBlock = _targetBlock;
         target = _target;
         selectedAbility = _selectedAbility;
     }

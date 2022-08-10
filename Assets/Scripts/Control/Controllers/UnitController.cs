@@ -82,7 +82,7 @@ namespace RPGProject.Control.Combat
 
             float actionPoints = unitResources.actionPoints;
 
-            totalPossibleGCostAllowance += unitResources.gCostAllowance;
+            totalPossibleGCostAllowance += unitResources.gCostMoveAllowance;
             totalPossibleGCostAllowance += mover.gCostPerAP * actionPoints;
 
             return totalPossibleGCostAllowance;
@@ -95,20 +95,20 @@ namespace RPGProject.Control.Combat
             currentBlock.SetContestedFighter(fighter);
         }
 
-        private void UseMovementResources(float _gCost)
+        private void UseMovementResources(int _gCost)
         {
-            if (_gCost > unitResources.gCostAllowance)
+            if (_gCost > unitResources.gCostMoveAllowance)
             {
-                _gCost -= unitResources.gCostAllowance;
-                unitResources.gCostAllowance = 0;
+                _gCost -= unitResources.gCostMoveAllowance;
+                unitResources.gCostMoveAllowance = 0;
 
                 unitResources.actionPoints--;
-                unitResources.gCostAllowance = mover.gCostPerAP;
+                unitResources.gCostMoveAllowance = mover.gCostPerAP;
             }
 
-            unitResources.gCostAllowance -= _gCost;
+            unitResources.gCostMoveAllowance -= _gCost;
 
-            if(unitResources.actionPoints == 0 && unitResources.gCostAllowance < 10)
+            if(unitResources.actionPoints == 0 && unitResources.gCostMoveAllowance < 10)
             {
                 onMoveCompletion();
             }

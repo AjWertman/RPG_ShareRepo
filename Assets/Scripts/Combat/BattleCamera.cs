@@ -65,6 +65,9 @@ public class BattleCamera : MonoBehaviour
 
     public void RecenterCamera()
     {
+        currentTarget = followTarget;
+        followTarget.localPosition = Vector3.zero;
+
         freeLook.m_YAxis.Value = .5f;
         freeLook.m_XAxis.Value = 0f;
     }

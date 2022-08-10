@@ -12,14 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: 
-  combo:
-  - animationID: Cast0
-    comboPointCost: 0
-    manaCost: 20
-    enduranceCost: 0
-    abilityObjectKey: 2
-    hitFXPrefab: {fileID: 0}
-  abilityResource: 0
   abilityName: Heal
   requiredLevel: 1
   abilityLifetime: 1
@@ -28,6 +20,15 @@ MonoBehaviour:
   shouldExpand: 0
   buttonColor: {r: 0, g: 1, b: 0, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
+  combo:
+  - animationID: Cast0
+    comboPointCost: 0
+    abilityObjectKey: 2
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
   abilityType: 4
   targetingType: 1
+  attackRange: 5
+  actionPointsCost: 1
+  requiresTarget: 0
   canTargetAll: 0

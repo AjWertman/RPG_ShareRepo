@@ -18,6 +18,7 @@ namespace RPGProject.Control.Combat
     {
         [SerializeField] List<CombatAIBehavior> combatAIBehaviors = new List<CombatAIBehavior>();
 
+        CombatAIBrain aiBrain = null;
         BattleUIManager battleUIManager = null;
         BattleGridManager battleGridManager = null;
         UnitManager unitManager = null;
@@ -34,6 +35,7 @@ namespace RPGProject.Control.Combat
 
         private void Awake()
         {
+            aiBrain = GetComponent<CombatAIBrain>();
             battleUIManager = GetComponentInChildren<BattleUIManager>();
             battleGridManager = GetComponentInChildren<BattleGridManager>();
             unitManager = GetComponentInChildren<UnitManager>();
@@ -52,7 +54,7 @@ namespace RPGProject.Control.Combat
             //Refactor - testing
             if (Input.GetKeyDown(KeyCode.L))
             {
-                AIBehavior.GetViableActions(unitManager.enemyUnits[1], unitManager.unitControllers);
+                aiBrain.GetViableActions(unitManager.enemyUnits[1], unitManager.unitControllers);
             }
         }
 

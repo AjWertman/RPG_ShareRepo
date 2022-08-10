@@ -12,34 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
   m_Name: TripleChop
   m_EditorClassIdentifier: 
-  combo:
-  - animationID: Attack2
-    comboPointCost: 0
-    manaCost: 0
-    enduranceCost: 0
-    abilityObjectKey: 0
-    hitFXPrefab: {fileID: 0}
-  - animationID: Attack2
-    comboPointCost: 0
-    manaCost: 0
-    enduranceCost: 0
-    abilityObjectKey: 0
-    hitFXPrefab: {fileID: 0}
-  - animationID: Attack2
-    comboPointCost: 0
-    manaCost: 0
-    enduranceCost: 0
-    abilityObjectKey: 0
-    hitFXPrefab: {fileID: 0}
-  abilityResource: 0
   abilityName: Triple Chop
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -40
+  baseAbilityAmount: -500
   description: Hack the enemy with your axe.
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
+  combo:
+  - animationID: Attack2
+    comboPointCost: 0
+    abilityObjectKey: 0
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  - animationID: Attack2
+    comboPointCost: 0
+    abilityObjectKey: 0
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  - animationID: Attack2
+    comboPointCost: 0
+    abilityObjectKey: 0
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
   abilityType: 0
   targetingType: 0
+  attackRange: 0
+  actionPointsCost: 2
+  requiresTarget: 0
   canTargetAll: 0

@@ -9,12 +9,12 @@ namespace RPGProject.Movement
     {
         [SerializeField] float distanceTolerance = .3f;
 
-        public float gCostPerAP = 24f;
+        public int gCostPerAP = 24;
         public bool isMoving = false;
 
         float startStoppingDistance = 0;
 
-        public event Action<float> onBlockReached;
+        public event Action<int> onBlockReached;
 
         public void InitalizeCombatMover()
         {
@@ -52,7 +52,7 @@ namespace RPGProject.Movement
 
                 if (isAtPosition)
                 {
-                    float gCost = GetGCost(previousTransform, nextTransform);
+                    int gCost = GetGCost(previousTransform, nextTransform);
                     onBlockReached(gCost);
 
                     previousTransform = nextTransform;
@@ -113,10 +113,10 @@ namespace RPGProject.Movement
             return new Vector3(_transform.position.x, 0, _transform.position.z);
         }
 
-        private float GetGCost(Transform _previousTransform, Transform _nextTransform)
+        private int GetGCost(Transform _previousTransform, Transform _nextTransform)
         {
-            if (_previousTransform.localPosition.x == _nextTransform.localPosition.x || _previousTransform.localPosition.z == _nextTransform.localPosition.z) return 10f;
-            else return 14f;
+            if (_previousTransform.localPosition.x == _nextTransform.localPosition.x || _previousTransform.localPosition.z == _nextTransform.localPosition.z) return 10;
+            else return 14;
         }      
     }
 }

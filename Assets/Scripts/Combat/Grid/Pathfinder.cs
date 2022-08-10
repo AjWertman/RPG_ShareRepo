@@ -39,7 +39,7 @@ namespace RPGProject.Combat.Grid
             openList.Add(_startBlock);
 
             while (openList.Count > 0)
-            {
+            { 
                 GridBlock currentBlock = GetLowestFCostBlock(openList);
 
                 if (currentBlock == _endBlock) return CalculatePath(_endBlock);
