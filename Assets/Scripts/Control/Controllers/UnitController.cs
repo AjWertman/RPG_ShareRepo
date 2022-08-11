@@ -120,22 +120,29 @@ namespace RPGProject.Control.Combat
             Fighter contestedFighter = goalBlock.contestedFighter;
             bool isContested = (contestedFighter != null);
 
-            if(isContested)
+            if (isContested)
             {
                 _path.Remove(goalBlock);
                 goalBlock = _path[_path.Count - 1];
             }
 
-            if(_path.Count > 1)
-            {
-                List<Transform> travelDestinations = GridSystem.GetTravelDestinations(_path);
-                yield return mover.MoveToDestination(travelDestinations);
-                UpdateCurrentBlock(goalBlock);
-            }
+            yield return FollowPath(_path);
 
             if (isContested)
             {
                 yield return UseAbilityBehavior(contestedFighter, fighter.GetBasicAttack());
+            }
+        }
+
+        public IEnumerator FollowPath(List<GridBlock> _path)
+        {
+            GridBlock goalBlock = _path[_path.Count - 1];
+
+            if (_path.Count > 1)
+            {
+                List<Transform> travelDestinations = GridSystem.GetTravelDestinations(_path);
+                yield return mover.MoveToDestination(travelDestinations);
+                UpdateCurrentBlock(goalBlock);
             }
         }
 

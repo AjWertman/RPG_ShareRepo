@@ -17,6 +17,8 @@ namespace RPGProject.Combat
                 if (!hasEnoughAP) return "Not enough Action Points";
             }
 
+            if (_caster.GetCooldown(_selectedAbility) > 0) return "Ability is cooling down";
+
             bool isCopyAbility = _selectedAbility.abilityType == AbilityType.Copy;
             if (isCopyAbility)
             {

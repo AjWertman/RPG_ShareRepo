@@ -40,6 +40,8 @@ namespace RPGProject.Combat
 
         bool isPlayerFighter = false;
 
+        Dictionary<Ability, int> abilityCooldowns = new Dictionary<Ability, int>();
+
         public event Action<Fighter, float> onAgroAction;
 
         public void InitalizeFighter()
@@ -72,6 +74,7 @@ namespace RPGProject.Combat
             selectedTarget = _selectedTarget;
             selectedAbility = _selectedAbility;
 
+            if(!abilityCooldowns.ContainsKey(_selectedAbility)) abilityCooldowns.Add(_selectedAbility, _selectedAbility.cooldown);
             yield return comboLinker.ExecuteCombo(selectedAbility.combo);
         }
 
@@ -82,7 +85,7 @@ namespace RPGProject.Combat
 
             yield return comboLinker.ExecuteCombo(selectedAbility.combo);
         }
-     
+
         public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
             _abilityBehavior.gameObject.SetActive(true);
@@ -102,6 +105,11 @@ namespace RPGProject.Combat
         public void SetCurrentComboLink(ComboLink _comboLink)
         {
             currentComboLink = _comboLink;
+        }
+
+        public void OnNewTurn()
+        {
+            DecrementCooldowns();
         }
 
         public void ResetFighter()
@@ -194,6 +202,12 @@ namespace RPGProject.Combat
             return knownAbilities;
         }
 
+        public int GetCooldown(Ability _ability)
+        {
+            if (abilityCooldowns.ContainsKey(_ability)) return abilityCooldowns[_ability];
+            else return 0;
+        }
+
         public Health GetHealthComponent()
         {
             return health;
@@ -277,6 +291,29 @@ namespace RPGProject.Combat
             }
 
             targetHealth.onHealthChange -= ApplyAgro;
+        }
+
+        private void DecrementCooldowns()
+        {
+            Dictionary<Ability, bool> cooldownsToRemove = new Dictionary<Ability, bool>();
+
+            foreach (Ability coolingDownAbility in abilityCooldowns.Keys)
+            {
+                if (abilityCooldowns[coolingDownAbility] - 1 <= 0) cooldownsToRemove.Add(coolingDownAbility, true);
+                else cooldownsToRemove.Add(coolingDownAbility, false);
+            }
+
+            foreach (Ability ability in cooldownsToRemove.Keys)
+            {
+                bool shouldRemove = cooldownsToRemove[ability];
+
+                if (shouldRemove) abilityCooldowns.Remove(ability);
+                else
+                {
+                    int newCooldown = abilityCooldowns[ability] - 1;
+                    abilityCooldowns[ability] = newCooldown;
+                }
+            }
         }
 
         private float GetStatsModifier(float _changeAmount)

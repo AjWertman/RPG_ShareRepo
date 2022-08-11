@@ -18,10 +18,29 @@ namespace RPGProject.Control.Combat
         public List<AICombatAction> GetViableActions(UnitController _currentUnitTurn, List<UnitController> _allUnits)
         {
             Fighter currentFighter = _currentUnitTurn.GetFighter();
+            CombatAIType combatAIType = _currentUnitTurn.combatAIType;
 
-            //Testing
             currentFighter.unitResources.actionPoints = 6;
-            //
+
+            List<Ability> usableAbilities = GetUsableAbilities(currentFighter, currentFighter.GetKnownAbilities());
+            Dictionary<UnitController, TargetPreference> targetPreferences = SetTargetPreferences(_currentUnitTurn, _allUnits);
+
+            int preferredDistance = GetPreferredDistance(_currentUnitTurn, usableAbilities);
+            float currentPositionScore = CalculateCurrentPositionScore(_currentUnitTurn, targetPreferences);
+
+            Dictionary<AICombatAction, float> possibleActions = GetPossibleActions(_currentUnitTurn, usableAbilities, targetPreferences);          
+            List<AICombatAction> viableActions = new List<AICombatAction>();
+
+            return viableActions;
+        }
+
+        //Refactor - for testing purposes. Simply gets the best action
+        public AICombatAction GetViableAction(UnitController _currentUnitTurn, List<UnitController> _allUnits)
+        {
+            Fighter currentFighter = _currentUnitTurn.GetFighter();
+            CombatAIType combatAIType = _currentUnitTurn.combatAIType;
+
+            currentFighter.unitResources.actionPoints = 6;
 
             List<Ability> usableAbilities = GetUsableAbilities(currentFighter, currentFighter.GetKnownAbilities());
             Dictionary<UnitController, TargetPreference> targetPreferences = SetTargetPreferences(_currentUnitTurn, _allUnits);
@@ -30,38 +49,28 @@ namespace RPGProject.Control.Combat
             float currentPositionScore = CalculateCurrentPositionScore(_currentUnitTurn, targetPreferences);
 
             Dictionary<AICombatAction, float> possibleActions = GetPossibleActions(_currentUnitTurn, usableAbilities, targetPreferences);
-            PrintPossibleActions(possibleActions);
 
-            List<AICombatAction> viableActions = new List<AICombatAction>();
-
-            return viableActions;
+            return GetBestAction(possibleActions);
         }
 
-        private void PrintPossibleActions(Dictionary<AICombatAction, float> _possibleActions)
+        private AICombatAction GetBestAction(Dictionary<AICombatAction, float> _possibleActions)
         {
-            foreach (AICombatAction combatAction in _possibleActions.Keys)
-            {
-                Fighter target = combatAction.target;
-                GridBlock blockToMoveTo = combatAction.targetBlock;
-                Ability abilityToUse = combatAction.selectedAbility;
+            AICombatAction bestAction = new AICombatAction();
+            float highestScore = 0;
 
+            foreach(AICombatAction combatAction in _possibleActions.Keys)
+            {
                 float score = _possibleActions[combatAction];
 
-                string targetName = "null";
-                string blockCoordinates = "null";
-                string abilityName = "null";
-
-                if (target != null) targetName = target.name;
-                if (blockToMoveTo != null)
+                if (highestScore <= score)
                 {
-                    GridCoordinates coords = blockToMoveTo.gridCoordinates;
-                    blockCoordinates = ("(" + coords.x.ToString() + "," + coords.z.ToString() + ")");
+                    bestAction = combatAction;
+                    highestScore = score;
                 }
-                if (abilityToUse != null) abilityName = abilityToUse.abilityName;
-
-
-                print("Target = " + targetName + ", Coords = " + blockCoordinates + ", Ability = " + abilityName + ", Score = " + score.ToString());
             }
+
+            PrintCombatAction(bestAction, highestScore);
+            return bestAction; 
         }
 
         private Dictionary<AICombatAction, float> GetPossibleActions(UnitController _currentUnitTurn,
@@ -73,7 +82,6 @@ namespace RPGProject.Control.Combat
 
             foreach (Ability ability in _usableAbilities)
             {
-                //Have calculation that takes into account stats (damage amount range);
                 float baseAbilityAmount = ability.baseAbilityAmount;
                 float attackRange = ability.attackRange;
 
@@ -81,6 +89,7 @@ namespace RPGProject.Control.Combat
 
                 foreach (UnitController unit in _targetPreferences.Keys)
                 {
+                    if (unit.GetHealth().isDead) continue;
                     AICombatAction combatAction = new AICombatAction();
                     combatAction.target = unit.GetFighter();
                     combatAction.selectedAbility = ability;
@@ -102,10 +111,7 @@ namespace RPGProject.Control.Combat
 
                     if (isTeammate)
                     {
-                        if (isHeal)
-                        {
-                            score += 5;
-                        }
+                        if (isHeal) score += 5;
                         else score -= 10;
                     }
                     else
@@ -115,6 +121,7 @@ namespace RPGProject.Control.Combat
                     }
 
                     score *= AIAssistant.GetPreferenceModifier(targetPreference);
+                    score *= AIAssistant.GetAITypeModifier(combatAIType, combatAction);
 
                     int actionPointsCost = GetActionPointsCost(_currentUnitTurn, combatAction);
                     score *= AIAssistant.GetScoreByActionPointsCost(_currentUnitTurn.unitResources.actionPoints, actionPointsCost);
@@ -123,6 +130,14 @@ namespace RPGProject.Control.Combat
             }
 
             return possibleActions;
+        }
+        
+        private AICombatAction GetLastResortAction()
+        {
+            //Am I in a decent position? if not find a better one
+
+            //An empty AICombatAction will signify an end of turn
+            return new AICombatAction();
         }
 
         private bool IsInRange(GridBlock _currentBlock, GridBlock _targetBlock, Ability _ability)
@@ -155,7 +170,7 @@ namespace RPGProject.Control.Combat
 
                 bool wantsToBeClose = (unit.combatAIType == CombatAIType.mDamage || unit.combatAIType == CombatAIType.Tank);
 
-                if (true && wantsToBeClose)
+                if (wantsToBeClose)
                 {
 
                 }
@@ -187,10 +202,8 @@ namespace RPGProject.Control.Combat
 
             foreach (Ability ability in _abilities)
             {
-                if (_fighter.unitResources.actionPoints >= ability.actionPointsCost)
-                {
-                    usableAbilities.Add(ability);
-                }
+                //Refactor - error when setting the UnitController and Fighter's AP in UnitResources (struct is not ref)
+                if (_fighter.unitResources.actionPoints >= ability.actionPointsCost) usableAbilities.Add(ability);
             }
 
             return usableAbilities;
@@ -241,13 +254,23 @@ namespace RPGProject.Control.Combat
             GridBlock targetBlock = _target.currentBlock;
             if (currentBlock == null || targetBlock == null) return null;
 
+            if(_target != null)
+            {
+                Fighter tenativeTarget = _target.GetFighter();
+                _unitController.GetFighter().selectedTarget = tenativeTarget;
+            }
+
             List<GridBlock> path = pathfinder.FindPath(currentBlock,targetBlock);
 
             if (path == null || path.Count <= 1) return null;
 
             foreach (GridBlock gridBlock in path)
             {
-                if (IsInRange(gridBlock, targetBlock, _ability)) return gridBlock;
+                if (IsInRange(gridBlock, targetBlock, _ability))
+                {
+                    _unitController.GetFighter().selectedTarget = null;
+                    return gridBlock;
+                }
             }
 
             return null;
@@ -279,6 +302,27 @@ namespace RPGProject.Control.Combat
         {
             if (_blockA == null || _blockB == null) return int.MaxValue;
             return Pathfinder.CalculateDistance(_blockA, _blockB);
+        }
+
+        private void PrintCombatAction(AICombatAction _aiCombatAction, float _score)
+        {
+            Fighter target = _aiCombatAction.target;
+            GridBlock blockToMoveTo = _aiCombatAction.targetBlock;
+            Ability abilityToUse = _aiCombatAction.selectedAbility;
+
+            string targetName = "null";
+            string blockCoordinates = "null";
+            string abilityName = "null";
+
+            if (target != null) targetName = target.name;
+            if (blockToMoveTo != null)
+            {
+                GridCoordinates coords = blockToMoveTo.gridCoordinates;
+                blockCoordinates = ("(" + coords.x.ToString() + "," + coords.z.ToString() + ")");
+            }
+            if (abilityToUse != null) abilityName = abilityToUse.abilityName;
+
+            print("Target = " + targetName + ", Coords = " + blockCoordinates + ", Ability = " + abilityName + ", Score = " + _score.ToString());
         }
 
         //public void PlanNextMove(List<Fighter> _allFighters)

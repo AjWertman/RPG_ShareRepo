@@ -12,26 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
   m_Name: MissileBarrage
   m_EditorClassIdentifier: 
-  combo:
-  - animationID: Cast0
-    comboPointCost: 0
-    manaCost: 20
-    enduranceCost: 0
-    abilityObjectKey: 10
-    hitFXPrefab: {fileID: 0}
-  - animationID: Cast0
-    comboPointCost: 0
-    manaCost: 20
-    enduranceCost: 0
-    abilityObjectKey: 10
-    hitFXPrefab: {fileID: 0}
-  - animationID: Cast0
-    comboPointCost: 0
-    manaCost: 20
-    enduranceCost: 0
-    abilityObjectKey: 10
-    hitFXPrefab: {fileID: 0}
-  abilityResource: 0
   abilityName: MissileBarrage
   requiredLevel: 1
   abilityLifetime: 1
@@ -40,6 +20,26 @@ MonoBehaviour:
   shouldExpand: 0
   buttonColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
+  combo:
+  - animationID: Cast0
+    comboPointCost: 0
+    abilityObjectKey: 10
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  - animationID: Cast0
+    comboPointCost: 0
+    abilityObjectKey: 10
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  - animationID: Cast0
+    comboPointCost: 0
+    abilityObjectKey: 10
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 0
+  attackRange: 7.5
+  actionPointsCost: 2
+  cooldown: 2
+  requiresTarget: 0
   canTargetAll: 0

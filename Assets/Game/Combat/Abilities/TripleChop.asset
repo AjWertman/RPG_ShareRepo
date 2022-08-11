@@ -15,7 +15,7 @@ MonoBehaviour:
   abilityName: Triple Chop
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -500
+  baseAbilityAmount: -50
   description: Hack the enemy with your axe.
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
@@ -40,5 +40,6 @@ MonoBehaviour:
   targetingType: 0
   attackRange: 0
   actionPointsCost: 2
+  cooldown: 2
   requiresTarget: 0
   canTargetAll: 0

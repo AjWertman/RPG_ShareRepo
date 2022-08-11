@@ -15,11 +15,11 @@ MonoBehaviour:
   unitName: Dhurmumir WorldBreaker
   baseLevel: 12
   characterKey: 5
-  combatAIType: 3
+  combatAIType: 0
   unitResources:
     healthPoints: 0
     maxHealthPoints: 100
-    actionPoints: 6
+    actionPoints: 0
     gCostMoveAllowance: 0
   stats:
     stamina: 10

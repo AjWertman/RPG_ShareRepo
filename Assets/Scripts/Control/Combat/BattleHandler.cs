@@ -26,6 +26,7 @@ namespace RPGProject.Control.Combat
 
         PlayerTeamManager playerTeamManager = null;
         GridSystem gridSystem = null;
+        Pathfinder pathfinder = null;
 
         GridCoordinates playerZeroCoordinates;
         GridCoordinates enemyZeroCoordinates;
@@ -43,6 +44,7 @@ namespace RPGProject.Control.Combat
 
             playerTeamManager = FindObjectOfType<PlayerTeamManager>();
             gridSystem = GetComponentInChildren<GridSystem>();
+            pathfinder = GetComponentInChildren<Pathfinder>();
 
             battleUIManager.InitalizeBattleUIManager();
             battleGridManager.InitializeBattleGridManager();
@@ -184,7 +186,46 @@ namespace RPGProject.Control.Combat
 
             if (!turnManager.IsPlayerTurn())
             {
-                StartCoroutine(AIUseAbility());
+                AICombatAction bestAction = aiBrain.GetViableAction(currentUnitTurn, unitManager.unitControllers);
+                StartCoroutine(AIUseAbility(bestAction));
+            }
+        }
+
+        public IEnumerator AIUseAbility(AICombatAction _aiCombatAction)
+        {
+            yield return new WaitForSeconds(1f);
+
+            if (!_aiCombatAction.Equals(new AICombatAction()))
+            {
+                Fighter currentUnitFighter = currentUnitTurn.GetFighter();
+                bool isPlayerAI = currentUnitTurn.unitInfo.isPlayer;
+
+                GridBlock actionBlock = _aiCombatAction.targetBlock;
+                Ability actionAbility = _aiCombatAction.selectedAbility;
+                Fighter actionTarget = _aiCombatAction.target;
+
+                List<GridBlock> path = new List<GridBlock>();
+
+                if (actionTarget != null) currentUnitFighter.selectedTarget = actionTarget;
+
+                if (actionBlock != null)
+                {
+                    path = pathfinder.FindPath(currentUnitTurn.currentBlock, actionBlock);
+                    if (actionBlock.contestedFighter != null) path.Remove(actionBlock);
+
+                    yield return currentUnitTurn.FollowPath(path);
+
+                }
+                if (actionAbility != null)
+                {
+                    currentUnitFighter.selectedAbility = actionAbility;
+                    UseAbility((CombatTarget)actionTarget, actionAbility);
+                }
+            }
+            else
+            {
+                AdvanceTurn();
+                yield break;
             }
         }
 
@@ -252,32 +293,32 @@ namespace RPGProject.Control.Combat
             StartCoroutine(currentAttack);
         }
 
-        public IEnumerator AIUseAbility()
-        {
-            Fighter currentUnitFighter = currentUnitTurn.GetFighter();
-            bool isPlayerAI = currentUnitTurn.unitInfo.isPlayer;
+        //public IEnumerator AIUseAbility()
+        //{
+        //    Fighter currentUnitFighter = currentUnitTurn.GetFighter();
+        //    bool isPlayerAI = currentUnitTurn.unitInfo.isPlayer;
 
-            Ability randomAbility = currentUnitFighter.GetRandomAbility();
-            // Fighter randomTarget = currentUnitTurn.GetCombatAIBrain().GetRandomTarget();
-            Fighter randomTarget = null;
+        //    Ability randomAbility = currentUnitFighter.GetRandomAbility();
+        //    // Fighter randomTarget = currentUnitTurn.GetCombatAIBrain().GetRandomTarget();
+        //    Fighter randomTarget = null;
 
-            randomAbility = currentUnitFighter.GetBasicAttack();
-            //if (randomAbility != null && randomTarget != null)
-            //{
-            //    if (CombatAssistant.IsAlreadyEffected(randomAbility.GetAbilityName(), randomTarget.GetUnitStatus()))
-            //    {
-            //        randomAbility = currentUnitFighter.GetBasicAttack();
-            //    }
-            // }
-            Pathfinder pathfinder = GetComponentInChildren<Pathfinder>();
+        //    randomAbility = currentUnitFighter.GetBasicAttack();
+        //    //if (randomAbility != null && randomTarget != null)
+        //    //{
+        //    //    if (CombatAssistant.IsAlreadyEffected(randomAbility.GetAbilityName(), randomTarget.GetUnitStatus()))
+        //    //    {
+        //    //        randomAbility = currentUnitFighter.GetBasicAttack();
+        //    //    }
+        //    // }
+        //    Pathfinder pathfinder = GetComponentInChildren<Pathfinder>();
 
-            List<GridBlock> path = pathfinder.FindPath(currentUnitTurn.currentBlock, battleGridManager.GetGridBlockByFighter(randomTarget));
+        //    List<GridBlock> path = pathfinder.FindPath(currentUnitTurn.currentBlock, battleGridManager.GetGridBlockByFighter(randomTarget));
 
-            yield return currentUnitTurn.PathExecution(path);
+        //    yield return currentUnitTurn.PathExecution(path);
 
-            //UseAbility(randomTarget.GetFighter(), randomAbility);
-            battleUIManager.ActivateUnitTurnUI(currentUnitFighter, false);
-        }
+        //    //UseAbility(randomTarget.GetFighter(), randomAbility);
+        //    battleUIManager.ActivateUnitTurnUI(currentUnitFighter, false);
+        //}
 
         private void EndBattle(bool? _won)
         {

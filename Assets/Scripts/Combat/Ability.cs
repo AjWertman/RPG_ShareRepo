@@ -27,6 +27,7 @@ namespace RPGProject.Combat
         public TargetingType targetingType = TargetingType.Everyone;
         public float attackRange = 5f;
         public int actionPointsCost = -1;
+        public int cooldown = 2;
         public bool requiresTarget = false;
         public bool canTargetAll = false;
     }

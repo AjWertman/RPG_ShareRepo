@@ -96,6 +96,7 @@ namespace RPGProject.Combat.AI
 
         public static float GetScoreByActionPointsCost(int _currentAP, int _apCost)
         {
+            if (_apCost == 0) return 5f;
             if (_currentAP > _apCost)
             {
                 float percentageOfAP = _currentAP / _apCost;
@@ -112,6 +113,34 @@ namespace RPGProject.Combat.AI
             if (_gCost <= 24) return 2f;
             else if (_gCost > 24 && _gCost <= 38) return 1f;
             else return 0f;
+        }
+
+        public static float GetAITypeModifier(CombatAIType _currentType, AICombatAction _actionToTest)
+        {
+            bool isTypeMatch = false;
+
+            foreach(CombatAIType combatAIType in GetCompatableAITypes(_actionToTest))
+            {
+                if (_currentType == combatAIType) isTypeMatch = true;
+            }
+
+            if (isTypeMatch) return 2f;
+            else return .5f;
+        } 
+
+        private static IEnumerable<CombatAIType> GetCompatableAITypes(AICombatAction _actionToTest)
+        {
+            bool isDamage = _actionToTest.selectedAbility.baseAbilityAmount < 0f;
+            if (isDamage)
+            {
+                yield return CombatAIType.mDamage;
+                yield return CombatAIType.rDamage;
+                yield return CombatAIType.Tank;
+            }
+            else
+            {
+                yield return CombatAIType.Healer;
+            }
         }
     }
 }

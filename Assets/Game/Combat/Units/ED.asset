@@ -15,11 +15,12 @@ MonoBehaviour:
   unitName: Erradication Drone
   baseLevel: 8
   characterKey: 7
+  combatAIType: 1
   unitResources:
     healthPoints: 0
     maxHealthPoints: 100
-    manaPoints: 0
-    maxManaPoints: 100
+    actionPoints: 0
+    gCostMoveAllowance: 0
   stats:
     stamina: 20
     spirit: 20
@@ -30,5 +31,4 @@ MonoBehaviour:
     speed: 94
     luck: 20
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
-  abilities:
-  - {fileID: 11400000, guid: 281f15e5f569fba40bcdd671e4fa5d65, type: 2}
+  abilities: []

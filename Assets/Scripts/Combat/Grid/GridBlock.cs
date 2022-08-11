@@ -68,8 +68,7 @@ namespace RPGProject.Combat.Grid
                 }
                 else
                 {
-                    return true;
-                    //if (currentFighter.selectedTarget != (CombatTarget)contestedFighter) return false;
+                    if (currentFighter.selectedTarget != (CombatTarget)contestedFighter) return false;
                 }
             }
 

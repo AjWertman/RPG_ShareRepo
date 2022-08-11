@@ -28,7 +28,8 @@ MonoBehaviour:
     abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 0
-  attackRange: 20
-  actionPointsCost: 1
+  attackRange: 10
+  actionPointsCost: 2
+  cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
