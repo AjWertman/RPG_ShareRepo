@@ -43,6 +43,7 @@ namespace RPGProject.Combat
         Dictionary<Ability, int> abilityCooldowns = new Dictionary<Ability, int>();
 
         public event Action<Fighter, float> onAgroAction;
+        public event Action<int> onAPUpdate;
 
         public void InitalizeFighter()
         {
@@ -110,6 +111,12 @@ namespace RPGProject.Combat
         public void OnNewTurn()
         {
             DecrementCooldowns();
+        }
+
+        public void SetActionPoints(int _newAPAmount)
+        {
+            unitResources.actionPoints = _newAPAmount;
+            onAPUpdate(_newAPAmount);
         }
 
         public void ResetFighter()

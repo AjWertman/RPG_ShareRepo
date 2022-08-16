@@ -16,7 +16,7 @@ namespace RPGProject.Control.Combat
 
     public class BattleHandler : MonoBehaviour
     {
-        [SerializeField] List<CombatAIBehavior> combatAIBehaviors = new List<CombatAIBehavior>();
+        //[SerializeField] List<CombatAIBehavior> combatAIBehaviors = new List<CombatAIBehavior>();
 
         CombatAIBrain aiBrain = null;
         BattleUIManager battleUIManager = null;
@@ -186,16 +186,16 @@ namespace RPGProject.Control.Combat
 
             if (!turnManager.IsPlayerTurn())
             {
-                AICombatAction bestAction = aiBrain.GetViableAction(currentUnitTurn, unitManager.unitControllers);
+                AIBattleAction bestAction = aiBrain.GetViableAction(currentUnitTurn, unitManager.unitControllers);
                 StartCoroutine(AIUseAbility(bestAction));
             }
         }
 
-        public IEnumerator AIUseAbility(AICombatAction _aiCombatAction)
+        public IEnumerator AIUseAbility(AIBattleAction _aiCombatAction)
         {
             yield return new WaitForSeconds(1f);
 
-            if (!_aiCombatAction.Equals(new AICombatAction()))
+            if (!_aiCombatAction.Equals(new AIBattleAction()))
             {
                 Fighter currentUnitFighter = currentUnitTurn.GetFighter();
                 bool isPlayerAI = currentUnitTurn.unitInfo.isPlayer;
@@ -210,7 +210,7 @@ namespace RPGProject.Control.Combat
 
                 if (actionBlock != null)
                 {
-                    path = pathfinder.FindPath(currentUnitTurn.currentBlock, actionBlock);
+                    path = pathfinder.FindOptimalPath(currentUnitTurn.currentBlock, actionBlock);
                     if (actionBlock.contestedFighter != null) path.Remove(actionBlock);
 
                     yield return currentUnitTurn.FollowPath(path);

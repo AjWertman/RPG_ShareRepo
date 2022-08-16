@@ -15,7 +15,7 @@ MonoBehaviour:
   abilityName: Discharge
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -50
+  baseAbilityAmount: -1033.4
   description: 
   shouldExpand: 0
   buttonColor: {r: 1, g: 0, b: 0, a: 1}
@@ -30,5 +30,6 @@ MonoBehaviour:
   targetingType: 0
   attackRange: 4
   actionPointsCost: 2
+  cooldown: 2
   requiresTarget: 0
   canTargetAll: 0

@@ -26,7 +26,9 @@ namespace RPGProject.Combat.Grid
             gridDictionary = _gridDictionary;
         }
 
-        public List<GridBlock> FindPath(GridBlock _startBlock, GridBlock _endBlock)
+        //Refactor to take into account affected blocks and end position evalution.
+        ///also add GetBlocksInRange(GridBlock _targetBlock, float range);
+        public List<GridBlock> FindOptimalPath(GridBlock _startBlock, GridBlock _endBlock)
         {
             openList.Clear();
             closedList.Clear();

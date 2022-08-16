@@ -1,4 +1,5 @@
 ﻿using RPGProject.Combat;
+using RPGProject.Combat.AI;
 using RPGProject.Combat.Grid;
 using RPGProject.GameResources;
 using RPGProject.Movement;
@@ -17,7 +18,7 @@ namespace RPGProject.Control.Combat
         public UnitResources unitResources = new UnitResources();
         public Stats startingStats = new Stats();
 
-        public CombatAIType combatAIType = CombatAIType.mDamage;
+        public AIBattleType aiType = AIBattleType.mDamage;
 
         public GridBlock currentBlock = null;
 
@@ -53,6 +54,7 @@ namespace RPGProject.Control.Combat
             mover.InitalizeCombatMover();
             unitUI.InitializeUnitUI();
 
+            fighter.onAPUpdate += SetActionPoints;
             mover.onBlockReached += UseMovementResources;
         }
 
@@ -180,6 +182,11 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        public void SetActionPoints(int _newAPAmount)
+        {
+            unitResources.actionPoints = _newAPAmount;
+        }
+
         private void SpendActionPoints(int _apCost)
         {
             //Refactor - does not prevent someone from doing something if they dont have enough ap
@@ -192,7 +199,7 @@ namespace RPGProject.Control.Combat
                 return;
             }
 
-            unitResources.actionPoints -= _apCost;
+            fighter.SetActionPoints(apAfterSpend);
 
             if(unitResources.actionPoints == 0)
             {

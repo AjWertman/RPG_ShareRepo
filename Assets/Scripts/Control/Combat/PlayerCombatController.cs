@@ -154,7 +154,7 @@ namespace RPGProject.Control.Combat
             if (_targetBlock.IsMovable(currentBlock, _targetBlock) == false) return;
 
             gridSystem.UnhighlightPath(tempPath);
-            tempPath = pathfinder.FindPath(currentBlock, _targetBlock);
+            tempPath = pathfinder.FindOptimalPath(currentBlock, _targetBlock);
 
             furthestBlockIndex = GetFurthestBlockIndex(tempPath);
 

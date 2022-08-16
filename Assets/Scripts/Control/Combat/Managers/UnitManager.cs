@@ -104,7 +104,7 @@ namespace RPGProject.Control.Combat
             }
 
             unitController.SetupUnitController(unitInfo, unitResources, _startingBlock, _isPlayerTeam, newMesh);
-            unitController.combatAIType = _unit.combatAIType;
+            unitController.aiType = _unit.combatAIType;
 
             fighter.unitInfo = unitInfo;
             fighter.unitResources = unitResources;

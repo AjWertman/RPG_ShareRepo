@@ -29,6 +29,7 @@ MonoBehaviour:
   abilityType: 4
   targetingType: 1
   attackRange: 5
-  actionPointsCost: 1
+  actionPointsCost: 0
+  cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
