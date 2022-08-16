@@ -3675,12 +3675,12 @@ PrefabInstance:
     - target: {fileID: 4662755111146009985, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000008331434
+      value: 0.000000008344293
       objectReference: {fileID: 0}
     - target: {fileID: 4662755111146009985, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000021452524
+      value: -0.0000000021420083
       objectReference: {fileID: 0}
     - target: {fileID: 4690810693775387508, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
@@ -6271,9 +6271,81 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[0].battleBehaviors.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[1].battleBehaviors.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[2].battleBehaviors.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[3].battleBehaviors.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[0].battleBehaviors.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[0].battleBehaviors.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[0].battleBehaviors.Array.data[3]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[0].battleBehaviors.Array.data[4]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[0].battleBehaviors.Array.data[5]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[1].battleBehaviors.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[1].battleBehaviors.Array.data[2]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[1].battleBehaviors.Array.data[3]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[1].battleBehaviors.Array.data[4]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[1].battleBehaviors.Array.data[5]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[2].battleBehaviors.Array.data[1]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[2].battleBehaviors.Array.data[2]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[2].battleBehaviors.Array.data[3]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164817, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: combatAIBehaviors.Array.data[2].battleBehaviors.Array.data[4]
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 734690255, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7773476
+      value: 1.7779905
       objectReference: {fileID: 0}
     - target: {fileID: 734690256, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6281,11 +6353,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 734690256, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000008330743
+      value: 0.000000008332105
       objectReference: {fileID: 0}
     - target: {fileID: 734690256, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000021479334
+      value: -0.000000002142649
       objectReference: {fileID: 0}
     - target: {fileID: 1040756390, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6309,23 +6381,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1989736353, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7773476
+      value: 1.7779905
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.23175052
+      value: 0.2317505
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 6.3059963e-13
+      value: 0.000000014496112
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 2.6550578e-12
+      value: -0.000000003450697
       objectReference: {fileID: 0}
     - target: {fileID: 1999198496, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7773476
+      value: 1.7779905
       objectReference: {fileID: 0}
     - target: {fileID: 1999198497, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6355,7 +6427,7 @@ PrefabInstance:
     - target: {fileID: 410858650583192177, guid: 2f17807c10561384ea07ef28bb66d773,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00003796439
+      value: 0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 1099763432026762118, guid: 2f17807c10561384ea07ef28bb66d773,
         type: 3}

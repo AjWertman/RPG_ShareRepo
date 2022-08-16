@@ -1,5 +1,6 @@
 using RPGProject.Combat;
 using RPGProject.Combat.Grid;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ namespace RPGProject.Control.Combat
     {
         public Dictionary<GridBlock, Unit> playerStartingPositionsDict = new Dictionary<GridBlock, Unit>();
         public Dictionary<GridBlock, Unit> enemyStartingPositionsDict = new Dictionary<GridBlock, Unit>();
+
+        public Vector3 playerTeamCenterPoint = Vector3.zero;
+        public Vector3 enemyTeamCenterPoint = Vector3.zero;
 
         GridSystem gridSystem = null;
         Pathfinder pathfinder = null;
@@ -36,11 +40,36 @@ namespace RPGProject.Control.Combat
 
             playerStartingPositionsDict = SetupStartingPositions(playerZeroCoordinates, _playerStartingPositions);
             enemyStartingPositionsDict = SetupStartingPositions(enemyZeroCoordinates, _enemyStartingPositions);
+
+            UpdateCenter(true);
+            UpdateCenter(false); 
         }
 
         public void SetNewFighterBlock(Fighter _fighter, GridBlock _gridBlock)
         {
             occupiedBlocksDict[_fighter] = _gridBlock;
+
+            UpdateCenter(_fighter.unitInfo.isPlayer);
+        }
+
+        private void UpdateCenter(bool _isPlayerTeam)
+        {
+            Vector3 averagePosition = new Vector3();
+            int numberOfTeammates = 0;
+
+            foreach(Fighter fighter in occupiedBlocksDict.Keys)
+            {
+                if(fighter.unitInfo.isPlayer == _isPlayerTeam)
+                {
+                    GridBlock occupiedBlock = occupiedBlocksDict[fighter];
+                    averagePosition += new Vector3(occupiedBlock.gridCoordinates.x, 0, occupiedBlock.gridCoordinates.z);
+                    numberOfTeammates++;
+                }
+            }
+
+            averagePosition = averagePosition / numberOfTeammates;
+            if (_isPlayerTeam) playerTeamCenterPoint = averagePosition;
+            else enemyTeamCenterPoint = averagePosition;
         }
 
         public void OnGridBlockEnter(Fighter _newFighter, GridBlock _gridBlockToTest)
@@ -96,6 +125,20 @@ namespace RPGProject.Control.Combat
         public GridBlock GetGridBlockByFighter(Fighter _fighter)
         {
             return occupiedBlocksDict[_fighter];
+        }
+
+        public Vector3 GetTeamCenterPoint(bool _isPlayer, bool _wantsOwnTeam)
+        {
+            if (_isPlayer)
+            {
+                if(_wantsOwnTeam) return playerTeamCenterPoint;
+                else return enemyTeamCenterPoint;
+            }
+            else
+            {
+                if (_wantsOwnTeam) return enemyTeamCenterPoint;
+                else return playerTeamCenterPoint;
+            }          
         }
 
         private Dictionary<GridBlock, Unit> SetupStartingPositions(GridCoordinates _zeroCoordinates, UnitStartingPosition[] _unitStartingPositions)

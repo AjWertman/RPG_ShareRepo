@@ -98,35 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1b02aa5a137a4343b80388244fe1bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  combatAIBehaviors:
-  - aiType: 0
-    aiBehaviors:
-      attack: 25
-      agro: 65
-      heal: 0
-      support: 10
-      runaway: 0
-  - aiType: 1
-    aiBehaviors:
-      attack: 80
-      agro: 0
-      heal: 0
-      support: 20
-      runaway: 0
-  - aiType: 2
-    aiBehaviors:
-      attack: 0
-      agro: 0
-      heal: 0
-      support: 0
-      runaway: 0
-  - aiType: 3
-    aiBehaviors:
-      attack: 0
-      agro: 0
-      heal: 60
-      support: 0
-      runaway: 0
 --- !u!114 &425164819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +135,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd186ea982e37ef4c9998e4a7bf09108, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  presetBehaviors:
+  - aiType: 0
+    actionTypes: 010000000300000000000000020000000500000004000000
+  - aiType: 1
+    actionTypes: 000000000300000005000000020000000100000004000000
+  - aiType: 2
+    actionTypes: 000000000500000004000000030000000200000001000000
+  - aiType: 3
+    actionTypes: 020000000300000004000000050000000000000001000000
 --- !u!1001 &13614584
 PrefabInstance:
   m_ObjectHideFlags: 0
