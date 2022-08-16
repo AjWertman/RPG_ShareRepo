@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 7599116760349610113}
   - component: {fileID: 7544678149459594818}
   - component: {fileID: 5497646693978762142}
-  - component: {fileID: 2617675497947377198}
   - component: {fileID: 7051265770026340352}
   - component: {fileID: 4170302240818230691}
   - component: {fileID: 509161126029126438}
@@ -114,26 +113,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!95 &2617675497947377198
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642788015177014662}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: d288a0e4a2d923b46898986e979da643, type: 3}
-  m_Controller: {fileID: 22100000, guid: cce47a98a6d3cc1479d8754036d4adfb, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &7051265770026340352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,7 +145,7 @@ MonoBehaviour:
     healthPoints: 0
     maxHealthPoints: 100
     actionPoints: 0
-    gCostAllowance: 0
+    gCostMoveAllowance: 0
   startingStats:
     stamina: 10
     spirit: 10
@@ -176,7 +155,7 @@ MonoBehaviour:
     resistance: 10
     speed: 10
     luck: 10
-  combatAIType: 1
+  aiType: 1
   currentBlock: {fileID: 0}
 --- !u!114 &4170302240818230691
 MonoBehaviour:
@@ -245,7 +224,7 @@ MonoBehaviour:
     healthPoints: 0
     maxHealthPoints: 0
     actionPoints: 0
-    gCostAllowance: 0
+    gCostMoveAllowance: 0
   characterMesh: {fileID: 0}
   selectedAbility: {fileID: 0}
 --- !u!114 &3504165519863861257

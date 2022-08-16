@@ -21,8 +21,12 @@ namespace RPGProject.Combat
 
         public void InitializeComboLinker()
         {
-            animator = GetComponent<Animator>();
             soundFXManager = FindObjectOfType<SoundFXManager>();
+        }
+
+        public void SetAnimator(Animator _animator)
+        {
+            animator = _animator;
         }
 
         public void SetupComboLinker()

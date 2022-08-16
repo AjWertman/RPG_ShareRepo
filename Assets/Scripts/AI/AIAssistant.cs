@@ -86,6 +86,8 @@ namespace RPGProject.Combat.AI
 
         public static AIRanking GetBehaviorRanking(AIBattleBehavior _behaviorPreset, AIActionType _actionType)
         {
+            if (_behaviorPreset.aiType == AIBattleType.Custom) return AIRanking.Great;
+
             int typeIndex = 0;
             foreach(AIActionType actionType in _behaviorPreset.actionTypes)
             {

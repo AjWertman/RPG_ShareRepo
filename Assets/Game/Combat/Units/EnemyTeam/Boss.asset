@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
+  m_Name: Boss
+  m_EditorClassIdentifier: 
+  unitName: Boss
+  baseLevel: 10
+  characterKey: 4
+  combatAIType: 1
+  unitResources:
+    healthPoints: 0
+    maxHealthPoints: 0
+    actionPoints: 0
+    gCostMoveAllowance: 0
+  stats:
+    stamina: 30
+    spirit: 30
+    strength: 30
+    skill: 30
+    armor: 30
+    resistance: 30
+    speed: 30
+    luck: 30
+  basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
+  abilities:
+  - {fileID: 11400000, guid: 281f15e5f569fba40bcdd671e4fa5d65, type: 2}
+  - {fileID: 11400000, guid: 14c67d1c4d72dc64ba518eebd47e1f97, type: 2}
+  - {fileID: 11400000, guid: e3c12eedced596c429cc8f9832a962ce, type: 2}
+  - {fileID: 11400000, guid: 85443344a95113a4bbae6e1f92e09480, type: 2}

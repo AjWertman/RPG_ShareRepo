@@ -1,20 +1,21 @@
 namespace RPGProject.Core
 {
+    //Refactor - remove and implement AssetBundles or Addressables
     public enum CharacterKey
     {
         None = 0,
 
         //Player Characters
-        Player = 1,
-        Rogue = 2,
-        Druid = 3,
-        ShieldMaiden = 4,
+        Protagonist = 1,
+        PDR = 2,
+        Astra = 3,
 
         //Unqiue Enemies
-        Dhurmumir_WorldBreaker = 5,
-        Juggernaut = 6,
+        Boss = 4,
 
         //Generic Enemies
-        Erradication_Drone = 7
+        rEnemy = 5,
+        mEnemy = 6,
+        Officer = 7
     }
 }

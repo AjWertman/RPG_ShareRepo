@@ -160,6 +160,7 @@ namespace RPGProject.Control.Combat
                     //AIAssistant.GetAPCostRanking(_currentUnitTurn.unitResources.actionPoints, actionPointsCost);
                     //score *= 1f;
 
+                    PrintCombatAction(combatAction, score);
                     if (!possibleActions.ContainsKey(combatAction)) possibleActions.Add(combatAction, score);
                 }
             }
@@ -245,7 +246,6 @@ namespace RPGProject.Control.Combat
 
             if (_aiCombatAction.selectedAbility != null) actionPointsCost += _aiCombatAction.selectedAbility.actionPointsCost;
 
-            print(actionPointsCost.ToString());
             return actionPointsCost;
         }
 

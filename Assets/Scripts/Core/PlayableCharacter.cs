@@ -9,7 +9,7 @@ namespace RPGProject.Core
         public string characterName = "";
         public PlayerKey playerKey = PlayerKey.None;
         public int age = 0;
-        public string summaryText = "";
+        [TextArea (10,10)] public string summaryText = "";
         
         [Header("UI Design")]
         public Sprite backgroundImage = null;

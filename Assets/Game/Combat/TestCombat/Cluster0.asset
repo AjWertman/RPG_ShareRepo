@@ -13,15 +13,19 @@ MonoBehaviour:
   m_Name: Cluster0
   m_EditorClassIdentifier: 
   enemies:
-  - unit: {fileID: 11400000, guid: d28dafea7a8855a4382a29e89b638228, type: 2}
+  - unit: {fileID: 11400000, guid: 2af88666b8413a744a7df7d25de3df0c, type: 2}
     startCoordinates:
       x: 1
       z: 1
-  - unit: {fileID: 11400000, guid: 108d2e81932fe844c98f22f0d7d30dd8, type: 2}
+  - unit: {fileID: 11400000, guid: cd100e2e2988b23448f8d3145f2b7c89, type: 2}
     startCoordinates:
       x: 0
       z: 0
-  - unit: {fileID: 11400000, guid: 7bcc44a958b5e4d40876c31efaef0b33, type: 2}
+  - unit: {fileID: 11400000, guid: 84d90196aedd1c44b9d4543caeffd41c, type: 2}
     startCoordinates:
       x: -2
       z: 1
+  - unit: {fileID: 11400000, guid: 33b61b1866d3c9f44b5d12f68e7283dc, type: 2}
+    startCoordinates:
+      x: -3
+      z: 2

@@ -40,8 +40,6 @@ namespace RPGProject.Control.Combat
 
         public void InitalizeUnitController()
         {
-            animator = GetComponent<Animator>();
-
             fighter = GetComponent<Fighter>();
             comboLinker = GetComponent<ComboLinker>();
             health = GetComponent<Health>();
@@ -237,12 +235,21 @@ namespace RPGProject.Control.Combat
             characterMesh.transform.localPosition = Vector3.zero;
             characterMesh.transform.localRotation = Quaternion.identity;
 
+            SetupAnimator(characterMesh.GetComponent<Animator>());
+
             animator.runtimeAnimatorController = characterMesh.animatorController;
             animator.avatar = _characterMesh.avatar;
 
             fighter.characterMesh = characterMesh;
 
             characterMesh.gameObject.SetActive(true);
+        }
+
+        private void SetupAnimator(Animator _animator)
+        {
+            animator = _animator;
+            fighter.SetAnimator(animator);
+            mover.SetAnimator(animator);
         }
 
         public void SetUnitResources(UnitResources _unitResources)

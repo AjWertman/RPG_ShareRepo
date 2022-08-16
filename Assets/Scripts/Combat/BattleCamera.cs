@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class BattleCamera : MonoBehaviour
 {
-    [SerializeField] float spinSensitivity = .75f;
-    [SerializeField] float moveSpeed = 10f;
+    [SerializeField] float spinSensitivity = 125f;
+    [SerializeField] float zoomSensitivity = 125f;
+    [SerializeField] float moveSpeed = 12f;
+
+    [SerializeField] float fieldOfViewMin, fieldOfViewMax;
+    [SerializeField] float fieldOfViewDefault = 40f;
 
     CinemachineFreeLook freeLook = null;
 
@@ -63,10 +67,22 @@ public class BattleCamera : MonoBehaviour
         followTarget.localEulerAngles = newEulers;
     }
 
+    public void Zoom(bool _zoomingIn)
+    {
+        float zoomAmount = zoomSensitivity;
+        if (_zoomingIn) zoomAmount *= -1f;
+
+        float newFieldOfView = freeLook.m_Lens.FieldOfView + (zoomAmount * Time.deltaTime);
+        newFieldOfView = Mathf.Clamp(newFieldOfView, fieldOfViewMin, fieldOfViewMax);
+        freeLook.m_Lens.FieldOfView = newFieldOfView;
+    }
+
     public void RecenterCamera()
     {
         currentTarget = followTarget;
         followTarget.localPosition = Vector3.zero;
+
+        freeLook.m_Lens.FieldOfView = fieldOfViewDefault;
 
         freeLook.m_YAxis.Value = .5f;
         freeLook.m_XAxis.Value = 0f;
@@ -76,7 +92,6 @@ public class BattleCamera : MonoBehaviour
     {
         if (currentTarget == _newTarget) return;
         currentTarget = _newTarget;
-
         followTarget.transform.position = currentTarget.transform.position;
     }
 

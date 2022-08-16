@@ -72,14 +72,12 @@ namespace RPGProject.Control.Combat
                 battleCamera.MoveFollowTransform(inputDirection);
             }
 
-            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow))
-            {
-                battleCamera.RotateFreeLook(true);
-            }
-            else if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow))
-            {
-                battleCamera.RotateFreeLook(false);
-            }
+            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow)) battleCamera.RotateFreeLook(true);
+            else if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow)) battleCamera.RotateFreeLook(false);
+
+
+            if(Input.GetAxisRaw("Mouse ScrollWheel") > 0) battleCamera.Zoom(true);
+            else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0) battleCamera.Zoom(false);
 
             //R
             if (Input.GetKeyDown(KeyCode.Tab))
@@ -112,7 +110,7 @@ namespace RPGProject.Control.Combat
                     Fighter fighter = (Fighter)combatTarget;
 
                     if (fighter == null) return;
-                    battleCamera.SetFollowTarget(fighter.transform);
+                    battleCamera.SetFollowTarget(fighter.GetAimTransform());
                 }
             }
         }

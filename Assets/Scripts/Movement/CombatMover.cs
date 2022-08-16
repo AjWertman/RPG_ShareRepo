@@ -89,6 +89,11 @@ namespace RPGProject.Movement
                 navMeshAgent.stoppingDistance = startStoppingDistance;
             }
         }
+        
+        public void SetAnimator(Animator _animator)
+        {
+            animator = _animator;
+        }
 
         private void UpdateAnimator(bool _isMoving)
         {

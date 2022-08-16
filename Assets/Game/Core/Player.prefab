@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69e8bd93d4eeae045b04ddfcb09b4d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTeam: 
+  playerTeam: 010000000200000003000000
   playerMesh: {fileID: 6673268796570089254}
   camLookObject: {fileID: 4265553782695489312}
   menuKeyCode: 111
@@ -157,6 +157,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: Player
+  currentDialogue: {fileID: 0}
+  currentNode: {fileID: 0}
+  isChoosing: 0
 --- !u!114 &1109500359278395369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,6 +212,7 @@ MonoBehaviour:
   moveSpeed: 8
   turnSmoothness: 0.1
   gravity: 20
+  canMove: 0
 --- !u!1 &3880345341442147315
 GameObject:
   m_ObjectHideFlags: 0
@@ -3072,3 +3076,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8c756a4f32f0d945bb0d60bb0f29ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemDropTransform: {fileID: 0}

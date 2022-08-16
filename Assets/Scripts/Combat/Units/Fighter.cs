@@ -47,7 +47,7 @@ namespace RPGProject.Combat
 
         public void InitalizeFighter()
         {
-            animator = GetComponentInChildren<Animator>();
+            //animator = GetComponentInChildren<Animator>();
             comboLinker = GetComponent<ComboLinker>();
             comboLinker.InitializeComboLinker();
             comboLinker.onComboStarted += SetCurrentAbilityInstance;
@@ -61,6 +61,13 @@ namespace RPGProject.Combat
             meleeRange = GetComponent<NavMeshAgent>().stoppingDistance;
 
             ResetFighter();
+        }
+
+        public void SetAnimator(Animator _animator)
+        {
+            animator = _animator;
+
+            comboLinker.SetAnimator(_animator);
         }
 
         public void UpdateAttributes(float _strength, float _skill, float _luck)
