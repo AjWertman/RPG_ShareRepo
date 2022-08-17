@@ -16,8 +16,6 @@ namespace RPGProject.Control.Combat
 
     public class BattleHandler : MonoBehaviour
     {
-        //[SerializeField] List<CombatAIBehavior> combatAIBehaviors = new List<CombatAIBehavior>();
-
         CombatAIBrain aiBrain = null;
         BattleUIManager battleUIManager = null;
         BattleGridManager battleGridManager = null;
@@ -32,7 +30,7 @@ namespace RPGProject.Control.Combat
         GridCoordinates enemyZeroCoordinates;
 
         public event Action<UnitController> onUnitTurnUpdate;
-        public event Action<Ability> onAbilitySelect;
+        public event Action onPlayerMoveCompletion;
 
         private void Awake()
         {
@@ -91,7 +89,7 @@ namespace RPGProject.Control.Combat
 
             unitManager.SetUpUnits(playerStartingPositions, enemyStartingPositions);
 
-            unitManager.onMoveCompletion += CheckAP;
+            unitManager.onMoveCompletion += OnMoveCompletion;
             unitManager.onTeamWipe += EndBattle;
             unitManager.onUnitDeath += OnUnitDeath;
         }
@@ -107,7 +105,6 @@ namespace RPGProject.Control.Combat
             List<Fighter> _combatantTurnOrder = GetUnitFighters(turnManager.turnOrder);
             battleUIManager.SetupUIManager(_playerCombatants, _enemyCombatants, _combatantTurnOrder);
             battleUIManager.SetUILookAts(Camera.main.transform);
-            battleUIManager.onPlayerMove += OnPlayerMove;
             battleUIManager.onEscape += Escape;
             battleUIManager.onEndTurn += () => AdvanceTurn();
         }
@@ -117,24 +114,27 @@ namespace RPGProject.Control.Combat
             return battleUIManager;
         }
 
-        public void OnPlayerMove(CombatTarget _target, Ability _selectedAbility)
+        public void OnPlayerMove(List<CombatTarget> _targets, Ability _selectedAbility)
         {
             battleUIManager.DeactivateAllMenus();
+
+            CombatTarget _target = _targets[0];
 
             string cantUseAbilityReason = CombatAssistant.CanUseAbilityCheck(currentUnitTurn.GetFighter(), _target, _selectedAbility);
 
             if (cantUseAbilityReason == "")
             {
-                UseAbility(_target, _selectedAbility);
+                UseAbility(_targets, _selectedAbility);
             }
             else
             {
                 StartCoroutine(battleUIManager.GetBattleHUD().ActivateCantUseAbilityUI(cantUseAbilityReason));
                 battleUIManager.ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
+                OnMoveCompletion();
             }
         }
 
-        public void UseAbility(CombatTarget _target, Ability _selectedAbility)
+        public void UseAbility(List<CombatTarget> _targets, Ability _selectedAbility)
         {
             if (_selectedAbility.canTargetAll)
             {
@@ -142,19 +142,27 @@ namespace RPGProject.Control.Combat
                 return;
             }
 
-            currentAttack = currentUnitTurn.UseAbilityBehavior(_target, _selectedAbility);
+            currentAttack = currentUnitTurn.UseAbilityBehavior(_targets, _selectedAbility);
             StartCoroutine(currentAttack);
         }
 
-        private void CheckAP()
+        private void OnMoveCompletion()
         {
             bool isPlayer = currentUnitTurn.unitInfo.isPlayer;
             float currentAP = currentUnitTurn.unitResources.actionPoints;
 
-            if(!isPlayer) AdvanceTurn();
+            if (!isPlayer)
+            {
+                //Refactor - Enemies only get one move (FIX THAT)
+                AdvanceTurn();
+            }
             if(currentAP > 0)
             {
-                if (isPlayer) battleUIManager.ActivatePlayerMoveSelectMenu(true);
+                if (isPlayer)
+                {
+                    battleUIManager.ActivatePlayerMoveSelectMenu(true);
+                    onPlayerMoveCompletion();
+                }
             }
             else
             {
@@ -219,7 +227,11 @@ namespace RPGProject.Control.Combat
                 if (actionAbility != null)
                 {
                     currentUnitFighter.selectedAbility = actionAbility;
-                    UseAbility((CombatTarget)actionTarget, actionAbility);
+
+                    //Refactor - testing 
+                    List<CombatTarget> singleCombatTarget = new List<CombatTarget>();
+                    singleCombatTarget.Add((CombatTarget)actionTarget);
+                    UseAbility(singleCombatTarget, actionAbility);
                 }
             }
             else
@@ -456,7 +468,6 @@ namespace RPGProject.Control.Combat
             unitManager.onTeamWipe -= EndBattle;
             unitManager.onUnitDeath -= OnUnitDeath;
 
-            battleUIManager.onPlayerMove -= OnPlayerMove;
             battleUIManager.onEscape -= Escape;
 
             turnManager.onTurnChange -= SetCurrentUnitTurn;

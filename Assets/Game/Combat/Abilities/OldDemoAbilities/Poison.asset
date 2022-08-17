@@ -12,15 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
-  combo:
-  - animationID: Attack0
-    comboPointCost: 0
-    manaCost: 20
-    enduranceCost: 0
-    abilityObjectKey: 4
-    spawnLocationOverride: 0
-    abilityClip: {fileID: 0}
-  abilityResource: 0
   abilityName: Poison
   requiredLevel: 1
   abilityLifetime: 3
@@ -30,6 +21,17 @@ MonoBehaviour:
   shouldExpand: 0
   buttonColor: {r: 0.37106323, g: 0, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
-  abilityType: 0
-  targetingType: 0
+  combo:
+  - animationID: Attack0
+    comboPointCost: 0
+    abilityObjectKey: 4
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  abilityType: 1
+  targetingType: 4
+  requiredTargetAmount: 4
+  attackRange: 79.06
+  actionPointsCost: 0
+  cooldown: 0
+  requiresTarget: 0
   canTargetAll: 0

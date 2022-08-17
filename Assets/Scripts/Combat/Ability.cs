@@ -4,7 +4,8 @@ using UnityEngine;
 namespace RPGProject.Combat
 {
     public enum AbilityType { Melee, Cast, Copy, Buff, InstaHit }
-    public enum TargetingType { EnemiesOnly, PlayersOnly, SelfOnly, Everyone }
+    public enum TargetingType { EnemiesOnly, PlayersOnly, SelfOnly, Everyone, GridBlocksOnly, Everything}
+    public enum AbilityBehaviorType { None, Teleporter}
 
     [CreateAssetMenu(fileName = "Ability", menuName = "Ability/Create New Ability", order = 1)]
     public class Ability : ScriptableObject
@@ -25,6 +26,7 @@ namespace RPGProject.Combat
         public List<ComboLink> combo = new List<ComboLink>();
         public AbilityType abilityType = AbilityType.Melee;
         public TargetingType targetingType = TargetingType.Everyone;
+        public int requiredTargetAmount = 1;
         public float attackRange = 5f;
         public int actionPointsCost = -1;
         public int cooldown = 2;

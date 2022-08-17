@@ -13,5 +13,7 @@ namespace RPGProject.Combat
         Nuke = 8,
         ShieldWall = 9,
         Missile = 10,
+
+        Teleporter = 11,
     }
 }

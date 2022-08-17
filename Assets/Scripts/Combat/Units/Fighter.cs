@@ -269,8 +269,9 @@ namespace RPGProject.Combat
             }
 
             Health targetHealth = null;
+            bool hasTarget = targetFighter != null;
 
-            if (targetFighter != null)
+            if (hasTarget)
             {
                 targetHealth = targetFighter.health;
                 targetHealth.onHealthChange += ApplyAgro;
@@ -304,7 +305,7 @@ namespace RPGProject.Combat
                     break;
             }
 
-            targetHealth.onHealthChange -= ApplyAgro;
+            if(hasTarget) targetHealth.onHealthChange -= ApplyAgro;
         }
 
         private void DecrementCooldowns()
@@ -370,12 +371,12 @@ namespace RPGProject.Combat
         }
 
         //Animation Events
-        void Hit()
+        public void Hit()
         {
             PerformAbility();
         }
 
-        void Shoot()
+        public void Shoot()
         {
             PerformAbility();
         }

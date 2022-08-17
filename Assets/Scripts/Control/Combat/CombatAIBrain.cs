@@ -2,6 +2,7 @@ using RPGProject.Combat;
 using RPGProject.Combat.AI;
 using RPGProject.Combat.Grid;
 using RPGProject.Core;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,22 +61,27 @@ namespace RPGProject.Control.Combat
 
         private AIBattleAction GetBestAction(Dictionary<AIBattleAction, float> _possibleActions)
         {
-            AIBattleAction bestAction = new AIBattleAction();
+            List<AIBattleAction> bestActions = new List<AIBattleAction>();
             float highestScore = 0;
 
             foreach(AIBattleAction combatAction in _possibleActions.Keys)
             {
                 float score = _possibleActions[combatAction];
 
-                if (highestScore <= score)
+                if (highestScore < score)
                 {
-                    bestAction = combatAction;
+                    bestActions.Clear();
+                    bestActions.Add(combatAction);
                     highestScore = score;
+                }
+                else if(highestScore == score)
+                {
+                    bestActions.Add(combatAction);
                 }
             }
 
-            //PrintCombatAction(bestAction, highestScore);
-            return bestAction; 
+            int randomIndex = RandomGenerator.GetRandomNumber(0, bestActions.Count - 1);
+            return bestActions[randomIndex]; 
         }
 
         private Dictionary<AIBattleAction, float> GetPossibleActions(UnitController _currentUnitTurn,
@@ -135,7 +141,7 @@ namespace RPGProject.Control.Combat
                     AIRanking behaviorRanking = AIAssistant.GetBehaviorRanking(GetBehaviorPreset(aiType), actionType);
                     score += AIAssistant.GetModifier(behaviorRanking);
 
-                    //Fighter preferredTarget = GetPreferredTarget(_currentUnitTurn);
+                    Fighter preferredTarget = GetPreferredTarget(_currentUnitTurn, _allUnits);
                     //AIRanking positionRanking = GetPositionStrengthRanking(_currentUnitTurn, preferredTarget)
                     //score += AIAssistant.GetModifier(positionRanking);
 
@@ -150,22 +156,51 @@ namespace RPGProject.Control.Combat
                         //or buff
                         if (isHeal) score -= 50f;
                     }
-                    //print("ability - " + ability.abilityName + " / cost - " + apCostRanking.ToString() + " / impact - " + impactRanking.ToString() + " / behavior - " + behaviorRanking.ToString());
 
-                    /////////////////////////////////////////////////////////////////////////////////
-
-                    //score *= AIAssistant.GetAITypeModifier(aiType, combatAction);
-
-                    //int actionPointsCost = GetActionPointsCost(_currentUnitTurn, combatAction);
-                    //AIAssistant.GetAPCostRanking(_currentUnitTurn.unitResources.actionPoints, actionPointsCost);
-                    //score *= 1f;
+                    if (score < 0) continue;
 
                     PrintCombatAction(combatAction, score);
-                    if (!possibleActions.ContainsKey(combatAction)) possibleActions.Add(combatAction, score);
+                    if (!possibleActions.ContainsKey(combatAction))
+                    {
+                        possibleActions.Add(combatAction, score);
+                    }
                 }
             }
 
             return possibleActions;
+        }
+
+        private Fighter GetPreferredTarget(UnitController _currentUnitTurn, List<UnitController> _allUnits)
+        {
+            AIBattleType aiType = _currentUnitTurn.aiType;
+            bool isPlayer = _currentUnitTurn.unitInfo.isPlayer;
+            bool isDamageOrTank = aiType == AIBattleType.Tank || aiType == AIBattleType.mDamage || aiType == AIBattleType.rDamage;
+
+            Dictionary<Fighter, AIRanking> fightersDict = new Dictionary<Fighter, AIRanking>();
+
+            foreach (UnitController unit in _allUnits)
+            {
+                List<AIRanking> unitRanking = new List<AIRanking>();
+                Fighter unitFighter = unit.GetFighter();
+                bool isTeammate = isPlayer == unit.unitInfo.isPlayer;
+
+                unitRanking.Add(AIAssistant.GetRankingByTargetStatus(unitFighter));
+
+                UnitAgro unitAgro = unit.GetUnitAgro();
+                if (!isTeammate)
+                {
+                    foreach (Agro agro in unitAgro.agros)
+                    {
+                        if (agro.fighter != unitFighter) continue;
+                        unitRanking.Add(AIAssistant.GetRankingByAgro(aiType, agro));
+                    }
+                }
+                AIRanking averageRank = AIAssistant.GetRankAverage(unitRanking);
+                fightersDict.Add(unitFighter, averageRank);
+                
+            }
+
+            return null;
         }
 
         private AIActionType GetActionType(AIBattleBehavior _combatAIBehavior, Fighter _currentFighter, AIBattleAction _action)
@@ -175,6 +210,7 @@ namespace RPGProject.Control.Combat
             Fighter target = _action.target;
             GridBlock targetBlock = _action.targetBlock;
 
+            //Self Interest
             bool isSelf = _currentFighter == target;
 
             if (ability != null && target != null)
@@ -182,7 +218,7 @@ namespace RPGProject.Control.Combat
                 //Refactor - take into acount buffs or debuffs or taunts/pull agro
                 bool? isDamage = null;
                 bool? isBuff = null;
-
+                
                 if (ability.baseAbilityAmount != 0) isDamage = (ability.baseAbilityAmount < 0);
 
                 if (isDamage == true || isBuff == false) actionTypes.Add(AIActionType.DealDamage_Or_Debuff);
@@ -214,6 +250,7 @@ namespace RPGProject.Control.Combat
             GridCoordinates preferredTargetCoords = battleGridManager.GetGridBlockByFighter(_preferredTarget).gridCoordinates;
             Vector3 targetPosition = new Vector3(preferredTargetCoords.x, 0, preferredTargetCoords.z);
 
+            //Refactor - plug in scoring 
             float distanceFromOpposingTeam = AIAssistant.GetDistance(currentPosition, battleGridManager.GetTeamCenterPoint(isPlayer, false));
             float distanceFromOwnTeam = AIAssistant.GetDistance(currentPosition, battleGridManager.GetTeamCenterPoint(isPlayer, true));
             float distanceFromPreferredTarget = AIAssistant.GetDistance(currentPosition, targetPosition);

@@ -27,8 +27,7 @@ namespace RPGProject.Control
         Dictionary<Fighter, UnitUI> fighterUIDict = new Dictionary<Fighter, UnitUI>();
         Dictionary<BattleUIMenuKey, GameObject> menuGameObjects = new Dictionary<BattleUIMenuKey, GameObject>();
         BattleUIMenuKey activeMenuKey = BattleUIMenuKey.None;
-
-        public event Action<Fighter, Ability> onPlayerMove;
+        
         public event Action onEscape;
         public event Action onEndTurn;
 
@@ -213,7 +212,7 @@ namespace RPGProject.Control
                 ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
                 return;
             }
-            onPlayerMove(_target, selectedAbility);
+            //onPlayerMove(_target, selectedAbility);
 
             ActivateUnitTurnUI(currentCombatantTurn, false);
             battleHUD.SetupUnitResourcesIndicator(null);

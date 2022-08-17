@@ -10,36 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: Fireball
+  m_Name: Teleporter
   m_EditorClassIdentifier: 
-  abilityName: Fireball
-  requiredLevel: 0
+  abilityName: Wormhole Generator
+  requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -120
-  description: Fireball
+  baseAbilityAmount: 0
+  description: 
   shouldExpand: 0
-  buttonColor: {r: 1, g: 0.7396226, b: 0.7396226, a: 1}
+  buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    abilityObjectKey: 1
-    spawnLocationOverride: 0
-    abilityClip: {fileID: 0}
-  - animationID: Cast0
-    comboPointCost: 0
-    abilityObjectKey: 1
-    spawnLocationOverride: 1
-    abilityClip: {fileID: 0}
-  - animationID: Cast0
-    comboPointCost: 0
-    abilityObjectKey: 1
-    spawnLocationOverride: 0
+    abilityObjectKey: 11
+    spawnLocationOverride: 3
     abilityClip: {fileID: 0}
   abilityType: 1
-  targetingType: 0
-  attackRange: 7
-  actionPointsCost: 2
+  targetingType: 4
+  requiredTargetAmount: 2
+  attackRange: 10
+  actionPointsCost: -1
   cooldown: 2
-  requiresTarget: 1
+  requiresTarget: 0
   canTargetAll: 0

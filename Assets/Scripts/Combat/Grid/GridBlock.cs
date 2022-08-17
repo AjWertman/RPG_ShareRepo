@@ -15,7 +15,7 @@ namespace RPGProject.Combat.Grid
         public Transform travelDestination = null;
 
         public Fighter contestedFighter = null;
-        public Ability activeAbility = null;
+        public AbilityBehavior activeAbility = null;
 
         MeshRenderer meshRenderer = null;
 

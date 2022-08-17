@@ -16,5 +16,22 @@ namespace RPGProject.Combat
         public Transform lHandTransform = null;
 
         public Transform particleExpander = null;
+
+        Animator animator = null;
+
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
+        }
+
+        public void InitalizeMesh(GameObject _parent)
+        {
+            GetComponent<AnimationEventCaller>().InitalizeAnimationCaller(_parent);
+        }
+
+        public Animator GetAnimator()
+        {
+            return animator;
+        }
     }
 }

@@ -115,12 +115,27 @@ namespace RPGProject.Combat.AI
             //Add Position strength
         }
 
-        //public static AIRanking GetBehaviorRanking(Fighter _currentFighter, AIBattleAction _action)
-        //{
-        //    Fighter target = _action.target;
-        //    Ability ability = _action.selectedAbility;
-            
-        //}
+        public static AIRanking GetRankingByAgro(AIBattleType _aiType, Agro _agro)
+        {
+            int agroPercentage = _agro.percentageOfAgro;
+            bool isDamageOrTank = _aiType == AIBattleType.Tank || _aiType == AIBattleType.mDamage || _aiType == AIBattleType.rDamage;
+
+            if (isDamageOrTank)
+            {
+                if (MathAssistant.IsBetween(agroPercentage, 75f, 100f)) return AIRanking.Great;
+                else if (MathAssistant.IsBetween(agroPercentage, 50f, 75f)) return AIRanking.Good;
+                else if (MathAssistant.IsBetween(agroPercentage, 25f, 50f)) return AIRanking.Mediocre;
+                else return AIRanking.Bad;
+            }
+            else
+            {
+                if (MathAssistant.IsBetween(agroPercentage, 90f, 100f)) return AIRanking.Great;
+                else if (MathAssistant.IsBetween(agroPercentage, 75f, 90f)) return AIRanking.Good;
+                else if (MathAssistant.IsBetween(agroPercentage, 60f, 75f)) return AIRanking.Mediocre;
+                else return AIRanking.Bad;
+            }
+
+        }
 
         public static float GetModifier(AIRanking _ranking)
         {
@@ -139,86 +154,89 @@ namespace RPGProject.Combat.AI
             return 0;
         }
 
-        private static Dictionary<Fighter, bool> SortAllFighters(List<Fighter> _allFighters)
+        //public static AIRanking GetBehaviorRanking(Fighter _currentFighter, AIBattleAction _action)
+        //{
+        //    Fighter target = _action.target;
+        //    Ability ability = _action.selectedAbility;
+
+        //}
+        //private static Dictionary<Fighter, bool> SortAllFighters(List<Fighter> _allFighters)
+        //{
+        //    Dictionary<Fighter, bool> allFighters = new Dictionary<Fighter, bool>();
+
+        //    foreach (Fighter fighter in _allFighters)
+        //    {
+        //        bool isPlayer = fighter.unitInfo.isPlayer;
+        //        allFighters.Add(fighter, isPlayer);
+        //    }
+
+        //    return allFighters;
+        //}
+
+        //public static float GetHealthPercentageModifier(float _healthPercentage)
+        //{
+        //    if (MathAssistant.IsBetween(_healthPercentage, 0f, .25f)) return 25f;
+        //    else if (MathAssistant.IsBetween(_healthPercentage, .25f, .50f)) return 15f;
+        //    else if (MathAssistant.IsBetween(_healthPercentage, .50f, .75f)) return 5f;
+        //    else return 0f;
+        //}
+
+        //public static TargetPreference GetTargetPreferenceByAgro(int _agroPercentage)
+        //{
+        //    if (_agroPercentage >= 90) return TargetPreference.Ideal;
+        //    else if (_agroPercentage < 90 && _agroPercentage >= 60) return TargetPreference.Preferred;
+        //    else if (_agroPercentage < 60 && _agroPercentage >= 10) return TargetPreference.Indifferent;
+        //    else return TargetPreference.Ignore;
+        //}
+
+        ////Gets preferences by distance (not amount of grid blocks)
+        //public static TargetPreference GetTargetPreferenceByDistance(Transform _currentTransform, Transform _testTransform)
+        //{
+        //    float distance = GetDistance(_currentTransform.position, _testTransform.position);
+
+        //    if (distance <= 2) return TargetPreference.Preferred;
+        //    else if (distance > 2 && distance <= 10) return TargetPreference.Indifferent;
+        //    else return TargetPreference.Ignore;
+        //}
+
+        public static AIRanking GetRankAverage(List<AIRanking> _rankings)
         {
-            Dictionary<Fighter, bool> allFighters = new Dictionary<Fighter, bool>();
+            AIRanking averageRank = AIRanking.Mediocre;
 
-            foreach (Fighter fighter in _allFighters)
-            {
-                bool isPlayer = fighter.unitInfo.isPlayer;
-                allFighters.Add(fighter, isPlayer);
-            }
-
-            return allFighters;
-        }
-
-        public static float GetHealthPercentageModifier(float _healthPercentage)
-        {
-            if (MathAssistant.IsBetween(_healthPercentage, 0f, .25f)) return 25f;
-            else if (MathAssistant.IsBetween(_healthPercentage, .25f, .50f)) return 15f;
-            else if (MathAssistant.IsBetween(_healthPercentage, .50f, .75f)) return 5f;
-            else return 0f;
-        }
-
-        public static TargetPreference GetTargetPreferenceByAgro(int _agroPercentage)
-        {
-            if (_agroPercentage >= 90) return TargetPreference.Ideal;
-            else if (_agroPercentage < 90 && _agroPercentage >= 60) return TargetPreference.Preferred;
-            else if (_agroPercentage < 60 && _agroPercentage >= 10) return TargetPreference.Indifferent;
-            else return TargetPreference.Ignore;
-        }
-
-        //Gets preferences by distance (not amount of grid blocks)
-        public static TargetPreference GetTargetPreferenceByDistance(Transform _currentTransform, Transform _testTransform)
-        {
-            float distance = GetDistance(_currentTransform.position, _testTransform.position);
-
-            if (distance <= 2) return TargetPreference.Preferred;
-            else if (distance > 2 && distance <= 10) return TargetPreference.Indifferent;
-            else return TargetPreference.Ignore;
-        }
-
-        //Gets the average preference based on a list of preferences
-        public static TargetPreference GetTargetPreferenceByAverage(List<TargetPreference> _targetPreferences)
-        {
-            TargetPreference targetPreference = TargetPreference.Indifferent;
-
-            int listCount = _targetPreferences.Count;
+            int listCount = _rankings.Count;
 
             if (listCount > 0)
             {
                 int currentTotal = 0;
-                foreach (TargetPreference pref in _targetPreferences)
+                foreach (AIRanking rank in _rankings)
                 {
-                    if (pref == TargetPreference.Ideal) return TargetPreference.Ideal;
-
-                    int prefIndex = (int)pref;
-                    currentTotal += (prefIndex + 1);
+                    int rankIndex = (int)rank;
+                    currentTotal += (rankIndex + 1);
                 }
 
                 int averageIndex = Mathf.RoundToInt(currentTotal / listCount);
-                targetPreference = (TargetPreference)averageIndex;
+                averageRank = (AIRanking)averageIndex;
             }
 
-            return targetPreference;
+            return averageRank;
         }
 
-        public static float GetPreferenceModifier(TargetPreference _targetPreference)
-        {
-            switch (_targetPreference)
-            {
-                case TargetPreference.Ignore:
-                    return 1f;
-                case TargetPreference.Indifferent:
-                    return 2f;
-                case TargetPreference.Preferred:
-                    return 5f;
-                case TargetPreference.Ideal:
-                    return 10f;
-            }
+        //public static float GetPreferenceModifier(TargetPreference _targetPreference)
+        //{
+        //    switch (_targetPreference)
+        //    {
+        //        case TargetPreference.Ignore:
+        //            return 1f;
+        //        case TargetPreference.Indifferent:
+        //            return 2f;
+        //        case TargetPreference.Preferred:
+        //            return 5f;
+        //        case TargetPreference.Ideal:
+        //            return 10f;
+        //    }
 
-            return 1f;
-        }
+        //    return 1f;
+        //}
 
         public static float GetDistance(Vector3 _currentPosition, Vector3 _testPosition)
         {
@@ -245,8 +263,15 @@ namespace RPGProject.Combat.AI
 
             if (isTypeMatch) return 2f;
             else return .5f;
-        } 
+        }
 
+        public static bool IsTeammate(Fighter _fighterA, Fighter _fighterB)
+        {
+            bool isAPlayer = _fighterA.unitInfo.isPlayer;
+            bool isBPlayer = _fighterB.unitInfo.isPlayer;
+
+            return isAPlayer == isBPlayer;
+        }
 
         private static IEnumerable<AIBattleType> GetCompatableAITypes(AIBattleAction _actionToTest)
         {

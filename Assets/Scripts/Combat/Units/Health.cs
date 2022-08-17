@@ -32,7 +32,7 @@ namespace RPGProject.GameResources
 
         public void InitalizeHealth()
         {
-            animator = GetComponent<Animator>();
+            //animator = GetComponentInChildren<Animator>();
             soundFXManager = FindObjectOfType<SoundFXManager>();
             baseMaxHealthPoints = stamina * staminaHealthAmount;
         }
@@ -119,6 +119,11 @@ namespace RPGProject.GameResources
         public void SetCurrentHealthPercentage()
         {
             healthPercentage = healthPoints / maxHealthPoints;
+        }
+
+        public void SetAnimator(Animator _animator)
+        {
+            animator = _animator;
         }
 
         public bool DeathCheck()

@@ -14,6 +14,8 @@ namespace RPGProject.Movement
 
         float startStoppingDistance = 0;
 
+        IEnumerator currentPath = null;
+
         public event Action<int> onBlockReached;
 
         public void InitalizeCombatMover()
@@ -25,7 +27,9 @@ namespace RPGProject.Movement
         {
             if (_path == null || _path.Count <= 0) yield break;
 
-            yield return FollowPath(_path);
+            currentPath = FollowPath(_path);
+
+            yield return currentPath;
         }
 
         private IEnumerator FollowPath(List<Transform> _path)
@@ -76,6 +80,15 @@ namespace RPGProject.Movement
 
                 yield return null;
             }
+        }
+        
+        public void Teleport(Vector3 _teleportPosition)
+        {
+            StopCoroutine(currentPath);
+
+            navMeshAgent.enabled = false;
+            transform.position = _teleportPosition;
+            navMeshAgent.enabled = true;
         }
 
         public void UpdateStoppingDistance(bool _isZero)

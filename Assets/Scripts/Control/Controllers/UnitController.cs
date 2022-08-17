@@ -118,6 +118,7 @@ namespace RPGProject.Control.Combat
         {
             GridBlock goalBlock = _path[_path.Count - 1];
             Fighter contestedFighter = goalBlock.contestedFighter;
+            AbilityBehavior activeAbility = goalBlock.activeAbility;
             bool isContested = (contestedFighter != null);
 
             if (isContested)
@@ -126,12 +127,34 @@ namespace RPGProject.Control.Combat
                 goalBlock = _path[_path.Count - 1];
             }
 
-            yield return FollowPath(_path);
+            IEnumerator followPath = FollowPath(_path);
+
+            yield return followPath;
 
             if (isContested)
             {
-                yield return UseAbilityBehavior(contestedFighter, fighter.GetBasicAttack());
+                List<CombatTarget> singleTarget = new List<CombatTarget>();
+                singleTarget.Add(contestedFighter);
+                yield return UseAbilityBehavior(singleTarget, fighter.GetBasicAttack());
             }
+            else if (!isContested && activeAbility != null)
+            {
+                BattleTeleporter battleTeleporter = (BattleTeleporter)goalBlock.activeAbility;
+                if(battleTeleporter!= null)
+                {
+                    BattleTeleporter linkedTeleporter = battleTeleporter.linkedTeleporter;
+                    GridBlock teleportBlock = linkedTeleporter.teleportBlock;
+
+                    Vector3 teleportPosition = new Vector3(teleportBlock.travelDestination.position.x, transform.position.y, teleportBlock.travelDestination.position.z);
+
+                    //Give choice of neighbor blocks?
+                    //Random neighbor block (unless unacceptable)
+                    mover.Teleport(teleportPosition);
+                    UpdateCurrentBlock(teleportBlock);
+                }
+            }
+
+            if (unitInfo.isPlayer) onMoveCompletion();
         }
 
         public IEnumerator FollowPath(List<GridBlock> _path)
@@ -146,30 +169,18 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        public IEnumerator UseAbilityBehavior(CombatTarget _target, Ability _ability)
+        public IEnumerator UseAbilityBehavior(List<CombatTarget> _targets, Ability _ability)
         {
             unitUI.ActivateUnitIndicator(false);
 
             while (isTurn)
             {
-                if (!_ability.canTargetAll)
-                {
-                    fighter.LookAtTarget(_target.GetAimTransform());
-                }
+                yield return UseOnAllTargets(_targets, _ability);
 
-                float moveDuration = comboLinker.GetFullComboTime(_ability.combo);
-                float moveDurationWOffset = moveDuration * 1.1f;
-
-                UseAbility(_target, _ability);
-
-                //AddToCopyList(selectedAbility,isCopy);
-
-                yield return new WaitForSeconds(moveDurationWOffset);
+                //DecrementSpellLifetimes
 
                 animator.CrossFade("Idle", .1f);
 
-
-                //DecrementSpellLifetimes
                 yield return new WaitForSeconds(1.5f);
 
                 fighter.selectedTarget = null;
@@ -183,6 +194,28 @@ namespace RPGProject.Control.Combat
         public void SetActionPoints(int _newAPAmount)
         {
             unitResources.actionPoints = _newAPAmount;
+        }
+
+        private IEnumerator UseOnAllTargets(List<CombatTarget> _targets, Ability _ability)
+        {
+            List<CombatTarget> privateList = new List<CombatTarget>();
+            foreach(CombatTarget target in _targets)
+            {
+                privateList.Add(target);
+            }
+            foreach (CombatTarget target in privateList)
+            {
+                fighter.LookAtTarget(target.GetAimTransform());
+
+                float moveDuration = comboLinker.GetFullComboTime(_ability.combo);
+                float moveDurationWOffset = moveDuration * 1.1f;
+
+                UseAbility(target, _ability);
+
+                //AddToCopyList(selectedAbility,isCopy);
+
+                yield return new WaitForSeconds(moveDurationWOffset);
+            }
         }
 
         private void SpendActionPoints(int _apCost)
@@ -235,7 +268,7 @@ namespace RPGProject.Control.Combat
             characterMesh.transform.localPosition = Vector3.zero;
             characterMesh.transform.localRotation = Quaternion.identity;
 
-            SetupAnimator(characterMesh.GetComponent<Animator>());
+            SetupAnimator(characterMesh.GetAnimator());
 
             animator.runtimeAnimatorController = characterMesh.animatorController;
             animator.avatar = _characterMesh.avatar;
@@ -243,13 +276,17 @@ namespace RPGProject.Control.Combat
             fighter.characterMesh = characterMesh;
 
             characterMesh.gameObject.SetActive(true);
+
+            characterMesh.InitalizeMesh(gameObject);
         }
 
         private void SetupAnimator(Animator _animator)
         {
+            //Refactor - will this be necessary with new models;
             animator = _animator;
             fighter.SetAnimator(animator);
             mover.SetAnimator(animator);
+            health.SetAnimator(animator);
         }
 
         public void SetUnitResources(UnitResources _unitResources)

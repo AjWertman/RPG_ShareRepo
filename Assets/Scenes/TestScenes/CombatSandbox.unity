@@ -3770,12 +3770,12 @@ PrefabInstance:
     - target: {fileID: 4662755111146009985, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000008331434
+      value: -0.000000008344259
       objectReference: {fileID: 0}
     - target: {fileID: 4662755111146009985, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000002145252
+      value: 0.0000000021418722
       objectReference: {fileID: 0}
     - target: {fileID: 4690810693775387508, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
@@ -4996,6 +4996,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638911783846062358, guid: d5e55f2105cb48040a821387a81a7e1e,
+        type: 3}
+      propertyPath: abilityPrefabs.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638911783846062358, guid: d5e55f2105cb48040a821387a81a7e1e,
+        type: 3}
+      propertyPath: abilityPrefabs.Array.data[10].abilityPrefab
+      value: 
+      objectReference: {fileID: 8292564950464179599, guid: 90e3255d68ad1c8448b016b84b57c140,
+        type: 3}
+    - target: {fileID: 6638911783846062358, guid: d5e55f2105cb48040a821387a81a7e1e,
+        type: 3}
+      propertyPath: abilityPrefabs.Array.data[10].abilityObjectKey
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6695461026917727425, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
@@ -6495,6 +6511,18 @@ PrefabInstance:
       propertyPath: combatAIBehaviors.Array.data[2].battleBehaviors.Array.data[4]
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 425164819, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: lr
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164819, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: pointA
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 425164819, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
+      propertyPath: pointB
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 734690255, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_Lens.FieldOfView
       value: 40
@@ -6513,11 +6541,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 734690256, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000008332104
+      value: -0.000000008330744
       objectReference: {fileID: 0}
     - target: {fileID: 734690256, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000021426487
+      value: 0.0000000021479336
       objectReference: {fileID: 0}
     - target: {fileID: 1040756390, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6549,7 +6577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1760748659, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: fieldOfViewMin
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1760748659, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: spinSensitivity
@@ -6573,15 +6601,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.23175052
+      value: 0.2317505
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 6.2892e-13
+      value: 0.000000014496114
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 2.655437e-12
+      value: -0.0000000034506975
       objectReference: {fileID: 0}
     - target: {fileID: 1999198496, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_Lens.FieldOfView
