@@ -20,7 +20,7 @@ namespace RPGProject.Combat
         public override void PerformAbilityBehavior()
         {
             myBlock = (GridBlock)target;
-            myBlock.activeAbility = this;
+            myBlock.SetActiveAbility(this);
 
             if (linkedTeleporter != null) return;
             BattleTeleporter[] battleTeleporters = FindObjectsOfType<BattleTeleporter>();
@@ -41,7 +41,7 @@ namespace RPGProject.Combat
 
         public override void OnAbilityDeath()
         {
-            myBlock.activeAbility = null;
+            myBlock.SetActiveAbility(null);
             linkedTeleporter = null;
             myBlock = null;
             base.OnAbilityDeath();

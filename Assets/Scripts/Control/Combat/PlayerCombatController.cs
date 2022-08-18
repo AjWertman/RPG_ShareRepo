@@ -93,6 +93,7 @@ namespace RPGProject.Control.Combat
         private void HandleRaycasting()
         {
             RaycastHit hit = raycaster.GetRaycastHit();
+
             if (hit.collider == null) return;
 
             CombatTarget combatTarget = hit.collider.GetComponent<CombatTarget>();
@@ -134,13 +135,9 @@ namespace RPGProject.Control.Combat
 
             Type targetType = _selectedTarget.GetType();
 
-            CombatTarget trueTarget = GetTrueTarget(_selectedTarget, targetType);
-
-                                    
-
             if(targetType == typeof(Fighter))
             {
-                Fighter fighter = (Fighter)trueTarget;
+                Fighter fighter = (Fighter)_selectedTarget;
                 if (fighter == currentUnitTurn.GetFighter()) yield break;
             }
 
@@ -148,16 +145,16 @@ namespace RPGProject.Control.Combat
             {
                 if (selectedAbility != null)
                 {
-                    if (CanTarget(selectedAbility, trueTarget))
+                    if (CanTarget(selectedAbility, _selectedTarget))
                     {
-                        selectedTargets.Add(trueTarget);
+                        selectedTargets.Add(_selectedTarget);
 
                         if (selectedTargets.Count == selectedAbility.requiredTargetAmount)
                         {
                             raycaster.isRaycasting = false;
                             gridSystem.UnhighlightBlocks(tempPath);
 
-                            if (selectedAbility.requiresTarget && (Fighter)trueTarget == null) yield break;
+                            if (selectedAbility.requiresTarget && (Fighter)_selectedTarget == null) yield break;
 
                             battleHandler.OnPlayerMove(selectedTargets, selectedAbility);
                             selectedAbility = null;
@@ -167,42 +164,41 @@ namespace RPGProject.Control.Combat
                 }
                 else
                 {
+                    raycaster.isRaycasting = false;
+                    gridSystem.UnhighlightBlocks(tempPath);
                     isPathfinding = false;
+
                     yield return currentUnitTurn.PathExecution(path);
 
-                    bool isTeleporter = targetType == typeof(BattleTeleporter) && (BattleTeleporter)trueTarget != null;
-                    bool isFighter = (targetType == typeof(Fighter) && (Fighter)trueTarget != null);
-
-                    //Specifed cast is not valid when clicking specifically on a Block that has a fighter on it
-                    bool isGridBlock = (targetType == typeof(GridBlock) && (GridBlock)trueTarget != null);
-
+                    bool isTeleporter = targetType == typeof(BattleTeleporter) && (BattleTeleporter)_selectedTarget != null;
+                    bool isFighter = (targetType == typeof(Fighter) && (Fighter)_selectedTarget != null);
+                    bool isGridBlock = (targetType == typeof(GridBlock) && (GridBlock)_selectedTarget != null);
                     if(isGridBlock)
                     {
-                        print(isGridBlock);
-                        GridBlock block = (GridBlock)trueTarget;
+                        GridBlock block = (GridBlock)_selectedTarget;
                         if (block.contestedFighter != null && block.contestedFighter != currentUnitTurn.GetFighter()) isFighter = true;
+
+                        else if (block.activeAbility != null && block.activeAbility.GetType() == typeof(BattleTeleporter))
+                        {
+                            BattleTeleporter battleTeleporter = (BattleTeleporter)block.activeAbility;
+                            _selectedTarget = battleTeleporter;
+                            targetType = typeof(BattleTeleporter);
+                            isTeleporter = true;
+                        }
                     }
 
-                    if (!isTeleporter && isFighter)
+                    if (isTeleporter || !isFighter)
+                    {
+                        blockToSelectFrom = GetDirectionSelectionBlock(_selectedTarget, targetType);
+                    }
+                    else
                     {
                         isSelectingFaceDirection = false;
                         isPathfinding = true;
                         yield break;
                     }
 
-                    if (isTeleporter)
-                    {
-                        BattleTeleporter battleTeleporter = (BattleTeleporter)trueTarget;
-                        GridBlock linkedTeleporterBlock = battleTeleporter.linkedTeleporter.myBlock;
-                        blockToSelectFrom = GetDirectionSelectionBlock(linkedTeleporterBlock, targetType);
-                    }
-                    else if(!isFighter && !isTeleporter)
-                    {
-                        blockToSelectFrom = GetDirectionSelectionBlock(trueTarget, targetType);
-                    }
-
                     isSelectingFaceDirection = true;
-                    gridSystem.UnhighlightBlocks(tempPath);
                 }
             }
             else
@@ -214,11 +210,19 @@ namespace RPGProject.Control.Combat
         private void OnDirectionBlockSelect(CombatTarget _selectedTarget)
         {
             GridBlock selectedDirection = GetTargetBlock(_selectedTarget);
+
             if (selectedDirection != null && pathfinder.IsNeighborBlock(blockToSelectFrom, selectedDirection))
             {
-                Vector3 lookDestination = selectedDirection.travelDestination.position;
-                Vector3 lookPosition = new Vector3(lookDestination.x, currentUnitTurn.transform.position.y, lookDestination.z);
-                currentUnitTurn.transform.LookAt(lookPosition);
+                if (blockToSelectFrom.activeAbility != null && blockToSelectFrom.activeAbility.GetType() == typeof(BattleTeleporter))
+                {
+                    currentUnitTurn.Teleport(selectedDirection);              
+                }
+                else
+                {
+                    Vector3 lookDestination = selectedDirection.travelDestination.position;
+                    Vector3 lookPosition = new Vector3(lookDestination.x, currentUnitTurn.transform.position.y, lookDestination.z);
+                    currentUnitTurn.transform.LookAt(lookPosition);
+                }
 
                 isSelectingFaceDirection = false;
                 isPathfinding = true;
@@ -226,6 +230,8 @@ namespace RPGProject.Control.Combat
                 hasHighlightedNeighbors = false;
                 blockToSelectFrom = null;
                 neighborBlocks.Clear();
+
+                raycaster.isRaycasting = true;
             }
         }
 
@@ -245,8 +251,8 @@ namespace RPGProject.Control.Combat
                 if ((BattleTeleporter)_combatTarget != null)
                 {
                     BattleTeleporter battleTeleporter = (BattleTeleporter)_combatTarget;
-                    AbilityBehavior parentBehavior = (AbilityBehavior)battleTeleporter;
-                    directionSelectionBlock=  battleGridManager.GetGridBlockByAbility(parentBehavior);
+                    AbilityBehavior parentBehavior = battleTeleporter.linkedTeleporter;
+                    directionSelectionBlock =  battleGridManager.GetGridBlockByAbility(parentBehavior);
                 }
             }
 
@@ -262,13 +268,15 @@ namespace RPGProject.Control.Combat
             if (_targetType == typeof(GridBlock))
             {
                 targetBlock = (GridBlock)_selectedTarget;
-                Fighter contestedFighter = targetBlock.contestedFighter;
-                if (contestedFighter != null)
-                {
-                    targetFighter = contestedFighter;
-                    trueTarget = targetFighter;
-                }
-                else trueTarget = targetBlock;
+                //Fighter contestedFighter = targetBlock.contestedFighter;
+                //if (contestedFighter != null)
+                //{
+                //    targetFighter = contestedFighter;
+                //    trueTarget = targetFighter;
+                //}
+                //else trueTarget = targetBlock;
+
+                trueTarget = targetBlock;
             }
             else if (_targetType == typeof(Fighter))
             {
@@ -405,7 +413,6 @@ namespace RPGProject.Control.Combat
                 if (targetBlock != null && targetingType == TargetingType.GridBlocksOnly) canTarget= true;
             }
 
-            print(canTarget.ToString());
             return canTarget;
         }
     }

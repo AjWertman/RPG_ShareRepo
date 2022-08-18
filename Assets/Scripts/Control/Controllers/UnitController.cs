@@ -205,6 +205,14 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        public void Teleport(GridBlock _newBlock)
+        {
+            Vector3 teleportDestination = _newBlock.travelDestination.position;
+            Vector3 teleportPosition = new Vector3(teleportDestination.x, transform.position.y, teleportDestination.z);
+            mover.Teleport(teleportPosition);
+            UpdateCurrentBlock(_newBlock);
+        }
+
         private void SpendActionPoints(int _apCost)
         {
             //Refactor - does not prevent someone from doing something if they dont have enough ap

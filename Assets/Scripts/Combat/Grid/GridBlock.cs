@@ -42,7 +42,7 @@ namespace RPGProject.Combat.Grid
         }
 
         public void SetActiveAbility(AbilityBehavior _abilityBehavior)
-        {
+        { 
             activeAbility = _abilityBehavior;
             onAffectedBlockUpdate(activeAbility, this);
         }
