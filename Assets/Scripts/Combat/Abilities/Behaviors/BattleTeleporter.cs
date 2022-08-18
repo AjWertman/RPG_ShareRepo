@@ -1,5 +1,5 @@
 using RPGProject.Combat.Grid;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Combat
@@ -7,12 +7,8 @@ namespace RPGProject.Combat
     public class BattleTeleporter : AbilityBehavior, CombatTarget
     {
         public BattleTeleporter linkedTeleporter = null;
-        public GridBlock teleportBlock = null;
-        //[SerializeField] GameObject pointAGameObject = null;
-        //[SerializeField] GameObject pointBGameObject = null;
-
-        //TeleporterPoint pointA = new TeleporterPoint();
-        //TeleporterPoint pointB = new TeleporterPoint();
+        public GridBlock myBlock = null;
+        public List<GridBlock> neighborBlocks = new List<GridBlock>();
 
         public bool canUse = false;
 
@@ -23,8 +19,8 @@ namespace RPGProject.Combat
 
         public override void PerformAbilityBehavior()
         {
-            teleportBlock = (GridBlock)target;
-            teleportBlock.activeAbility = this;
+            myBlock = (GridBlock)target;
+            myBlock.activeAbility = this;
 
             if (linkedTeleporter != null) return;
             BattleTeleporter[] battleTeleporters = FindObjectsOfType<BattleTeleporter>();
@@ -45,12 +41,11 @@ namespace RPGProject.Combat
 
         public override void OnAbilityDeath()
         {
-            teleportBlock.activeAbility = null;
+            myBlock.activeAbility = null;
             linkedTeleporter = null;
-            teleportBlock = null;
+            myBlock = null;
             base.OnAbilityDeath();
         }
-
     }
 }
 

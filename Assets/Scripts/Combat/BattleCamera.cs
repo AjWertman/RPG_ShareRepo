@@ -86,6 +86,9 @@ public class BattleCamera : MonoBehaviour
 
         freeLook.m_YAxis.Value = .5f;
         freeLook.m_XAxis.Value = 0f;
+
+        followTarget.transform.position = Vector3.zero;
+        followTarget.transform.eulerAngles = Vector3.zero;
     }
 
     public void SetFollowTarget(Transform _newTarget)

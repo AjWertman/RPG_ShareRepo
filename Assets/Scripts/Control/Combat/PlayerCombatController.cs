@@ -2,6 +2,7 @@ using RPGProject.Combat;
 using RPGProject.Combat.Grid;
 using RPGProject.Core;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +27,11 @@ namespace RPGProject.Control.Combat
         Ability selectedAbility = null;
 
         bool isPathfinding = true;
-        bool isSelecting = false;
+
+        GridBlock blockToSelectFrom = null;
+        List<GridBlock> neighborBlocks = new List<GridBlock>();
+        bool isSelectingFaceDirection = false;
+        bool hasHighlightedNeighbors = false;
 
         private void Awake()
         {
@@ -40,7 +45,7 @@ namespace RPGProject.Control.Combat
             battleCamera = FindObjectOfType<BattleCamera>();
 
             battleHandler.onUnitTurnUpdate += UpdateCurrentUnitTurn;
-            battleHandler.onPlayerMoveCompletion += ActivateRaycaster;
+            battleHandler.onPlayerMoveCompletion += OnPlayerMoveCompletion;
         }
 
         private void Start()
@@ -92,6 +97,16 @@ namespace RPGProject.Control.Combat
 
             CombatTarget combatTarget = hit.collider.GetComponent<CombatTarget>();
 
+            if (isSelectingFaceDirection)
+            {
+                if (!hasHighlightedNeighbors)
+                {
+                    hasHighlightedNeighbors = true;
+                    neighborBlocks = pathfinder.GetNeighbors(blockToSelectFrom);
+                    gridSystem.HighlightBlocks(neighborBlocks);
+                }
+            }
+
             if (combatTarget != null)
             {
                 GridBlock targetBlock = GetTargetBlock(combatTarget);
@@ -101,7 +116,7 @@ namespace RPGProject.Control.Combat
                 {
                     if (tempPath == null) return;
                     path = GetFurthestPath(tempPath);
-                    OnPlayerClick(combatTarget);
+                    StartCoroutine(OnPlayerClick(combatTarget));
                 }
                 else if (Input.GetMouseButtonDown(1))
                 {
@@ -113,62 +128,155 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        private void OnPlayerClick(CombatTarget _combatTarget)
+        private IEnumerator OnPlayerClick(CombatTarget _selectedTarget)
         { 
-            if (_combatTarget == null) return;
+            if (_selectedTarget == null) yield break;
 
-            CombatTarget trueTarget = _combatTarget;
+            Type targetType = _selectedTarget.GetType();
 
-            Type targetType = _combatTarget.GetType();
+            CombatTarget trueTarget = GetTrueTarget(_selectedTarget, targetType);
 
-            GridBlock targetBlock = null;
-            Fighter targetFighter = null;
+                                    
 
-            if (selectedAbility != null)
+            if(targetType == typeof(Fighter))
             {
-                if (targetType == typeof(GridBlock))
+                Fighter fighter = (Fighter)trueTarget;
+                if (fighter == currentUnitTurn.GetFighter()) yield break;
+            }
+
+            if (!isSelectingFaceDirection)
+            {
+                if (selectedAbility != null)
                 {
-                    targetBlock = (GridBlock)_combatTarget;
-                    Fighter contestedFighter = targetBlock.contestedFighter;
-                    if (contestedFighter != null)
+                    if (CanTarget(selectedAbility, trueTarget))
                     {
-                        targetFighter = contestedFighter;
-                        trueTarget = targetFighter;
+                        selectedTargets.Add(trueTarget);
+
+                        if (selectedTargets.Count == selectedAbility.requiredTargetAmount)
+                        {
+                            raycaster.isRaycasting = false;
+                            gridSystem.UnhighlightBlocks(tempPath);
+
+                            if (selectedAbility.requiresTarget && (Fighter)trueTarget == null) yield break;
+
+                            battleHandler.OnPlayerMove(selectedTargets, selectedAbility);
+                            selectedAbility = null;
+                            selectedTargets.Clear();
+                        }
                     }
-                    else trueTarget = targetBlock;
                 }
-                else if (targetType == typeof(Fighter))
+                else
                 {
-                    targetFighter = (Fighter)_combatTarget;
-                    trueTarget = targetFighter;
-                }
+                    isPathfinding = false;
+                    yield return currentUnitTurn.PathExecution(path);
 
-                if (CanTarget(selectedAbility, trueTarget))
-                {
-                    selectedTargets.Add(trueTarget);
+                    bool isTeleporter = targetType == typeof(BattleTeleporter) && (BattleTeleporter)trueTarget != null;
+                    bool isFighter = (targetType == typeof(Fighter) && (Fighter)trueTarget != null);
 
-                    if (selectedTargets.Count == selectedAbility.requiredTargetAmount)
+                    //Specifed cast is not valid when clicking specifically on a Block that has a fighter on it
+                    bool isGridBlock = (targetType == typeof(GridBlock) && (GridBlock)trueTarget != null);
+
+                    if(isGridBlock)
                     {
-                        raycaster.isRaycasting = false;
-                        gridSystem.UnhighlightPath(tempPath);
-
-                        if (selectedAbility.requiresTarget && targetFighter == null) return;
-
-                        battleHandler.OnPlayerMove(selectedTargets, selectedAbility);
-                        selectedAbility = null;
-                        selectedTargets.Clear();
-
+                        print(isGridBlock);
+                        GridBlock block = (GridBlock)trueTarget;
+                        if (block.contestedFighter != null && block.contestedFighter != currentUnitTurn.GetFighter()) isFighter = true;
                     }
-                    else
+
+                    if (!isTeleporter && isFighter)
                     {
-                        print("needs more targets");
+                        isSelectingFaceDirection = false;
+                        isPathfinding = true;
+                        yield break;
                     }
+
+                    if (isTeleporter)
+                    {
+                        BattleTeleporter battleTeleporter = (BattleTeleporter)trueTarget;
+                        GridBlock linkedTeleporterBlock = battleTeleporter.linkedTeleporter.myBlock;
+                        blockToSelectFrom = GetDirectionSelectionBlock(linkedTeleporterBlock, targetType);
+                    }
+                    else if(!isFighter && !isTeleporter)
+                    {
+                        blockToSelectFrom = GetDirectionSelectionBlock(trueTarget, targetType);
+                    }
+
+                    isSelectingFaceDirection = true;
+                    gridSystem.UnhighlightBlocks(tempPath);
                 }
             }
             else
             {
-                StartCoroutine(currentUnitTurn.PathExecution(path));          
-            }             
+                OnDirectionBlockSelect(_selectedTarget);
+            }
+        }
+
+        private void OnDirectionBlockSelect(CombatTarget _selectedTarget)
+        {
+            GridBlock selectedDirection = GetTargetBlock(_selectedTarget);
+            if (selectedDirection != null && pathfinder.IsNeighborBlock(blockToSelectFrom, selectedDirection))
+            {
+                Vector3 lookDestination = selectedDirection.travelDestination.position;
+                Vector3 lookPosition = new Vector3(lookDestination.x, currentUnitTurn.transform.position.y, lookDestination.z);
+                currentUnitTurn.transform.LookAt(lookPosition);
+
+                isSelectingFaceDirection = false;
+                isPathfinding = true;
+                gridSystem.UnhighlightBlocks(neighborBlocks);
+                hasHighlightedNeighbors = false;
+                blockToSelectFrom = null;
+                neighborBlocks.Clear();
+            }
+        }
+
+        private GridBlock GetDirectionSelectionBlock(CombatTarget _combatTarget, Type _targetType)
+        {
+            GridBlock directionSelectionBlock = null;
+            if (_targetType == typeof(GridBlock))
+            {
+                if ((GridBlock)_combatTarget != null) directionSelectionBlock = (GridBlock)_combatTarget;
+            }
+            else if (_targetType == typeof(Fighter))
+            {
+                if((Fighter)_combatTarget != null) directionSelectionBlock = battleGridManager.GetGridBlockByFighter((Fighter)_combatTarget);
+            }
+            else if (_targetType == typeof(BattleTeleporter))
+            {
+                if ((BattleTeleporter)_combatTarget != null)
+                {
+                    BattleTeleporter battleTeleporter = (BattleTeleporter)_combatTarget;
+                    AbilityBehavior parentBehavior = (AbilityBehavior)battleTeleporter;
+                    directionSelectionBlock=  battleGridManager.GetGridBlockByAbility(parentBehavior);
+                }
+            }
+
+            return directionSelectionBlock;
+        }
+
+        private CombatTarget GetTrueTarget(CombatTarget _selectedTarget, Type _targetType)
+        {
+            CombatTarget trueTarget = _selectedTarget;
+            GridBlock targetBlock = null;
+            Fighter targetFighter = null;
+
+            if (_targetType == typeof(GridBlock))
+            {
+                targetBlock = (GridBlock)_selectedTarget;
+                Fighter contestedFighter = targetBlock.contestedFighter;
+                if (contestedFighter != null)
+                {
+                    targetFighter = contestedFighter;
+                    trueTarget = targetFighter;
+                }
+                else trueTarget = targetBlock;
+            }
+            else if (_targetType == typeof(Fighter))
+            {
+                targetFighter = (Fighter)_selectedTarget;
+                trueTarget = targetFighter;
+            }
+
+            return trueTarget;
         }
 
         private void HandlePathfinding(GridBlock _targetBlock)
@@ -179,11 +287,15 @@ namespace RPGProject.Control.Combat
             if (currentUnitTurn != null) currentBlock = currentUnitTurn.currentBlock;
 
             if (currentBlock == null) return;
-            if (_targetBlock == currentBlock) return;
+            if (_targetBlock == currentBlock)
+            {
+                gridSystem.UnhighlightBlocks(tempPath);
+                return;
+            }
 
             if (_targetBlock.IsMovable(currentBlock, _targetBlock) == false) return;
 
-            gridSystem.UnhighlightPath(tempPath);
+            gridSystem.UnhighlightBlocks(tempPath);
             tempPath = pathfinder.FindOptimalPath(currentBlock, _targetBlock);
 
             furthestBlockIndex = GetFurthestBlockIndex(tempPath);
@@ -212,7 +324,7 @@ namespace RPGProject.Control.Combat
             selectedAbility = _selectedAbility;
         }
 
-        private void ActivateRaycaster()
+        private void OnPlayerMoveCompletion()
         {
             raycaster.isRaycasting = true;
         }
@@ -230,7 +342,7 @@ namespace RPGProject.Control.Combat
             else if(targetType == typeof(BattleTeleporter))
             {
                 BattleTeleporter battleTeleporter = _combatTarget.GetComponent<BattleTeleporter>();
-                targetBlock = battleTeleporter.teleportBlock;
+                targetBlock = battleTeleporter.myBlock;
             }
             else
             {
@@ -269,31 +381,32 @@ namespace RPGProject.Control.Combat
 
         private bool CanTarget(Ability _ability, CombatTarget _target)
         {
+            bool canTarget = false;
             TargetingType targetingType = _ability.targetingType;
 
-            if (targetingType == TargetingType.Everything) return true;
+            if (targetingType == TargetingType.Everything) canTarget= true;
 
             Fighter targetFighter = _target as Fighter;
             bool isCharacter = targetFighter != null;
 
             if (isCharacter)
             {
-                if (targetingType == TargetingType.Everyone) return true;
+                if (targetingType == TargetingType.Everyone) canTarget= true;
 
                 bool isFriendlyTargeting = (targetingType == TargetingType.PlayersOnly || targetingType == TargetingType.SelfOnly);
                 bool isTeammate = (currentUnitTurn.unitInfo.isPlayer == targetFighter.unitInfo.isPlayer);
 
-                if (isTeammate && isFriendlyTargeting) return true;
-                else if (!isTeammate && targetingType == TargetingType.EnemiesOnly) return true;
+                if (isTeammate && isFriendlyTargeting) canTarget= true;
+                else if (!isTeammate && targetingType == TargetingType.EnemiesOnly) canTarget= true;
             }
             else
             {
                 GridBlock targetBlock = _target as GridBlock;
-                if (targetBlock != null && targetingType == TargetingType.GridBlocksOnly) return true;
+                if (targetBlock != null && targetingType == TargetingType.GridBlocksOnly) canTarget= true;
             }
 
-            print("cannot target");
-            return false;
+            print(canTarget.ToString());
+            return canTarget;
         }
     }
 }

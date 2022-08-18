@@ -30,6 +30,8 @@ namespace RPGProject.Combat.Grid
         ///also add GetBlocksInRange(GridBlock _targetBlock, float range);
         public List<GridBlock> FindOptimalPath(GridBlock _startBlock, GridBlock _endBlock)
         {
+            if (_startBlock == _endBlock) return null;
+
             openList.Clear();
             closedList.Clear();
 
@@ -112,6 +114,16 @@ namespace RPGProject.Combat.Grid
             return false;
         }
 
+        public List<GridBlock> GetNeighbors(GridBlock _centerBlock)
+        {
+            List<GridBlock> neighbors = new List<GridBlock>();
+            foreach(GridBlock gridBlock in CalculateNeighborBlocks(_centerBlock))
+            {
+                if (gridBlock != null) neighbors.Add(gridBlock);
+            }
+            return neighbors;
+        }
+
         private List<GridBlock> CalculatePath(GridBlock _endBlock)
         {
             List<GridBlock> calculatedPath = new List<GridBlock>();
@@ -156,7 +168,7 @@ namespace RPGProject.Combat.Grid
             }
         }
 
-        private IEnumerable<GridBlock> GetNeighbors(GridBlock _gridBlock)
+        private IEnumerable<GridBlock> CalculateNeighborBlocks(GridBlock _gridBlock)
         {
             int x = _gridBlock.gridCoordinates.x;
             int z = _gridBlock.gridCoordinates.z;

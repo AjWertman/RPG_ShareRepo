@@ -26,6 +26,8 @@ namespace RPGProject.Combat.Grid
 
         Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
 
+        bool isNormalized = true;
+
         private void Awake()
         {
             pathfinder = GetComponent<Pathfinder>();
@@ -83,10 +85,20 @@ namespace RPGProject.Combat.Grid
             if (goalBlock.contestedFighter != null) goalBlock.SetColors(redMaterial, Color.white);
         }
 
-        public void UnhighlightPath(List<GridBlock> _path)
+        public void HighlightBlocks(List<GridBlock> _gridBlocks)
         {
-            foreach (GridBlock gridBlock in _path)
+            foreach (GridBlock gridBlock in _gridBlocks)
             {
+                gridBlock.SetColors(highlightMaterial, Color.white);
+                gridBlock.ActivateMeshRenderer(true);
+            }
+        }
+
+        public void UnhighlightBlocks(List<GridBlock> _gridBlocks)
+        {
+            foreach (GridBlock gridBlock in _gridBlocks)
+            {
+                if (!gridBlock.IsMeshActive()) continue;
                 Material newMaterial = GetGridBlockMaterial(gridBlock.gridCoordinates);
                 Color textColor = GetTextColor(newMaterial);
                 gridBlock.SetColors(newMaterial, textColor);
@@ -160,6 +172,5 @@ namespace RPGProject.Combat.Grid
             if (isXEven == isZEven) return true;
             else return false;
         }
-   
     }
 }

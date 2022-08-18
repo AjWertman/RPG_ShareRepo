@@ -19,7 +19,8 @@ namespace RPGProject.Control.Combat
 
         GridBlock[] gridBlocks = null;
 
-        Dictionary<Fighter, GridBlock> occupiedBlocksDict = new Dictionary<Fighter, GridBlock>(); 
+        Dictionary<Fighter, GridBlock> occupiedBlocksDict = new Dictionary<Fighter, GridBlock>();
+        Dictionary<AbilityBehavior, GridBlock> affectedBlocksDict = new Dictionary<AbilityBehavior, GridBlock>();
         Dictionary<GridBlock, GridBlockStatus> gridBlockStatusDict = new Dictionary<GridBlock, GridBlockStatus>();
 
         public void InitializeBattleGridManager()
@@ -30,6 +31,7 @@ namespace RPGProject.Control.Combat
             foreach (GridBlock gridBlock in gridSystem.gridBlocks)
             {
                 gridBlock.onContestedFighterUpdate += SetNewFighterBlock;
+                gridBlock.onAffectedBlockUpdate += SetNewAbilityBlock;
             }
         }
 
@@ -48,8 +50,12 @@ namespace RPGProject.Control.Combat
         public void SetNewFighterBlock(Fighter _fighter, GridBlock _gridBlock)
         {
             occupiedBlocksDict[_fighter] = _gridBlock;
-
             UpdateCenter(_fighter.unitInfo.isPlayer);
+        }
+
+        public void SetNewAbilityBlock(AbilityBehavior _abilityBehavior, GridBlock _gridBlock)
+        {
+            affectedBlocksDict[_abilityBehavior] = _gridBlock;
         }
 
         private void UpdateCenter(bool _isPlayerTeam)
@@ -125,6 +131,11 @@ namespace RPGProject.Control.Combat
         public GridBlock GetGridBlockByFighter(Fighter _fighter)
         {
             return occupiedBlocksDict[_fighter];
+        }
+
+        public GridBlock GetGridBlockByAbility(AbilityBehavior _abilityBehavior)
+        {
+            return affectedBlocksDict[_abilityBehavior];
         }
 
         public Vector3 GetTeamCenterPoint(bool _isPlayer, bool _wantsOwnTeam)

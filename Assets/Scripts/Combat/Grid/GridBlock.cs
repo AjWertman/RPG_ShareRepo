@@ -20,6 +20,7 @@ namespace RPGProject.Combat.Grid
         MeshRenderer meshRenderer = null;
 
         public event Action<Fighter, GridBlock> onContestedFighterUpdate;
+        public event Action<AbilityBehavior, GridBlock> onAffectedBlockUpdate;
 
         public void InitializeBlock()
         {
@@ -35,10 +36,15 @@ namespace RPGProject.Combat.Grid
 
         public void SetContestedFighter(Fighter _fighter)
         {
+            if (_fighter == null) return;
             contestedFighter = _fighter;
-
-            if (contestedFighter == null) return;
             onContestedFighterUpdate(contestedFighter, this);
+        }
+
+        public void SetActiveAbility(AbilityBehavior _abilityBehavior)
+        {
+            activeAbility = _abilityBehavior;
+            onAffectedBlockUpdate(activeAbility, this);
         }
 
         public void SetColors(Material _newMaterial, Color _textColor)
@@ -78,6 +84,11 @@ namespace RPGProject.Combat.Grid
         public void ActivateMeshRenderer(bool _shouldActivate)
         {
             meshRenderer.enabled = _shouldActivate;
+        }
+
+        public bool IsMeshActive()
+        {
+            return meshRenderer.enabled;
         }
 
         public Transform GetAimTransform()

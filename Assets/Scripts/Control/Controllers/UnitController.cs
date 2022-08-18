@@ -119,9 +119,10 @@ namespace RPGProject.Control.Combat
             GridBlock goalBlock = _path[_path.Count - 1];
             Fighter contestedFighter = goalBlock.contestedFighter;
             AbilityBehavior activeAbility = goalBlock.activeAbility;
-            bool isContested = (contestedFighter != null);
+            bool isContested = (contestedFighter != null && contestedFighter != fighter);
+            bool hasAbility = (activeAbility != null);
 
-            if (isContested)
+            if (isContested || (hasAbility && activeAbility.GetType() == typeof(BattleTeleporter)))
             {
                 _path.Remove(goalBlock);
                 goalBlock = _path[_path.Count - 1];
@@ -135,23 +136,9 @@ namespace RPGProject.Control.Combat
             {
                 List<CombatTarget> singleTarget = new List<CombatTarget>();
                 singleTarget.Add(contestedFighter);
+
+
                 yield return UseAbilityBehavior(singleTarget, fighter.GetBasicAttack());
-            }
-            else if (!isContested && activeAbility != null)
-            {
-                BattleTeleporter battleTeleporter = (BattleTeleporter)goalBlock.activeAbility;
-                if(battleTeleporter!= null)
-                {
-                    BattleTeleporter linkedTeleporter = battleTeleporter.linkedTeleporter;
-                    GridBlock teleportBlock = linkedTeleporter.teleportBlock;
-
-                    Vector3 teleportPosition = new Vector3(teleportBlock.travelDestination.position.x, transform.position.y, teleportBlock.travelDestination.position.z);
-
-                    //Give choice of neighbor blocks?
-                    //Random neighbor block (unless unacceptable)
-                    mover.Teleport(teleportPosition);
-                    UpdateCurrentBlock(teleportBlock);
-                }
             }
 
             if (unitInfo.isPlayer) onMoveCompletion();
