@@ -1798,7 +1798,7 @@ PrefabInstance:
         type: 3}
       propertyPath: animatorController
       value: 
-      objectReference: {fileID: 22100000, guid: cce47a98a6d3cc1479d8754036d4adfb,
+      objectReference: {fileID: 22100000, guid: 8809972a5296c1549af75773ec32f10a,
         type: 2}
     - target: {fileID: 5319519476176398369, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}

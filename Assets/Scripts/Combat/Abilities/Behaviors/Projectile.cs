@@ -6,6 +6,8 @@ namespace RPGProject.Combat
     {
         [SerializeField] float launchForce = 10f;
 
+        public bool isParentAbility = true;
+
         Transform aimTransform = null;
 
         bool hasAppliedChangeAmount = false;
@@ -23,10 +25,16 @@ namespace RPGProject.Combat
         public override void PerformAbilityBehavior()
         {
             hasAppliedChangeAmount = false;
-
             aimTransform = target.GetAimTransform();
-
             isSetup = true;
+        }
+
+        public override void OnAbilityDeath()
+        {
+            if (isParentAbility)
+            {
+                base.OnAbilityDeath();
+            }
         }
 
         private void LaunchProjectile()

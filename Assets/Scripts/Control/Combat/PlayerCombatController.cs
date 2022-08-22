@@ -75,8 +75,8 @@ namespace RPGProject.Control.Combat
                 battleCamera.MoveFollowTransform(inputDirection);
             }
 
-            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.LeftArrow)) battleCamera.RotateFreeLook(true);
-            else if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.RightArrow)) battleCamera.RotateFreeLook(false);
+            if (Input.GetKey(KeyCode.Q)) battleCamera.RotateFreeLook(true);
+            else if (Input.GetKey(KeyCode.E)) battleCamera.RotateFreeLook(false);
 
 
             if(Input.GetAxisRaw("Mouse ScrollWheel") > 0) battleCamera.Zoom(true);
@@ -95,7 +95,6 @@ namespace RPGProject.Control.Combat
             RaycastHit hit = raycaster.GetRaycastHit();
 
             if (hit.collider == null) return;
-
             CombatTarget combatTarget = hit.collider.GetComponent<CombatTarget>();
 
             if (isSelectingFaceDirection)
@@ -104,6 +103,8 @@ namespace RPGProject.Control.Combat
                 {
                     hasHighlightedNeighbors = true;
                     neighborBlocks = pathfinder.GetNeighbors(blockToSelectFrom);
+
+                    //Refactor - highlighting everyframe
                     gridSystem.HighlightBlocks(neighborBlocks);
                 }
             }
@@ -121,6 +122,7 @@ namespace RPGProject.Control.Combat
                 }
                 else if (Input.GetMouseButtonDown(1))
                 {
+                    if (combatTarget.GetType() != typeof(Fighter)) return;
                     Fighter fighter = (Fighter)combatTarget;
 
                     if (fighter == null) return;
@@ -143,6 +145,11 @@ namespace RPGProject.Control.Combat
 
             if (!isSelectingFaceDirection)
             {
+                if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
+                {
+                    if(targetType == typeof(Fighter)) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
+                }
+           
                 if (selectedAbility != null)
                 {
                     if (CanTarget(selectedAbility, _selectedTarget))
@@ -293,23 +300,28 @@ namespace RPGProject.Control.Combat
 
             GridBlock currentBlock = null;
             if (currentUnitTurn != null) currentBlock = currentUnitTurn.currentBlock;
-
             if (currentBlock == null) return;
+
             if (_targetBlock == currentBlock)
             {
+                //Save for later
                 gridSystem.UnhighlightBlocks(tempPath);
                 return;
             }
 
             if (_targetBlock.IsMovable(currentBlock, _targetBlock) == false) return;
 
-            gridSystem.UnhighlightBlocks(tempPath);
-            tempPath = pathfinder.FindOptimalPath(currentBlock, _targetBlock);
+            List<GridBlock> optimalPath = pathfinder.FindOptimalPath(currentBlock, _targetBlock);
+            if (!pathfinder.ArePathsEqual(tempPath, optimalPath))
+            {
+                if(gridSystem.isPathHighlighted) gridSystem.UnhighlightBlocks(tempPath);
+                tempPath = optimalPath;
 
-            furthestBlockIndex = GetFurthestBlockIndex(tempPath);
+                furthestBlockIndex = GetFurthestBlockIndex(tempPath);
 
-            if (selectedAbility != null) return;
-            gridSystem.HighlightPath(tempPath, furthestBlockIndex);
+                if (selectedAbility != null) return;
+                gridSystem.HighlightPath(tempPath, furthestBlockIndex);
+            }
         }
 
         private void SetupBattleCamera()

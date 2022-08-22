@@ -6,8 +6,8 @@ namespace RPGProject.Combat.Grid
 {
     public class GridBlock : MonoBehaviour, CombatTarget
     {
+        [SerializeField] MeshRenderer highlightMesh = null;
         [SerializeField] TextMeshProUGUI coordinatesText = null;
-        [SerializeField] bool isMovable = true;
 
         public GridCoordinates gridCoordinates;
         public PathfindingCostValues pathfindingCostValues;
@@ -17,21 +17,19 @@ namespace RPGProject.Combat.Grid
         public Fighter contestedFighter = null;
         public AbilityBehavior activeAbility = null;
 
+        public bool isMovable = true;
+
         MeshRenderer meshRenderer = null;
 
         public event Action<Fighter, GridBlock> onContestedFighterUpdate;
         public event Action<AbilityBehavior, GridBlock> onAffectedBlockUpdate;
 
-        public void InitializeBlock()
-        {
-            meshRenderer = GetComponentInChildren<MeshRenderer>();
-        }
-
         public void SetupGridBlock(Material _newMaterial, Color _textColor)
         {
-            InitializeBlock();
+            meshRenderer = GetComponentInChildren<MeshRenderer>();
             SetColors(_newMaterial, _textColor);
             UpdateCoordinatesText(gridCoordinates.x, gridCoordinates.z);
+            UnhighlightBlock();
         }
 
         public void SetContestedFighter(Fighter _fighter)
@@ -45,6 +43,17 @@ namespace RPGProject.Combat.Grid
         { 
             activeAbility = _abilityBehavior;
             onAffectedBlockUpdate(activeAbility, this);
+        }
+
+        public void HighlightBlock(Material _highlightColor)
+        {
+            highlightMesh.material = _highlightColor;
+            highlightMesh.gameObject.SetActive(true);
+        }
+
+        public void UnhighlightBlock()
+        {
+            highlightMesh.gameObject.SetActive(false);
         }
 
         public void SetColors(Material _newMaterial, Color _textColor)
@@ -81,6 +90,13 @@ namespace RPGProject.Combat.Grid
             return true;
         }
 
+        public bool IsContested(Fighter _currentFighter)
+        {
+            if (contestedFighter != null && contestedFighter != _currentFighter) return true;
+            else if (activeAbility != null && activeAbility.GetType() == typeof(BattleTeleporter)) return true;
+            return false;
+        }
+
         public void ActivateMeshRenderer(bool _shouldActivate)
         {
             meshRenderer.enabled = _shouldActivate;
@@ -88,7 +104,7 @@ namespace RPGProject.Combat.Grid
 
         public bool IsMeshActive()
         {
-            return meshRenderer.enabled;
+            return highlightMesh.enabled;
         }
 
         public Transform GetAimTransform()

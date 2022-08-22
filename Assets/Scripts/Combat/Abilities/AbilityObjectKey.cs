@@ -15,5 +15,7 @@ namespace RPGProject.Combat
         Missile = 10,
 
         Teleporter = 11,
+        TurretBullet = 12,
+        BlasterBullet = 13,
     }
 }

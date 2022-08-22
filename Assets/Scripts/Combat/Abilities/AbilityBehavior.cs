@@ -12,8 +12,8 @@ namespace RPGProject.Combat
         [SerializeField] protected HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
 
         public Fighter caster = null;
+        public CombatTarget target = null;
 
-        protected CombatTarget target = null;
         protected UnitStatus targetStatus = null;
         protected float changeAmount = 0f;
         protected bool isCritical = false;

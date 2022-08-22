@@ -22,6 +22,8 @@ namespace RPGProject.Combat.Grid
         public GridCoordinates minCoordinates;
         public GridCoordinates maxCoordinates;
 
+        public bool isPathHighlighted = false;
+
         Pathfinder pathfinder = null;
 
         Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
@@ -69,7 +71,9 @@ namespace RPGProject.Combat.Grid
 
         public void HighlightPath(List<GridBlock> _path, int _furthestBlockIndex)
         {
+            GridBlock startBlock = _path[0];
             GridBlock goalBlock = _path[_path.Count - 1];
+            Fighter goalBlockFighter = goalBlock.contestedFighter;
 
             foreach (GridBlock gridBlock in _path)
             {
@@ -78,19 +82,22 @@ namespace RPGProject.Combat.Grid
                 Material currentHighlightMaterial = highlightMaterial;
                 if (currentIndex > _furthestBlockIndex) currentHighlightMaterial = unworthyMaterial;
 
-                gridBlock.SetColors(currentHighlightMaterial, Color.white);
-                gridBlock.ActivateMeshRenderer(true);
+                if (gridBlock == goalBlock && goalBlockFighter != null) continue;
+                if (gridBlock == startBlock) continue;
+
+                gridBlock.HighlightBlock(currentHighlightMaterial);
             }
 
-            if (goalBlock.contestedFighter != null) goalBlock.SetColors(redMaterial, Color.white);
+            if (goalBlockFighter!= null) goalBlockFighter.HighlightFighter(true);
+
+            isPathHighlighted = true;
         }
 
         public void HighlightBlocks(List<GridBlock> _gridBlocks)
         {
             foreach (GridBlock gridBlock in _gridBlocks)
             {
-                gridBlock.SetColors(highlightMaterial, Color.white);
-                gridBlock.ActivateMeshRenderer(true);
+                gridBlock.HighlightBlock(highlightMaterial);
             }
         }
 
@@ -98,12 +105,22 @@ namespace RPGProject.Combat.Grid
         {
             foreach (GridBlock gridBlock in _gridBlocks)
             {
+                if (gridBlock == _gridBlocks[_gridBlocks.Count - 1])
+                {
+                    Fighter tempFighter = gridBlock.contestedFighter;
+                    if (tempFighter != null) tempFighter.HighlightFighter(false);
+                }
+
                 if (!gridBlock.IsMeshActive()) continue;
-                Material newMaterial = GetGridBlockMaterial(gridBlock.gridCoordinates);
-                Color textColor = GetTextColor(newMaterial);
-                gridBlock.SetColors(newMaterial, textColor);
-                gridBlock.ActivateMeshRenderer(false);
+
+                gridBlock.UnhighlightBlock();
+
+                //Material newMaterial = GetGridBlockMaterial(gridBlock.gridCoordinates);
+                //Color textColor = GetTextColor(newMaterial);
+                //gridBlock.SetColors(newMaterial, textColor);
+                //gridBlock.ActivateMeshRenderer(false);
             }
+            isPathHighlighted = false;
         }
 
         public GridBlock GetGridBlock(int _x, int _z)

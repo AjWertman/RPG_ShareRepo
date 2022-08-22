@@ -124,6 +124,23 @@ namespace RPGProject.Combat.Grid
             return neighbors;
         }
 
+        public bool ArePathsEqual(List<GridBlock> _pathA, List<GridBlock> _pathB)
+        {
+            if (_pathA == null || _pathB == null) return false;
+
+            int aCount = _pathA.Count;
+            int bCount = _pathB.Count;
+            if (aCount == 0 || bCount == 0) return false;
+            if (aCount != bCount) return false;
+
+            foreach(GridBlock gridBlock in _pathA)
+            {
+                if (!_pathB.Contains(gridBlock)) return false;
+            }
+
+            return true;
+        }
+
         private List<GridBlock> CalculatePath(GridBlock _endBlock)
         {
             List<GridBlock> calculatedPath = new List<GridBlock>();

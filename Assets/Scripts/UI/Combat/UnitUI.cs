@@ -19,9 +19,8 @@ namespace RPGProject.UI
         public void InitializeUnitUI()
         {
             fighter = GetComponent<Fighter>();
-
+            fighter.onHighlight += ActivateUnitIndicator;
             health = GetComponent<Health>();
-
             health.onHealthChange += UpdateHealthUI;
         }
 

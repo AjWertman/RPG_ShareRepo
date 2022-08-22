@@ -119,10 +119,10 @@ namespace RPGProject.Control.Combat
             GridBlock goalBlock = _path[_path.Count - 1];
             Fighter contestedFighter = goalBlock.contestedFighter;
             AbilityBehavior activeAbility = goalBlock.activeAbility;
-            bool isContested = (contestedFighter != null && contestedFighter != fighter);
-            bool hasAbility = (activeAbility != null);
 
-            if (isContested || (hasAbility && activeAbility.GetType() == typeof(BattleTeleporter)))
+            bool isContested = goalBlock.IsContested(fighter);
+
+            if (isContested)
             {
                 _path.Remove(goalBlock);
                 goalBlock = _path[_path.Count - 1];
@@ -136,7 +136,6 @@ namespace RPGProject.Control.Combat
             {
                 List<CombatTarget> singleTarget = new List<CombatTarget>();
                 singleTarget.Add(contestedFighter);
-
 
                 yield return UseAbilityBehavior(singleTarget, fighter.GetBasicAttack());
             }

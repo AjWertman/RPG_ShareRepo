@@ -39,11 +39,13 @@ namespace RPGProject.Combat
         float luck = 0f;
 
         bool isPlayerFighter = false;
+        bool isHighlighted = false;
 
         Dictionary<Ability, int> abilityCooldowns = new Dictionary<Ability, int>();
 
         public event Action<Fighter, float> onAgroAction;
         public event Action<int> onAPUpdate;
+        public event Action<bool> onHighlight;
 
         public void InitalizeFighter()
         {
@@ -124,6 +126,13 @@ namespace RPGProject.Combat
         {
             unitResources.actionPoints = _newAPAmount;
             onAPUpdate(_newAPAmount);
+        }
+
+        public void HighlightFighter(bool _shouldHighlight)
+        {
+            if (isHighlighted == _shouldHighlight) return;
+            isHighlighted = _shouldHighlight;
+            onHighlight(isHighlighted);
         }
 
         public void ResetFighter()
