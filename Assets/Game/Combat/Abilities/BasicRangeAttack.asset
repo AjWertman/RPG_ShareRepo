@@ -23,13 +23,13 @@ MonoBehaviour:
   combo:
   - animationID: Attack0
     comboPointCost: 0
-    abilityObjectKey: 0
+    abilityObjectKey: 13
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 0
   requiredTargetAmount: 1
-  attackRange: 7.5
+  attackRange: 12
   actionPointsCost: 0
   cooldown: 0
   requiresTarget: 0

@@ -1,12 +1,14 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RPGProject.Combat.Grid
 {
     public class GridBlock : MonoBehaviour, CombatTarget
     {
         [SerializeField] MeshRenderer highlightMesh = null;
+        [SerializeField] Image highlightImage = null;
         [SerializeField] TextMeshProUGUI coordinatesText = null;
 
         public GridCoordinates gridCoordinates;
@@ -49,11 +51,20 @@ namespace RPGProject.Combat.Grid
         {
             highlightMesh.material = _highlightColor;
             highlightMesh.gameObject.SetActive(true);
+
+            Color32 color = highlightImage.color;
+            color.a = 255;
+
+            highlightImage.color = color;
         }
 
         public void UnhighlightBlock()
         {
             highlightMesh.gameObject.SetActive(false);
+            Color32 color = highlightImage.color;
+            color.a = 65;
+
+            highlightImage.color = color;
         }
 
         public void SetColors(Material _newMaterial, Color _textColor)
