@@ -10,8 +10,9 @@ namespace RPGProject.Control.Combat
 {
     public class PlayerCombatController : MonoBehaviour
     {
-        BattleGridManager battleGridManager = null;
         BattleHandler battleHandler = null;
+        BattleUIManager battleUIManager = null;
+        BattleGridManager battleGridManager = null;
         GridSystem gridSystem = null;
         Pathfinder pathfinder = null;
 
@@ -26,6 +27,8 @@ namespace RPGProject.Control.Combat
         List<CombatTarget> selectedTargets = new List<CombatTarget>();
         Ability selectedAbility = null;
 
+        Fighter highlightedTarget = null;
+
         bool isPathfinding = true;
 
         GridBlock blockToSelectFrom = null;
@@ -38,6 +41,7 @@ namespace RPGProject.Control.Combat
             battleHandler = GetComponent<BattleHandler>();
             raycaster = GetComponent<Raycaster>();
 
+            battleUIManager = GetComponentInChildren<BattleUIManager>();
             battleGridManager = GetComponentInChildren<BattleGridManager>();
             gridSystem = GetComponentInChildren<GridSystem>();
             pathfinder = GetComponentInChildren<Pathfinder>();
@@ -50,7 +54,7 @@ namespace RPGProject.Control.Combat
 
         private void Start()
         {
-            battleHandler.GetBattleUIManager().onAbilitySelect += SetSelectedAbility;
+            battleUIManager.onAbilitySelect += SetSelectedAbility;
             SetupBattleCamera();
         }
 
@@ -88,6 +92,10 @@ namespace RPGProject.Control.Combat
                 battleCamera.RecenterCamera();
                 //battleCamera.SetFollowTarget(currentUnitTurn.transform);
             }
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                battleHandler.AdvanceTurn();
+            }
         }
 
         private void HandleRaycasting()
@@ -113,10 +121,23 @@ namespace RPGProject.Control.Combat
             {
                 GridBlock targetBlock = GetTargetBlock(combatTarget);
                 if (isPathfinding) HandlePathfinding(targetBlock);
+                if(combatTarget.GetType() == typeof(Fighter))
+                {
+                    battleUIManager.HighlightTarget((Fighter)combatTarget);
+                }
+                else if(targetBlock.contestedFighter != null)
+                {
+                    battleUIManager.HighlightTarget(targetBlock.contestedFighter);
+                }
+                else
+                {
+                    battleUIManager.UnhighlightTarget();
+                }
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (tempPath == null) return;
+                    battleUIManager.UnhighlightTarget();
                     path = GetFurthestPath(tempPath);
                     StartCoroutine(OnPlayerClick(combatTarget));
                 }
@@ -134,34 +155,38 @@ namespace RPGProject.Control.Combat
         private IEnumerator OnPlayerClick(CombatTarget _selectedTarget)
         { 
             if (_selectedTarget == null) yield break;
+            if (!battleHandler.IsBattling()) yield break;
+            if (currentUnitTurn != null && !currentUnitTurn.unitInfo.isPlayer) yield break;
 
             Type targetType = _selectedTarget.GetType();
-
-            if(targetType == typeof(Fighter))
-            {
-                Fighter fighter = (Fighter)_selectedTarget;
-                if (fighter == currentUnitTurn.GetFighter()) yield break;
-            }
+            CombatTarget trueTarget = GetTrueTarget(_selectedTarget, targetType);
 
             if (!isSelectingFaceDirection)
             {
+
+                //if (targetType == typeof(Fighter))
+                //{
+                //    Fighter fighter = (Fighter)trueTarget;
+                //    if (fighter == currentUnitTurn.GetFighter()) yield break;
+                //}
+
                 if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
                 {
-                    if(targetType == typeof(Fighter)) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
+                    if(trueTarget.GetType() == typeof(Fighter)) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
                 }
            
                 if (selectedAbility != null)
                 {
-                    if (CanTarget(selectedAbility, _selectedTarget))
+                    if (CanTarget(selectedAbility, trueTarget))
                     {
-                        selectedTargets.Add(_selectedTarget);
+                        selectedTargets.Add(trueTarget);
 
                         if (selectedTargets.Count == selectedAbility.requiredTargetAmount)
                         {
                             raycaster.isRaycasting = false;
                             gridSystem.UnhighlightBlocks(tempPath);
 
-                            if (selectedAbility.requiresTarget && (Fighter)_selectedTarget == null) yield break;
+                            if (selectedAbility.requiresTarget && (Fighter)trueTarget == null) yield break;
 
                             battleHandler.OnPlayerMove(selectedTargets, selectedAbility);
                             selectedAbility = null;
@@ -177,6 +202,8 @@ namespace RPGProject.Control.Combat
 
                     yield return currentUnitTurn.PathExecution(path);
 
+                    if (!currentUnitTurn.unitInfo.isPlayer) yield break;
+                    
                     bool isTeleporter = targetType == typeof(BattleTeleporter) && (BattleTeleporter)_selectedTarget != null;
                     bool isFighter = (targetType == typeof(Fighter) && (Fighter)_selectedTarget != null);
                     bool isGridBlock = (targetType == typeof(GridBlock) && (GridBlock)_selectedTarget != null);
@@ -245,11 +272,8 @@ namespace RPGProject.Control.Combat
         private GridBlock GetDirectionSelectionBlock(CombatTarget _combatTarget, Type _targetType)
         {
             GridBlock directionSelectionBlock = null;
-            if (_targetType == typeof(GridBlock))
-            {
-                if ((GridBlock)_combatTarget != null) directionSelectionBlock = (GridBlock)_combatTarget;
-            }
-            else if (_targetType == typeof(Fighter))
+
+            if (_targetType == typeof(Fighter))
             {
                 if((Fighter)_combatTarget != null) directionSelectionBlock = battleGridManager.GetGridBlockByFighter((Fighter)_combatTarget);
             }
@@ -261,6 +285,10 @@ namespace RPGProject.Control.Combat
                     AbilityBehavior parentBehavior = battleTeleporter.linkedTeleporter;
                     directionSelectionBlock =  battleGridManager.GetGridBlockByAbility(parentBehavior);
                 }
+            }
+            else
+            {                
+                directionSelectionBlock = currentUnitTurn.currentBlock;
             }
 
             return directionSelectionBlock;
@@ -275,15 +303,13 @@ namespace RPGProject.Control.Combat
             if (_targetType == typeof(GridBlock))
             {
                 targetBlock = (GridBlock)_selectedTarget;
-                //Fighter contestedFighter = targetBlock.contestedFighter;
-                //if (contestedFighter != null)
-                //{
-                //    targetFighter = contestedFighter;
-                //    trueTarget = targetFighter;
-                //}
-                //else trueTarget = targetBlock;
-
-                trueTarget = targetBlock;
+                Fighter contestedFighter = targetBlock.contestedFighter;
+                if (contestedFighter != null)
+                {
+                    targetFighter = contestedFighter;
+                    trueTarget = targetFighter;
+                }
+                else trueTarget = targetBlock;
             }
             else if (_targetType == typeof(Fighter))
             {
@@ -334,9 +360,14 @@ namespace RPGProject.Control.Combat
 
         private void UpdateCurrentUnitTurn(UnitController _unitController)
         {
+            battleUIManager.UnhighlightTarget();
+            gridSystem.UnhighlightBlocks(tempPath);
+
             currentUnitTurn = _unitController;
             if (currentUnitTurn.unitInfo.isPlayer) raycaster.isRaycasting = true;
             else raycaster.isRaycasting = false;
+
+            battleCamera.SetFollowTarget(_unitController.GetCharacterMesh().aimTransform);
         }
 
         private void SetSelectedAbility(Ability _selectedAbility)

@@ -36,8 +36,9 @@ namespace RPGProject.Combat.Grid
 
         public void SetContestedFighter(Fighter _fighter)
         {
-            if (_fighter == null) return;
             contestedFighter = _fighter;
+            if (_fighter == null) return;
+
             onContestedFighterUpdate(contestedFighter, this);
         }
 
@@ -52,7 +53,8 @@ namespace RPGProject.Combat.Grid
             highlightMesh.material = _highlightColor;
             highlightMesh.gameObject.SetActive(true);
 
-            Color32 color = highlightImage.color;
+            //Color32 color = highlightImage.color;
+            Color32 color = _highlightColor.color;
             color.a = 255;
 
             highlightImage.color = color;
@@ -61,7 +63,7 @@ namespace RPGProject.Combat.Grid
         public void UnhighlightBlock()
         {
             highlightMesh.gameObject.SetActive(false);
-            Color32 color = highlightImage.color;
+            Color32 color = Color.white;
             color.a = 65;
 
             highlightImage.color = color;

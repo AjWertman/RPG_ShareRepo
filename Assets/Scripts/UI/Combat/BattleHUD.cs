@@ -9,43 +9,73 @@ namespace RPGProject.UI
 {
     public class BattleHUD : MonoBehaviour
     {
-        [SerializeField] UnitResourcesIndicator unitResourcesIndicator = null;
+        [SerializeField] SelectedUnitIndicator selectedUnitIndicator = null;
+
         [SerializeField] Transform turnOrderContent = null;
-        [SerializeField] GameObject turnOrderUIPrefab = null;
+        [SerializeField] TurnOrderUIItem turnOrderUIPrefab = null;
+
+        [SerializeField] Transform teamMemberContent = null;
+        [SerializeField] TeamMemberIndicator teamMemberIndicatorPrefab = null;
 
         [SerializeField] TextMeshProUGUI cantCastText = null;
 
-        int amountOfTurnOrderUIItems = 8;
+        int amountOfTurnOrderUIItems = 10;
 
         List<TurnOrderUIItem> turnOrderUIItems = new List<TurnOrderUIItem>();
+        List<TeamMemberIndicator> teamMemberIndicators = new List<TeamMemberIndicator>();
 
         List<Fighter> uiTurnOrder = new List<Fighter>();
 
-        public event Action<Fighter> onTurnOrderHighlight;
-        public event Action onTurnOrderUnhighlight;
+        public event Action<Fighter> onFighterHighlight;
+        public event Action onFighterUnhighlight;
 
         private void Awake()
         {
             CreateTurnOrderUIItemPool();
-            
+            CreateTeamMemberUIItemPool();
+            selectedUnitIndicator.DeactivateIndicator();
+
             cantCastText.text = "";
             cantCastText.gameObject.SetActive(false);
         }
 
         private void CreateTurnOrderUIItemPool()
         {
+            foreach (Transform existingUIItem in turnOrderContent)
+            {
+                Destroy(existingUIItem.gameObject);
+            }
+
             for (int i = 0; i < amountOfTurnOrderUIItems; i++)
             {
-                GameObject turnOrderInstance = Instantiate(turnOrderUIPrefab, turnOrderContent);
-                TurnOrderUIItem turnOrderUIItem = turnOrderInstance.GetComponent<TurnOrderUIItem>();
-                turnOrderUIItem.InitalizeTurnOrderUIItem();
+                TurnOrderUIItem turnOrderInstance = Instantiate(turnOrderUIPrefab, turnOrderContent);
+                turnOrderInstance.InitalizeTurnOrderUIItem();
 
-                turnOrderUIItem.onPointerEnter += OnTurnOrderHighlight;
-                turnOrderUIItem.onPointerExit += OnTurnOrderUnhighlight;
+                turnOrderInstance.onHighlight += OnFighterHighlight;
+                turnOrderInstance.onUnhighlight += OnFighterUnhighlight;
 
-                turnOrderUIItems.Add(turnOrderUIItem);
+                turnOrderUIItems.Add(turnOrderInstance);
 
                 turnOrderInstance.gameObject.SetActive(false);
+            }
+        }
+
+        private void CreateTeamMemberUIItemPool()
+        {
+            foreach(Transform existingIndicator in teamMemberContent)
+            {
+                Destroy(existingIndicator.gameObject);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                TeamMemberIndicator teamMemberIndicator = Instantiate(teamMemberIndicatorPrefab, teamMemberContent);
+                teamMemberIndicator.onHighlight += OnFighterHighlight;
+                teamMemberIndicator.onUnhighlight += OnFighterUnhighlight;
+                    
+                teamMemberIndicators.Add(teamMemberIndicator);
+               
+                teamMemberIndicator.gameObject.SetActive(false);
             }
         }
 
@@ -55,6 +85,15 @@ namespace RPGProject.UI
             SetupTurnOrderUIItems();
         }
 
+        public void SetupTeammemberIndicators(List<Fighter> _teamMembers)
+        {
+            for (int i = 0; i < _teamMembers.Count; i++)
+            {
+                teamMemberIndicators[i].SetupIndicator(_teamMembers[i]);
+                teamMemberIndicators[i].gameObject.SetActive(true);
+            }
+        }
+
         public void SetupTurnOrderUIItems()
         {
             for (int i = 0; i < amountOfTurnOrderUIItems; i++)
@@ -62,27 +101,48 @@ namespace RPGProject.UI
                 Fighter combatant = uiTurnOrder[i];
                 TurnOrderUIItem currentTurnOrderUIItem = turnOrderUIItems[i];
 
-                currentTurnOrderUIItem.SetupTurnOrderUI(i, combatant);
+                currentTurnOrderUIItem.SetupTurnOrderUI(combatant);
                 currentTurnOrderUIItem.gameObject.SetActive(true);
             }
         }
 
         public void SetupUnitResourcesIndicator(Fighter _combatant)
         {
-            unitResourcesIndicator.SetupResourceIndicator(_combatant);
+            if (_combatant.unitInfo.isPlayer)
+            {
+                selectedUnitIndicator.OnTeammateSelection(GetTeamMemberIndicator(_combatant));
+            }
+            else
+            {
+                selectedUnitIndicator.SetupResourceIndicator(_combatant);
+            }
 
-            bool isCombatantNull = (_combatant == null);
-            unitResourcesIndicator.gameObject.SetActive(!isCombatantNull);
+            selectedUnitIndicator.gameObject.SetActive(true);
         }
 
-        private void OnTurnOrderHighlight(Fighter _combatant)
+        public void IssueCheck()
         {
-            onTurnOrderHighlight(_combatant);
+
         }
 
-        private void OnTurnOrderUnhighlight()
+        public TeamMemberIndicator GetTeamMemberIndicator(Fighter _fighter)
         {
-            onTurnOrderUnhighlight();
+            foreach (TeamMemberIndicator teamMemberIndicator in teamMemberIndicators)
+            {
+                if (teamMemberIndicator.GetFighter() == _fighter) return teamMemberIndicator;
+            }
+
+            return null;
+        }
+
+        private void OnFighterHighlight(Fighter _combatant)
+        {
+            onFighterHighlight(_combatant);
+        }
+
+        private void OnFighterUnhighlight()
+        {
+            onFighterUnhighlight();
         }
 
         public void ResetTurnOrderUIItems()
@@ -110,6 +170,11 @@ namespace RPGProject.UI
             }
 
             return updatedUITurnOrder;
+        }
+
+        public SelectedUnitIndicator GetSelectedTargetIndicator()
+        {
+            return selectedUnitIndicator;
         }
 
         private int UpdateIndex(int _index, int _turnOrderCount)

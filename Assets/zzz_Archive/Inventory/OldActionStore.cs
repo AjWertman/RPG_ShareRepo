@@ -5,7 +5,7 @@ using RPGProject.Saving;
 
 namespace RPGProject.Inventories
 {
-    //Refactor - Move to combat.items menu
+    //- Move to combat.items menu
     public class ActionStore : MonoBehaviour, ISaveable
     {
         Dictionary<int, DockedItemSlot> dockedItems = new Dictionary<int, DockedItemSlot>();

@@ -1787,6 +1787,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}
+      propertyPath: uiColor.rgba
+      value: 4278190335
+      objectReference: {fileID: 0}
+    - target: {fileID: 3761025221113926766, guid: c1e365463d4e79c47919e9fbd09557e8,
+        type: 3}
       propertyPath: lHandTransform
       value: 
       objectReference: {fileID: 7807883483970077547}
@@ -1799,7 +1804,7 @@ PrefabInstance:
         type: 3}
       propertyPath: animatorController
       value: 
-      objectReference: {fileID: 22100000, guid: cce47a98a6d3cc1479d8754036d4adfb,
+      objectReference: {fileID: 22100000, guid: d05becc118cfa0943924eb419940a2a3,
         type: 2}
     - target: {fileID: 5319519476176398369, guid: c1e365463d4e79c47919e9fbd09557e8,
         type: 3}

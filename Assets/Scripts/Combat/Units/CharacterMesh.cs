@@ -17,6 +17,8 @@ namespace RPGProject.Combat
 
         public Transform particleExpander = null;
 
+        public Color32 uiColor = new Color32();
+
         Animator animator = null;
 
         private void Awake()

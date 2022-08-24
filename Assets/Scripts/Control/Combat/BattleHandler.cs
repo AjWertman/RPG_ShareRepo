@@ -35,7 +35,7 @@ namespace RPGProject.Control.Combat
         private void Awake()
         {
             aiBrain = GetComponent<CombatAIBrain>();
-            battleUIManager = GetComponentInChildren<BattleUIManager>();
+            battleUIManager = GetComponentInChildren<BattleUIManager>(false);
             battleGridManager = GetComponentInChildren<BattleGridManager>();
             unitManager = GetComponentInChildren<UnitManager>();
             turnManager = GetComponentInChildren<TurnManager>();
@@ -148,6 +148,7 @@ namespace RPGProject.Control.Combat
 
         private void OnMoveCompletion()
         {
+            //Refactor - likely being called twice or paired with something else to cause skipping moves
             bool isPlayer = currentUnitTurn.unitInfo.isPlayer;
             float currentAP = currentUnitTurn.unitResources.actionPoints;
 
@@ -170,7 +171,7 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        private void AdvanceTurn()
+        public void AdvanceTurn()
         {
             if (isBattleOver) return;
 
@@ -502,7 +503,7 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        private bool IsBattling()
+        public bool IsBattling()
         {
             return battleState == BattleState.Battling;
         }     

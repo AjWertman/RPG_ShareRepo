@@ -56,6 +56,9 @@ MonoBehaviour:
   rHandTransform: {fileID: 0}
   lHandTransform: {fileID: 0}
   particleExpander: {fileID: 2659244645411528458}
+  uiColor:
+    serializedVersion: 2
+    rgba: 2617245695
 --- !u!95 &3261715537047823685
 Animator:
   serializedVersion: 4

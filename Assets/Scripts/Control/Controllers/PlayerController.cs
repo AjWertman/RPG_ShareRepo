@@ -49,7 +49,7 @@ namespace RPGProject.Control
         private void Start()
         {
             followCamera = FindObjectOfType<FollowCamera>();
-            uiCanvas = FindObjectOfType<UICanvas>();
+            uiCanvas = FindObjectOfType<UICanvas>(false);
             soundFXManager = FindObjectOfType<SoundFXManager>();
 
             playerTeamManager = FindObjectOfType<PlayerTeamManager>();

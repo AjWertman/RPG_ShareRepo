@@ -15,55 +15,36 @@ namespace RPGProject.UI
 
         LayoutElement layoutElement = null;
 
-        int index = 0;
         Fighter combatant = null;
         Sprite facePic = null;
         bool isPlayer = false;
 
-        public event Action<Fighter> onPointerEnter;
-        public event Action onPointerExit;
+        public event Action<Fighter> onHighlight;
+        public event Action onUnhighlight;
 
         public void InitalizeTurnOrderUIItem()
         {
             layoutElement = GetComponent<LayoutElement>();
         }
 
-        public void SetupTurnOrderUI(int _index, Fighter _combatant)
+        public void SetupTurnOrderUI(Fighter _combatant)
         {
-            index = _index;
             combatant = _combatant;
-            facePic = combatant.characterMesh.faceImage;
-            isPlayer = combatant.unitInfo.isPlayer;
+            CharacterMesh characterMesh = combatant.characterMesh;
+            facePic = characterMesh.faceImage;
 
-            SetSize(index);
             SetImage(facePic);
-            SetBackgroundColor(isPlayer);
+            background.color = characterMesh.uiColor; 
         }
 
         public void ResetTurnOrderUIItem()
         {
-            index = 0;
             combatant = null;
             facePic = null;
             isPlayer = false;
 
-            SetSize(1);
             SetImage(defaultFaceImage);
-            SetBackgroundColor(null);
-        }
-
-        public void SetSize(int index)
-        { 
-            if (index == 0)
-            {
-                layoutElement.preferredHeight = 75f;
-                layoutElement.preferredWidth = 75f;
-            }
-            else
-            {
-                layoutElement.preferredHeight = 50f;
-                layoutElement.preferredWidth = 50f;
-            }
+            background.color = Color.white ;
         }
 
         public Fighter GetCombatant()
@@ -74,26 +55,6 @@ namespace RPGProject.UI
         public void SetImage(Sprite _facePic)
         {
             faceImage.sprite = _facePic;
-        }
-
-        public void SetBackgroundColor(bool? _isPlayer)
-        {
-            Color newColor = Color.white;
-            if (_isPlayer == true)
-            {
-                newColor = new Color(0, 0, 1, .35f);
-            }
-            else if (_isPlayer == false)
-            {
-                newColor = new Color(1, 0, 0, .35f);
-            }
-
-            background.color = newColor;
-        }
-
-        public int GetIndex()
-        {
-            return index;
         }
 
         public Sprite GetFaceImage()
@@ -109,12 +70,12 @@ namespace RPGProject.UI
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (combatant == null) return;
-            onPointerEnter(combatant);
+            onHighlight(combatant);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            onPointerExit();
+            onUnhighlight();
         }
     }
 }

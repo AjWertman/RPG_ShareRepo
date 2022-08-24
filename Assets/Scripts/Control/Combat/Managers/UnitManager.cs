@@ -232,6 +232,8 @@ namespace RPGProject.Control.Combat
             deadUnit.GetUnitUI().ActivateResourceSliders(false);
             TeamWipeCheck();
             onUnitDeath(deadUnit);
+
+            deadUnit.gameObject.SetActive(false);
         }
 
         private void TeamWipeCheck()

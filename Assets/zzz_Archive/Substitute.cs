@@ -79,7 +79,7 @@ public class Substitute
     //            fighter.LookAtTarget(target.transform);
     //            //fighter.Attack();
 
-    //            //Refactor - Move duration
+    //            //- Move duration
     //            yield return new WaitForSeconds(1.5f);
 
     //            //yield return mover.ReturnToStart(false);

@@ -67,7 +67,7 @@
 
 //private Dictionary<UnitController, AIRanking> SetTargetRankings(UnitController _currentUnitTurn, List<UnitController> _allUnits)
 //{
-//    //Refactor remove target preference and get target AIRanking?
+//    // remove target preference and get target AIRanking?
 //    Dictionary<UnitController, AIRanking> targetRankings = new Dictionary<UnitController, AIRanking>();
 
 //    Fighter currentFighter = _currentUnitTurn.GetFighter();

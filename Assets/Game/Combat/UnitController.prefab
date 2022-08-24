@@ -189,7 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footstepsSound: {fileID: 8300000, guid: 9993e4a45f4c5a24699fe278ca426350, type: 3}
   distanceTolerance: 0.3
-  gCostPerAP: 54
+  gCostPerAP: 24
   isMoving: 0
 --- !u!114 &-3233447754243240660
 MonoBehaviour:

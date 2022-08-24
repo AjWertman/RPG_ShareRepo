@@ -56,8 +56,8 @@ namespace RPGProject.Control
             targetSelectMenu.onTargetUnhighlight += UnhighlightTarget;
             targetSelectMenu.onBackButton += ActivateBattleUIMenu;
 
-            battleHUD.onTurnOrderHighlight += HighlightTarget;
-            battleHUD.onTurnOrderUnhighlight += UnhighlightTarget;
+            battleHUD.onFighterHighlight += HighlightTarget;
+            battleHUD.onFighterUnhighlight += UnhighlightTarget;
         }
 
         public void SetupUIManager(List<Fighter> _playerCombatants, List<Fighter> _enemyCombatants, List<Fighter> _turnOrder)
@@ -66,6 +66,7 @@ namespace RPGProject.Control
             SetCurrentCombatantTurn(_turnOrder[0]);
 
             battleHUD.UpdateTurnOrderUIItems(_turnOrder, currentCombatantTurn);
+            battleHUD.SetupTeammemberIndicators(_playerCombatants);
         }
 
         public void ActivateBattleUIMenu(BattleUIMenuKey _battleUIMenu)
@@ -236,6 +237,8 @@ namespace RPGProject.Control
         public void HighlightTarget(Fighter _combatant)
         {
             if (_combatant == null) return;
+            if (highlightedTarget != null && highlightedTarget != _combatant) UnhighlightTarget();
+            if (highlightedTarget != null && highlightedTarget ==_combatant) return;
             highlightedTarget = _combatant;
 
             UnitUI unitUI = GetUnitUI(highlightedTarget);
@@ -255,9 +258,28 @@ namespace RPGProject.Control
                 unitUI.ActivateResourceSliders(false);
             }
 
-            battleHUD.SetupUnitResourcesIndicator(null);
+            if (highlightedTarget.unitInfo.isPlayer) battleHUD.GetTeamMemberIndicator(highlightedTarget).HideIndicator(false);
+
+            battleHUD.GetSelectedTargetIndicator().DeactivateIndicator();
             highlightedTarget = null;
         }
+
+        //public void UnhighlightTarget()
+        //{
+        //    if (highlightedTarget == null) return;
+        //    UnitUI unitUI = GetUnitUI(highlightedTarget);
+        //    if (highlightedTarget != currentCombatantTurn)
+        //    {
+        //        unitUI.ActivateUnitIndicator(false);
+        //        unitUI.ActivateResourceSliders(false);
+        //    }
+
+        //    if (highlightedTarget.unitInfo.isPlayer) battleHUD.GetTeamMemberIndicator(highlightedTarget).HideIndicator(false);
+
+        //    battleHUD.GetSelectedTargetIndicator().DeactivateIndicator();
+        //    battleHUD.IssueCheck();
+        //    highlightedTarget = null;
+        //}
 
         public void DeactivateAllMenus()
         {

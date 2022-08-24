@@ -81,8 +81,8 @@ namespace RPGProject.Combat.Grid
 
                 Material currentHighlightMaterial = highlightMaterial;
                 if (currentIndex > _furthestBlockIndex) currentHighlightMaterial = unworthyMaterial;
+                if (gridBlock == goalBlock && goalBlockFighter != null) currentHighlightMaterial = redMaterial;
 
-                if (gridBlock == goalBlock && goalBlockFighter != null) continue;
                 if (gridBlock == startBlock) continue;
 
                 gridBlock.HighlightBlock(currentHighlightMaterial);

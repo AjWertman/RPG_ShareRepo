@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
-    //Refactor - not neccessary for turn based rpg.
+    //not neccessary for turn based rpg.
     public class OldActionSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
         [SerializeField] InventoryItemIcon icon = null;

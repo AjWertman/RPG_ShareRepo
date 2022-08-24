@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: BasicRangeAttack
+  m_Name: BasicRangeAttack1
   m_EditorClassIdentifier: 
   abilityName: Attack
   requiredLevel: 1
@@ -21,10 +21,10 @@ MonoBehaviour:
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   combo:
-  - animationID: Attack0
+  - animationID: Attack1
     comboPointCost: 0
     abilityObjectKey: 13
-    spawnLocationOverride: 0
+    spawnLocationOverride: 1
     abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 0

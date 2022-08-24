@@ -13,10 +13,6 @@ MonoBehaviour:
   m_Name: Cluster0
   m_EditorClassIdentifier: 
   enemies:
-  - unit: {fileID: 11400000, guid: 2af88666b8413a744a7df7d25de3df0c, type: 2}
-    startCoordinates:
-      x: 1
-      z: 1
   - unit: {fileID: 11400000, guid: cd100e2e2988b23448f8d3145f2b7c89, type: 2}
     startCoordinates:
       x: 0
@@ -29,3 +25,7 @@ MonoBehaviour:
     startCoordinates:
       x: -3
       z: 2
+  - unit: {fileID: 11400000, guid: 2af88666b8413a744a7df7d25de3df0c, type: 2}
+    startCoordinates:
+      x: 1
+      z: -1
