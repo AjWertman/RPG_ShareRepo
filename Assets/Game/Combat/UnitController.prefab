@@ -51,6 +51,7 @@ GameObject:
   - component: {fileID: 4292025080150459303}
   - component: {fileID: 2304397834848362312}
   - component: {fileID: 4136358189517395625}
+  - component: {fileID: 6885921623392347808}
   m_Layer: 0
   m_Name: UnitController
   m_TagString: Untagged
@@ -144,7 +145,8 @@ MonoBehaviour:
   unitResources:
     healthPoints: 0
     maxHealthPoints: 100
-    actionPoints: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
     gCostMoveAllowance: 0
   startingStats:
     stamina: 10
@@ -223,7 +225,8 @@ MonoBehaviour:
   unitResources:
     healthPoints: 0
     maxHealthPoints: 0
-    actionPoints: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
     gCostMoveAllowance: 0
   characterMesh: {fileID: 0}
   selectedAbility: {fileID: 0}
@@ -252,7 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 6282102614987267205}
-  manaSlider: {fileID: 6604942465199965555}
+  energySlider: {fileID: 6604942465199965555}
   unitIndicator: {fileID: 7379268148205648341}
   uiHealthChange: {fileID: 2475244755357701700}
 --- !u!114 &2304397834848362312
@@ -285,6 +288,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agroPercentagePerDamagePercentage: 1
   agros: []
+--- !u!114 &6885921623392347808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642788015177014662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12e316041313ada489ccea81d2bdec58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyPoints: 0
+  maxEnergyPoints: 100
 --- !u!1 &4569020565003744689
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,6 +377,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1394948397794020910, guid: e06bb727acc25fe4aac7e0255ee9bf73,
+        type: 3}
+      propertyPath: m_Name
+      value: EnergySlider
       objectReference: {fileID: 0}
     - target: {fileID: 1394948397794020910, guid: e06bb727acc25fe4aac7e0255ee9bf73,
         type: 3}
@@ -635,6 +657,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161233276241591393, guid: e06bb727acc25fe4aac7e0255ee9bf73,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161233276241591393, guid: e06bb727acc25fe4aac7e0255ee9bf73,
+        type: 3}
+      propertyPath: m_IgnoreReversedGraphics
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8243827694620385813, guid: e06bb727acc25fe4aac7e0255ee9bf73,
         type: 3}
@@ -943,6 +975,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839613489464274394, guid: 220b437358215d84b88ed484bc468fbd,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839613489464274394, guid: 220b437358215d84b88ed484bc468fbd,
+        type: 3}
+      propertyPath: m_IgnoreReversedGraphics
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6867676251008294428, guid: 220b437358215d84b88ed484bc468fbd,
         type: 3}

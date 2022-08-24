@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7975910225020419105}
   - component: {fileID: 6503375743069951652}
   - component: {fileID: 4705342392314861957}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Coordinates
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 1817937010493149286}
   - component: {fileID: 5447775403354791827}
   - component: {fileID: 7495517113137527199}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: GValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 4294558813010801132}
   - component: {fileID: 6222689721936622370}
   - component: {fileID: 5069409514214156142}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: HValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 4087142439527495900}
   - component: {fileID: 1541830698990094403}
   - component: {fileID: 8559285528161174923}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: FValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 5407393411195976436}
   - component: {fileID: 4984482638175301665}
   - component: {fileID: 8160964064195857749}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: HighlightImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -775,7 +775,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2610154644514497992}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: PathfindingValues
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -914,7 +914,7 @@ GameObject:
   - component: {fileID: 1625600436058116149}
   - component: {fileID: 2332020371020227312}
   - component: {fileID: 1375558787960597058}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: GridPieceCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
 --- !u!1 &7776654750715165035
 GameObject:
   m_ObjectHideFlags: 0

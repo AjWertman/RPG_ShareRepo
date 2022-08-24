@@ -203,7 +203,7 @@ namespace RPGProject.UI
 
             foreach (Fighter target in GetTeamList(_isPlayer))
             {
-                if (!target.GetHealthComponent().isDead)
+                if (!target.GetHealth().isDead)
                 {
                     targets.Add(target);
                 }

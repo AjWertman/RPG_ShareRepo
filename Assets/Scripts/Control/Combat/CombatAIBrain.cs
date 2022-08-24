@@ -26,7 +26,8 @@ namespace RPGProject.Control.Combat
             Fighter currentFighter = _currentUnitTurn.GetFighter();
             AIBattleType combatAIType = _currentUnitTurn.aiType;
 
-            currentFighter.SetActionPoints(6);
+            //Refactor - set Energy somewhere else;
+            currentFighter.GetEnergy().RestoreEnergyPoints(40);
 
             List<Ability> usableAbilities = GetUsableAbilities(currentFighter, currentFighter.GetKnownAbilities());
             //Dictionary<UnitController, AIRanking> targetPreferences = SetTargetRankings(_currentUnitTurn, _allUnits);
@@ -46,7 +47,8 @@ namespace RPGProject.Control.Combat
             Fighter currentFighter = _currentUnitTurn.GetFighter();
             AIBattleType combatAIType = _currentUnitTurn.aiType;
 
-            currentFighter.SetActionPoints(6);
+            //Refactor - set Energy somewhere else;
+            currentFighter.GetEnergy().RestoreEnergyPoints(40);
 
             List<Ability> usableAbilities = GetUsableAbilities(currentFighter, currentFighter.GetKnownAbilities());
             //Dictionary<UnitController, AIRanking> targetPreferences = SetTargetRankings(_currentUnitTurn, _allUnits);
@@ -94,10 +96,10 @@ namespace RPGProject.Control.Combat
 
             foreach (Ability ability in _usableAbilities)
             {
-                int currentAP = _currentUnitTurn.unitResources.actionPoints;
-                int costToUseAbility = ability.actionPointsCost;
+                int currentEnergy = _currentUnitTurn.GetEnergy().energyPoints;
+                int costToUseAbility = ability.energyPointsCost;
 
-                if (currentAP < costToUseAbility) continue;
+                if (currentEnergy < costToUseAbility) continue;
 
                 float baseAbilityAmount = ability.baseAbilityAmount;
                 float attackRange = ability.attackRange;
@@ -123,12 +125,12 @@ namespace RPGProject.Control.Combat
                     }
 
                     int totalAPCost = GetActionPointsCost(_currentUnitTurn, combatAction);
-                    if (currentAP < totalAPCost) continue;
+                    if (currentEnergy < totalAPCost) continue;
 
                     //Agro -- Used to calculate preferred target? Or what?
 
                     ///SCORES////////////////////////////////////////////////////////////////////////
-                    AIRanking apCostRanking = AIAssistant.GetAPCostRanking(currentAP, totalAPCost);
+                    AIRanking apCostRanking = AIAssistant.GetAPCostRanking(currentEnergy, totalAPCost);
                     score += AIAssistant.GetModifier(apCostRanking);
                   
 
@@ -267,7 +269,7 @@ namespace RPGProject.Control.Combat
         private int GetActionPointsCost(UnitController _currentUnit, AIBattleAction _aiCombatAction)
         {
             int actionPointsCost = 0;
-            int currentAP = _currentUnit.unitResources.actionPoints;
+            int currentAP = _currentUnit.GetEnergy().energyPoints;
 
             if (_aiCombatAction.targetBlock != null)
             {
@@ -281,7 +283,7 @@ namespace RPGProject.Control.Combat
                 currentGCostAllowance = 0;
             }
 
-            if (_aiCombatAction.selectedAbility != null) actionPointsCost += _aiCombatAction.selectedAbility.actionPointsCost;
+            if (_aiCombatAction.selectedAbility != null) actionPointsCost += _aiCombatAction.selectedAbility.energyPointsCost;
 
             return actionPointsCost;
         }
@@ -378,7 +380,7 @@ namespace RPGProject.Control.Combat
 
             foreach (Ability ability in _abilities)
             {
-                if (_fighter.unitResources.actionPoints >= ability.actionPointsCost) usableAbilities.Add(ability);
+                if (_fighter.GetEnergy().energyPoints >= ability.energyPointsCost) usableAbilities.Add(ability);
             }
 
             return usableAbilities;

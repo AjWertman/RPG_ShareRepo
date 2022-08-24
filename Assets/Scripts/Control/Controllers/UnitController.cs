@@ -27,6 +27,7 @@ namespace RPGProject.Control.Combat
         Fighter fighter = null;
         ComboLinker comboLinker = null;
         Health health = null;
+        Energy energy = null;
         CharacterMesh characterMesh = null;
         UnitAgro unitAgro = null;
         UnitUI unitUI = null;
@@ -43,16 +44,18 @@ namespace RPGProject.Control.Combat
             fighter = GetComponent<Fighter>();
             comboLinker = GetComponent<ComboLinker>();
             health = GetComponent<Health>();
+            energy = GetComponent<Energy>();
             mover = GetComponent<CombatMover>();
             unitAgro = GetComponent<UnitAgro>();
             unitUI = GetComponent<UnitUI>();
 
             health.InitalizeHealth();
+            energy.InitializeEnergy();
             fighter.InitalizeFighter();
             mover.InitalizeCombatMover();
             unitUI.InitializeUnitUI();
 
-            fighter.onAPUpdate += SetActionPoints;
+            //fighter.onAPUpdate += SetActionPoints;
             mover.onBlockReached += UseMovementResources;
         }
 
@@ -80,18 +83,20 @@ namespace RPGProject.Control.Combat
         {
             float totalPossibleGCostAllowance = 0f;
 
-            float actionPoints = unitResources.actionPoints;
+            float energyPoints = energy.energyPoints;
 
             totalPossibleGCostAllowance += unitResources.gCostMoveAllowance;
-            totalPossibleGCostAllowance += mover.gCostPerAP * actionPoints;
+            totalPossibleGCostAllowance += mover.gCostPerAP * energyPoints;
 
             return totalPossibleGCostAllowance;
         }
 
-        private void UpdateCurrentBlock(GridBlock _newBlock)
+        public void UpdateCurrentBlock(GridBlock _newBlock)
         { 
             currentBlock.SetContestedFighter(null);
             currentBlock = _newBlock;
+
+            if (currentBlock == null) return;
             currentBlock.SetContestedFighter(fighter);
         }
 
@@ -102,16 +107,16 @@ namespace RPGProject.Control.Combat
                 _gCost -= unitResources.gCostMoveAllowance;
                 unitResources.gCostMoveAllowance = 0;
 
-                unitResources.actionPoints--;
+                energy.SpendEnergyPoints(1);
                 unitResources.gCostMoveAllowance = mover.gCostPerAP;
             }
 
             unitResources.gCostMoveAllowance -= _gCost;
 
-            if(unitResources.actionPoints == 0 && unitResources.gCostMoveAllowance < 10)
-            {
-                onMoveCompletion();
-            }
+            //if(energy.energyPoints == 0 && unitResources.gCostMoveAllowance < 10)
+            //{
+            //    onMoveCompletion();
+            //}
         }
 
         public IEnumerator PathExecution(List<GridBlock> _path)
@@ -177,11 +182,6 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        public void SetActionPoints(int _newAPAmount)
-        {
-            unitResources.actionPoints = _newAPAmount;
-        }
-
         private IEnumerator UseOnAllTargets(List<CombatTarget> _targets, Ability _ability)
         {
             List<CombatTarget> privateList = new List<CombatTarget>();
@@ -212,11 +212,11 @@ namespace RPGProject.Control.Combat
             UpdateCurrentBlock(_newBlock);
         }
 
-        private void SpendActionPoints(int _apCost)
+        private void SpendEnergyPoints(int _energyCost)
         {
             //Refactor - does not prevent someone from doing something if they dont have enough ap
             ///Combat Assistant?
-            int apAfterSpend = unitResources.actionPoints - _apCost;
+            int apAfterSpend = energy.energyPoints - _energyCost;
 
             if(apAfterSpend < 0)
             {
@@ -224,9 +224,9 @@ namespace RPGProject.Control.Combat
                 return;
             }
 
-            fighter.SetActionPoints(apAfterSpend);
+            energy.SpendEnergyPoints(_energyCost);
 
-            if(unitResources.actionPoints == 0)
+            if(energy.energyPoints == 0)
             {
                 onMoveCompletion();
             }
@@ -246,7 +246,7 @@ namespace RPGProject.Control.Combat
         {
             //mana.SpendManaPoints(_selectedAbility.GetManaCost());
             StartCoroutine(fighter.Attack(_target, _selectedAbility));
-            SpendActionPoints(_selectedAbility.actionPointsCost); 
+            SpendEnergyPoints(_selectedAbility.energyPointsCost); 
         }
 
         public void SetName(string _name)
@@ -304,7 +304,9 @@ namespace RPGProject.Control.Combat
             float healthPoints = health.healthPoints;
             float maxHealthPoints = health.maxHealthPoints;
 
-            UnitResources newUnitResources = new UnitResources(maxHealthPoints);
+            int maxEnergy = energy.maxEnergyPoints;
+
+            UnitResources newUnitResources = new UnitResources(maxHealthPoints, maxEnergy);
 
             SetUnitResources(newUnitResources);
         }
@@ -343,7 +345,8 @@ namespace RPGProject.Control.Combat
 
             if (isTurn)
             {
-                unitResources.actionPoints += 4;
+                //Refactor - How much is restored on new turn? Is it a constant amount or is it based on percentages? Does low health effect this?
+                energy.RestoreEnergyPoints(40);
             }
         }
 
@@ -380,6 +383,11 @@ namespace RPGProject.Control.Combat
         public Health GetHealth()
         {
             return health;
+        }
+
+        public Energy GetEnergy()
+        {
+            return energy;
         }
 
         public Animator GetAnimator()

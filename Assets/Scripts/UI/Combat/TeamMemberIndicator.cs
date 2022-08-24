@@ -11,11 +11,12 @@ namespace RPGProject.UI
     {
         [SerializeField] Image background = null;
         [SerializeField] Image faceImage = null;
-        [SerializeField] Slider shieldSlider = null;
         [SerializeField] Slider healthSlider = null;
+        [SerializeField] Slider energySlider = null;
 
         Fighter fighter = null;
         Health teamMemberHealth = null;
+        Energy teamMemberEnergy = null;
 
         RectTransform rect;
 
@@ -32,15 +33,18 @@ namespace RPGProject.UI
             fighter = _fighter;
 
             CharacterMesh characterMesh = fighter.characterMesh;
-            teamMemberHealth = fighter.GetHealthComponent();
+            teamMemberHealth = fighter.GetHealth();
+            teamMemberEnergy = fighter.GetEnergy();
 
             faceImage.sprite = characterMesh.faceImage;
             background.color = characterMesh.uiColor;
             //refactor - Shield? AP/Energy? Rage/Special Power source?
-            shieldSlider.value = 1;
-            SetHealthPercentage(false, 42069);
 
+            SetHealthPercentage(false, 42069);
+            SetEnergyPercentage();
+            
             teamMemberHealth.onHealthChange += SetHealthPercentage;
+            teamMemberEnergy.onEnergyChange += SetEnergyPercentage;
         }
 
         public void HideIndicator(bool _shouldHide)
@@ -61,6 +65,11 @@ namespace RPGProject.UI
         private void SetHealthPercentage(bool _arg1, float _arg2)
         {
             healthSlider.value = teamMemberHealth.healthPercentage;
+        }
+
+        private void SetEnergyPercentage()
+        {
+            energySlider.value = teamMemberEnergy.GetEnergyPercentage();
         }
 
         public void OnPointerEnter(PointerEventData eventData)

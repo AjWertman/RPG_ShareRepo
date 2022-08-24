@@ -36,6 +36,8 @@ namespace RPGProject.Control.Combat
         bool isSelectingFaceDirection = false;
         bool hasHighlightedNeighbors = false;
 
+        public bool canAdvanceTurn = true;
+
         private void Awake()
         {
             battleHandler = GetComponent<BattleHandler>();
@@ -62,9 +64,29 @@ namespace RPGProject.Control.Combat
         {
             HandleCameraControl();
 
+            HandlePlayerControls();
+
             if (!raycaster.isRaycasting) return;
+            if (battleUIManager.isSelectingAbility) return;
 
             HandleRaycasting();
+        }
+
+        private void HandlePlayerControls()
+        {
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (isSelectingFaceDirection) ClearNeighborSelection();
+                else gridSystem.UnhighlightBlocks(tempPath);
+
+                battleUIManager.ActivateAbilitySelectMenu();
+            }
+
+            if (Input.GetKeyDown(KeyCode.KeypadEnter) && canAdvanceTurn)
+            {
+                ClearNeighborSelection();
+                battleHandler.AdvanceTurn();
+            }
         }
 
         private void HandleCameraControl()
@@ -86,22 +108,18 @@ namespace RPGProject.Control.Combat
             if(Input.GetAxisRaw("Mouse ScrollWheel") > 0) battleCamera.Zoom(true);
             else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0) battleCamera.Zoom(false);
 
-            //R
-            if (Input.GetKeyDown(KeyCode.Tab))
+            
+            if (Input.GetKeyDown(KeyCode.R))
             {
                 battleCamera.RecenterCamera();
-                //battleCamera.SetFollowTarget(currentUnitTurn.transform);
-            }
-            if (Input.GetKeyDown(KeyCode.KeypadEnter))
-            {
-                battleHandler.AdvanceTurn();
+                battleCamera.SetFollowTarget(currentUnitTurn.transform);
             }
         }
 
         private void HandleRaycasting()
         {
             RaycastHit hit = raycaster.GetRaycastHit();
-
+            
             if (hit.collider == null) return;
             CombatTarget combatTarget = hit.collider.GetComponent<CombatTarget>();
 
@@ -112,7 +130,6 @@ namespace RPGProject.Control.Combat
                     hasHighlightedNeighbors = true;
                     neighborBlocks = pathfinder.GetNeighbors(blockToSelectFrom);
 
-                    //Refactor - highlighting everyframe
                     gridSystem.HighlightBlocks(neighborBlocks);
                 }
             }
@@ -121,15 +138,20 @@ namespace RPGProject.Control.Combat
             {
                 GridBlock targetBlock = GetTargetBlock(combatTarget);
                 if (isPathfinding) HandlePathfinding(targetBlock);
+
+                //Refactor - Issue when not over target.But should highlight when not over target and over the UI Image
+
                 if(combatTarget.GetType() == typeof(Fighter))
                 {
-                    battleUIManager.HighlightTarget((Fighter)combatTarget);
+                    if (battleUIManager.highlightedTarget != null && battleUIManager.isUIHighlight) return;
+                    battleUIManager.HighlightTarget((Fighter)combatTarget, false);
                 }
                 else if(targetBlock.contestedFighter != null)
                 {
-                    battleUIManager.HighlightTarget(targetBlock.contestedFighter);
+                    if (battleUIManager.highlightedTarget != null && battleUIManager.isUIHighlight) return;
+                    battleUIManager.HighlightTarget(targetBlock.contestedFighter,false);
                 }
-                else
+                else if(battleUIManager.highlightedTarget != null && !battleUIManager.isUIHighlight)
                 {
                     battleUIManager.UnhighlightTarget();
                 }
@@ -184,6 +206,7 @@ namespace RPGProject.Control.Combat
                         if (selectedTargets.Count == selectedAbility.requiredTargetAmount)
                         {
                             raycaster.isRaycasting = false;
+                            canAdvanceTurn = false;
                             gridSystem.UnhighlightBlocks(tempPath);
 
                             if (selectedAbility.requiresTarget && (Fighter)trueTarget == null) yield break;
@@ -197,6 +220,7 @@ namespace RPGProject.Control.Combat
                 else
                 {
                     raycaster.isRaycasting = false;
+                    canAdvanceTurn = false;
                     gridSystem.UnhighlightBlocks(tempPath);
                     isPathfinding = false;
 
@@ -258,15 +282,20 @@ namespace RPGProject.Control.Combat
                     currentUnitTurn.transform.LookAt(lookPosition);
                 }
 
-                isSelectingFaceDirection = false;
-                isPathfinding = true;
-                gridSystem.UnhighlightBlocks(neighborBlocks);
-                hasHighlightedNeighbors = false;
-                blockToSelectFrom = null;
-                neighborBlocks.Clear();
-
-                raycaster.isRaycasting = true;
+                ClearNeighborSelection();
             }
+        }
+
+        private void ClearNeighborSelection()
+        {
+            isSelectingFaceDirection = false;
+            isPathfinding = true;
+            gridSystem.UnhighlightBlocks(neighborBlocks);
+            hasHighlightedNeighbors = false;
+            blockToSelectFrom = null;
+            neighborBlocks.Clear();
+
+            raycaster.isRaycasting = true;
         }
 
         private GridBlock GetDirectionSelectionBlock(CombatTarget _combatTarget, Type _targetType)
@@ -330,7 +359,7 @@ namespace RPGProject.Control.Combat
 
             if (_targetBlock == currentBlock)
             {
-                //Save for later
+                //Refactor - every frame
                 gridSystem.UnhighlightBlocks(tempPath);
                 return;
             }
@@ -359,14 +388,23 @@ namespace RPGProject.Control.Combat
         }
 
         private void UpdateCurrentUnitTurn(UnitController _unitController)
-        {
+        { 
             battleUIManager.UnhighlightTarget();
             gridSystem.UnhighlightBlocks(tempPath);
 
             currentUnitTurn = _unitController;
-            if (currentUnitTurn.unitInfo.isPlayer) raycaster.isRaycasting = true;
-            else raycaster.isRaycasting = false;
-
+            if (currentUnitTurn.unitInfo.isPlayer)
+            {
+                raycaster.isRaycasting = true;
+                canAdvanceTurn = true;
+                isPathfinding = true;
+            }
+            else
+            {
+                raycaster.isRaycasting = false;
+                canAdvanceTurn = false;
+                isPathfinding = false;
+            }
             battleCamera.SetFollowTarget(_unitController.GetCharacterMesh().aimTransform);
         }
 
@@ -378,6 +416,7 @@ namespace RPGProject.Control.Combat
         private void OnPlayerMoveCompletion()
         {
             raycaster.isRaycasting = true;
+            canAdvanceTurn = true;
         }
 
         private GridBlock GetTargetBlock(CombatTarget _combatTarget)

@@ -26,7 +26,7 @@ namespace RPGProject.UI
 
         List<Fighter> uiTurnOrder = new List<Fighter>();
 
-        public event Action<Fighter> onFighterHighlight;
+        public event Action<Fighter, bool> onFighterHighlight;
         public event Action onFighterUnhighlight;
 
         private void Awake()
@@ -137,7 +137,7 @@ namespace RPGProject.UI
 
         private void OnFighterHighlight(Fighter _combatant)
         {
-            onFighterHighlight(_combatant);
+            onFighterHighlight(_combatant, true);
         }
 
         private void OnFighterUnhighlight()

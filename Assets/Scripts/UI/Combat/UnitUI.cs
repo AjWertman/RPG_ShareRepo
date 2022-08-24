@@ -8,25 +8,30 @@ namespace RPGProject.UI
     public class UnitUI : MonoBehaviour
     {
         [SerializeField] ResourceSlider healthSlider = null;
-        [SerializeField] ResourceSlider manaSlider = null;
+        [SerializeField] ResourceSlider energySlider = null;
 
         [SerializeField] UnitIndicatorUI unitIndicator = null;
         [SerializeField] UIHealthChange uiHealthChange = null;
 
         Health health = null;
         Fighter fighter = null;
+        Energy energy = null;
 
         public void InitializeUnitUI()
         {
             fighter = GetComponent<Fighter>();
             fighter.onHighlight += ActivateUnitIndicator;
-            health = GetComponent<Health>();
+
+            health = fighter.GetHealth();
             health.onHealthChange += UpdateHealthUI;
+
+            energy = fighter.GetEnergy();
+            energy.onEnergyChange += UpdateEnergyUI;
         }
 
         public void SetupUnitUI()
         {
-            healthSlider.UpdateSliderValue(GetHealthPercentage());
+            healthSlider.UpdateSliderValue(health.healthPercentage);
             ActivateResourceSliders(false);
         }
 
@@ -38,9 +43,14 @@ namespace RPGProject.UI
 
         private void UpdateHealthUI(bool _isCritical, float _changeAmount)
         {
-            healthSlider.UpdateSliderValue(GetHealthPercentage());
+            healthSlider.UpdateSliderValue(health.healthPercentage);
 
             StartCoroutine(UIHealthChange(_isCritical, _changeAmount));
+        }
+
+        private void UpdateEnergyUI()
+        {
+            energySlider.UpdateSliderValue(energy.GetEnergyPercentage());
         }
 
         public IEnumerator UIHealthChange(bool _isCritical, float _changeAmount)
@@ -55,7 +65,7 @@ namespace RPGProject.UI
         public void ActivateResourceSliders(bool _shouldActivate)
         {
             healthSlider.gameObject.SetActive(_shouldActivate);
-            manaSlider.gameObject.SetActive(_shouldActivate);
+            energySlider.gameObject.SetActive(_shouldActivate);
         }
 
         public UnitIndicatorUI GetUnitIndicator()
@@ -66,11 +76,6 @@ namespace RPGProject.UI
         public UIHealthChange GetUIHealthChange()
         {
             return uiHealthChange;
-        }
-
-        public float GetHealthPercentage()
-        {
-            return health.healthPercentage;
         }
     }
 }

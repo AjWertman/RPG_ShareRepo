@@ -32,7 +32,7 @@ namespace RPGProject.Combat
             Fighter agressorTarget = (Fighter)_agressor.selectedTarget;
             if (myFighter != agressorTarget) return;
 
-            int percentageChange = GetPercentageOfHealthChange(myFighter.GetHealthComponent(), _changeAmount);
+            int percentageChange = GetPercentageOfHealthChange(myFighter.GetHealth(), _changeAmount);
 
             int agroPercentage = percentageChange * agroPercentagePerDamagePercentage;
 

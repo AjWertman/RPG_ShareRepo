@@ -26,21 +26,11 @@ MonoBehaviour:
     abilityObjectKey: 1
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
-  - animationID: Cast0
-    comboPointCost: 0
-    abilityObjectKey: 1
-    spawnLocationOverride: 1
-    abilityClip: {fileID: 0}
-  - animationID: Cast0
-    comboPointCost: 0
-    abilityObjectKey: 1
-    spawnLocationOverride: 0
-    abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 0
   requiredTargetAmount: 3
   attackRange: 7
-  actionPointsCost: 0
+  energyPointsCost: -1
   cooldown: 2
   requiresTarget: 1
   canTargetAll: 0

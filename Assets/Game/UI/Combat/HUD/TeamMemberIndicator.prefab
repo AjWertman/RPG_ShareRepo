@@ -652,8 +652,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 2496370836480893473}
   faceImage: {fileID: 3458114895037707182}
-  shieldSlider: {fileID: 7260723910672916567}
   healthSlider: {fileID: 143174868195937777}
+  energySlider: {fileID: 7260723910672916567}
 --- !u!222 &8433907222054036930
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1005,7 +1005,7 @@ GameObject:
   - component: {fileID: 7260723910672916567}
   - component: {fileID: 4197499301128344726}
   m_Layer: 0
-  m_Name: ActionPointsSlider
+  m_Name: EnergySlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

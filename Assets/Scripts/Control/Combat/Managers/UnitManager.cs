@@ -85,7 +85,7 @@ namespace RPGProject.Control.Combat
                 _isPlayerTeam, _unit.stats, _unit.basicAttack, _unit.abilities);
 
             UnitResources unitResources = unitController.unitResources;
-            unitResources = new UnitResources(unitController.GetHealth().maxHealthPoints);
+            unitResources = new UnitResources(unitController.GetHealth().maxHealthPoints, unitController.GetEnergy().maxEnergyPoints);
 
             CharacterMesh newMesh = characterMeshPool.GetMesh(characterKey);
 
@@ -233,6 +233,7 @@ namespace RPGProject.Control.Combat
             TeamWipeCheck();
             onUnitDeath(deadUnit);
 
+            deadUnit.UpdateCurrentBlock(null);
             deadUnit.gameObject.SetActive(false);
         }
 

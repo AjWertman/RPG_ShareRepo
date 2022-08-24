@@ -33,18 +33,20 @@ namespace RPGProject.UI
         {
             if (_fighter != null)
             {
-
-
                 UnitInfo unitInfo = _fighter.unitInfo;
 
                 nameText.text = unitInfo.unitName;
                 faceImage.sprite = _fighter.characterMesh.faceImage;
                 background.color = _fighter.characterMesh.uiColor;
 
-                Health unitHealth = _fighter.GetHealthComponent();
+                Health unitHealth = _fighter.GetHealth();
+                Energy unitEnergy = _fighter.GetEnergy();
 
                 healthText.text = (unitHealth.healthPoints.ToString() + "/" + unitHealth.maxHealthPoints.ToString());
                 healthSlider.value = unitHealth.healthPercentage;
+
+                energyText.text = (unitEnergy.energyPoints.ToString() + "/" + unitEnergy.maxEnergyPoints.ToString());
+                energySlider.value = unitEnergy.GetEnergyPercentage();
 
                 if (!_fighter.unitInfo.isPlayer) MoveToPosition(defaultPosition);
             }

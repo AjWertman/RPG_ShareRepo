@@ -32,7 +32,7 @@ namespace RPGProject.Combat.AI
             bool isDamage = abilityAmount < 0;
 
             Fighter target = _combatAction.target;
-            Health targetHealth = target.GetHealthComponent();
+            Health targetHealth = target.GetHealth();
             float currentHealthPoints = targetHealth.healthPoints;
             float currentHealthPercentage = targetHealth.healthPercentage;
             float percentageAfterAbility = (currentHealthPoints + abilityAmount) / targetHealth.maxHealthPoints;
@@ -103,7 +103,7 @@ namespace RPGProject.Combat.AI
 
         public static AIRanking GetRankingByTargetStatus(Fighter _target)
         {       
-            Health targetHealth = _target.GetHealthComponent();
+            Health targetHealth = _target.GetHealth();
             float currentHealthPercentage = targetHealth.healthPercentage;
 
             if (MathAssistant.IsBetween(currentHealthPercentage, 0, .25f)) return AIRanking.Great;

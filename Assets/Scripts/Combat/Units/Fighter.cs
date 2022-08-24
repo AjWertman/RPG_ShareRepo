@@ -25,6 +25,7 @@ namespace RPGProject.Combat
         SoundFXManager soundFXManager = null;
 
         Health health = null;
+        Energy energy = null;
 
         List<Fighter> selectedTargets = new List<Fighter>();
         AbilityObjectKey currentAbilityObjectKey = AbilityObjectKey.None;
@@ -44,7 +45,6 @@ namespace RPGProject.Combat
         Dictionary<Ability, int> abilityCooldowns = new Dictionary<Ability, int>();
 
         public event Action<Fighter, float> onAgroAction;
-        public event Action<int> onAPUpdate;
         public event Action<bool> onHighlight;
 
         public void InitalizeFighter()
@@ -57,6 +57,7 @@ namespace RPGProject.Combat
 
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
             health = GetComponent<Health>();
+            energy = GetComponent<Energy>();
             unitStatus = GetComponent<UnitStatus>();
 
             //Preset to fit the agents size
@@ -120,12 +121,6 @@ namespace RPGProject.Combat
         public void OnNewTurn()
         {
             DecrementCooldowns();
-        }
-
-        public void SetActionPoints(int _newAPAmount)
-        {
-            unitResources.actionPoints = _newAPAmount;
-            onAPUpdate(_newAPAmount);
         }
 
         public void HighlightFighter(bool _shouldHighlight)
@@ -231,9 +226,14 @@ namespace RPGProject.Combat
             else return 0;
         }
 
-        public Health GetHealthComponent()
+        public Health GetHealth()
         {
             return health;
+        }
+
+        public Energy GetEnergy()
+        {
+            return energy;
         }
 
         public Ability GetBasicAttack()

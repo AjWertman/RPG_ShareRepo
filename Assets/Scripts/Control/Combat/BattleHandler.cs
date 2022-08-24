@@ -12,8 +12,6 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
-    public enum BattleState { Null, Battling }
-
     public class BattleHandler : MonoBehaviour
     {
         CombatAIBrain aiBrain = null;
@@ -28,6 +26,8 @@ namespace RPGProject.Control.Combat
 
         GridCoordinates playerZeroCoordinates;
         GridCoordinates enemyZeroCoordinates;
+
+        bool isBattling = false;
 
         public event Action<UnitController> onUnitTurnUpdate;
         public event Action onPlayerMoveCompletion;
@@ -66,10 +66,10 @@ namespace RPGProject.Control.Combat
             SetupManagers(_enemyTeam);
 
             SetCurrentUnitTurn(turnManager.GetFirstMoveUnit());
-         
+
             //musicOverride.OverrideMusic();
 
-            battleState = BattleState.Battling;
+            isBattling = true;
             StartCoroutine(ExecuteNextTurn());
 
             yield return null;
@@ -150,23 +150,22 @@ namespace RPGProject.Control.Combat
         {
             //Refactor - likely being called twice or paired with something else to cause skipping moves
             bool isPlayer = currentUnitTurn.unitInfo.isPlayer;
-            float currentAP = currentUnitTurn.unitResources.actionPoints;
+            float currentEnergy = currentUnitTurn.GetEnergy().energyPoints;
 
-            if (!isPlayer)
+            if (isPlayer)
             {
-                //Refactor - Enemies only get one move (FIX THAT)
-                AdvanceTurn();
-            }
-            if(currentAP > 0)
-            {
-                if (isPlayer)
+                if(currentEnergy <= 0)
                 {
-                    battleUIManager.ActivatePlayerMoveSelectMenu(true);
+                    AdvanceTurn();
+                }
+                else
+                {
                     onPlayerMoveCompletion();
                 }
             }
             else
-            {
+            {  
+                //Refactor - Enemies only get one move (FIX THAT)
                 AdvanceTurn();
             }
         }
@@ -179,7 +178,7 @@ namespace RPGProject.Control.Combat
 
             turnManager.AdvanceTurn();
 
-            if (battleState == BattleState.Battling)
+            if (isBattling)
             {
                 StartCoroutine(ExecuteNextTurn());
             }
@@ -282,8 +281,6 @@ namespace RPGProject.Control.Combat
         List<Unit> enemyTeam = new List<Unit>();
         int enemyTeamSize = 0;
 
-        BattleState battleState = BattleState.Null;
-
         UnitController currentUnitTurn = null;
         IEnumerator currentAttack = null;
 
@@ -338,7 +335,7 @@ namespace RPGProject.Control.Combat
             if (isBattleOver) return;
             isBattleOver = true;
 
-            battleState = BattleState.Null;
+            isBattling = false;
 
             StartCoroutine(EndBattleBehavior(_won));
         }
@@ -355,7 +352,7 @@ namespace RPGProject.Control.Combat
 
                 yield return new WaitForSeconds(1f);
 
-                ResetManagers();
+                //ResetManagers();
 
                 yield return new WaitForSeconds(2f);
 
@@ -462,6 +459,8 @@ namespace RPGProject.Control.Combat
 
             battleUIManager.UpdateUnitLists(playerCombatants, enemyCombatants);
             turnManager.UpdateTurnOrder(_unitThatCausedUpdate);
+            List<Fighter> unitFighters = GetUnitFighters(turnManager.turnOrder);
+            battleUIManager.GetBattleHUD().UpdateTurnOrderUIItems(unitFighters, currentUnitTurn.GetFighter());
         }
         private void ResetManagers()
         {
@@ -505,7 +504,7 @@ namespace RPGProject.Control.Combat
 
         public bool IsBattling()
         {
-            return battleState == BattleState.Battling;
+            return isBattling;
         }     
     }
 }

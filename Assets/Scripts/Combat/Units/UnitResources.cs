@@ -8,16 +8,32 @@ namespace RPGProject.Combat
         public float healthPoints;
         public float maxHealthPoints;
 
-        public int actionPoints;
+        public int energyPoints;
+        public int maxEnergyPoints;
         public int gCostMoveAllowance;
 
-        public UnitResources(float _maxHealthPoints)
+        public UnitResources(float _maxHealthPoints, int _maxEnergyPoints)
         {
             maxHealthPoints = _maxHealthPoints;
             healthPoints = maxHealthPoints;
 
+            maxEnergyPoints = _maxEnergyPoints;
+            energyPoints = maxEnergyPoints;
+
             gCostMoveAllowance = 14;
-            actionPoints = 0;
+            energyPoints = 0;
+        }
+
+        public UnitResources(float _healthPoints, float _maxHealthPoints, int _maxEnergyPoints)
+        {
+            maxHealthPoints = _maxHealthPoints;
+            healthPoints = _healthPoints;
+
+            maxEnergyPoints = _maxEnergyPoints;
+            energyPoints = maxEnergyPoints;
+
+            gCostMoveAllowance = 14;
+            energyPoints = 0;
         }
 
         public void RestoreHealth()
@@ -30,7 +46,7 @@ namespace RPGProject.Combat
             healthPoints = 0f;
             maxHealthPoints = 0f;
 
-            actionPoints = 0;
+            energyPoints = 0;
         }
     }
 }

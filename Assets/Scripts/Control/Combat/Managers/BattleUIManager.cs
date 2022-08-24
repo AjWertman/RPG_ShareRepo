@@ -14,12 +14,16 @@ namespace RPGProject.Control
         [SerializeField] AbilitySelect abilitySelectMenu = null;
         [SerializeField] TargetSelect targetSelectMenu = null;
 
+        public Fighter highlightedTarget = null;
+        public bool isUIHighlight = false;
+
+        public bool isSelectingAbility = false;
+
         List<Fighter> playerCombatants = new List<Fighter>();
         List<Fighter> enemyCombatants = new List<Fighter>();
 
         Fighter currentCombatantTurn = null;
         Fighter target = null;
-        Fighter highlightedTarget = null;
 
         Ability selectedAbility = null;
         bool isCopy = false;
@@ -52,12 +56,14 @@ namespace RPGProject.Control
             abilitySelectMenu.onBackButton += () => ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
 
             targetSelectMenu.onTargetSelect += OnTargetSelect;
-            targetSelectMenu.onTargetHighlight += HighlightTarget;
+            //targetSelectMenu.onTargetHighlight += HighlightTarget;
             targetSelectMenu.onTargetUnhighlight += UnhighlightTarget;
             targetSelectMenu.onBackButton += ActivateBattleUIMenu;
 
             battleHUD.onFighterHighlight += HighlightTarget;
             battleHUD.onFighterUnhighlight += UnhighlightTarget;
+
+            abilitySelectMenu.gameObject.SetActive(false);
         }
 
         public void SetupUIManager(List<Fighter> _playerCombatants, List<Fighter> _enemyCombatants, List<Fighter> _turnOrder)
@@ -82,7 +88,7 @@ namespace RPGProject.Control
 
                 case BattleUIMenuKey.AbilitySelect:
 
-                    ActivateAbilitySelectMenu(true);
+                    ActivateAbilitySelectMenu();
                     break;
 
                 case BattleUIMenuKey.TargetSelect:
@@ -133,20 +139,23 @@ namespace RPGProject.Control
             playerMoveSelectMenu.gameObject.SetActive(_shouldActivate);
         }
 
-        public void ActivateAbilitySelectMenu(bool _shouldActivate)
+        public void ActivateAbilitySelectMenu()
         {
-            if (IsActivationObsolete(BattleUIMenuKey.AbilitySelect, _shouldActivate)) return;
-
-            if (_shouldActivate)
-            {;
+            //if (IsActivationObsolete(BattleUIMenuKey.AbilitySelect, _shouldActivate)) return;
+            bool shouldActivate = !abilitySelectMenu.gameObject.activeSelf;
+            
+            if (shouldActivate)
+            {
                 abilitySelectMenu.PopulateAbilitiesList(currentCombatantTurn, currentCombatantTurn.GetKnownAbilities());
+                isSelectingAbility = true;
             }
             else
             {
                 abilitySelectMenu.ResetAbilitySelectMenu();
+                isSelectingAbility = false;
             }
 
-            abilitySelectMenu.gameObject.SetActive(_shouldActivate);
+            abilitySelectMenu.gameObject.SetActive(shouldActivate);
         }
 
         public void ActivateTargetSelectMenu(bool _shouldActivate)
@@ -169,8 +178,8 @@ namespace RPGProject.Control
         public void OnAbilitySelect(Ability _ability)
         {
             selectedAbility = _ability;
-
-            ActivateAbilitySelectMenu(false);
+            isSelectingAbility = false;
+            ActivateAbilitySelectMenu();
             onAbilitySelect(selectedAbility);
 
             //if (selectedAbility.CanTargetAll())
@@ -234,11 +243,13 @@ namespace RPGProject.Control
             }
         }
        
-        public void HighlightTarget(Fighter _combatant)
+        public void HighlightTarget(Fighter _combatant, bool _isUIHighlight)
         {
             if (_combatant == null) return;
             if (highlightedTarget != null && highlightedTarget != _combatant) UnhighlightTarget();
             if (highlightedTarget != null && highlightedTarget ==_combatant) return;
+
+            isUIHighlight = _isUIHighlight;
             highlightedTarget = _combatant;
 
             UnitUI unitUI = GetUnitUI(highlightedTarget);
@@ -262,6 +273,7 @@ namespace RPGProject.Control
 
             battleHUD.GetSelectedTargetIndicator().DeactivateIndicator();
             highlightedTarget = null;
+            isUIHighlight = false;
         }
 
         //public void UnhighlightTarget()
@@ -284,7 +296,7 @@ namespace RPGProject.Control
         public void DeactivateAllMenus()
         {
             ActivatePlayerMoveSelectMenu(false);
-            ActivateAbilitySelectMenu(false);
+            abilitySelectMenu.gameObject.SetActive(false);
             ActivateTargetSelectMenu(false);
         }
 

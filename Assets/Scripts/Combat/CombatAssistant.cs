@@ -9,11 +9,11 @@ namespace RPGProject.Combat
     {
         public static string CanUseAbilityCheck(Fighter _caster, Ability _selectedAbility)
         {
-            float apCost = _selectedAbility.actionPointsCost;
-            if (apCost > 0)
+            float energyCost = _selectedAbility.energyPointsCost;
+            if (energyCost > 0)
             {
-                float actionPoints = _caster.unitResources.actionPoints;
-                bool hasEnoughAP = actionPoints >= apCost;
+                float energyPoints = _caster.GetEnergy().energyPoints;
+                bool hasEnoughAP = energyPoints >= energyCost;
                 if (!hasEnoughAP) return "Not enough Action Points";
             }
 

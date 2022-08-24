@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/TestScenes/CombatSandbox.unity
+    guid: 47a0d334608be174f80cd45b7506cfe9
+  - enabled: 1
     path: Assets/zzz_Archive/zz_Demo/Menu.unity
     guid: fee346b4715e30a41a31806f026720dd
   - enabled: 1

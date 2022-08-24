@@ -20,9 +20,9 @@ namespace RPGProject.Core
         private void Update()
         {
             //Refactor -- Testing;
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.Equals))
             {
-                LoadMainMenu();
+                SceneManager.LoadScene(0);
             }
         }
 

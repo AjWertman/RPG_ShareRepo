@@ -116,7 +116,6 @@ namespace RPGProject.Control.Combat
         public void RemoveUnitFromTurnOrder(UnitController _unit)
         {
             if (!turnOrder.Contains(_unit)) return;
-
             turnOrder.Remove(_unit);
         }
 

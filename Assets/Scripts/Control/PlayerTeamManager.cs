@@ -56,7 +56,10 @@ namespace RPGProject.Control
 
                 float maxHealthPoints = CalculateMaxHealthPoints(teamInfo.stats.GetStatLevel(StatType.Stamina));
 
-                UnitResources unitResources = new UnitResources(maxHealthPoints);
+                //Refactor - Does this require a calculation? or a specified amount?
+                int maxEnergyPoints = 100;
+
+                UnitResources unitResources = new UnitResources(maxHealthPoints, maxEnergyPoints);
                 teamInfo.unitResources = unitResources;
 
                 teamInfos.Add(teamInfo);
