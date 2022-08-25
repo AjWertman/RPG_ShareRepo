@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
-    public enum SpawnLocation { None, LHand, RHand, Target, Target_Parent, Caster, Caster_Parent }
+    public enum SpawnLocation { None, LHand, RHand, Target, Target_Parent, Caster, Caster_Parent, Weapon}
 
     public abstract class AbilityBehavior : MonoBehaviour
     {
@@ -74,6 +74,10 @@ namespace RPGProject.Combat
                 case SpawnLocation.Target_Parent:
                     transform.position = aimTransform.position;
                     transform.parent = aimTransform;
+                    break;
+
+                case SpawnLocation.Weapon:
+
                     break;
             }
         }

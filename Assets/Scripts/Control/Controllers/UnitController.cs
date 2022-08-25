@@ -31,6 +31,7 @@ namespace RPGProject.Control.Combat
         CharacterMesh characterMesh = null;
         UnitAgro unitAgro = null;
         UnitUI unitUI = null;
+        AimLine aimLine = null;
 
         GridBlock queuedBlock = null;
 
@@ -48,6 +49,9 @@ namespace RPGProject.Control.Combat
             mover = GetComponent<CombatMover>();
             unitAgro = GetComponent<UnitAgro>();
             unitUI = GetComponent<UnitUI>();
+
+            aimLine = GetComponentInChildren<AimLine>();
+            aimLine.ResetLine();
 
             health.InitalizeHealth();
             energy.InitializeEnergy();
@@ -408,6 +412,11 @@ namespace RPGProject.Control.Combat
         public UnitUI GetUnitUI()
         {
             return unitUI;
+        }
+
+        public AimLine GetAimLine()
+        {
+            return aimLine;
         }
     }
 }

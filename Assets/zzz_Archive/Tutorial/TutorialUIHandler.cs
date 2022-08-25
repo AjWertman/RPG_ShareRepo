@@ -21,7 +21,7 @@ public class TutorialUIHandler : MonoBehaviour
         if (shouldActivate)
         {
             SetAllButtonsUninteractable();
-            GetComponent<BattleUIManager>().ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
+            //GetComponent<BattleUIManager>().ActivateBattleUIMenu(BattleUIMenuKey.PlayerMoveSelect);
         }
         else
         {

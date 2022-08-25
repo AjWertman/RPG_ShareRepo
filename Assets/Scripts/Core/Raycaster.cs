@@ -22,5 +22,22 @@ namespace RPGProject.Core
 
             return hit;
         }
+
+        public RaycastHit GetRaycastHit(Vector3 _originPosition, Vector3 _targetPosition)
+        {
+            Vector3 direction = (_targetPosition - _originPosition).normalized;
+            Ray ray = new Ray(_originPosition, direction);
+            RaycastHit hit;
+            Physics.Raycast(ray, out hit);
+            return hit;
+        }
+
+        public Vector3 GetMousePosition()
+        {
+            RaycastHit hit = GetRaycastHit();
+
+            if (hit.collider != null) return hit.point;
+            else return Vector3.zero;
+        }
     }
 }

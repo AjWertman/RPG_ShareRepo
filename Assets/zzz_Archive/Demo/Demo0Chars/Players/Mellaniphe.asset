@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce03015cc62a59f479a67cabc6a6e062, type: 3}
+  m_Name: Mellaniphe
+  m_EditorClassIdentifier: 
+  characterName: Mellaniphe
+  playerKey: 3
+  age: 25
+  summaryText: Mellaniphe was born and raised in the Red Forest by tree spirits,
+    although no one knows how she first arrived there. The Red Forest is known for
+    its aggressive and violent inhabitants and it is rumored that a group of beasts
+    massacred a local village and kidnapped her, she was then saved by the tree spirits.
+    Growing up in the Red Forest taught Mellaniphe to defend herself, however, she
+    prefers to reverse the effects of violence and heal living creatures.
+  backgroundImage: {fileID: 21300000, guid: 1db2aafa220bdac428f29f48a82e2b50, type: 3}
+  faceImage: {fileID: 21300000, guid: 1db2aafa220bdac428f29f48a82e2b50, type: 3}
+  fullBodyImage: {fileID: 21300000, guid: 1db2aafa220bdac428f29f48a82e2b50, type: 3}

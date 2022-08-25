@@ -131,6 +131,11 @@ namespace RPGProject.Combat.Grid
             string coordinates = "(" + _x.ToString() + "," + _z.ToString() + ")";
             coordinatesText.text = coordinates;
         }
+
+        public string Name()
+        {
+            return name;
+        }
     }
 
     [Serializable]

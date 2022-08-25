@@ -390,5 +390,11 @@ namespace RPGProject.Combat
             PerformAbility();
         }
         //////////
+        ///
+
+        public string Name()
+        {
+            return name;
+        }
     }
 }

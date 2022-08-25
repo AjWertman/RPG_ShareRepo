@@ -114,11 +114,6 @@ namespace RPGProject.Combat.Grid
                 if (!gridBlock.IsMeshActive()) continue;
 
                 gridBlock.UnhighlightBlock();
-
-                //Material newMaterial = GetGridBlockMaterial(gridBlock.gridCoordinates);
-                //Color textColor = GetTextColor(newMaterial);
-                //gridBlock.SetColors(newMaterial, textColor);
-                //gridBlock.ActivateMeshRenderer(false);
             }
             isPathHighlighted = false;
         }

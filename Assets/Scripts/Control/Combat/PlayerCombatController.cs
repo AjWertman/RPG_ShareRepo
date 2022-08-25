@@ -64,6 +64,7 @@ namespace RPGProject.Control.Combat
         {
             HandleCameraControl();
 
+            if (currentUnitTurn == null || !currentUnitTurn.unitInfo.isPlayer) return;
             HandlePlayerControls();
 
             if (!raycaster.isRaycasting) return;
@@ -82,10 +83,16 @@ namespace RPGProject.Control.Combat
                 battleUIManager.ActivateAbilitySelectMenu();
             }
 
-            if (Input.GetKeyDown(KeyCode.KeypadEnter) && canAdvanceTurn)
+            if (Input.GetKeyDown(KeyCode.Return) && canAdvanceTurn)
             {
                 ClearNeighborSelection();
                 battleHandler.AdvanceTurn();
+            }
+
+            if(Input.GetKeyDown(KeyCode.Escape) && selectedAbility != null)
+            {
+                selectedAbility = null;
+                currentUnitTurn.GetAimLine().ResetLine();
             }
         }
 
@@ -104,9 +111,9 @@ namespace RPGProject.Control.Combat
             if (Input.GetKey(KeyCode.Q)) battleCamera.RotateFreeLook(true);
             else if (Input.GetKey(KeyCode.E)) battleCamera.RotateFreeLook(false);
 
-
-            if(Input.GetAxisRaw("Mouse ScrollWheel") > 0) battleCamera.Zoom(true);
-            else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0) battleCamera.Zoom(false);
+            float scrollWheelInput = Input.GetAxisRaw("Mouse ScrollWheel");
+            if (scrollWheelInput > 0) battleCamera.Zoom(true);
+            else if(scrollWheelInput < 0) battleCamera.Zoom(false);
 
             
             if (Input.GetKeyDown(KeyCode.R))
@@ -133,28 +140,38 @@ namespace RPGProject.Control.Combat
                     gridSystem.HighlightBlocks(neighborBlocks);
                 }
             }
+            else
+            {
+                bool isBasicAttack = false;
+                if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
+                {
+                    isBasicAttack = true;
+                    selectedAbility = currentUnitTurn.unitInfo.basicAttack;
+                }
+
+                if(selectedAbility != null && selectedAbility.attackRange > 0)
+                {
+                    AimLine currentAimLine = currentUnitTurn.GetAimLine();
+                    if (!isBasicAttack)
+                    {
+                        if (!DrawAimLine(hit, selectedAbility)) return;
+                    }
+                    else
+                    {
+                        if (DrawAimLine(hit, currentUnitTurn.unitInfo.basicAttack)) gridSystem.UnhighlightBlocks(tempPath);
+                        else currentAimLine.ResetLine();
+                    }
+
+                    if (currentAimLine.hitFighter != null) combatTarget = currentAimLine.hitFighter;
+                }
+            }
 
             if (combatTarget != null)
             {
                 GridBlock targetBlock = GetTargetBlock(combatTarget);
                 if (isPathfinding) HandlePathfinding(targetBlock);
 
-                //Refactor - Issue when not over target.But should highlight when not over target and over the UI Image
-
-                if(combatTarget.GetType() == typeof(Fighter))
-                {
-                    if (battleUIManager.highlightedTarget != null && battleUIManager.isUIHighlight) return;
-                    battleUIManager.HighlightTarget((Fighter)combatTarget, false);
-                }
-                else if(targetBlock.contestedFighter != null)
-                {
-                    if (battleUIManager.highlightedTarget != null && battleUIManager.isUIHighlight) return;
-                    battleUIManager.HighlightTarget(targetBlock.contestedFighter,false);
-                }
-                else if(battleUIManager.highlightedTarget != null && !battleUIManager.isUIHighlight)
-                {
-                    battleUIManager.UnhighlightTarget();
-                }
+                HandlePhysicalHighlighting(combatTarget, targetBlock);
 
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -172,6 +189,59 @@ namespace RPGProject.Control.Combat
                     battleCamera.SetFollowTarget(fighter.GetAimTransform());
                 }
             }
+            else
+            {
+                if (gridSystem.isPathHighlighted)
+                {
+                    gridSystem.UnhighlightBlocks(tempPath);
+                    tempPath.Clear();
+                }
+            }
+        }
+
+        private bool DrawAimLine(RaycastHit _hit, Ability _selectedAbility)
+        {
+            if (_hit.collider == null || _selectedAbility == null) return false;
+            AimLine aimLine = currentUnitTurn.GetAimLine();
+
+            Transform startTransform = null;
+            Transform aimTransform = null;
+            Vector3 aimPosition = Vector3.zero;
+
+            startTransform = currentUnitTurn.GetCharacterMesh().rHandTransform;
+            bool isRightHand = _selectedAbility.combo[0].spawnLocationOverride == SpawnLocation.RHand;
+            if (!isRightHand) startTransform = currentUnitTurn.GetCharacterMesh().lHandTransform;
+
+            Fighter fighter = _hit.collider.GetComponent<Fighter>();
+            if (fighter != null)
+            {
+                aimTransform = fighter.characterMesh.aimTransform;
+                aimPosition = aimTransform.position;
+            }
+            else
+            {
+                aimPosition = _hit.point;
+            }
+
+            return aimLine.DrawAimLine(startTransform, aimPosition, _selectedAbility.attackRange);
+        }
+
+        private void HandlePhysicalHighlighting(CombatTarget _combatTarget, GridBlock _targetBlock)
+        {
+            if (_combatTarget.GetType() == typeof(Fighter))
+            {
+                if (battleUIManager.highlightedTarget != null && battleUIManager.isUIHighlight) return;
+                battleUIManager.HighlightTarget((Fighter)_combatTarget, false);
+            }
+            else if (_targetBlock.contestedFighter != null)
+            {
+                if (battleUIManager.highlightedTarget != null && battleUIManager.isUIHighlight) return;
+                battleUIManager.HighlightTarget(_targetBlock.contestedFighter, false);
+            }
+            else if (battleUIManager.highlightedTarget != null && !battleUIManager.isUIHighlight)
+            {
+                battleUIManager.UnhighlightTarget();
+            }
         }
 
         private IEnumerator OnPlayerClick(CombatTarget _selectedTarget)
@@ -180,18 +250,13 @@ namespace RPGProject.Control.Combat
             if (!battleHandler.IsBattling()) yield break;
             if (currentUnitTurn != null && !currentUnitTurn.unitInfo.isPlayer) yield break;
 
+            currentUnitTurn.GetAimLine().ResetLine();
+
             Type targetType = _selectedTarget.GetType();
             CombatTarget trueTarget = GetTrueTarget(_selectedTarget, targetType);
 
             if (!isSelectingFaceDirection)
             {
-
-                //if (targetType == typeof(Fighter))
-                //{
-                //    Fighter fighter = (Fighter)trueTarget;
-                //    if (fighter == currentUnitTurn.GetFighter()) yield break;
-                //}
-
                 if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
                 {
                     if(trueTarget.GetType() == typeof(Fighter)) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
@@ -481,6 +546,8 @@ namespace RPGProject.Control.Combat
 
             if (isCharacter)
             {
+                if (targetFighter == currentUnitTurn.GetFighter()) canTarget = false;
+
                 if (targetingType == TargetingType.Everyone) canTarget= true;
 
                 bool isFriendlyTargeting = (targetingType == TargetingType.PlayersOnly || targetingType == TargetingType.SelfOnly);

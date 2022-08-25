@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
+  m_Name: ED
+  m_EditorClassIdentifier: 
+  unitName: Erradication Drone
+  baseLevel: 8
+  characterKey: 7
+  combatAIType: 1
+  unitResources:
+    healthPoints: 0
+    maxHealthPoints: 100
+    actionPoints: 0
+    gCostMoveAllowance: 0
+  stats:
+    stamina: 20
+    spirit: 20
+    strength: 20
+    skill: 20
+    armor: 20
+    resistance: 20
+    speed: 94
+    luck: 20
+  basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
+  abilities: []

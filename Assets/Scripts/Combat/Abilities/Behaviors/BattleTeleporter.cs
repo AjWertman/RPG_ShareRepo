@@ -46,6 +46,11 @@ namespace RPGProject.Combat
             myBlock = null;
             base.OnAbilityDeath();
         }
+
+        public string Name()
+        {
+            return name;
+        }
     }
 }
 
