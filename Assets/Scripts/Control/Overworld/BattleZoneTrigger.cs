@@ -30,10 +30,9 @@ namespace RPGProject.Control.Combat
 
         private void Update()
         {
-            if (startedBattle) return;
             if (Input.GetKeyDown(KeyCode.J))
             {
-                StartCoroutine(StartBattle());
+                CallStartBattle();
             }
         }
 

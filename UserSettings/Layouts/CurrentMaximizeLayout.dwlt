@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 25177
+  controlID: 35944
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
-  m_EnterPlayModeBehavior: 0
+  m_EnterPlayModeBehavior: 1
   m_UseMipMap: 0
   m_VSyncEnabled: 0
   m_Gizmos: 0
@@ -87,7 +87,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 25178
+  controlID: 35945
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 25179
+  controlID: 35946
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -229,7 +229,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 8685e2ff9272e5fff84deafffcf6f1ff1641f2ff9085f2ffbeccf2ffd418f4ff608cf5ff7a12f7ff3aabf8ff5479faff4cbcfaffbe81fbff2c43fcffa697fcff10ebffffcefaffff04720000
+      m_ExpandedIDs: fc50e1fff6e8e1ff8685e2ff9272e5fff84deafffcf6f1ff1641f2ff9085f2ffbeccf2ffd418f4ff608cf5ff7a12f7ff3aabf8ff5479faff4cbcfaffbe81fbff2c43fcffa697fcff10ebffffcefaffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -275,8 +275,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 73.6
-    width: 299
-    height: 437.4
+    width: 259.8
+    height: 447.8
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -813,22 +813,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Game/Combat/Units
+    - Assets/Scripts/Control/Overworld
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 51
   m_LastFolders:
-  - Assets/Game/Combat/Units
+  - Assets/Scripts/Control/Overworld
   m_LastFoldersGridSize: 51
   m_LastProjectPath: D:\Aj\UnityProjects\TurnBasedRPG
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 167.80002}
-    m_SelectedIDs: 74f50000
-    m_LastClickedID: 62836
-    m_ExpandedIDs: 0000000068f500006af500006cf500006ef5000070f5000072f5000074f5000076f5000078f500007af500007cf500007ef5000080f5000082f5000084f5000086f5000088f500008af500008cf500008ef5000090f5000092f5000094f5000096f5000098f500009af50000bcf50000c8f500006cea0100b4ea0100
+    scrollPos: {x: 0, y: 451}
+    m_SelectedIDs: 1c510f00
+    m_LastClickedID: 1003804
+    m_ExpandedIDs: 0000000068f500006af500006cf500006ef5000070f5000072f5000074f5000076f5000078f500007af500007cf500007ef5000080f5000082f5000084f5000086f5000088f500008af500008cf500008ef5000090f5000092f5000094f5000096f5000098f500009af50000bcf50000c8f50000b4ea0100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -881,8 +881,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: e2b3ffff
+    m_LastClickedInstanceID: -19486
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000703c000080560000a6270000d24500000ec304000e620300d4330500d400050098380100000000002c610300baf3000016430000
     m_RenameOverlay:
@@ -972,7 +972,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 1666440
+  m_LastSelectedObjectID: -19486
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -2059,7 +2059,7 @@ MonoBehaviour:
     m_CachedPref: -209
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: -1
+  m_LastInspectedObjectInstanceID: -19486
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0

@@ -143,27 +143,33 @@ namespace RPGProject.Control.Combat
             else
             {
                 bool isBasicAttack = false;
-                if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
-                {
-                    isBasicAttack = true;
-                    selectedAbility = currentUnitTurn.unitInfo.basicAttack;
-                }
+                bool canAimLine = true;
 
-                if(selectedAbility != null && selectedAbility.attackRange > 0)
-                {
-                    AimLine currentAimLine = currentUnitTurn.GetAimLine();
-                    if (!isBasicAttack)
-                    {
-                        if (!DrawAimLine(hit, selectedAbility)) return;
-                    }
-                    else
-                    {
-                        if (DrawAimLine(hit, currentUnitTurn.unitInfo.basicAttack)) gridSystem.UnhighlightBlocks(tempPath);
-                        else currentAimLine.ResetLine();
-                    }
+                if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
+                else if (selectedAbility != null && IsBasicAttack(selectedAbility)) isBasicAttack = true;
 
-                    if (currentAimLine.hitFighter != null) combatTarget = currentAimLine.hitFighter;
+                if (isBasicAttack && (combatTarget == null || combatTarget.GetType() != typeof(Fighter))) canAimLine = false;
+
+                AimLine currentAimLine = currentUnitTurn.GetAimLine();
+
+                if (canAimLine)
+                {
+                    if (selectedAbility != null && selectedAbility.attackRange > 0)
+                    {
+                        if (!isBasicAttack)
+                        {
+                            if (!DrawAimLine(hit, selectedAbility)) return;
+                        }
+                        else
+                        {
+                            if (DrawAimLine(hit, currentUnitTurn.unitInfo.basicAttack)) gridSystem.UnhighlightBlocks(tempPath);
+                            else currentAimLine.ResetLine();
+                        }
+
+                        if (currentAimLine.hitFighter != null) combatTarget = currentAimLine.hitFighter;
+                    }
                 }
+                else currentAimLine.ResetLine();
             }
 
             if (combatTarget != null)
@@ -240,6 +246,7 @@ namespace RPGProject.Control.Combat
             }
             else if (battleUIManager.highlightedTarget != null && !battleUIManager.isUIHighlight)
             {
+                //Refactor - might need to add more checks - doesnt unhighlight
                 battleUIManager.UnhighlightTarget();
             }
         }
@@ -261,8 +268,11 @@ namespace RPGProject.Control.Combat
                 {
                     if(trueTarget.GetType() == typeof(Fighter)) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
                 }
-           
-                if (selectedAbility != null)
+
+                bool isSelectedAbilityNull = selectedAbility == null;
+                bool isValidBasicAttackTarget = (IsBasicAttack(selectedAbility) && trueTarget.GetType() == typeof(Fighter));
+
+                if ((!isSelectedAbilityNull && !IsBasicAttack(selectedAbility)) || isValidBasicAttackTarget)
                 {
                     if (CanTarget(selectedAbility, trueTarget))
                     {
@@ -284,6 +294,7 @@ namespace RPGProject.Control.Combat
                 }
                 else
                 {
+                    print("hajdshja");
                     raycaster.isRaycasting = false;
                     canAdvanceTurn = false;
                     gridSystem.UnhighlightBlocks(tempPath);
@@ -434,12 +445,19 @@ namespace RPGProject.Control.Combat
             List<GridBlock> optimalPath = pathfinder.FindOptimalPath(currentBlock, _targetBlock);
             if (!pathfinder.ArePathsEqual(tempPath, optimalPath))
             {
-                if(gridSystem.isPathHighlighted) gridSystem.UnhighlightBlocks(tempPath);
+                if (gridSystem.isPathHighlighted) gridSystem.UnhighlightBlocks(tempPath);
                 tempPath = optimalPath;
 
                 furthestBlockIndex = GetFurthestBlockIndex(tempPath);
 
-                if (selectedAbility != null) return;
+                if (selectedAbility != null)
+                {
+                    if (selectedAbility == currentUnitTurn.unitInfo.basicAttack)
+                    {
+                        if (_targetBlock.contestedFighter != null) return;
+                    }
+                    else return;
+                }
                 gridSystem.HighlightPath(tempPath, furthestBlockIndex);
             }
         }
@@ -563,6 +581,12 @@ namespace RPGProject.Control.Combat
             }
 
             return canTarget;
+        }
+
+        private bool IsBasicAttack(Ability _selectedAbility)
+        {
+            if (_selectedAbility == null) return false;
+            return (_selectedAbility == currentUnitTurn.unitInfo.basicAttack);
         }
     }
 }

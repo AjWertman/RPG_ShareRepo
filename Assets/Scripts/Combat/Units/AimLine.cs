@@ -38,7 +38,6 @@ namespace RPGProject.Combat
             {
                 currentTarget = _targetPostion;
                 hasDrawnAimLine = false;
-                print("updating current target");
             }
 
             RaycastHit hit = raycaster.GetRaycastHit(_origin.position, _targetPostion);
@@ -83,7 +82,6 @@ namespace RPGProject.Combat
 
         public void ResetLine()
         {
-            print("reseting");
             if (!gameObject.activeSelf) return;
             lineRenderer.positionCount = 0;
             hasDrawnAimLine = false;
