@@ -101,6 +101,21 @@ namespace RPGProject.Combat
         {
             _abilityBehavior.gameObject.SetActive(true);
             _abilityBehavior.PerformAbilityBehavior();
+            //
+            if (_abilityBehavior.GetType() == typeof(Turret))
+            {
+                Turret turret = (Turret)_abilityBehavior;
+
+                List<Grid.GridBlock> attackRadius = new List<Grid.GridBlock>();
+                Grid.Pathfinder pathfinder = FindObjectOfType<Grid.Pathfinder>();
+
+                foreach (Grid.GridBlock gridBlock in pathfinder.GetNeighbors(turret.myBlock, 3))
+                {
+                    attackRadius.Add(gridBlock);
+                }
+                turret.SetupAttackRadius(attackRadius);
+            }
+            //
         }
 
         public void LookAtTarget(Transform _target)

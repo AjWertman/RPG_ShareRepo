@@ -7,6 +7,8 @@ namespace RPGProject.Combat.Grid
 {
     public class GridBlock : MonoBehaviour, CombatTarget
     {
+        [SerializeField] GridBlockMesh[] gridBlockMeshes;
+
         [SerializeField] MeshRenderer highlightMesh = null;
         [SerializeField] Image highlightImage = null;
         [SerializeField] TextMeshProUGUI coordinatesText = null;
@@ -48,12 +50,15 @@ namespace RPGProject.Combat.Grid
             onAffectedBlockUpdate(activeAbility, this);
         }
 
-        public void HighlightBlock(Material _highlightColor)
+        public void HighlightBlock(Material _highlightColor, GridBlockMeshKey _gridBlockMeshKey)
         {
-            highlightMesh.material = _highlightColor;
-            highlightMesh.gameObject.SetActive(true);
+            MeshRenderer gridBlockMesh = GetGridBlockMesh(_gridBlockMeshKey);
+            if (gridBlockMesh != null && contestedFighter == null)
+            {
+                gridBlockMesh.material = _highlightColor;
+                gridBlockMesh.gameObject.SetActive(true);
+            }
 
-            //Color32 color = highlightImage.color;
             Color32 color = _highlightColor.color;
             color.a = 255;
 
@@ -62,7 +67,7 @@ namespace RPGProject.Combat.Grid
 
         public void UnhighlightBlock()
         {
-            highlightMesh.gameObject.SetActive(false);
+            DeactivateGridBlockMeshes();
             Color32 color = Color.white;
             color.a = 65;
 
@@ -136,6 +141,33 @@ namespace RPGProject.Combat.Grid
         {
             return name;
         }
+
+        private MeshRenderer GetGridBlockMesh(GridBlockMeshKey _gridBlockMeshKey)
+        {
+            DeactivateGridBlockMeshes();
+
+            foreach(GridBlockMesh gridBlockMesh in gridBlockMeshes)
+            {
+                if (gridBlockMesh.meshKey == _gridBlockMeshKey) return gridBlockMesh.mesh;
+            }
+
+            return null;
+        }
+
+        private void DeactivateGridBlockMeshes()
+        {
+            foreach(GridBlockMesh gridBlockMesh in gridBlockMeshes)
+            {
+                gridBlockMesh.mesh.gameObject.SetActive(false);
+            }
+        }
+
+        [Serializable]
+        private struct GridBlockMesh
+        {
+            public GridBlockMeshKey meshKey;
+            public MeshRenderer mesh;
+        }
     }
 
     [Serializable]
@@ -159,4 +191,6 @@ namespace RPGProject.Combat.Grid
             z = _z;
         }
     }
+
+    public enum GridBlockMeshKey { None, Arrow, Path }
 }

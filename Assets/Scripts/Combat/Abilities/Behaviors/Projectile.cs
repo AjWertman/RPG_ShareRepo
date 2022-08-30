@@ -4,6 +4,7 @@ namespace RPGProject.Combat
 {
     public class Projectile : AbilityBehavior
     {
+        [SerializeField] GameObject affectorTrigger = null;
         [SerializeField] float launchForce = 10f;
 
         public bool isParentAbility = true;

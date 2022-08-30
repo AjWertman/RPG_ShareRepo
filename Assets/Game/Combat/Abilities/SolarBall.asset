@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: Fireball
+  m_Name: SolarBall
   m_EditorClassIdentifier: 
-  abilityName: Fireball
+  abilityName: Solar Ball
   requiredLevel: 0
   abilityLifetime: 1
-  baseAbilityAmount: -10
+  baseAbilityAmount: -30
   description: Fireball
   shouldExpand: 0
-  buttonColor: {r: 1, g: 0.7396226, b: 0.7396226, a: 1}
+  buttonColor: {r: 0.8584906, g: 0.33752984, b: 0, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   combo:
   - animationID: Cast0
@@ -28,9 +28,9 @@ MonoBehaviour:
     abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 0
-  requiredTargetAmount: 3
+  requiredTargetAmount: 1
   attackRange: 7
   energyPointsCost: -1
-  cooldown: 2
+  cooldown: 0
   requiresTarget: 1
   canTargetAll: 0

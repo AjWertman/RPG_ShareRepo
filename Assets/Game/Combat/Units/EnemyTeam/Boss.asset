@@ -19,7 +19,8 @@ MonoBehaviour:
   unitResources:
     healthPoints: 0
     maxHealthPoints: 0
-    actionPoints: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
     gCostMoveAllowance: 0
   stats:
     stamina: 30
@@ -31,4 +32,5 @@ MonoBehaviour:
     speed: 30
     luck: 30
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
-  abilities: []
+  abilities:
+  - {fileID: 0}

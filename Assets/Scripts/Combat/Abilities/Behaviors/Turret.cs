@@ -1,11 +1,12 @@
 using RPGProject.Combat.Grid;
+using RPGProject.Core;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Combat
 {
-    public class Turret : AbilityBehavior
+    public class Turret : AbilityBehavior, CombatTarget
     {
         [SerializeField] Fighter testTarget = null;
         //Had to place the TurretGun into an empty parent object to have better look at functionality
@@ -17,23 +18,49 @@ namespace RPGProject.Combat
 
         Fighter fighter = null;
         Projectile bulletProjectile = null;
-        GridBlock myBlock = null;
+        public GridBlock myBlock = null;
 
-        List<Fighter> enemyFighters = new List<Fighter>();
+        public List<GridBlock> attackRadius = new List<GridBlock>();
+        public List<Fighter> fightersInRange = new List<Fighter>();
 
-        private void Update()
+        private void Awake()
         {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                Shoot(testTarget);
-            }
+            fighter = GetComponent<Fighter>();
         }
 
-        public void Shoot(Fighter _target)
+        public void Shoot(Fighter _target, bool _isTurn)
         {
+            if (!_isTurn)
+            {
+                if (fightersInRange.Contains(_target)) return;
+                fightersInRange.Add(_target);
+            }
+            else
+            {
+                target = GetRandomTarget();
+            }
+
+            if (_target == null) return;
+
             LookAtTarget(_target.transform);
             target = _target;
+            bulletProjectile.target = target;
             bulletProjectile.PerformAbilityBehavior();
+        }
+
+        public void ShootNewContester(Fighter _target, GridBlock _targetBlock)
+        {
+            if (_target == null) return;
+            Shoot(_target, false);
+        }
+
+        private Fighter GetRandomTarget()
+        {
+            int fightersInRangeCount = fightersInRange.Count;
+
+            if (fightersInRangeCount <= 0) return null;
+
+            return fightersInRange[RandomGenerator.GetRandomNumber(0, fightersInRangeCount - 1)];
         }
 
         public void LookAtTarget(Transform _target)
@@ -61,28 +88,38 @@ namespace RPGProject.Combat
             projectile.target = null;
         }
 
-        public override void PerformAbilityBehavior()
+        public void SetupAttackRadius(List<GridBlock> _attackRadius)
         {
-            GridBlock myBlock = (GridBlock)target;
-            myBlock.isMovable = false;
-
-            bool isCasterPlayer = caster.unitInfo.isPlayer;
-
-            foreach (Fighter fighter in FindObjectsOfType<Fighter>())
+            foreach (GridBlock gridBlock in _attackRadius)
             {
-                if (isCasterPlayer != fighter.unitInfo.isPlayer)
+                if(gridBlock != null && !attackRadius.Contains(gridBlock))
                 {
-                    float distance = GetDistance(fighter.transform);
-                    enemyFighters.Add(fighter);
+                    attackRadius.Add(gridBlock);
+                    gridBlock.onContestedFighterUpdate += ShootNewContester;
+
+                    Fighter contestedFighter = gridBlock.contestedFighter;
+
+                    if (contestedFighter != null && !IsTeammate(contestedFighter)) fightersInRange.Add(contestedFighter);
                 }
             }
+        }
 
-            fighter = GetComponent<Fighter>();
+        public override void PerformAbilityBehavior()
+        {
+            myBlock = (GridBlock)target;
+            myBlock.isMovable = false;
         }
 
         public override void OnAbilityDeath()
         {
             myBlock.isMovable = true;
+
+            foreach(GridBlock gridBlock in attackRadius)
+            {
+                gridBlock.onContestedFighterUpdate -= ShootNewContester;
+            }
+
+            attackRadius.Clear();
 
             base.OnAbilityDeath();
         }
@@ -93,6 +130,22 @@ namespace RPGProject.Combat
             Vector3 myPosition = new Vector3(transform.position.x, 0, transform.position.z);
 
             return Vector3.Distance(fighterPosition, myPosition);
+        }
+
+        public string Name()
+        {
+            return name;
+        }
+
+        public Transform GetAimTransform()
+        {
+            return transform;
+        }
+
+        public bool IsTeammate(Fighter _target)
+        {
+            if (caster == null || _target == null) return false;
+            return caster.unitInfo.isPlayer == _target.unitInfo.isPlayer;
         }
     }
 }

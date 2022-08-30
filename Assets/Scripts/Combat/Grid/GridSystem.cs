@@ -85,7 +85,7 @@ namespace RPGProject.Combat.Grid
 
                 if (gridBlock == startBlock) continue;
 
-                gridBlock.HighlightBlock(currentHighlightMaterial);
+                gridBlock.HighlightBlock(currentHighlightMaterial, GridBlockMeshKey.Path);
             }
 
             if (goalBlockFighter!= null) goalBlockFighter.HighlightFighter(true);
@@ -93,11 +93,11 @@ namespace RPGProject.Combat.Grid
             isPathHighlighted = true;
         }
 
-        public void HighlightBlocks(List<GridBlock> _gridBlocks)
+        public void HighlightBlocks(List<GridBlock> _gridBlocks, GridBlockMeshKey _meshKey)
         {
             foreach (GridBlock gridBlock in _gridBlocks)
             {
-                gridBlock.HighlightBlock(highlightMaterial);
+                gridBlock.HighlightBlock(highlightMaterial, _meshKey);
             }
         }
 

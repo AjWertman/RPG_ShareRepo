@@ -32,5 +32,7 @@ namespace RPGProject.Combat
         public int cooldown = 2;
         public bool requiresTarget = false;
         public bool canTargetAll = false;
+
+        public int amountOfNeighborBlocksAffected = 0;
     }
 }

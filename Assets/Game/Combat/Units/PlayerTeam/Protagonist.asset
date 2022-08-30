@@ -19,7 +19,8 @@ MonoBehaviour:
   unitResources:
     healthPoints: 0
     maxHealthPoints: 0
-    actionPoints: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
     gCostMoveAllowance: 0
   stats:
     stamina: 20
@@ -34,3 +35,4 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}
   - {fileID: 11400000, guid: 27e123f48ae737348b5d5251d3a4fa8d, type: 2}
+  - {fileID: 11400000, guid: 9c05218009d6fc64c83c7deb6f636910, type: 2}

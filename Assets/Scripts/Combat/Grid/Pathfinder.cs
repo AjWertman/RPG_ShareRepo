@@ -51,7 +51,7 @@ namespace RPGProject.Combat.Grid
                 openList.Remove(currentBlock);
                 closedList.Add(currentBlock);
 
-                foreach (GridBlock neighborBlock in GetNeighbors(currentBlock))
+                foreach (GridBlock neighborBlock in GetNeighbors(currentBlock,1))
                 {
                     if (neighborBlock == null) continue;
                     if (closedList.Contains(neighborBlock)) continue;
@@ -106,7 +106,7 @@ namespace RPGProject.Combat.Grid
 
         public bool IsNeighborBlock(GridBlock _targetBlock, GridBlock _possibleNeighbor)
         {
-            foreach(GridBlock gridBlock in GetNeighbors(_targetBlock))
+            foreach(GridBlock gridBlock in GetNeighbors(_targetBlock,1))
             {
                 if (gridBlock == _possibleNeighbor) return true;
             }
@@ -114,14 +114,14 @@ namespace RPGProject.Combat.Grid
             return false;
         }
 
-        public List<GridBlock> GetNeighbors(GridBlock _centerBlock)
+        public List<GridBlock> GetNeighbors(GridBlock _centerBlock, int _amount)
         {
-            List<GridBlock> neighbors = new List<GridBlock>();
-            foreach(GridBlock gridBlock in CalculateNeighborBlocks(_centerBlock))
+            List<GridBlock> neighborBlocks = new List<GridBlock>();
+            foreach(GridBlock neighbor in CalculateNeighborBlocks(_centerBlock, _amount))
             {
-                if (gridBlock != null) neighbors.Add(gridBlock);
+                if (neighbor != null) neighborBlocks.Add(neighbor);
             }
-            return neighbors;
+            return neighborBlocks;
         }
 
         public bool ArePathsEqual(List<GridBlock> _pathA, List<GridBlock> _pathB)
@@ -185,34 +185,38 @@ namespace RPGProject.Combat.Grid
             }
         }
 
-        private IEnumerable<GridBlock> CalculateNeighborBlocks(GridBlock _gridBlock)
+        private IEnumerable<GridBlock> CalculateNeighborBlocks(GridBlock _gridBlock, int _amount)
         {
-            int x = _gridBlock.gridCoordinates.x;
-            int z = _gridBlock.gridCoordinates.z;
+            int myX = _gridBlock.gridCoordinates.x;
+            int myZ = _gridBlock.gridCoordinates.z;
 
-            //Right
-            yield return GetGridBlock(x + 1, z);
+            for (int newX = -_amount; newX < _amount + 1; newX++)
+            {
+                int x = myX - newX;
+                for (int newZ = -_amount; newZ < _amount + 1; newZ++)
+                {
+                    int z = myZ - newZ; ;
+                    GridBlock newBlock = GetGridBlock(x, z);
+                    if(newBlock != null) yield return newBlock;
+                }
+            }
 
-            //Left
-            yield return GetGridBlock(x - 1, z);
-
-            //Up
-            yield return GetGridBlock(x, z + 1);
-
-            //Down
-            yield return GetGridBlock(x, z - 1);
-
-            //Right and Up
-            yield return GetGridBlock(x + 1, z + 1);
-
-            //Left and Up 
-            yield return GetGridBlock(x - 1, z + 1);
-
-            //Right and Down
-            yield return GetGridBlock(x + 1, z - 1);
-
-            //Left and Down
-            yield return GetGridBlock(x - 1, z - 1);
+            //Queen/Chess movement
+            //if(_amount >= 1)
+            //{
+            //    for (int i = 1; i < _amount + 1; i++)
+            //    {
+            //        yield return GetGridBlock(x + i, z);
+            //        yield return GetGridBlock(x - i, z);
+            //        yield return GetGridBlock(x, z + i);
+            //        yield return GetGridBlock(x, z - i);
+            //        yield return GetGridBlock(x + i, z + i);
+            //        yield return GetGridBlock(x - i, z + i);
+            //        yield return GetGridBlock(x + i, z - i);
+            //        yield return GetGridBlock(x - i, z - i);
+            //    }
+            //}
+            
         }
     }
 

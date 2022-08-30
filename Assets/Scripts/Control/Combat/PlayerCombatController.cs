@@ -27,8 +27,6 @@ namespace RPGProject.Control.Combat
         List<CombatTarget> selectedTargets = new List<CombatTarget>();
         Ability selectedAbility = null;
 
-        Fighter highlightedTarget = null;
-
         bool isPathfinding = true;
 
         GridBlock blockToSelectFrom = null;
@@ -118,6 +116,7 @@ namespace RPGProject.Control.Combat
             
             if (Input.GetKeyDown(KeyCode.R))
             {
+                currentUnitTurn.GetEnergy().energyPoints = 3;
                 battleCamera.RecenterCamera();
                 battleCamera.SetFollowTarget(currentUnitTurn.transform);
             }
@@ -135,9 +134,9 @@ namespace RPGProject.Control.Combat
                 if (!hasHighlightedNeighbors)
                 {
                     hasHighlightedNeighbors = true;
-                    neighborBlocks = pathfinder.GetNeighbors(blockToSelectFrom);
+                    neighborBlocks = pathfinder.GetNeighbors(blockToSelectFrom, 3);
 
-                    gridSystem.HighlightBlocks(neighborBlocks);
+                    gridSystem.HighlightBlocks(neighborBlocks, GridBlockMeshKey.None);
                 }
             }
             else
@@ -158,7 +157,7 @@ namespace RPGProject.Control.Combat
                     {
                         if (!isBasicAttack)
                         {
-                            if (!DrawAimLine(hit, selectedAbility)) return;
+                            DrawAimLine(hit, selectedAbility);
                         }
                         else
                         {
@@ -175,8 +174,19 @@ namespace RPGProject.Control.Combat
             if (combatTarget != null)
             {
                 GridBlock targetBlock = GetTargetBlock(combatTarget);
-                if (isPathfinding) HandlePathfinding(targetBlock);
 
+                if (targetBlock == null || targetBlock == currentUnitTurn.currentBlock || !targetBlock.IsMovable(currentUnitTurn.currentBlock, targetBlock))
+                {
+                    if (!isSelectingFaceDirection)
+                    {
+                        gridSystem.UnhighlightBlocks(tempPath);
+                        return;
+                    }
+                }
+                if (isPathfinding)
+                {
+                    HandlePathfinding(targetBlock);
+                }
                 HandlePhysicalHighlighting(combatTarget, targetBlock);
 
                 if (Input.GetMouseButtonDown(0))
@@ -244,9 +254,9 @@ namespace RPGProject.Control.Combat
                 if (battleUIManager.highlightedTarget != null && battleUIManager.isUIHighlight) return;
                 battleUIManager.HighlightTarget(_targetBlock.contestedFighter, false);
             }
-            else if (battleUIManager.highlightedTarget != null && !battleUIManager.isUIHighlight)
+            else if ((battleUIManager.highlightedTarget != null && !battleUIManager.isUIHighlight) || 
+                (_combatTarget.GetType() != typeof(Fighter) || _targetBlock.contestedFighter == null))
             {
-                //Refactor - might need to add more checks - doesnt unhighlight
                 battleUIManager.UnhighlightTarget();
             }
         }
@@ -264,6 +274,7 @@ namespace RPGProject.Control.Combat
 
             if (!isSelectingFaceDirection)
             {
+               
                 if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
                 {
                     if(trueTarget.GetType() == typeof(Fighter)) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
@@ -293,17 +304,20 @@ namespace RPGProject.Control.Combat
                     }
                 }
                 else
-                {
-                    print("hajdshja");
+                {              
                     raycaster.isRaycasting = false;
                     canAdvanceTurn = false;
                     gridSystem.UnhighlightBlocks(tempPath);
                     isPathfinding = false;
 
+                    //for (int i = 0; i < path.Count; i++)
+                    //{
+                    //    GridCoordinates coords = path[i].gridCoordinates;
+                    //    print("path[" + i.ToString() + "] =  " + coords.x.ToString() + "," + coords.z.ToString());
+                    //}
+
                     yield return currentUnitTurn.PathExecution(path);
 
-                    if (!currentUnitTurn.unitInfo.isPlayer) yield break;
-                    
                     bool isTeleporter = targetType == typeof(BattleTeleporter) && (BattleTeleporter)_selectedTarget != null;
                     bool isFighter = (targetType == typeof(Fighter) && (Fighter)_selectedTarget != null);
                     bool isGridBlock = (targetType == typeof(GridBlock) && (GridBlock)_selectedTarget != null);
@@ -324,15 +338,14 @@ namespace RPGProject.Control.Combat
                     if (isTeleporter || !isFighter)
                     {
                         blockToSelectFrom = GetDirectionSelectionBlock(_selectedTarget, targetType);
+                        isSelectingFaceDirection = true;
                     }
                     else
                     {
                         isSelectingFaceDirection = false;
                         isPathfinding = true;
                         yield break;
-                    }
-
-                    isSelectingFaceDirection = true;
+                    }                
                 }
             }
             else
@@ -370,7 +383,7 @@ namespace RPGProject.Control.Combat
             hasHighlightedNeighbors = false;
             blockToSelectFrom = null;
             neighborBlocks.Clear();
-
+            tempPath.Clear();
             raycaster.isRaycasting = true;
         }
 

@@ -71,11 +71,6 @@ namespace RPGProject.Combat
             {
                 hitFighter = fighter;
             }
-            //if (!CanHit(_origin, _targetPostion, _attackRange))
-            //{
-            //    ResetLine();
-            //    return false;
-            //}
 
             return true;
         }

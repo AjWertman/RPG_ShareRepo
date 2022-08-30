@@ -125,6 +125,8 @@ namespace RPGProject.Control.Combat
 
         public IEnumerator PathExecution(List<GridBlock> _path)
         {
+            if (_path == null || _path.Count <= 0) yield break;
+
             GridBlock goalBlock = _path[_path.Count - 1];
             Fighter contestedFighter = goalBlock.contestedFighter;
             AbilityBehavior activeAbility = goalBlock.activeAbility;
@@ -186,6 +188,16 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        public IEnumerator UseAbilityOnAllBehavior(List<UnitController> _targetTeam, Ability _selectedAbility)
+        {
+            List<Fighter> targetFighters = new List<Fighter>();
+
+            foreach (UnitController unitController in _targetTeam) targetFighters.Add(unitController.fighter);
+
+            StartCoroutine(fighter.AttackAll(targetFighters, _selectedAbility));
+            yield return null;
+        }
+
         private IEnumerator UseOnAllTargets(List<CombatTarget> _targets, Ability _ability)
         {
             List<CombatTarget> privateList = new List<CombatTarget>();
@@ -236,15 +248,6 @@ namespace RPGProject.Control.Combat
             }
         }
         
-        public IEnumerator UseAbilityOnAllBehavior(List<UnitController> _targetTeam, Ability _selectedAbility)
-        {
-            List<Fighter> targetFighters = new List<Fighter>();
-
-            foreach (UnitController unitController in _targetTeam) targetFighters.Add(unitController.fighter);
-
-            StartCoroutine(fighter.AttackAll(targetFighters, _selectedAbility));
-            yield return null;
-        }
 
         public void UseAbility(CombatTarget _target, Ability _selectedAbility)
         {

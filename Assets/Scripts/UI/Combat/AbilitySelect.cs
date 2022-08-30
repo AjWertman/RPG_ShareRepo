@@ -28,7 +28,7 @@ namespace RPGProject.UI
             CreateAbilityButtonsPool();
             spellTooltip.gameObject.SetActive(false);
 
-            backButton.onClick.AddListener(() => onBackButton());
+            backButton.onClick.AddListener(() => OnAbilitySelect(null));
         }
 
         private void CreateAbilityButtonsPool()
@@ -58,6 +58,7 @@ namespace RPGProject.UI
 
             foreach (Ability ability in _abilities)
             {
+                if (ability == _caster.unitInfo.basicAttack) continue;
                 AbilityButton availableAbilityButton = GetAvailableAbilityButton();
 
                 bool isCopyAbility = (ability.abilityType== AbilityType.Copy);
