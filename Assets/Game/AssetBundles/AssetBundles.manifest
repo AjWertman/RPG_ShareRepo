@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 2436304349
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: abilities
+      Dependencies: {}
