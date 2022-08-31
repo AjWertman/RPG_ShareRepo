@@ -130,7 +130,7 @@ namespace RPGProject.Combat.Grid
             List<GridBlock> neighborBlocks = new List<GridBlock>();
             foreach(GridBlock neighbor in CalculateNeighborBlocks(_centerBlock, _amount))
             {
-                if (neighbor != null) neighborBlocks.Add(neighbor);
+                if (neighbor != null && neighbor != _centerBlock) neighborBlocks.Add(neighbor);
             }
             return neighborBlocks;
         }

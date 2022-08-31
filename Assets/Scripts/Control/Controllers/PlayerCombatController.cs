@@ -117,7 +117,6 @@ namespace RPGProject.Control.Combat
             
             if (Input.GetKeyDown(KeyCode.R))
             {
-                currentUnitTurn.GetEnergy().energyPoints = 3;
                 battleCamera.RecenterCamera();
                 battleCamera.SetFollowTarget(currentUnitTurn.transform);
             }
@@ -134,10 +133,9 @@ namespace RPGProject.Control.Combat
             {
                 if (!hasHighlightedNeighbors)
                 {
+                    Debug.Log("Selecting neighbors");
                     hasHighlightedNeighbors = true;
-                    neighborBlocks = pathfinder.GetNeighbors(blockToSelectFrom, 3);
-
-                    gridSystem.HighlightBlocks(neighborBlocks, GridBlockMeshKey.None);
+                    neighborBlocks = gridSystem.HighlightNeighbors(blockToSelectFrom, 1, true);
                 }
             }
             else
@@ -184,10 +182,9 @@ namespace RPGProject.Control.Combat
                         return;
                     }
                 }
-                if (isPathfinding)
-                {
-                    HandlePathfinding(targetBlock);
-                }
+
+                if (isPathfinding) HandlePathfinding(targetBlock);
+
                 HandlePhysicalHighlighting(combatTarget, targetBlock);
 
                 if (Input.GetMouseButtonDown(0))
@@ -274,8 +271,7 @@ namespace RPGProject.Control.Combat
             CombatTarget trueTarget = GetTrueTarget(_selectedTarget, targetType);
 
             if (!isSelectingFaceDirection)
-            {
-               
+            {              
                 if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
                 {
                     if(trueTarget.GetType() == typeof(Fighter)) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
@@ -555,11 +551,15 @@ namespace RPGProject.Control.Combat
 
         private int GetFurthestBlockIndex(List<GridBlock> _path)
         {
-            float totalGCostAllowance = currentUnitTurn.GetTotalPossibleGCostAllowance();
+            int energyPoints = currentUnitTurn.GetEnergy().energyPoints;
 
+            int energyCost = 0;
             foreach (GridBlock gridBlock in _path)
             {
-                if (totalGCostAllowance >= gridBlock.pathfindingCostValues.gCost) continue;
+                if (currentUnitTurn.currentBlock == gridBlock) continue;
+
+                energyCost += BattleHandler.energyCostPerBlock;
+                if (energyPoints >= energyCost) continue;
 
                 return _path.IndexOf(gridBlock) - 1;
             }

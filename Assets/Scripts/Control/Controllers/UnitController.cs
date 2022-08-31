@@ -107,11 +107,11 @@ namespace RPGProject.Control.Combat
             currentBlock.SetContestedFighter(fighter);
         }
 
-        private void UseMovementResources(int _gCost)
+        private void UseMovementResources()
         {
-            int energyCost = 5;
+            int energyCost = BattleHandler.energyCostPerBlock;
 
-            
+            energy.SpendEnergyPoints(energyCost);
 
             //if (_gCost > unitResources.gCostMoveAllowance)
             //{

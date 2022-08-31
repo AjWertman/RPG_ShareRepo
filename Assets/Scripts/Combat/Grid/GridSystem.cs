@@ -16,6 +16,7 @@ namespace RPGProject.Combat.Grid
 
         [SerializeField] Material highlightMaterial = null;
         [SerializeField] Material unworthyMaterial = null;
+        [SerializeField] Material neutralMaterial = null;
 
         public GridBlock[] gridBlocks = null;
 
@@ -100,11 +101,30 @@ namespace RPGProject.Combat.Grid
             isPathHighlighted = true;
         }
 
-        public void HighlightBlocks(List<GridBlock> _gridBlocks, GridBlockMeshKey _meshKey)
+        public List<GridBlock> HighlightNeighbors(GridBlock _centerBlock, int _radius, bool _isSelectingDirection)
+        {
+            List<GridBlock>neighborBlocks = pathfinder.GetNeighbors(_centerBlock, _radius);
+            GridBlockMeshKey meshKey = GridBlockMeshKey.None;
+            if (_isSelectingDirection) meshKey = GridBlockMeshKey.Arrow;
+
+            HighlightBlocks(neighborBlocks,meshKey, neutralMaterial);
+
+            if (_isSelectingDirection)
+            {
+                foreach(GridBlock gridBlock in neighborBlocks)
+                {
+                    gridBlock.RotateGridArrowMesh(_centerBlock);
+                }
+            }
+
+            return neighborBlocks;
+        }
+
+        private void HighlightBlocks(List<GridBlock> _gridBlocks, GridBlockMeshKey _meshKey, Material _highlightMaterial)
         {
             foreach (GridBlock gridBlock in _gridBlocks)
             {
-                gridBlock.HighlightBlock(highlightMaterial, _meshKey);
+                gridBlock.HighlightBlock(_highlightMaterial, _meshKey);
             }
         }
 

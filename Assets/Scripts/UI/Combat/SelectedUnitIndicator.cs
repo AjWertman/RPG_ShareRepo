@@ -27,11 +27,16 @@ namespace RPGProject.UI
 
         RectTransform rect;
 
-        private void Start()
+        private void Awake()
         {
             rect = GetComponent<RectTransform>();
-            defaultPosition = rect.anchoredPosition;
         }
+
+        //public void InitalizeUnitIndicator()
+        //{
+        //    rect = GetComponent<RectTransform>();
+        //    DeactivateIndicator();
+        //}
 
         public void SetupResourceIndicator(Fighter _fighter)
         {
@@ -95,8 +100,8 @@ namespace RPGProject.UI
 
         private void MoveToPosition(Vector2 _position)
         {
-            //rect.anchoredPosition = _position;
-            GetComponent<RectTransform>().anchoredPosition = _position;
+            if (rect == null) return;
+            rect.anchoredPosition = _position;
         }
 
         private void SetBackgroundColor(bool _isPlayer)

@@ -19,7 +19,7 @@ namespace RPGProject.Movement
 
         IEnumerator currentPath = null;
 
-        public event Action<int> onBlockReached;
+        public event Action onBlockReached;
 
         public void InitalizeCombatMover()
         {
@@ -59,8 +59,7 @@ namespace RPGProject.Movement
 
                 if (isAtPosition)
                 {
-                    int gCost = GetGCost(previousTransform, nextTransform);
-                    onBlockReached(gCost);
+                    onBlockReached();
 
                     previousTransform = nextTransform;
                     if (!isGoalBlock)

@@ -53,12 +53,21 @@ MonoBehaviour:
   blueMaterial: {fileID: 2100000, guid: 5a574a379b0310645960db7804618fc7, type: 2}
   highlightMaterial: {fileID: 2100000, guid: e5cea390deae5984ba8df413651ea142, type: 2}
   unworthyMaterial: {fileID: 2100000, guid: 46d5c3ff9a71e6b4c967037330cb9ba9, type: 2}
+  neutralMaterial: {fileID: 2100000, guid: ece7e5c65769aa24a9601e9d3d14d51a, type: 2}
+  gridBlocks: []
   playerZeroCoordinates:
     x: 0
     z: -3
   enemyZeroCoordinates:
     x: 0
     z: 3
+  minCoordinates:
+    x: 0
+    z: 0
+  maxCoordinates:
+    x: 0
+    z: 0
+  isPathHighlighted: 0
 --- !u!114 &2874777526737954186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,6 +92,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82986ba1d1267884e8fb1c1e7f3abf61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTeamCenterPoint: {x: 0, y: 0, z: 0}
+  enemyTeamCenterPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &8667660795022426417
 GameObject:
   m_ObjectHideFlags: 0

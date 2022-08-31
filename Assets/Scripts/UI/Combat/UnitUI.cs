@@ -29,7 +29,7 @@ namespace RPGProject.UI
             health.onHealthChange += UpdateHealthUI;
 
             energy = fighter.GetEnergy();
-            energy.onEnergyChange += UpdateEnergyUI;
+            //energy.onEnergyChange += UpdateEnergyUI;
         }
 
         public void SetupUnitUI()
@@ -46,7 +46,7 @@ namespace RPGProject.UI
 
         private void UpdateHealthUI(bool _isCritical, float _changeAmount)
         {
-            healthSlider.UpdateSliderValue(health.healthPercentage);
+            //healthSlider.UpdateSliderValue(health.healthPercentage);
 
             StartCoroutine(UIHealthChange(_isCritical, _changeAmount));
         }
@@ -67,8 +67,8 @@ namespace RPGProject.UI
 
         public void ActivateResourceSliders(bool _shouldActivate)
         {
-            healthSlider.gameObject.SetActive(_shouldActivate);
-            energySlider.gameObject.SetActive(_shouldActivate);
+            healthSlider.gameObject.SetActive(false);
+            energySlider.gameObject.SetActive(false);
         }
 
         public UnitIndicatorUI GetUnitIndicator()

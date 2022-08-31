@@ -167,12 +167,6 @@ namespace RPGProject.Combat
             characterMesh = null;
         }
 
-        public bool IsInRange(Ability _selectedAbility, Fighter _target)
-        {
-            float distanceToTarget = CombatAssistant.GetDistance(transform.position, _target.transform.position);
-            return _selectedAbility.attackRange > distanceToTarget;
-        }
-
         public bool HasTarget()
         {
             if (selectedTarget != null) return true;

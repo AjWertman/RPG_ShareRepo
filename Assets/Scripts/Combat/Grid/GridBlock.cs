@@ -12,7 +12,6 @@ namespace RPGProject.Combat.Grid
     {
         [SerializeField] GridBlockMesh[] gridBlockMeshes;
 
-        [SerializeField] MeshRenderer highlightMesh = null;
         [SerializeField] Image highlightImage = null;
         [SerializeField] TextMeshProUGUI coordinatesText = null;
 
@@ -27,6 +26,7 @@ namespace RPGProject.Combat.Grid
         public bool isMovable = true;
 
         MeshRenderer meshRenderer = null;
+        MeshRenderer highlightMesh = null;
 
         /// <summary>
         /// Called whenever the grid block updates its current fighter
@@ -62,17 +62,52 @@ namespace RPGProject.Combat.Grid
 
         public void HighlightBlock(Material _highlightColor, GridBlockMeshKey _gridBlockMeshKey)
         {
-            MeshRenderer gridBlockMesh = GetGridBlockMesh(_gridBlockMeshKey);
-            if (gridBlockMesh != null && contestedFighter == null)
+            highlightMesh = GetGridBlockMesh(_gridBlockMeshKey);
+
+            if (highlightMesh != null && contestedFighter == null)
             {
-                gridBlockMesh.material = _highlightColor;
-                gridBlockMesh.gameObject.SetActive(true);
+                highlightMesh.material = _highlightColor;
+                highlightMesh.gameObject.SetActive(true);
             }
 
             Color32 color = _highlightColor.color;
             color.a = 255;
 
             highlightImage.color = color;
+        }
+
+        public void RotateGridArrowMesh(GridBlock _centerBlock)
+        {
+            int x = gridCoordinates.x - _centerBlock.gridCoordinates.x;
+            int z = gridCoordinates.z - _centerBlock.gridCoordinates.z;
+
+            float yEuler = GetArrowYEuler(x, z);
+
+            Vector3 newEulers = new Vector3(0, yEuler, 0);
+            highlightMesh.transform.parent.localEulerAngles = newEulers;
+        }
+
+        private float GetArrowYEuler(int _x, int _z)
+        {
+            if(_x == -1)
+            {
+                if (_z == -1) return 225f;
+                else if (_z == 0) return 270f;
+                else if (_z == 1) return 315f;
+            }
+            else if(_x == 0)
+            {
+                if (_z == -1) return 180f;
+                else if (_z == 1) return 0f;
+            }
+            else if (_x == 1)
+            {
+                if (_z == -1) return 135f;
+                else if (_z == 0) return 90f;
+                else if (_z == 1) return 45f;
+            }
+
+            return 0f;
         }
 
         public void UnhighlightBlock()
@@ -137,6 +172,7 @@ namespace RPGProject.Combat.Grid
 
         public bool IsMeshActive()
         {
+            if (highlightMesh == null) return false;
             return highlightMesh.enabled;
         }
 

@@ -29,7 +29,7 @@ namespace RPGProject.GameResources
             energyPoints -= _energyToSpend;
             energyPoints = Mathf.Clamp(energyPoints, 0, maxEnergyPoints);
 
-            onEnergyChange();
+            if(onEnergyChange != null) onEnergyChange();
         }
 
         public void RestoreEnergyPoints(int _energyToRestore)

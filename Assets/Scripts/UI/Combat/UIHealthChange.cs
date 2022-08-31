@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using RPGProject.Core;
+using TMPro;
 using UnityEngine;
 
 namespace RPGProject.UI
@@ -12,14 +13,18 @@ namespace RPGProject.UI
         [SerializeField] TextMeshProUGUI criticalText = null;
         [SerializeField] TextMeshProUGUI amountChangeText = null;
 
+        LookAtCam lookAtCam = null;
+
         private void Awake()
         {
+            lookAtCam = GetComponent<LookAtCam>();
             DeactivateHealthChange();
             criticalText.text = "Critical!";
         }
 
         public void ActivateHealthChange(bool _isCritical, float _changeAmount)
         {
+            lookAtCam.LookAtCamTransform(Camera.main.transform);
             bool isDamage = _changeAmount < 0;
 
             ActivateCriticalCanvas(_isCritical, isDamage);

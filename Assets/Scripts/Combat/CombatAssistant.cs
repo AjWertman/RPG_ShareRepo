@@ -119,7 +119,7 @@ namespace RPGProject.Combat
         {
             float distanceToTarget = GetDistance(_myPosition, _targetPosition);
 
-            return distanceToTarget < _attackRange;
+            return _attackRange > distanceToTarget;
         }
 
         public static float GetDistance( Vector3 _myPosition, Vector3 _targetPosition)

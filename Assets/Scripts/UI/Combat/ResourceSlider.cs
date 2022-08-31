@@ -17,7 +17,7 @@ namespace RPGProject.UI
 
         public void UpdateSliderValue(float _value)
         {
-            slider.value = _value;
+            //slider.value = _value;
         }
     }
 }

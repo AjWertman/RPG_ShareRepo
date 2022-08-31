@@ -37,6 +37,7 @@ namespace RPGProject.UI
         {
             CreateTurnOrderUIItemPool();
             CreateTeamMemberUIItemPool();
+
             selectedUnitIndicator.DeactivateIndicator();
 
             cantCastText.text = "";

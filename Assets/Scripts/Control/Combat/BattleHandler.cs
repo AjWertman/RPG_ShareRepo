@@ -12,6 +12,10 @@ namespace RPGProject.Control.Combat
 {
     public class BattleHandler : MonoBehaviour
     {
+        [SerializeField] int amountOfEnergyPointsPerTurn = 40;
+
+        public static int energyCostPerBlock = 5;
+
         CombatAIBrain aiBrain = null;
         BattleUIManager battleUIManager = null;
         BattleGridManager battleGridManager = null;
@@ -45,7 +49,10 @@ namespace RPGProject.Control.Combat
             playerTeamManager = FindObjectOfType<PlayerTeamManager>();
             gridSystem = GetComponentInChildren<GridSystem>();
             pathfinder = GetComponentInChildren<Pathfinder>();
+        }
 
+        private void Start()
+        {
             battleUIManager.InitalizeBattleUIManager();
             battleGridManager.InitializeBattleGridManager();
             unitManager.InitalizeUnitManager();
@@ -54,17 +61,18 @@ namespace RPGProject.Control.Combat
         private void Update()
         {
             //Refactor - testing
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                aiBrain.GetViableActions(unitManager.enemyUnits[1], unitManager.unitControllers);
-            }
+            //if (Input.GetKeyDown(KeyCode.L))
+            //{
+            //    aiBrain.GetViableActions(unitManager.enemyUnits[1], unitManager.unitControllers);
+            //}
         }
 
         public IEnumerator StartBattle(PlayerTeamManager _playerTeamManager, UnitStartingPosition[] _enemyTeam)
         {
             isBattleOver = false;
 
-            playerTeamManager = _playerTeamManager;        
+            playerTeamManager = _playerTeamManager;
+
             SetupManagers(_enemyTeam);
 
             SetCurrentUnitTurn(turnManager.GetFirstMoveUnit());
@@ -137,7 +145,6 @@ namespace RPGProject.Control.Combat
 
         private void OnMoveCompletion()
         {
-            //Refactor - likely being called twice or paired with something else to cause skipping moves
             bool isPlayer = currentUnitTurn.unitInfo.isPlayer;
             float currentEnergy = currentUnitTurn.GetEnergy().energyPoints;
 
@@ -177,9 +184,11 @@ namespace RPGProject.Control.Combat
         {
             //if (isTutorial) return;
             yield return new WaitForSeconds(1f);
-            turnManager.currentUnitTurn.GetUnitUI().ActivateUnitIndicator(true);
+            currentUnitTurn.GetUnitUI().ActivateUnitIndicator(true);
             List<Fighter> unitFighters = GetUnitFighters(turnManager.turnOrder);
             battleUIManager.ExecuteNextTurn(unitFighters, currentUnitTurn.GetFighter());
+
+            currentUnitTurn.GetEnergy().RestoreEnergyPoints(amountOfEnergyPointsPerTurn);
 
             if (!turnManager.IsPlayerTurn())
             {
@@ -318,7 +327,7 @@ namespace RPGProject.Control.Combat
 
         private IEnumerator EndBattleBehavior(bool? _won)
         {
-            StopCoroutine(currentAttack);
+            //StopCoroutine(currentAttack);
 
             yield return FindObjectOfType<BattleEndScreen>(true).EndDemo(_won);
 
