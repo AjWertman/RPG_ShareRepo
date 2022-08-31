@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Saving
 {
+    /// <summary>
+    /// Placed on any object that has state to be saved, assigning a unique ID # to reference their state.
+    /// </summary>
     [ExecuteAlways]
     public class SaveableEntity : MonoBehaviour
     {
@@ -31,15 +34,8 @@ namespace RPGProject.Saving
 
         private bool IsUnique(string _stringToTest)
         {
-            if (!globalIDLookup.ContainsKey(_stringToTest))
-            {
-                return true;
-            }
-
-            if (globalIDLookup[_stringToTest] == this)
-            {
-                return true;
-            }
+            if (!globalIDLookup.ContainsKey(_stringToTest)) return true;
+            if (globalIDLookup[_stringToTest] == this) return true;
 
             if (globalIDLookup[_stringToTest] == null)
             {

@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Displays useful information about a quest.
+    /// </summary>
     public class QuestTooltipUI : MonoBehaviour
     {
         [SerializeField] GameObject questSelectedObject = null;

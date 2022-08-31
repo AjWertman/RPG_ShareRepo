@@ -3,6 +3,10 @@ using RPGProject.UI;
 
 namespace RPGProject.Inventories
 {
+    /// <summary>
+    /// The UI to represent a slot in the inventory. If the slot is not empty, 
+    /// it will contain the data of an inventory item.
+    /// </summary>
     public class InventorySlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
         [SerializeField] InventoryItemIcon icon = null;

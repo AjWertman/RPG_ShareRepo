@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace RPGProject.Dialogue
 {
+    /// <summary>
+    /// Visualization of dialogue in the editor.
+    /// </summary>
     [Serializable]
     public class DialogueNode : ScriptableObject
     {

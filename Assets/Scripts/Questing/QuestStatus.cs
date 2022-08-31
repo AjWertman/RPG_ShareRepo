@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace RPGProject.Questing
 {
+    /// <summary>
+    /// Determines the completion of quests and its objectives.
+    /// </summary>
     public class QuestStatus
     {     
         public Quest quest = null;
@@ -81,6 +84,9 @@ namespace RPGProject.Questing
         }
     }
 
+    /// <summary>
+    /// Used to save quest statuses
+    /// </summary>
     [Serializable]
     class QuestStatusRecord
     {

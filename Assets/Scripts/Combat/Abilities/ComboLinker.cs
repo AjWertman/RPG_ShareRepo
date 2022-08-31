@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Links combos(animations with other info) in combat.
+    /// </summary>
     public class ComboLinker : MonoBehaviour
     {
         Animator animator = null;
@@ -14,9 +17,21 @@ namespace RPGProject.Combat
         int comboIndex = 0;
         bool isExecutingCombo = false;
 
+        /// <summary>
+        /// Contains the data for animations and their length.
+        /// Key(string) == Animation ID.
+        /// Value(float) == Length of animation.
+        /// </summary>
         Dictionary<string, float> animationTimesDictionary = new Dictionary<string, float>();
 
+        /// <summary>
+        /// Called when the combo starts, taking in the Ability Object Key to spawn the proper ability.
+        /// </summary>
         public event Action<AbilityObjectKey> onComboStarted;
+
+        /// <summary>
+        /// Called when the current combo link is completed.
+        /// </summary>
         public event Action<ComboLink> onComboLinkExecution;
 
         public void InitializeComboLinker()
@@ -34,6 +49,10 @@ namespace RPGProject.Combat
             PopulateAnimationTimesDictionary();
         }
 
+        /// <summary>
+        /// Will cycle through combo links and perform the respective animations. 
+        /// It will then wait until the animation is complete before moving to the next.
+        /// </summary>
         public IEnumerator ExecuteCombo(List<ComboLink> _combo)
         {
             isExecutingCombo = true;

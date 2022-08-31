@@ -7,6 +7,9 @@ using System;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Handles the dropping of items.
+    /// </summary>
     public class ItemDropper : MonoBehaviour, ISaveable
     {
         public Transform itemDropTransform = null;

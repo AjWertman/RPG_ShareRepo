@@ -2,6 +2,9 @@
 
 namespace RPGProject.Questing
 {
+    /// <summary>
+    /// Placed on objects that can complete objectives for the player.
+    /// </summary>
     public class QuestCompletion : MonoBehaviour
     {
         [SerializeField] string objectiveRefToComplete = null;

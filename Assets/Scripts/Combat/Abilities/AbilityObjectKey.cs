@@ -1,5 +1,8 @@
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Key for ability prefabs.
+    /// </summary>
     public enum AbilityObjectKey
     {
         None = 0,

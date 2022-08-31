@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Behavior that targets and attacks all enemies in range.
+    /// </summary>
     public class TargetAll : AbilityBehavior
     {
         ParticleSystem abilityParticles = null;

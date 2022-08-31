@@ -1,118 +1,130 @@
 using Cinemachine;
 using UnityEngine;
 
-public class BattleCamera : MonoBehaviour
+namespace RPGProject.Combat
 {
-    [SerializeField] float spinSensitivity = 125f;
-    [SerializeField] float zoomSensitivity = 125f;
-    [SerializeField] float moveSpeed = 12f;
-
-    [SerializeField] float fieldOfViewMin, fieldOfViewMax;
-    [SerializeField] float fieldOfViewDefault = 40f;
-
-    CinemachineFreeLook freeLook = null;
-
-    public Transform followTarget = null;
-    Transform currentTarget = null;
-
-    float turnSmoothVelocity;
-
-    int minX, minZ, maxX, maxZ;
-
-    bool canMove = true;
-
-    //Future ideas
-    //1. have a recenter button
-    //2. possibly a way to have it lock on a character so the camera movement will follow the character while still being able to rotate
-    //3. a way to increase speed of the camera controls in the menu
-
-    private void Awake()
+    /// <summary>
+    /// Controls the camera used in combat.
+    /// </summary>
+    public class BattleCamera : MonoBehaviour
     {
-        freeLook = GetComponent<CinemachineFreeLook>();
-    }
+        [SerializeField] float spinSensitivity = 125f;
+        [SerializeField] float zoomSensitivity = 125f;
+        [SerializeField] float moveSpeed = 12f;
 
-    private void Update()
-    {
-        if (currentTarget == followTarget) return;
+        [SerializeField] float fieldOfViewMin, fieldOfViewMax;
+        [SerializeField] float fieldOfViewDefault = 40f;
 
-        if(followTarget.position != currentTarget.position)
+        CinemachineFreeLook freeLook = null;
+
+        public Transform followTarget = null;
+        Transform currentTarget = null;
+
+        float turnSmoothVelocity;
+
+        int minX, minZ, maxX, maxZ;
+
+        bool canMove = true;
+
+        //Future ideas
+        //1. have a recenter button
+        //2. possibly a way to have it lock on a character so the camera movement will follow the character while still being able to rotate
+        //3. a way to increase speed of the camera controls in the menu
+
+        private void Awake()
         {
-            followTarget.position = currentTarget.position;
+            freeLook = GetComponent<CinemachineFreeLook>();
         }
-    }
 
-    public void InitalizeBattleCamera(int _minX, int _minZ, int _maxX, int _maxZ)
-    {
-        minX = _minX;
-        minZ = _minZ;
-        maxX = _maxX;
-        maxZ = _maxZ;
+        private void Update()
+        {
+            if (currentTarget == followTarget) return;
 
-        RecenterCamera();
-        freeLook.Follow = followTarget;
-        freeLook.LookAt = followTarget;
+            if (followTarget.position != currentTarget.position)
+            {
+                followTarget.position = currentTarget.position;
+            }
+        }
 
-        SetFollowTarget(followTarget);
-    }
+        public void InitalizeBattleCamera(int _minX, int _minZ, int _maxX, int _maxZ)
+        {
+            minX = _minX;
+            minZ = _minZ;
+            maxX = _maxX;
+            maxZ = _maxZ;
 
-    public void RotateFreeLook(bool _rotateClockwise)
-    {
-        float rotationAmount = spinSensitivity * Time.deltaTime;
+            RecenterCamera();
+            freeLook.Follow = followTarget;
+            freeLook.LookAt = followTarget;
 
-        if (!_rotateClockwise) rotationAmount *= -1f;
+            SetFollowTarget(followTarget);
+        }
 
-        //freeLook.m_XAxis.Value += rotationAmount;
-        Vector3 eulers = followTarget.localEulerAngles;
-        Vector3 newEulers = new Vector3(eulers.x, eulers.y + rotationAmount, eulers.z);
-        followTarget.localEulerAngles = newEulers;
-    }
+        /// <summary>
+        /// Changes the target that the camera follows and rotates around.
+        /// </summary>
+        public void SetFollowTarget(Transform _newTarget)
+        {
+            if (currentTarget == _newTarget) return;
+            currentTarget = _newTarget;
+            followTarget.transform.position = currentTarget.transform.position;
+        }
 
-    public void Zoom(bool _zoomingIn)
-    {
-        float zoomAmount = zoomSensitivity;
-        if (_zoomingIn) zoomAmount *= -1f;
+        /// <summary>
+        /// Moves the object that the camera follows, in turn moving the camera
+        /// based on the direction the follow object is facing.
+        /// </summary>
+        public void MoveFollowTransform(Vector3 _inputDirection)
+        {
+            if (currentTarget != followTarget) SetFollowTarget(followTarget);
+            float aimAngle = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg + transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(followTarget.eulerAngles.y, aimAngle, ref turnSmoothVelocity, .1f);
 
-        float newFieldOfView = freeLook.m_Lens.FieldOfView + (zoomAmount * Time.deltaTime);
-        newFieldOfView = Mathf.Clamp(newFieldOfView, fieldOfViewMin, fieldOfViewMax);
-        freeLook.m_Lens.FieldOfView = newFieldOfView;
-    }
+            Vector3 moveDirection = Quaternion.Euler(0f, aimAngle, 0f) * Vector3.forward;
 
-    public void RecenterCamera()
-    {
-        currentTarget = followTarget;
-        followTarget.localPosition = Vector3.zero;
+            followTarget.Translate(moveDirection * moveSpeed * Time.deltaTime);
 
-        freeLook.m_Lens.FieldOfView = fieldOfViewDefault;
+            Vector3 localPosition = followTarget.localPosition;
 
-        freeLook.m_YAxis.Value = .5f;
-        freeLook.m_XAxis.Value = 0f;
+            localPosition.x = Mathf.Clamp(localPosition.x, minX, maxX);
+            localPosition.z = Mathf.Clamp(localPosition.z, minZ, maxZ);
 
-        followTarget.transform.position = Vector3.zero;
-        followTarget.transform.eulerAngles = Vector3.zero;
-    }
+            followTarget.localPosition = localPosition;
+        }
 
-    public void SetFollowTarget(Transform _newTarget)
-    {
-        if (currentTarget == _newTarget) return;
-        currentTarget = _newTarget;
-        followTarget.transform.position = currentTarget.transform.position;
-    }
+        public void RotateCamera(bool _rotateClockwise)
+        {
+            float rotationAmount = spinSensitivity * Time.deltaTime;
 
-    public void MoveFollowTransform(Vector3 _inputDirection)
-    {
-        if (currentTarget != followTarget) SetFollowTarget(followTarget);
-        float aimAngle = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg + transform.eulerAngles.y;
-        float angle = Mathf.SmoothDampAngle(followTarget.eulerAngles.y, aimAngle, ref turnSmoothVelocity, .1f);
+            if (!_rotateClockwise) rotationAmount *= -1f;
 
-        Vector3 moveDirection = Quaternion.Euler(0f, aimAngle, 0f) * Vector3.forward;
+            Vector3 eulers = followTarget.localEulerAngles;
+            Vector3 newEulers = new Vector3(eulers.x, eulers.y + rotationAmount, eulers.z);
+            followTarget.localEulerAngles = newEulers;
+        }
 
-        followTarget.Translate(moveDirection * moveSpeed * Time.deltaTime);
+        public void Zoom(bool _zoomingIn)
+        {
+            float zoomAmount = zoomSensitivity;
+            if (_zoomingIn) zoomAmount *= -1f;
 
-        Vector3 localPosition = followTarget.localPosition;
+            float newFieldOfView = freeLook.m_Lens.FieldOfView + (zoomAmount * Time.deltaTime);
+            newFieldOfView = Mathf.Clamp(newFieldOfView, fieldOfViewMin, fieldOfViewMax);
+            freeLook.m_Lens.FieldOfView = newFieldOfView;
+        }
 
-        localPosition.x = Mathf.Clamp(localPosition.x, minX, maxX);
-        localPosition.z = Mathf.Clamp(localPosition.z, minZ, maxZ);
+        public void RecenterCamera()
+        {
+            currentTarget = followTarget;
+            followTarget.localPosition = Vector3.zero;
 
-        followTarget.localPosition = localPosition;
+            freeLook.m_Lens.FieldOfView = fieldOfViewDefault;
+
+            freeLook.m_YAxis.Value = .5f;
+            freeLook.m_XAxis.Value = 0f;
+
+            followTarget.transform.position = Vector3.zero;
+            followTarget.transform.eulerAngles = Vector3.zero;
+        }
     }
 }

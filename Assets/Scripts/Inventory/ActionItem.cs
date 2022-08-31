@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace RPGProject.Inventories
 {
+    /// <summary>
+    /// Item that can be used.
+    /// </summary>
     [CreateAssetMenu(menuName = ("Inventory/Action Item"))]
     public class ActionItem : InventoryItem
     {

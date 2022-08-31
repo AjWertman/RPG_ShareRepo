@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// A button used to be an interactive instance of an ability.
+    /// </summary>
     public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         Ability assignedAbility = null;

@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Used to indicate a highlighted character, or if it is currently the character's turn.
+    /// </summary>
     public class UnitIndicatorUI : MonoBehaviour
     {
         [SerializeField] GameObject playerObject = null;

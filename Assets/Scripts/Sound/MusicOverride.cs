@@ -2,6 +2,9 @@
 
 namespace RPGProject.Sound
 {
+    /// <summary>
+    /// Placed on objects that will override the current song/playlist that is playing.
+    /// </summary>
     public class MusicOverride : MonoBehaviour
     {
         //Refactor

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Handles the (de)activation when a child trigger is triggered by the player.
+    /// </summary>
     public class EnemyActivator : MonoBehaviour, ISaveable
     {
         [SerializeField] EnemyController[] enemyControllers = null;

@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace RPGProject.Combat.Grid
 {
+    /// <summary>
+    /// Allows for custom grid behavior from the editor
+    /// </summary>
     [CustomEditor(typeof(GridSystem))]
     public class GridEditor : Editor
     {

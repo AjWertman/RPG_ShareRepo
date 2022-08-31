@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.Dialogue
 {
+    /// <summary>
+    /// Button that the player can select to choose a dialogue option.
+    /// </summary>
     public class DialogueButton : MonoBehaviour
     {
         Button button = null;

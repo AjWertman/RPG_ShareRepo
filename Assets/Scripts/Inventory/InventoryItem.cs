@@ -4,8 +4,14 @@ using UnityEngine;
 
 namespace RPGProject.Inventories
 {
+    /// <summary>
+    /// Key to reference the mesh that an item will take in the overworld.
+    /// </summary>
     public enum ItemMeshKey { None, Bag, Weapon, Armor, Potion, Food }
 
+    /// <summary>
+    /// Scriptable object that contains the data of inventory items.
+    /// </summary>
     public abstract class InventoryItem : ScriptableObject, ISerializationCallbackReceiver
     {
         public string itemID = null;

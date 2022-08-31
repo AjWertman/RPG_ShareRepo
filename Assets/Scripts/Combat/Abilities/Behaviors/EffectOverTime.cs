@@ -1,5 +1,8 @@
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Behavior that does damage or heals each turn.
+    /// </summary>
     public class EffectOverTime : AbilityBehavior
     {
         public override void OnTurnAdvance()

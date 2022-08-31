@@ -8,6 +8,9 @@ namespace RPGProject.UI
 {
     public enum MainMenuButtonType { Character, Inventory, Quests, Map, Options, MainMenu }
 
+    /// <summary>
+    /// The core navigator of the player menu. 
+    /// </summary>
     public class CoreMainMenu : MonoBehaviour
     {
         [SerializeField] Button characterButton = null;

@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Indicates the amount of damage or healing done by an ability, 
+    /// also indicating if it was a critical hit.
+    /// </summary>
     public class UIHealthChange : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI criticalText = null;

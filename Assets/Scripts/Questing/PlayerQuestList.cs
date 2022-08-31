@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace RPGProject.Questing
 {
+    /// <summary>
+    /// The collection of quests and their statuses that a player has.
+    /// </summary>
     public class PlayerQuestList : MonoBehaviour, ISaveable, IPredicateEvaluator
     {
         List<QuestStatus> questStatuses = new List<QuestStatus>();

@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 namespace RPGProject.Core
 {
+    /// <summary>
+    /// Handles the changing of scenes.
+    /// </summary>
     public class SceneManagerScript : MonoBehaviour
     {
         [SerializeField] float fadeWaitTime = .5f;

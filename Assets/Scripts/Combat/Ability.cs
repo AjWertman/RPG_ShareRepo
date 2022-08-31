@@ -3,10 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
-    public enum AbilityType { Melee, Cast, Copy, Buff, InstaHit }
-    public enum TargetingType { EnemiesOnly, PlayersOnly, SelfOnly, Everyone, GridBlocksOnly, Everything}
-    public enum AbilityBehaviorType { None, Teleporter}
-
+    /// <summary>
+    /// A scriptable object containing the data of an ability that can be used in combat.
+    /// </summary>
     [CreateAssetMenu(fileName = "Ability", menuName = "Ability/Create New Ability", order = 1)]
     public class Ability : ScriptableObject
     {
@@ -33,6 +32,16 @@ namespace RPGProject.Combat
         public bool requiresTarget = false;
         public bool canTargetAll = false;
 
-        public int amountOfNeighborBlocksAffected = 0;
+        public int amountOfNeighborBlocksAffected = 0;          
     }
+
+    /// <summary>
+    /// The type of an ability which changes how an ability is initialized.
+    /// </summary>
+    public enum AbilityType { Melee, Cast, Copy, Buff, InstaHit }
+
+    /// <summary>
+    /// The type of CombatTarget that an ability can target
+    /// </summary>
+    public enum TargetingType { EnemiesOnly, PlayersOnly, SelfOnly, Everyone, GridBlocksOnly, Everything }
 }

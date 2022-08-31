@@ -3,6 +3,9 @@ using RPGProject.Inventories;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// The UI that represents the equipment of a character.
+    /// </summary>
     public class EquipmentSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
         [SerializeField] InventoryItemIcon icon = null;

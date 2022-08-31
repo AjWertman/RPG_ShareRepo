@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.Combat.Grid
 {
+    /// <summary>
+    /// The component of a gridblock in the combat grid.
+    /// </summary>
     public class GridBlock : MonoBehaviour, CombatTarget
     {
         [SerializeField] GridBlockMesh[] gridBlockMeshes;
@@ -25,7 +28,14 @@ namespace RPGProject.Combat.Grid
 
         MeshRenderer meshRenderer = null;
 
+        /// <summary>
+        /// Called whenever the grid block updates its current fighter
+        /// </summary>
         public event Action<Fighter, GridBlock> onContestedFighterUpdate;
+
+        /// <summary>
+        /// Called whenever the grid block updates its current ability
+        /// </summary>
         public event Action<AbilityBehavior, GridBlock> onAffectedBlockUpdate;
 
         public void SetupGridBlock(Material _newMaterial, Color _textColor)
@@ -120,6 +130,11 @@ namespace RPGProject.Combat.Grid
             meshRenderer.enabled = _shouldActivate;
         }
 
+        public static string CoordsToString(GridCoordinates _gridCoordinates)
+        {
+            return (_gridCoordinates.x.ToString() + "," + _gridCoordinates.z.ToString());
+        }
+
         public bool IsMeshActive()
         {
             return highlightMesh.enabled;
@@ -135,11 +150,6 @@ namespace RPGProject.Combat.Grid
             if (!coordinatesText.gameObject.activeSelf) return;
             string coordinates = "(" + _x.ToString() + "," + _z.ToString() + ")";
             coordinatesText.text = coordinates;
-        }
-
-        public string Name()
-        {
-            return name;
         }
 
         private MeshRenderer GetGridBlockMesh(GridBlockMeshKey _gridBlockMeshKey)
@@ -161,7 +171,10 @@ namespace RPGProject.Combat.Grid
                 gridBlockMesh.mesh.gameObject.SetActive(false);
             }
         }
-
+        
+        /// <summary>
+        /// A serializable dictionary of the highlight meshes and their respective keys.
+        /// </summary>
         [Serializable]
         private struct GridBlockMesh
         {
@@ -170,6 +183,9 @@ namespace RPGProject.Combat.Grid
         }
     }
 
+    /// <summary>
+    /// Current status of the gridblock.
+    /// </summary>
     [Serializable]
     public struct GridBlockStatus
     {
@@ -179,6 +195,9 @@ namespace RPGProject.Combat.Grid
         ///Barrels/Crystals for explosion?
     }
 
+    /// <summary>
+    /// This grid's version of a Vector2
+    /// </summary>
     [Serializable]
     public struct GridCoordinates
     {
@@ -192,5 +211,8 @@ namespace RPGProject.Combat.Grid
         }
     }
 
+    /// <summary>
+    /// Key to differentiate the meshes a grid block can show.
+    /// </summary>
     public enum GridBlockMeshKey { None, Arrow, Path }
 }

@@ -1,5 +1,8 @@
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Behavior that reflects melee damage back to the caster.
+    /// </summary>
     public class PhysicalReflector : AbilityBehavior
     {
         public override void PerformAbilityBehavior()

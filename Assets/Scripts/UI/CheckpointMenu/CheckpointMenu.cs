@@ -6,6 +6,9 @@ namespace RPGProject.UI
 {
     public enum CheckpointMenuKey { Heal, FastTravel, Save, Quit}
 
+    /// <summary>
+    /// The menu used when at a checkpoint. Can be used to heal, open the fast travel menu, or save.
+    /// </summary>
     public class CheckpointMenu : MonoBehaviour
     {
         [SerializeField] Button healTeamButton = null;

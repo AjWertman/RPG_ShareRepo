@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 namespace RPGProject.Dialogue
 {
+    /// <summary>
+    /// Placed on something that triggers dialogue (usually npcs).
+    /// </summary>
     public class DialogueTrigger : MonoBehaviour
     {
         [SerializeField] DialogueAction[] dialogueActions = null;
@@ -31,6 +34,10 @@ namespace RPGProject.Dialogue
         }
     }
 
+    /// <summary>
+    /// Actions that the dialogue can trigger.
+    /// Examples - giving quests, completing quests, and starting combat. 
+    /// </summary>
     [Serializable]
     public class DialogueAction
     {

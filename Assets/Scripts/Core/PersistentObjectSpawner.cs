@@ -2,6 +2,9 @@
 
 namespace RPGProject.Core
 {
+    /// <summary>
+    /// Spawns important prefabs and makes them persistent.
+    /// </summary>
     public class PersistentObjectSpawner : MonoBehaviour
     {
         [SerializeField] GameObject persistentObjectsPrefab = null;

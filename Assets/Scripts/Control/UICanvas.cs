@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// The parent UI canvas that handles all of the overworld UI.
+    /// </summary>
     public class UICanvas : MonoBehaviour
     {
         PlayerMenuHandler playerMenu = null;

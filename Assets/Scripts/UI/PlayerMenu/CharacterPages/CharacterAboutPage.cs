@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// The page of the character menu that contains the general info/summary of a character.
+    /// </summary>
     public class CharacterAboutPage : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI nameText0 = null;

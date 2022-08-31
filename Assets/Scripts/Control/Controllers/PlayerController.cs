@@ -59,7 +59,10 @@ namespace RPGProject.Control
         }
 
         private void Update()
-        { 
+        {
+            int currentSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            if (currentSceneIndex == 0 || currentSceneIndex == 1) return;
+
             if (!isBattling)
             {
                 playerMover.Move();

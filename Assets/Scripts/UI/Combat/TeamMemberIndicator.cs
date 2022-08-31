@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Used to give the player reference to the current status of their team during combat.
+    /// </summary>
     public class TeamMemberIndicator : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] Image background = null;

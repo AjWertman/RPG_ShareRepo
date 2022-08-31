@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Progression
 {
+    /// <summary>
+    /// Handles the level progression of characters based on XP
+    /// </summary>
     public class ProgressionHandler : MonoBehaviour
     {
         [SerializeField] UniversalCharProgression[] universalCharProgressions;
@@ -19,15 +22,12 @@ namespace RPGProject.Progression
                     {
                         level = universalCharProgression.level;
                     }
-                    else
+                    else continue;
                     {
-                        continue;
+                        
                     }
                 }
-                else
-                {
-                    break;
-                }
+                else break;
             }
 
             return level;

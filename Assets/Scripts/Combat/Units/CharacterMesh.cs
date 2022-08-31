@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// The mesh of a character also containing necessary data including
+    /// animations and combat transforms.
+    /// </summary>
     public class CharacterMesh : MonoBehaviour
     {
         public CharacterKey characterKey = CharacterKey.None;

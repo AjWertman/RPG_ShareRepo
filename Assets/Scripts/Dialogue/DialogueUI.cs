@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.Dialogue
 {
+    /// <summary>
+    /// The UI for dialogue that the player interacts with.
+    /// </summary>
     public class DialogueUI : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI conversantName = null;

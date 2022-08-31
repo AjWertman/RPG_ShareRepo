@@ -2,6 +2,10 @@ using UnityEngine;
 
 namespace RPGProject.Core
 {
+    //Refactor - handle raycasting everywhere.
+    /// <summary>
+    /// Handles raycasting in combat
+    /// </summary>
     public class Raycaster : MonoBehaviour
     {
         public bool isRaycasting = true;

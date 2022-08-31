@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.GameResources
 {
+    /// <summary>
+    /// Resource used in combat to use abilities/items or move to a certain location.
+    /// </summary>
     public class Energy : MonoBehaviour
     {
         public int energyPoints = 0;

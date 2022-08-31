@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Used to represent the current amount of currency the player has.
+    /// </summary>
     public class CurrencyUI : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI currencyText = null;

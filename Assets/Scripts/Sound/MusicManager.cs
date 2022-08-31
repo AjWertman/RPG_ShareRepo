@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Sound
 {
+    /// <summary>
+    /// Handles the playlist of songs that is currently playing.
+    /// </summary>
     public class MusicManager : MonoBehaviour
     {
         [SerializeField] List<Song> mainPlaylist = new List<Song>();

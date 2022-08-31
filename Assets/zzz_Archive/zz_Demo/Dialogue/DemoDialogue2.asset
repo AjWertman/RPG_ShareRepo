@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: '  '
-  text: '*You turn around to Mellaniphe bleeding, and Gudrid directing murderous
-    intent towards Dario.*'
+  nodeText: 
   children:
   - fb987796-47f4-4408-bb18-e2d6c5ec9e85
   rect:
@@ -42,7 +41,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: Dhurmumir
-  text: 'Ye done good work Dario me boy. '
+  nodeText: 
   children:
   - ba267be7-16e8-4230-83d0-7c17c9af8733
   rect:
@@ -69,12 +68,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: 
-  text: '*The enemy team attacks*'
+  nodeText: 
   children: []
   rect:
     serializedVersion: 2
     x: 2837
-    y: 129
+    y: 133
     width: 200
     height: 100
   onEnterAction: 
@@ -95,8 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: Dario
-  text: I expected to have to flee the country after killing that old fart, not receive
-    a medal of honor for my service.
+  nodeText: 
   children:
   - e47318dd-2baf-4115-b537-117b7db24723
   rect:
@@ -123,14 +121,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: '  '
-  text: '*The ground begins to shake, and the dwarf''s personal defense mech approaches,
-    it looks much more powerful than ordinary mechs.*'
+  nodeText: 
   children:
   - 77a5909a-5812-472b-8132-868c07ab32b2
   rect:
     serializedVersion: 2
     x: 2584
-    y: 130
+    y: 129
     width: 200
     height: 100
   onEnterAction: 
@@ -151,9 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: Dario
-  text: The King of the most powerful kingdom in a thousands years gets killed off
-    during the start of this war and they try to hire his  personal assassin to avenge
-    him?
+  nodeText: 
   children:
   - a847dd3a-2b6d-4fa3-b03d-743f0f3f48fa
   rect:
@@ -180,12 +175,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: Dhurmumir
-  text: 'Well... lookie here, more fuel for the furnace. '
+  nodeText: 
   children:
   - 00e3ee0e-b071-4b17-9f1a-2212c9462635
   rect:
     serializedVersion: 2
-    x: 2139
+    x: 2141
     y: 133
     width: 200
     height: 100
@@ -207,13 +202,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: ' '
-  text: '*The dwarf then lets out an ear-piercing scream in his native tongue.*'
+  nodeText: 
   children:
   - d1906aa5-b61b-4277-b7d2-fc2178e42d06
   rect:
     serializedVersion: 2
-    x: 2351
-    y: 129
+    x: 2356
+    y: 146
     width: 200
     height: 100
   onEnterAction: 
@@ -234,8 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: Dario
-  text: Hahaha, those idiots at that agency call themselves psychics? I was getting
-    away with lies before I even knew they were there. *Pft* What a joke.
+  nodeText: 
   children:
   - 30ebe0ec-7b89-4fa3-87b4-07b8c74493d1
   rect:
@@ -291,8 +285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: Dario
-  text: Do they realize how many previous assassination attempts were unsuccessful?
-    I lost count when it hit triple digits...
+  nodeText: 
   children:
   - 8f2aa216-0b80-48f1-b3c2-82d0bca0594b
   rect:
@@ -319,7 +312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: ' '
-  text: '*Just before you open the door you hear a scream of pain from behind.*'
+  nodeText: 
   children:
   - 1c07f44f-c7f1-4806-bd38-d881f63bfc9d
   rect:
@@ -346,8 +339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: '  '
-  text: '*Before you could say a word, an eerie laugh comes from within the house.
-    A short and stocky dwarf exits the home.*'
+  nodeText: 
   children:
   - 850aa01c-57ea-40ec-a41c-3ebe27f38221
   rect:
@@ -374,7 +366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: Dario
-  text: Then when they recruited me to join this team I struggled to hold in laughter.
+  nodeText: 
   children:
   - 3c492915-e9a8-4d6e-a005-79842ec26a4c
   rect:
@@ -401,8 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerNode: 0
   overrideConversantName: Dario
-  text: Dhurmumir offered me all the gold and power I please... To do what I love
-    most... KILL!
+  nodeText: 
   children:
   - fb34c5dc-d7fb-4520-9dca-e6064e14c137
   rect:

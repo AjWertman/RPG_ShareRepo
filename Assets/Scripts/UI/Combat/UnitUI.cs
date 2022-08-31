@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Component that handles all of the UI attached to a unit.
+    /// </summary>
     public class UnitUI : MonoBehaviour
     {
         [SerializeField] ResourceSlider healthSlider = null;

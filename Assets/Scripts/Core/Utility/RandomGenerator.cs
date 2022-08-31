@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Core
 {
+    /// <summary>
+    /// Utility for getting randoms.
+    /// </summary>
     public class RandomGenerator : MonoBehaviour
     {
         public static float GetRandomNumber(float _min, float _max)

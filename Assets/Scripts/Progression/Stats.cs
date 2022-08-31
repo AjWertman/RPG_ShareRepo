@@ -3,8 +3,14 @@ using UnityEngine;
 
 namespace RPGProject.Progression
 {
+    /// <summary>
+    /// Used to reference a specific stat.
+    /// </summary>
     public enum StatType { Stamina, Spirit, Strength, Skill, Armor, Resistance, Speed, Luck }
 
+    /// <summary>
+    /// The stats of a character.
+    /// </summary>
     [Serializable]
     public struct Stats
     {

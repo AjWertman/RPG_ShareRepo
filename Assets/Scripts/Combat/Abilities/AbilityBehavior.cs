@@ -5,6 +5,9 @@ namespace RPGProject.Combat
 {
     public enum SpawnLocation { None, LHand, RHand, Target, Target_Parent, Caster, Caster_Parent, Weapon}
 
+    /// <summary>
+    /// Base class for an instance of an ability.
+    /// </summary>
     public abstract class AbilityBehavior : MonoBehaviour
     {
         [SerializeField] protected AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
@@ -23,6 +26,10 @@ namespace RPGProject.Combat
         protected int abilityLifetime = 0;
 
         public event Action<AbilityBehavior> onAbilityDeath;
+        
+        /// <summary>
+        /// Called if the instance requires a hit FX and the location the hit FX should be spawned at
+        /// </summary>
         public event Action<HitFXObjectKey, Vector3> hitFXSpawnRequest;
 
         public void SetupAbility(Fighter _caster, CombatTarget _target, float _changeAmount, bool _isCritical, int _lifeTime)
@@ -30,9 +37,12 @@ namespace RPGProject.Combat
             caster = _caster;
             target = _target;
 
-            Fighter targetFighter = _target.GetComponent<Fighter>();
+            if(_target != null)
+            {
+                Fighter targetFighter = _target.GetComponent<Fighter>();
 
-            if(targetFighter != null) targetStatus = targetFighter.unitStatus;
+                if (targetFighter != null) targetStatus = targetFighter.unitStatus;
+            }
 
             changeAmount = _changeAmount;
             isCritical = _isCritical;
@@ -82,6 +92,9 @@ namespace RPGProject.Combat
             }
         }
 
+        /// <summary>
+        /// Base behavior for ability instances when they are initialized.
+        /// </summary>
         public abstract void PerformAbilityBehavior();
 
         public virtual void OnAbilityDeath()
@@ -108,6 +121,7 @@ namespace RPGProject.Combat
 
         protected Fighter GetTargetFighter()
         {
+            if (target == null) return null;
             return target.GetComponent<Fighter>();
         }
 

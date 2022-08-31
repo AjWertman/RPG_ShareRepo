@@ -30,7 +30,8 @@ MonoBehaviour:
   targetingType: 4
   requiredTargetAmount: 2
   attackRange: 10
-  actionPointsCost: -1
+  energyPointsCost: -1
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
+  amountOfNeighborBlocksAffected: 0

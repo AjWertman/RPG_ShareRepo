@@ -5,6 +5,9 @@ using RPGProject.Saving;
 
 namespace RPGProject.Inventories
 {
+    /// <summary>
+    /// The instance of a character's equipment.
+    /// </summary>
     public class Equipment : MonoBehaviour, ISaveable
     {
         Dictionary<EquipmentSlot, EquipableItem> equippedItems = new Dictionary<EquipmentSlot, EquipableItem>();

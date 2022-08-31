@@ -8,6 +8,9 @@ namespace RPGProject.UI
 {
     public enum StartMenuButtonType { New, Continue, Options, Quit }
 
+    /// <summary>
+    /// The main/start menu of the game.
+    /// </summary>
     public class StartMenu : MonoBehaviour
     {
         [SerializeField] Texture2D cursor = null;
@@ -26,7 +29,7 @@ namespace RPGProject.UI
             Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
             SetupStartMenu();
 
-            savingWrapper = FindObjectOfType<SavingWrapper>();
+            //savingWrapper = FindObjectOfType<SavingWrapper>();
 
             startMenuCanvasGroups = FindObjectsOfType<CanvasGroup>();
         }
@@ -43,10 +46,10 @@ namespace RPGProject.UI
             //}
 
             newGameButton.onClick.AddListener(() => OnButtonSelection(StartMenuButtonType.New));
-            optionsButton.onClick.AddListener(() => OnButtonSelection(StartMenuButtonType.Options));
+            //optionsButton.onClick.AddListener(() => OnButtonSelection(StartMenuButtonType.Options));
             quitButton.onClick.AddListener(() => OnButtonSelection(StartMenuButtonType.Quit));
 
-            GetComponent<MusicOverride>().OverrideMusic();
+            //GetComponent<MusicOverride>().OverrideMusic();
         }
 
         private void OnButtonSelection(StartMenuButtonType _startMenuButtonType)
@@ -82,10 +85,10 @@ namespace RPGProject.UI
 
         private void OnNewGameButton()
         {
-            if (HasPreviousSaveFile())
-            {
-                savingWrapper.DeleteSaveFile();
-            }
+            //if (HasPreviousSaveFile())
+            //{
+            //    //savingWrapper.DeleteSaveFile();
+            //}
 
             FindObjectOfType<SceneManagerScript>().LoadScene(1);
             //GetComponent<MusicOverride>().ClearOverride();

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Questing
 {
+    /// <summary>
+    /// Scriptable Object containing the data for a quest.
+    /// </summary>
     [CreateAssetMenu(fileName = "Quest", menuName = "Quest/Create New Quest", order = 1)]
     public class Quest : ScriptableObject
     {        

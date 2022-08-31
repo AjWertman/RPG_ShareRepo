@@ -2,6 +2,9 @@
 
 namespace RPGProject.Questing
 {
+    /// <summary>
+    /// Placed on objects that can give a player quests.
+    /// </summary>
     public class QuestGiver : MonoBehaviour
     {
         [SerializeField] GameObject exclamationPointObject = null;

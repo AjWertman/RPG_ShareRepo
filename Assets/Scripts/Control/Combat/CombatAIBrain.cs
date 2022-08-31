@@ -130,7 +130,7 @@ namespace RPGProject.Control.Combat
                     //Agro -- Used to calculate preferred target? Or what?
 
                     ///SCORES////////////////////////////////////////////////////////////////////////
-                    AIRanking apCostRanking = AIAssistant.GetAPCostRanking(currentEnergy, totalAPCost);
+                    AIRanking apCostRanking = AIAssistant.GetEnergyCostRanking(currentEnergy, totalAPCost);
                     score += AIAssistant.GetModifier(apCostRanking);
                   
 
@@ -323,7 +323,7 @@ namespace RPGProject.Control.Combat
             {
                 if (IsInRange(gridBlock, targetBlock, _ability))
                 {
-                    _unitController.GetFighter().selectedTarget = null;
+                    _unitController.GetFighter().selectedTarget = null;                  
                     return gridBlock;
                 }
             }
@@ -404,7 +404,7 @@ namespace RPGProject.Control.Combat
             }
             if (abilityToUse != null) abilityName = abilityToUse.abilityName;
 
-            print("Target = " + targetName + ", Coords = " + blockCoordinates + ", Ability = " + abilityName + ", Score = " + _score.ToString());
+            //print("Target = " + targetName + ", Coords = " + blockCoordinates + ", Ability = " + abilityName + ", Score = " + _score.ToString());
         }
     }
 }

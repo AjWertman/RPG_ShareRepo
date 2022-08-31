@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// The main player menu. Is the parent for the player's sub-menus.
+    /// </summary>
     public class PlayerMenuHandler : MonoBehaviour
     {
         [Header("Selection Menus")]

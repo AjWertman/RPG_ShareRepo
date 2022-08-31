@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Contains the agro for a Unit.
+    /// </summary>
     public class UnitAgro : MonoBehaviour
     {
         [SerializeField] int agroPercentagePerDamagePercentage = 1;
@@ -14,6 +17,9 @@ namespace RPGProject.Combat
 
         Fighter myFighter = null;
 
+        /// <summary>
+        /// Sets the average Agro amount based on a number of fighters. 
+        /// </summary>
         public void InitalizeAgros(Fighter _myFighter, List<Fighter> _enemyFighters)
         {
             myFighter = _myFighter;
@@ -27,6 +33,10 @@ namespace RPGProject.Combat
             }
         }
 
+        /// <summary>
+        /// Changes the agro percentage for a specific fighter, then adds/subtracts that agro amount
+        /// equally from the other fighters on the opposing team.
+        /// </summary>
         public void UpdateAgro(Fighter _agressor, float _changeAmount)
         {
             Fighter agressorTarget = (Fighter)_agressor.selectedTarget;
@@ -52,6 +62,9 @@ namespace RPGProject.Combat
             FormatAgros(_agressor);
         }
 
+        /// <summary>
+        /// Protects against the total agro from being anything other than 100%
+        /// </summary>
         private void FormatAgros(Fighter _agressor)
         {
             int totalPercentageAmount = 0;
@@ -60,12 +73,9 @@ namespace RPGProject.Combat
                 totalPercentageAmount += agros[i].percentageOfAgro;
             }
 
-            //print("total = " + totalPercentageAmount.ToString());
-
             int excessPercentage = 0;
             if (totalPercentageAmount > 100)
             {
-                //print("Total > 100");
                 excessPercentage = totalPercentageAmount - 100;
 
                 int splitAgro = GetEvenAgroSplit(excessPercentage);
@@ -79,7 +89,6 @@ namespace RPGProject.Combat
             }
             else if (totalPercentageAmount < 100)
             {
-                //print("Total < 100");
                 excessPercentage = 100 - totalPercentageAmount;
                 for (int i = 0; i < agros.Count; i++)
                 {
@@ -93,6 +102,10 @@ namespace RPGProject.Combat
             }
         }
 
+        /// <summary>
+        /// Removes a fighter from the agro list (likely caused by death), and redistributes that fighters agro
+        /// evenly amongst the other fighters.
+        /// </summary>
         public void RemoveFromAgrosList(Fighter _deadFighter)
         {
             int agroToRedistribute = GetAgroPercentage(_deadFighter);
@@ -107,38 +120,9 @@ namespace RPGProject.Combat
             }
         }
 
-        public Fighter GetRandomTarget()
-        {
-            float randomPercentage = RandomGenerator.GetRandomNumber(0f, 100f);
-            float currentPercentageMax = 0f;
-
-            foreach (Agro agro in agros)
-            {
-                currentPercentageMax += agro.percentageOfAgro;
-
-                if (currentPercentageMax > randomPercentage) return agro.fighter;
-            }
-
-            return GetHighestAgroFighter();
-        }
-
-        public Fighter GetHighestAgroFighter()
-        {
-            Fighter highestAgroFighter = null;
-            float highestPercentage = 0;
-
-            foreach (Agro agro in agros)
-            {
-                if (agro.percentageOfAgro > highestPercentage)
-                {
-                    highestAgroFighter = agro.fighter;
-                    highestPercentage = agro.percentageOfAgro;
-                }
-            }
-
-            return highestAgroFighter;
-        }
-
+        /// <summary>
+        /// Returns the agro percentage for a specific fighter
+        /// </summary>
         public int GetAgroPercentage(Fighter _fighter)
         {
             foreach (Agro agro in agros)
@@ -149,6 +133,9 @@ namespace RPGProject.Combat
             return 0;
         }
 
+        /// <summary>
+        /// Returns the agro struct from a specific fighter
+        /// </summary>
         private Agro GetAgro(Fighter _fighter)
         {
             Agro agroToGet = new Agro();
@@ -161,6 +148,9 @@ namespace RPGProject.Combat
             return agroToGet;
         }
 
+        /// <summary>
+        /// Gets an evenly split agro percentage based on a number of fighters
+        /// </summary>
         private int GetEvenAgroSplit(int _percentageChange)
         {
             int enemyFighterCount = (agros.Count - 1);
@@ -168,7 +158,10 @@ namespace RPGProject.Combat
 
             return splitAgro;
         }
-
+        
+        /// <summary>
+        /// Returns the amount of health percentage change to calculate the agro amount.
+        /// </summary>
         private int GetPercentageOfHealthChange(Health _health, float _changeAmount)
         {
             bool isDamage = _changeAmount < 0;
@@ -182,6 +175,9 @@ namespace RPGProject.Combat
         }
     }
 
+    /// <summary>
+    /// Struct that contains a fighter and their current percentage of agro.
+    /// </summary>
     [Serializable]
     public struct Agro
     {

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Trigger that activates overworld enemies for specific areas.
+    /// </summary>
     public class EnemyActivationTrigger : MonoBehaviour
     {
         public event Action onActivation;

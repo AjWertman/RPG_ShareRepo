@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Page of the character menu that shows the abilities of a character.
+    /// </summary>
     public class CharacterAbilityPage : MonoBehaviour
     {
         [SerializeField] Image classImage = null;

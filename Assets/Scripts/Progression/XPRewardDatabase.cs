@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Progression
 {
+    /// <summary>
+    /// Database containing the xp rewards for different units.
+    /// </summary>
     public class XPRewardDatabase : MonoBehaviour
     {
         XP_Reward[] xp_Rewards = null;

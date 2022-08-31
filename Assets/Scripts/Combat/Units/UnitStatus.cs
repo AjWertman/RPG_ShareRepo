@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Data of a combatant and the abilities that are currently affecting them.
+    /// </summary>
     public class UnitStatus : MonoBehaviour
     {
         public float physicalReflectionDamage = 0f;

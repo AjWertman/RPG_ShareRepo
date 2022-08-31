@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Screen that is shown when the player team gets wiped out.
+    /// </summary>
     public class DeathScreen : MonoBehaviour
     {
         [SerializeField] GameObject options = null;

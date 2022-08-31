@@ -1,5 +1,8 @@
 namespace RPGProject.Core
 {
+    /// <summary>
+    /// Compares player and character keys.
+    /// </summary>
     public static class CharacterKeyComparison
     {
         public static bool AreKeysEqual(CharacterKey _characterKey, PlayerKey _playerKey)

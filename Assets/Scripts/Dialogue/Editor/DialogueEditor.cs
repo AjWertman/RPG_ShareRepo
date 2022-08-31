@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Dialogue
 {
+    /// <summary>
+    /// Handles the editing of dialogue scriptable objects in the editor.
+    /// </summary>
     public class DialogueEditor : EditorWindow
     {
         [NonSerialized] GUIStyle nodeStyle = null;

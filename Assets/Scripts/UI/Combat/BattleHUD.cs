@@ -7,6 +7,10 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// The UI that is always active during combat, displaying useful information
+    /// for the player.
+    /// </summary>
     public class BattleHUD : MonoBehaviour
     {
         [SerializeField] SelectedUnitIndicator selectedUnitIndicator = null;

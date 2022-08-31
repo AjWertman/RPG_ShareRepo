@@ -83,6 +83,7 @@ namespace RPGProject.Control.Combat
 
             if (Input.GetKeyDown(KeyCode.Return) && canAdvanceTurn)
             {
+                gridSystem.UnhighlightBlocks(tempPath);
                 ClearNeighborSelection();
                 battleHandler.AdvanceTurn();
             }
@@ -106,8 +107,8 @@ namespace RPGProject.Control.Combat
                 battleCamera.MoveFollowTransform(inputDirection);
             }
 
-            if (Input.GetKey(KeyCode.Q)) battleCamera.RotateFreeLook(true);
-            else if (Input.GetKey(KeyCode.E)) battleCamera.RotateFreeLook(false);
+            if (Input.GetKey(KeyCode.Q)) battleCamera.RotateCamera(true);
+            else if (Input.GetKey(KeyCode.E)) battleCamera.RotateCamera(false);
 
             float scrollWheelInput = Input.GetAxisRaw("Mouse ScrollWheel");
             if (scrollWheelInput > 0) battleCamera.Zoom(true);
@@ -486,9 +487,9 @@ namespace RPGProject.Control.Combat
         private void UpdateCurrentUnitTurn(UnitController _unitController)
         { 
             battleUIManager.UnhighlightTarget();
+            currentUnitTurn = _unitController;
             gridSystem.UnhighlightBlocks(tempPath);
 
-            currentUnitTurn = _unitController;
             if (currentUnitTurn.unitInfo.isPlayer)
             {
                 raycaster.isRaycasting = true;
@@ -501,6 +502,7 @@ namespace RPGProject.Control.Combat
                 canAdvanceTurn = false;
                 isPathfinding = false;
             }
+
             battleCamera.SetFollowTarget(_unitController.GetCharacterMesh().aimTransform);
         }
 

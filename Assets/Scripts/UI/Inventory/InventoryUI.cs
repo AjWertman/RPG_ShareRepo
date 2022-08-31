@@ -15,6 +15,8 @@ namespace RPGProject.UI
 
         private void Awake() 
         {
+            //Refactor
+            return;
             inventory = FindObjectOfType<Inventory>();
             inventory.inventoryUpdated += Redraw;
             CreateInventorySlotUIs();
@@ -22,6 +24,7 @@ namespace RPGProject.UI
 
         private void Start()
         {
+            return;
             Redraw();
         }
 

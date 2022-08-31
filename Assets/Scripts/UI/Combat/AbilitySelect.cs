@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// The menu that the player can select one of their character's abilities from.
+    /// </summary>
     public class AbilitySelect : MonoBehaviour
     {
         [SerializeField] RectTransform contentRectTransform = null;

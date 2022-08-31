@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Questing
 {
+    /// <summary>
+    /// Determines requirements that must be met for specific dialogue options/paths to be shown.
+    /// </summary>
     [Serializable]
     public class Condition
     {

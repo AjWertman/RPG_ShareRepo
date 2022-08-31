@@ -4,6 +4,9 @@ using RPGProject.Saving;
 
 namespace RPGProject.Inventories
 {
+    /// <summary>
+    /// The inventory of a player.
+    /// </summary>
     public class Inventory : MonoBehaviour, ISaveable
     {
         [SerializeField] int inventorySize = 16;
@@ -14,6 +17,9 @@ namespace RPGProject.Inventories
 
         private void Awake()
         {
+            //Refactor - Remmove when ready
+            return;
+
             slots = new InventorySlot[inventorySize];
 
             //Testing

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.GameResources
 {
+    /// <summary>
+    /// Manages a combatants health.
+    /// </summary>
     public class Health : MonoBehaviour
     {
         [SerializeField] AudioClip hurtClip = null;
@@ -26,8 +29,21 @@ namespace RPGProject.GameResources
         float armor = 10f;
         float resistance = 10f;
 
+        /// <summary>
+        /// Called whenever the health is changed to update UI to indicate the change.
+        /// Bool = Is critical.
+        /// Float = Amount of change.
+        /// </summary>
         public event Action<bool, float> onHealthChange;
+
+        /// <summary>
+        /// Called when the event in the "death" animation is called.
+        /// </summary>
         public event Action<Health> onAnimDeath;
+
+        /// <summary>
+        /// Called when healthpoints = 0.
+        /// </summary>
         public event Action<Health> onHealthDeath;
 
         public void InitalizeHealth()
@@ -35,6 +51,11 @@ namespace RPGProject.GameResources
             //animator = GetComponentInChildren<Animator>();
             soundFXManager = FindObjectOfType<SoundFXManager>();
             baseMaxHealthPoints = stamina * staminaHealthAmount;
+        }
+
+        public void SetAnimator(Animator _animator)
+        {
+            animator = _animator;
         }
 
         public void ResetHealth()
@@ -119,11 +140,6 @@ namespace RPGProject.GameResources
         public void SetCurrentHealthPercentage()
         {
             healthPercentage = healthPoints / maxHealthPoints;
-        }
-
-        public void SetAnimator(Animator _animator)
-        {
-            animator = _animator;
         }
 
         public bool DeathCheck()

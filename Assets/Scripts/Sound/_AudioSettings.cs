@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Sound
 {
+    /// <summary>
+    /// Used to duplicate an AudioSource's settings to be edited in the inspector.
+    /// </summary>
     [Serializable]
     public class _AudioSettings
     {

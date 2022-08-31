@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// The UI that handles the representation of character stats.
+    /// </summary>
     public class CharacterStatsPage : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI nameText = null;

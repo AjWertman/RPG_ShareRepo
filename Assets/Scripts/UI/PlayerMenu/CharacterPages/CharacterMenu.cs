@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// The menu that contains useful information about a specified character.
+    /// </summary>
     public class CharacterMenu : MonoBehaviour
     {
         [SerializeField] Button backTab = null;

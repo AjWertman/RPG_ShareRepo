@@ -6,7 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace RPGProject.UI
-{
+{ 
+    /// <summary>
+    /// The list to select a character on the current team of the player.
+    /// </summary>
     public class CharacterSelectMenu : MonoBehaviour
     {
         [SerializeField] Transform buttonContainer = null;

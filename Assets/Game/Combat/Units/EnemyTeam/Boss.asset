@@ -32,5 +32,4 @@ MonoBehaviour:
     speed: 30
     luck: 30
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
-  abilities:
-  - {fileID: 0}
+  abilities: []

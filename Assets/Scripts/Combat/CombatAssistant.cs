@@ -4,9 +4,15 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
-    //Used to calculate and/or test things during combat
+    /// <summary>
+    /// Useful functions and calculations for combat.
+    /// </summary>
     public static class CombatAssistant
     {
+        /// <summary>
+        /// Returns a string of why the current combatant cannot use an ability.
+        /// If it returns an empty string (""), it implies that the current combatant can use the ability.
+        /// </summary>
         public static string CanUseAbilityCheck(Fighter _caster, Ability _selectedAbility)
         {
             float energyCost = _selectedAbility.energyPointsCost;
@@ -34,6 +40,9 @@ namespace RPGProject.Combat
             return "";
         }
 
+        /// <summary>
+        /// Extra parameters for the "CanUseAbilityCheck" function.
+        /// </summary>
         public static string CanUseAbilityCheck(Fighter _caster, CombatTarget _target, Ability _selectedAbility)
         {
             string canUseAbilityCheck = CanUseAbilityCheck(_caster, _selectedAbility);
@@ -49,6 +58,9 @@ namespace RPGProject.Combat
             return "";
         }
 
+        /// <summary>
+        /// Determines if the target already is effected by an ability.
+        /// </summary>
         public static bool IsAlreadyEffected(string _abilityName, UnitStatus _targetStatus)
         {
             if (_abilityName == null || _abilityName == "" || _targetStatus == null) return false;
@@ -61,6 +73,9 @@ namespace RPGProject.Combat
             return false;       
         }
 
+        /// <summary>
+        /// Calculation for critical hits.
+        /// </summary>
         public static bool CriticalHitCheck(float _critChance)
         {
             float randomFloat = RandomGenerator.GetRandomNumber(0, 99);
@@ -69,6 +84,9 @@ namespace RPGProject.Combat
             return isCriticalHit;
         }
 
+        /// <summary>
+        /// Calculation for applying buff.
+        /// </summary>
         public static bool ApplyBuffCheck(float _applyChance)
         {
             float randomFloat = RandomGenerator.GetRandomNumber(0, 99);
@@ -80,6 +98,9 @@ namespace RPGProject.Combat
             return isSuccessful;
         }
 
+        /// <summary>
+        /// Returns the amount of damage or healing with critical hit modifier.
+        /// </summary>
         public static float GetCalculatedAmount(float _baseAmount, bool _isCritical)
         {
             float calculatedAmount = _baseAmount;

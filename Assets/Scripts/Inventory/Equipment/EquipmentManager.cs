@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Handles a characters equipment.
+/// </summary>
 public class EquipmentManager : MonoBehaviour
 {
     //Refactor

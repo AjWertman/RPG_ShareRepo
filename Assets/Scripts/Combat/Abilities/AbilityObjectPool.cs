@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Pool of all abilities
+    /// </summary>
     public class AbilityObjectPool : MonoBehaviour
     {
         [SerializeField] AbilityPrefab[] abilityPrefabs = null;
@@ -62,6 +65,12 @@ namespace RPGProject.Combat
                     abilityBehavior.hitFXSpawnRequest += SpawnHitFX;
 
                     abilityBehaviorInstances.Add(abilityBehavior);
+
+                    //if(abilityBehavior.GetType() == typeof(Turret))
+                    //{
+                    //    Turret turret = (Turret)abilityBehavior;
+                    //    turret.SetProjectile(GetAbilityInstance(turret.projectileKey));
+                    //}
                 }
 
                 abilityPool.Add(abilityPrefab.abilityObjectKey, abilityBehaviorInstances);

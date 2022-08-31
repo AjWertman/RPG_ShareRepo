@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Displays all information regarding a player's quest list.
+    /// </summary>
     public class QuestMenu : MonoBehaviour
     {
         [SerializeField] Button questsTab = null;

@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Handles the highlighting of a menu item.
+    /// </summary>
     public class MenuItemHighlighter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         Image image = null;

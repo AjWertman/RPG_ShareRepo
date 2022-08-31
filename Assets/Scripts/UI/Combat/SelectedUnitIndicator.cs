@@ -6,6 +6,10 @@ using RPGProject.Combat;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// UI to represent the highlighted character in combat, and provide deatailed information
+    /// on their status.
+    /// </summary>
     public class SelectedUnitIndicator : MonoBehaviour
     {
         [SerializeField] Image background = null;
@@ -23,7 +27,7 @@ namespace RPGProject.UI
 
         RectTransform rect;
 
-        private void Awake()
+        private void Start()
         {
             rect = GetComponent<RectTransform>();
             defaultPosition = rect.anchoredPosition;
@@ -91,7 +95,8 @@ namespace RPGProject.UI
 
         private void MoveToPosition(Vector2 _position)
         {
-            rect.anchoredPosition = _position;
+            //rect.anchoredPosition = _position;
+            GetComponent<RectTransform>().anchoredPosition = _position;
         }
 
         private void SetBackgroundColor(bool _isPlayer)

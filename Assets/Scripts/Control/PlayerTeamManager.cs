@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Holds and handles the information of the player team.
+    /// </summary>
     public class PlayerTeamManager : MonoBehaviour, ISaveable
     {
         public List<TeamInfo> teamInfos = new List<TeamInfo>();

@@ -9,6 +9,9 @@ using UnityEngine.AI;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Handles combat for a Unit.
+    /// </summary>
     public class Fighter : MonoBehaviour, CombatTarget
     {
         public UnitStatus unitStatus = null;
@@ -44,6 +47,10 @@ namespace RPGProject.Combat
 
         Dictionary<Ability, int> abilityCooldowns = new Dictionary<Ability, int>();
 
+        /// <summary>
+        /// Called whenever the current Fighter does something that increases
+        /// or decreases their agro percentage of the opposing team.
+        /// </summary>
         public event Action<Fighter, float> onAgroAction;
         public event Action<bool> onHighlight;
 
@@ -172,45 +179,9 @@ namespace RPGProject.Combat
             else return false;
         }
 
-        public Ability GetRandomAbility()
-        {
-            Ability randomAbility = null;
-
-            List<Ability> knownAbilities = new List<Ability>();
-            Ability basicAttack = unitInfo.basicAttack;
-            Ability[] abilities = unitInfo.abilities;
-
-            knownAbilities.Add(basicAttack);
-
-            if (!unitStatus.isSilenced)
-            {
-                if (abilities.Length == 0 || abilities == null) randomAbility = basicAttack;
-                foreach(Ability ability in abilities)
-                {
-                    knownAbilities.Add(ability);
-                }
-
-                randomAbility = knownAbilities[RandomGenerator.GetRandomNumber(0, knownAbilities.Count -1)];
-            }
-            else
-            {
-                List<Ability> physicalAbilities = new List<Ability>();
-                physicalAbilities.Add(basicAttack);
-
-                foreach (Ability ability in abilities)
-                {
-                    if (ability.abilityType == AbilityType.Melee)
-                    {
-                        physicalAbilities.Add(ability);
-                    }
-                }
-
-                randomAbility = physicalAbilities[RandomGenerator.GetRandomNumber(0, physicalAbilities.Count - 1)];
-            }
-
-            return randomAbility;
-        }
-
+        /// <summary>
+        /// Returns all the abilities a fighter is the proper level to use.
+        /// </summary>
         public List<Ability> GetKnownAbilities()
         {
             List<Ability> knownAbilities = new List<Ability>();
@@ -222,10 +193,10 @@ namespace RPGProject.Combat
 
             foreach(Ability ability in abilities)
             {
+                if (ability == null) continue;
                 //Refactor
                 //int unitLevel = unitInfo.GetUnitLevel();
                 int unitLevel = 1000;
-
                 if (unitLevel >= ability.requiredLevel)
                 {
                     knownAbilities.Add(ability);
@@ -261,6 +232,9 @@ namespace RPGProject.Combat
             return characterMesh.aimTransform;
         }
 
+        /// <summary>
+        /// Performs the behavior of the selected ability this fighter is casting and executes it on the selected target.
+        /// </summary>
         private void PerformAbility()
         {
             AbilityType abilityType = selectedAbility.abilityType;
@@ -406,10 +380,5 @@ namespace RPGProject.Combat
         }
         //////////
         ///
-
-        public string Name()
-        {
-            return name;
-        }
     }
 }

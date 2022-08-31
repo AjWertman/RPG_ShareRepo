@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Saving
 {
+    /// <summary>
+    /// Gives control to the player to call save and load on the SavingSystem.
+    /// </summary>
     public class SavingWrapper : MonoBehaviour
     {
         SavingSystem savingSystem = null;

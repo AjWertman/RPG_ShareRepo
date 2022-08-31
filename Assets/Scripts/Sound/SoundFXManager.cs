@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Sound
 {
+    /// <summary>
+    /// Creates an audiosource pool and handles the creation of sound effects.
+    /// </summary>
     public class SoundFXManager : MonoBehaviour
     {
         [SerializeField] GameObject soundFXSourcePrefab = null;

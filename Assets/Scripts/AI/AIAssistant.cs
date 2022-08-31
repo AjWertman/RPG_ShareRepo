@@ -5,15 +5,21 @@ using UnityEngine;
 
 namespace RPGProject.Combat.AI
 {
-    //Useful functions that are used by the BattleAIBrain 
+    /// <summary>
+    /// Useful functions that are used by the BattleAIBrain to calculate moves.
+    /// </summary>
     public static class AIAssistant
     {
-        public static AIRanking GetAPCostRanking(int _currentAP, int _apCost)
+        /// <summary>
+        /// Returns the ranking of the cost to use an ability.
+        /// This also includes the cost to move in range if necessary.
+        /// </summary>
+        public static AIRanking GetEnergyCostRanking(int _currentEnergy, int _energyCost)
         {
-            if (_apCost == 0) return AIRanking.Great;
-            if (_currentAP > _apCost)
+            if (_energyCost == 0) return AIRanking.Great;
+            if (_currentEnergy > _energyCost)
             {
-                float percentageOfAP = _currentAP / _apCost;
+                float percentageOfAP = _currentEnergy / _energyCost;
 
                 if (percentageOfAP <= .25f) return AIRanking.Great;
                 else if (percentageOfAP > .25f && percentageOfAP <= .50f) return AIRanking.Good;
@@ -23,6 +29,11 @@ namespace RPGProject.Combat.AI
             else return AIRanking.Mediocre;
         }
 
+        /// <summary>
+        /// Returns the ranking of the impact/strength of an action. 
+        /// Lower health targets are high priority for both damage and healing.
+        /// If the action does a lot of damage or healing, it gets a higher ranking.
+        /// </summary>
         public static AIRanking GetImpactRanking(AIBattleAction _combatAction, bool _isPlayer)
         {
             float impactScore = 0f;
@@ -62,6 +73,11 @@ namespace RPGProject.Combat.AI
             else return AIRanking.Bad;
         }
 
+        /// <summary>
+        /// Determines what type of action(s) a move is and returns the highest action based on the type of AI.
+        /// For example, if an action has the type "Damage" and "Taunt," a damage dealer will return damage,
+        /// where a tank would return taunt.
+        /// </summary>
         public static AIActionType GetHighestActionType(AIBattleBehavior _behaviorPreset, List<AIActionType> _actionTypes)
         {
             if (_actionTypes.Count == 1) return _actionTypes[0];
@@ -84,6 +100,11 @@ namespace RPGProject.Combat.AI
             return (AIActionType)highestIndex;
         }
 
+        /// <summary>
+        /// Returns the ranking of an Action Type based on the type of AI.
+        /// For example, if the type of AI is a healer, it will rank healing and support abilities high
+        /// and it would rank taunt and damage abilities low.
+        /// </summary>
         public static AIRanking GetBehaviorRanking(AIBattleBehavior _behaviorPreset, AIActionType _actionType)
         {
             if (_behaviorPreset.aiType == AIBattleType.Custom) return AIRanking.Great;
@@ -101,6 +122,10 @@ namespace RPGProject.Combat.AI
             else return AIRanking.Bad;
         }
 
+        /// <summary>
+        /// Returns the ranking of the target status based on their current health percentage,
+        /// any buffs/debuffs the target has, and the strength of their current position.
+        /// </summary>
         public static AIRanking GetRankingByTargetStatus(Fighter _target)
         {       
             Health targetHealth = _target.GetHealth();
@@ -115,6 +140,10 @@ namespace RPGProject.Combat.AI
             //Add Position strength
         }
 
+        /// <summary>
+        /// Returns a ranking based on the Agro of a certain enemy. The higher the agro, the higher the ranking. 
+        /// Healers and other support AI are less influenced by agro.
+        /// </summary>
         public static AIRanking GetRankingByAgro(AIBattleType _aiType, Agro _agro)
         {
             int agroPercentage = _agro.percentageOfAgro;
@@ -137,6 +166,9 @@ namespace RPGProject.Combat.AI
 
         }
 
+        /// <summary>
+        /// Returns a "score" based on the ranking. 
+        /// </summary>
         public static float GetModifier(AIRanking _ranking)
         {
             switch (_ranking)
@@ -154,51 +186,9 @@ namespace RPGProject.Combat.AI
             return 0;
         }
 
-        //public static AIRanking GetBehaviorRanking(Fighter _currentFighter, AIBattleAction _action)
-        //{
-        //    Fighter target = _action.target;
-        //    Ability ability = _action.selectedAbility;
-
-        //}
-        //private static Dictionary<Fighter, bool> SortAllFighters(List<Fighter> _allFighters)
-        //{
-        //    Dictionary<Fighter, bool> allFighters = new Dictionary<Fighter, bool>();
-
-        //    foreach (Fighter fighter in _allFighters)
-        //    {
-        //        bool isPlayer = fighter.unitInfo.isPlayer;
-        //        allFighters.Add(fighter, isPlayer);
-        //    }
-
-        //    return allFighters;
-        //}
-
-        //public static float GetHealthPercentageModifier(float _healthPercentage)
-        //{
-        //    if (MathAssistant.IsBetween(_healthPercentage, 0f, .25f)) return 25f;
-        //    else if (MathAssistant.IsBetween(_healthPercentage, .25f, .50f)) return 15f;
-        //    else if (MathAssistant.IsBetween(_healthPercentage, .50f, .75f)) return 5f;
-        //    else return 0f;
-        //}
-
-        //public static TargetPreference GetTargetPreferenceByAgro(int _agroPercentage)
-        //{
-        //    if (_agroPercentage >= 90) return TargetPreference.Ideal;
-        //    else if (_agroPercentage < 90 && _agroPercentage >= 60) return TargetPreference.Preferred;
-        //    else if (_agroPercentage < 60 && _agroPercentage >= 10) return TargetPreference.Indifferent;
-        //    else return TargetPreference.Ignore;
-        //}
-
-        ////Gets preferences by distance (not amount of grid blocks)
-        //public static TargetPreference GetTargetPreferenceByDistance(Transform _currentTransform, Transform _testTransform)
-        //{
-        //    float distance = GetDistance(_currentTransform.position, _testTransform.position);
-
-        //    if (distance <= 2) return TargetPreference.Preferred;
-        //    else if (distance > 2 && distance <= 10) return TargetPreference.Indifferent;
-        //    else return TargetPreference.Ignore;
-        //}
-
+        /// <summary>
+        /// Returns the average ranking from the list of rankings.
+        /// </summary>
         public static AIRanking GetRankAverage(List<AIRanking> _rankings)
         {
             AIRanking averageRank = AIRanking.Mediocre;
@@ -221,71 +211,11 @@ namespace RPGProject.Combat.AI
             return averageRank;
         }
 
-        //public static float GetPreferenceModifier(TargetPreference _targetPreference)
-        //{
-        //    switch (_targetPreference)
-        //    {
-        //        case TargetPreference.Ignore:
-        //            return 1f;
-        //        case TargetPreference.Indifferent:
-        //            return 2f;
-        //        case TargetPreference.Preferred:
-        //            return 5f;
-        //        case TargetPreference.Ideal:
-        //            return 10f;
-        //    }
-
-        //    return 1f;
-        //}
-
         public static float GetDistance(Vector3 _currentPosition, Vector3 _testPosition)
         {
             Vector3 myPosition = new Vector3(_currentPosition.x, 0, _currentPosition.z);
             Vector3 targetPosition = new Vector3(_testPosition.x, 0, _testPosition.z);
             return Vector3.Distance(myPosition, targetPosition);
-        }
-
-        public static float GetScoreByGCost(int _gCost)
-        {
-            if (_gCost <= 24) return 2f;
-            else if (_gCost > 24 && _gCost <= 38) return 1f;
-            else return 0f;
-        }
-
-        public static float GetAITypeModifier(AIBattleType _currentType, AIBattleAction _actionToTest)
-        {
-            bool isTypeMatch = false;
-
-            foreach(AIBattleType combatAIType in GetCompatableAITypes(_actionToTest))
-            {
-                if (_currentType == combatAIType) isTypeMatch = true;
-            }
-
-            if (isTypeMatch) return 2f;
-            else return .5f;
-        }
-
-        public static bool IsTeammate(Fighter _fighterA, Fighter _fighterB)
-        {
-            bool isAPlayer = _fighterA.unitInfo.isPlayer;
-            bool isBPlayer = _fighterB.unitInfo.isPlayer;
-
-            return isAPlayer == isBPlayer;
-        }
-
-        private static IEnumerable<AIBattleType> GetCompatableAITypes(AIBattleAction _actionToTest)
-        {
-            bool isDamage = _actionToTest.selectedAbility.baseAbilityAmount < 0f;
-            if (isDamage)
-            {
-                yield return AIBattleType.mDamage;
-                yield return AIBattleType.rDamage;
-                yield return AIBattleType.Tank;
-            }
-            else
-            {
-                yield return AIBattleType.Healer;
-            }
         }
     }
 }

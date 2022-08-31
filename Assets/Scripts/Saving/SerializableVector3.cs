@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Saving
 {
+    /// <summary>
+    /// Allows for the serialization of Vector3s
+    /// </summary>
     [Serializable]
     public struct SerializableVector3
     {

@@ -6,7 +6,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace RPGProject.UI
-{
+{ 
+    /// <summary>
+    /// Button used to interact with and display stored information of its set ability.
+    /// </summary>
     public class AbilityUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         Ability myAbility = null;

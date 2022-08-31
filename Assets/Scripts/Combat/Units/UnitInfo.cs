@@ -4,6 +4,9 @@ using System;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Information about a combatant
+    /// </summary>
     [Serializable]
     public struct UnitInfo
     {

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// A scriptable object containing the data of a combatant.
+    /// </summary>
     [CreateAssetMenu(fileName = "New Unit", menuName = "Character/Create New Unit", order = 1)]
     public class Unit : ScriptableObject
     {

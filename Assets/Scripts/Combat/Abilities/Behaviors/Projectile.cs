@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Behavior that launches itself at a target.
+    /// </summary>
     public class Projectile : AbilityBehavior
     {
         [SerializeField] GameObject affectorTrigger = null;
@@ -25,6 +28,7 @@ namespace RPGProject.Combat
 
         public override void PerformAbilityBehavior()
         {
+            if (target == null) return;
             hasAppliedChangeAmount = false;
             aimTransform = target.GetAimTransform();
             isSetup = true;

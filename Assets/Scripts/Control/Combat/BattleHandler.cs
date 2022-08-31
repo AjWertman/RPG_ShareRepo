@@ -111,10 +111,6 @@ namespace RPGProject.Control.Combat
             battleUIManager.onEndTurn += () => AdvanceTurn();
         }
 
-        public BattleUIManager GetBattleUIManager()
-        {
-            return battleUIManager;
-        }
 
         public void OnPlayerMove(List<CombatTarget> _targets, Ability _selectedAbility)
         {
@@ -266,6 +262,11 @@ namespace RPGProject.Control.Combat
             return isBattling;
         }
 
+        public BattleUIManager GetBattleUIManager()
+        {
+            return battleUIManager;
+        }
+
         private void OnUnitDeath(UnitController _unitThatCausedUpdate)
         {
             List<Fighter> playerCombatants = GetUnitFighters(unitManager.playerUnits);
@@ -319,43 +320,45 @@ namespace RPGProject.Control.Combat
         {
             StopCoroutine(currentAttack);
 
-            if (_won == true) 
-            {
-                yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
+            yield return FindObjectOfType<BattleEndScreen>(true).EndDemo(_won);
 
-                UpdateTeamResources(unitManager.playerUnits);
-
-                yield return new WaitForSeconds(1f);
-
-                //ResetManagers();
-
-                yield return new WaitForSeconds(2f);
-
-                //FindObjectOfType<SavingWrapper>().Save();     
-
-                //GetComponent<MusicOverride>().ClearOverride();
-
-                CalculateBattleRewards();
-
-                onBattleEnd();
-
-                yield return FindObjectOfType<Fader>().FadeIn(.5f);
-            }
-
-            else if (_won == false)
-            {
-                FindObjectOfType<SceneManagerScript>().LoadMainMenu();
-            }
-            //else if(_won == null)
+            //if (_won == true) 
             //{
-            //    Refactor Win ending without reward??
+            //    yield return FindObjectOfType<Fader>().FadeOut(Color.white, .5f);
+
+            //    UpdateTeamResources(unitManager.playerUnits);
+
+            //    yield return new WaitForSeconds(1f);
+
+            //    //ResetManagers();
+
+            //    yield return new WaitForSeconds(2f);
+
+            //    //FindObjectOfType<SavingWrapper>().Save();     
+
+            //    //GetComponent<MusicOverride>().ClearOverride();
+
+            //    CalculateBattleRewards();
+
+            //    //onBattleEnd();
+
+            //    yield return FindObjectOfType<Fader>().FadeIn(.5f);
             //}
 
-            currentAttack = null;
-            //playerTeam.Clear();
-            //playerTeamSize = 0;
-            //enemyTeam.Clear();
-            //enemyTeamSize = 0;
+            //else if (_won == false)
+            //{
+            //    FindObjectOfType<SceneManagerScript>().LoadMainMenu();
+            //}
+            ////else if(_won == null)
+            ////{
+            ////    Refactor Win ending without reward??
+            ////}
+
+            //currentAttack = null;
+            ////playerTeam.Clear();
+            ////playerTeamSize = 0;
+            ////enemyTeam.Clear();
+            ////enemyTeamSize = 0;
         }
 
         private void CalculateBattleRewards()

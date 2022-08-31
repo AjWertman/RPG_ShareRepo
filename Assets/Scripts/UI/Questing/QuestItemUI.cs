@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Button that stores a quest and is interactable to display that information.
+    /// </summary>
     public class QuestItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] TextMeshProUGUI title = null;

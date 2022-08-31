@@ -6,6 +6,9 @@ namespace RPGProject.Movement
 {
     public enum AIMovementAnimKey { Idle, Jump , Moving}
 
+    /// <summary>
+    /// The base class for any AI related movement.
+    /// </summary>
     public abstract class AIMover : MonoBehaviour
     {
         [SerializeField] protected AudioClip footstepsSound = null;

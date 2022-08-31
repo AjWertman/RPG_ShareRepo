@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// The menu that the player can use to fast travel.
+    /// </summary>
     public class FastTravelMenu : MonoBehaviour
     {
         [SerializeField] GameObject fastTravelButtonPrefab = null;

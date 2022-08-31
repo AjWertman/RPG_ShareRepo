@@ -1,5 +1,8 @@
 namespace RPGProject.Inventories
-{
+{ 
+    /// <summary>
+    /// A reference to where a weapon is/should be equipped.
+    /// </summary>
     public enum WeaponLocation
     {
        None,

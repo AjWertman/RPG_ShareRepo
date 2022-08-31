@@ -15,7 +15,7 @@ MonoBehaviour:
   abilityName: Attack
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -40
+  baseAbilityAmount: -4000
   description: 
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
@@ -34,3 +34,4 @@ MonoBehaviour:
   cooldown: 0
   requiresTarget: 0
   canTargetAll: 0
+  amountOfNeighborBlocksAffected: 0

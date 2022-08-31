@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat.Grid
 {
+    /// <summary>
+    /// Controls the basic necessary information for the combat grid.
+    /// </summary>
     [ExecuteAlways]
     public class GridSystem : MonoBehaviour
     {
@@ -69,6 +72,10 @@ namespace RPGProject.Combat.Grid
             gridDictionary.Clear();
         }
 
+        /// <summary>
+        /// Highlights the path green to the furtherst block a character can move based on their energy.
+        /// If they do not have enough energy to reach the goal, the remaining path is highlighted red.
+        /// </summary>
         public void HighlightPath(List<GridBlock> _path, int _furthestBlockIndex)
         {
             GridBlock startBlock = _path[0];
@@ -147,6 +154,7 @@ namespace RPGProject.Combat.Grid
             _gridBlock.SetupGridBlock(newMaterial, textColor);
         }
 
+        //Sets the boundaries of the grid system to the lowest and highest x and z values.
         private void BoundaryCheck(GridCoordinates _gridCoordinates)
         {
             int x = _gridCoordinates.x;

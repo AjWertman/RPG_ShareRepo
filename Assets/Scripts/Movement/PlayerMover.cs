@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Movement
 {
+    /// <summary>
+    /// Handles the movement of the overworld "Player."
+    /// </summary>
     public class PlayerMover : MonoBehaviour, ISaveable
     {
         [SerializeField] float moveSpeed = 100f;

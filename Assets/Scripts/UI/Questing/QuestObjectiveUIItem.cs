@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Displays the status of a quest objective.
+    /// </summary>
     public class QuestObjectiveUIItem : MonoBehaviour
     {
         [SerializeField] GameObject nonCompletedImage = null;

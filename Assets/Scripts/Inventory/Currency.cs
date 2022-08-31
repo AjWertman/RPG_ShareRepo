@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Inventories
 {
+    /// <summary>
+    /// Resource used in the buying and selling of items.
+    /// </summary>
     public class Currency : MonoBehaviour
     {
         public float gold = 0;

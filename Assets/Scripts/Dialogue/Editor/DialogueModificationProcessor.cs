@@ -3,6 +3,9 @@ using UnityEditor;
 
 namespace RPGProject.Dialogue
 {
+    /// <summary>
+    /// Handles the moving of dialogue nodes in the editor 
+    /// </summary>
     public class DialogueModificationProcessor : AssetModificationProcessor
     {
         private static AssetMoveResult OnWillMoveAsset(string _sourcePath, string _destinationPath)

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// The camera behavior for the overworld.
+    /// </summary>
     public class FollowCamera : MonoBehaviour
     {
         CinemachineFreeLook followCamera = null;

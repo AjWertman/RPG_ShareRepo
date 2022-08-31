@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat.Grid
 {
+    /// <summary>
+    /// Calculates paths and differnet gridblock formations.
+    /// </summary>
     public class Pathfinder : MonoBehaviour
     {
         const int straightCost = 10;
@@ -25,11 +28,15 @@ namespace RPGProject.Combat.Grid
             gridDictionary.Clear();
             gridDictionary = _gridDictionary;
         }
-
-        //Refactor to take into account affected blocks and end position evalution.
-        ///also add GetBlocksInRange(GridBlock _targetBlock, float range);
+      
+       /// <summary>
+       /// Calculates the best possible path based on A* pathfinding.
+       /// </summary>
         public List<GridBlock> FindOptimalPath(GridBlock _startBlock, GridBlock _endBlock)
         {
+            //Refactor to take into account affected blocks and end position evalution.
+            //also add GetBlocksInRange(GridBlock _targetBlock, float range);
+
             if (_startBlock == _endBlock) return null;
 
             openList.Clear();
@@ -82,14 +89,10 @@ namespace RPGProject.Combat.Grid
             return new List<GridBlock>();
         }
 
-        public GridBlock GetGridBlock(int _x, int _z)
-        {
-            GridCoordinates gridCoordinates = new GridCoordinates(_x, _z);
 
-            if (gridDictionary.ContainsKey(gridCoordinates)) return gridDictionary[gridCoordinates];
-            else return null;
-        }
-
+        /// <summary>
+        /// Returns the G-Cost to reach a specific block.
+        /// </summary>
         public static int CalculateDistance(GridBlock _startBlock, GridBlock _endBlock)
         {
             GridCoordinates startCoordinates = _startBlock.gridCoordinates;
@@ -104,9 +107,17 @@ namespace RPGProject.Combat.Grid
             return distanceCost;
         }
 
+        public GridBlock GetGridBlock(int _x, int _z)
+        {
+            GridCoordinates gridCoordinates = new GridCoordinates(_x, _z);
+
+            if (gridDictionary.ContainsKey(gridCoordinates)) return gridDictionary[gridCoordinates];
+            else return null;
+        }
+
         public bool IsNeighborBlock(GridBlock _targetBlock, GridBlock _possibleNeighbor)
         {
-            foreach(GridBlock gridBlock in GetNeighbors(_targetBlock,1))
+            foreach (GridBlock gridBlock in GetNeighbors(_targetBlock, 1))
             {
                 if (gridBlock == _possibleNeighbor) return true;
             }
@@ -141,6 +152,9 @@ namespace RPGProject.Combat.Grid
             return true;
         }
 
+        /// <summary>
+        /// Retraces the path found in "FindOptimalPath()" and reverses the order to be usable by the combat system.
+        /// </summary>
         private List<GridBlock> CalculatePath(GridBlock _endBlock)
         {
             List<GridBlock> calculatedPath = new List<GridBlock>();
@@ -162,6 +176,9 @@ namespace RPGProject.Combat.Grid
             return calculatedPath;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private GridBlock GetLowestFCostBlock(List<GridBlock> blockList)
         {
             GridBlock lowestFCostBlock = blockList[0];
@@ -185,6 +202,9 @@ namespace RPGProject.Combat.Grid
             }
         }
 
+        /// <summary>
+        /// Returns all the neighbor blocks by the specified amount of neighbors
+        /// </summary>
         private IEnumerable<GridBlock> CalculateNeighborBlocks(GridBlock _gridBlock, int _amount)
         {
             int myX = _gridBlock.gridCoordinates.x;
@@ -201,7 +221,7 @@ namespace RPGProject.Combat.Grid
                 }
             }
 
-            //Queen/Chess movement
+            //Queen(Chess) movement
             //if(_amount >= 1)
             //{
             //    for (int i = 1; i < _amount + 1; i++)
@@ -220,13 +240,16 @@ namespace RPGProject.Combat.Grid
         }
     }
 
+    /// <summary>
+    /// Struct containing necessary information for pathfinding.
+    /// </summary>
     [Serializable]
     public struct PathfindingCostValues
     {
         public GridBlock cameFromBlock;
-        public int gCost;
-        public int hCost;
-        public int fCost;
+        public int gCost; //Cost to move to a block (straight = 10, diagonal = 14)
+        public int hCost; //Ideal G-Cost to move to a specific point
+        public int fCost; //G-Cost + H-Cost
 
         public void CalculateFCost()
         {

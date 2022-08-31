@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Core
 {
+    /// <summary>
+    /// Plays a particle effect then returns the particle to its pool when it has completed playing.
+    /// </summary>
     public class ReturnAfterEffect : MonoBehaviour
     {
         ParticleSystem myParticleSystem = null;

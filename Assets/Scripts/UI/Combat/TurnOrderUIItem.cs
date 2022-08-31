@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// The object instance of UI that is represented by the turn order of battle.
+    /// </summary>
     public class TurnOrderUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] Image background = null;

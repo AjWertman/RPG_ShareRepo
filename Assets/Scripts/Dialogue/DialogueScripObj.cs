@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Dialogue
 {
+    /// <summary>
+    /// Scriptable object that contains information of dialogue.
+    /// </summary>
     [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue/Create New Dialogue", order = 1)]
     public class DialogueScripObj : ScriptableObject, ISerializationCallbackReceiver
     {

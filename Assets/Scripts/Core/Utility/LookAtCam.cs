@@ -2,11 +2,14 @@
 
 namespace RPGProject.Core
 {
+    /// <summary>
+    /// Behavior for making UI face the camera.
+    /// </summary>
     public class LookAtCam : MonoBehaviour
     {
-        public void LookAtCamTransform(Transform camTransform)
+        public void LookAtCamTransform(Transform _camTransform)
         {
-            transform.LookAt(camTransform);
+            transform.LookAt(_camTransform);
         }
     }
 }

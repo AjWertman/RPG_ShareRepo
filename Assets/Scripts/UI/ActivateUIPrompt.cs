@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Piece of text near the cursor to indicate what the player 
+    /// would activate on click.
+    /// </summary>
     public class ActivateUIPrompt : MonoBehaviour
     {
         [SerializeField] GameObject activationPromptObject = null;

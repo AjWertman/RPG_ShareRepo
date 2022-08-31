@@ -1,11 +1,14 @@
 using RPGProject.Combat.Grid;
 using RPGProject.Core;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// The behavior of a turret placeable on a grid. Will attack any combatants that venture into its attack range.
+    /// It also gets a turn of its own and will attack a random target.
+    /// </summary>
     public class Turret : AbilityBehavior, CombatTarget
     {
         [SerializeField] Fighter testTarget = null;
@@ -28,8 +31,15 @@ namespace RPGProject.Combat
             fighter = GetComponent<Fighter>();
         }
 
+        /// <summary>
+        /// Shoots a target with a projectile.
+        /// If it is this turrets turn, it will shoot a random target.
+        /// If it is not this turrets turn, a combatant must have come in range and will be shot.
+        /// </summary>
         public void Shoot(Fighter _target, bool _isTurn)
         {
+            //Refactor - range obstructions?
+
             if (!_isTurn)
             {
                 if (fightersInRange.Contains(_target)) return;
@@ -43,17 +53,23 @@ namespace RPGProject.Combat
             if (_target == null) return;
 
             LookAtTarget(_target.transform);
-            target = _target;
-            bulletProjectile.target = target;
+            bulletProjectile.target = _target;
             bulletProjectile.PerformAbilityBehavior();
         }
 
+        /// <summary>
+        /// Called when a combatant enters the turrets range.
+        /// </summary>
         public void ShootNewContester(Fighter _target, GridBlock _targetBlock)
         {
+            //Refactor - only works if the current combatant moves to _targetBlock, not if they simply move over it.
             if (_target == null) return;
             Shoot(_target, false);
         }
 
+        /// <summary>
+        /// Gets a random target based on all of the fighters currently in range of the turret.
+        /// </summary>
         private Fighter GetRandomTarget()
         {
             int fightersInRangeCount = fightersInRange.Count;
@@ -63,6 +79,9 @@ namespace RPGProject.Combat
             return fightersInRange[RandomGenerator.GetRandomNumber(0, fightersInRangeCount - 1)];
         }
 
+        /// <summary>
+        /// Rotates the gun of the turret to look at a target.
+        /// </summary>
         public void LookAtTarget(Transform _target)
         {
             Vector3 targetPosition = _target.position;
@@ -71,6 +90,9 @@ namespace RPGProject.Combat
             gunTransform.LookAt(lookPosition);
         }
 
+        /// <summary>
+        /// Sets up the bullet projectile of this turret.
+        /// </summary>
         public void SetProjectile(AbilityBehavior _newProjectile)
         {
             _newProjectile.SetupAbility(fighter, null, changeAmount, false, abilityLifetime);
@@ -80,6 +102,9 @@ namespace RPGProject.Combat
             ResetProjectile(_newProjectile);
         }
         
+        /// <summary>
+        /// Resets the bullet projectile of this turret.
+        /// </summary>
         public void ResetProjectile(AbilityBehavior _projectile)
         {
             Projectile projectile = _projectile as Projectile;
@@ -88,6 +113,9 @@ namespace RPGProject.Combat
             projectile.target = null;
         }
 
+        /// <summary>
+        /// Sets the attack radius (list of gridblocks) and subscribes to the fighter update event on each block.
+        /// </summary>
         public void SetupAttackRadius(List<GridBlock> _attackRadius)
         {
             foreach (GridBlock gridBlock in _attackRadius)
@@ -114,7 +142,7 @@ namespace RPGProject.Combat
         {
             myBlock.isMovable = true;
 
-            foreach(GridBlock gridBlock in attackRadius)
+            foreach (GridBlock gridBlock in attackRadius)
             {
                 gridBlock.onContestedFighterUpdate -= ShootNewContester;
             }
@@ -122,19 +150,6 @@ namespace RPGProject.Combat
             attackRadius.Clear();
 
             base.OnAbilityDeath();
-        }
-
-        private float GetDistance(Transform _fighterTransform)
-        {
-            Vector3 fighterPosition = new Vector3(_fighterTransform.position.x, 0, _fighterTransform.position.z);
-            Vector3 myPosition = new Vector3(transform.position.x, 0, transform.position.z);
-
-            return Vector3.Distance(fighterPosition, myPosition);
-        }
-
-        public string Name()
-        {
-            return name;
         }
 
         public Transform GetAimTransform()

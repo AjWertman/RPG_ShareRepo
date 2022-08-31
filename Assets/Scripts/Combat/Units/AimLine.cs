@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// The line that is used to indicate where the player is currently aiming their ability,
+    /// and if they are in range to use the ability.
+    /// </summary>
     public class AimLine : MonoBehaviour
     {
         [SerializeField] Material inRangeMaterial = null;
@@ -25,6 +29,10 @@ namespace RPGProject.Combat
             parent = transform.parent;
         }
 
+        /// <summary>
+        /// Activates the aim line, setting its start and end position, and updating the color 
+        /// to represent if the combatant is in range or not.
+        /// </summary>
         public bool DrawAimLine(Transform _origin, Vector3 _targetPostion, float _attackRange)
         {
             if (_origin == null || _attackRange == 0)
@@ -84,16 +92,5 @@ namespace RPGProject.Combat
             hitFighter = null;
             gameObject.SetActive(false);
         }
-
-        //private bool CanHit(Transform _origin, Vector3 _target, float _attackRange)
-        //{         
-        //    RaycastHit hit = raycaster.GetRaycastHit(_origin.position, _target, _attackRange);
-        //    if (hit.collider == null) return false;
-
-        //    //Fighter fighter = hit.collider.GetComponent<Fighter>();
-        //    //if (fighter != null) return true;
-        //    //return false;
-        //    return true;
-        //}
     }
 }

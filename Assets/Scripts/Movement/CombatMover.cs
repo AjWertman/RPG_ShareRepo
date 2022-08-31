@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Movement
 {
+    /// <summary>
+    /// Handles the movement for combatants.
+    /// </summary>
     public class CombatMover : AIMover
     {
         [SerializeField] float distanceTolerance = .3f;

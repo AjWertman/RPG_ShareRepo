@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 namespace RPGProject.UI
 {
+    /// <summary>
+    /// Indicates the information of an ability, 
+    /// including if the caster can use an ability.
+    /// </summary>
     public class SpellTooltip : MonoBehaviour
     {
         [SerializeField] Image background = null;

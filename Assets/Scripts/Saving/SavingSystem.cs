@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 
 namespace RPGProject.Saving
 {
+    /// <summary>
+    /// Handles the saving and loading of the application.
+    /// </summary>
     public class SavingSystem : MonoBehaviour
     {
         public IEnumerator LoadLastScene(string _saveFile)

@@ -12,6 +12,9 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// The instance of a combat unit. Used to control all combat related functions with childed components.
+    /// </summary>
     public class UnitController : MonoBehaviour
     {
         public UnitInfo unitInfo = new UnitInfo();
@@ -106,21 +109,25 @@ namespace RPGProject.Control.Combat
 
         private void UseMovementResources(int _gCost)
         {
-            if (_gCost > unitResources.gCostMoveAllowance)
-            {
-                _gCost -= unitResources.gCostMoveAllowance;
-                unitResources.gCostMoveAllowance = 0;
+            int energyCost = 5;
 
-                energy.SpendEnergyPoints(1);
-                unitResources.gCostMoveAllowance = mover.gCostPerAP;
-            }
+            
 
-            unitResources.gCostMoveAllowance -= _gCost;
-
-            //if(energy.energyPoints == 0 && unitResources.gCostMoveAllowance < 10)
+            //if (_gCost > unitResources.gCostMoveAllowance)
             //{
-            //    onMoveCompletion();
+            //    _gCost -= unitResources.gCostMoveAllowance;
+            //    unitResources.gCostMoveAllowance = 0;
+
+            //    energy.SpendEnergyPoints(1);
+            //    unitResources.gCostMoveAllowance = mover.gCostPerAP;
             //}
+
+            //unitResources.gCostMoveAllowance -= _gCost;
+
+            ////if(energy.energyPoints == 0 && unitResources.gCostMoveAllowance < 10)
+            ////{
+            ////    onMoveCompletion();
+            ////}
         }
 
         public IEnumerator PathExecution(List<GridBlock> _path)

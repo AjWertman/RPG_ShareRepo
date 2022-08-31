@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Data of a combo and its behaviors.
+    /// </summary>
     [Serializable]
     public class ComboLink
     {

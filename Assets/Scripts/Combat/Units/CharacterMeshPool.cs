@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
-    //Creates the character meshes that will be used for combat
+    /// <summary>
+    /// Creates character meshes that will be used in combat.
+    /// </summary>
     public class CharacterMeshPool : MonoBehaviour
     {
         [SerializeField] GameObject[] playerMeshPrefabs = null;

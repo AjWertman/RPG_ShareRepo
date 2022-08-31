@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Core
 {
+    /// <summary>
+    /// Handles the fading in and out.
+    /// </summary>
     public class Fader : MonoBehaviour
     {
         CanvasGroup canvasGroup = null;

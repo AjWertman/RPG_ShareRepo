@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Behavior that allows the caster and their team to teleport between teleporters.
+    /// </summary>
     public class BattleTeleporter : AbilityBehavior, CombatTarget
     {
         public BattleTeleporter linkedTeleporter = null;
@@ -14,7 +17,7 @@ namespace RPGProject.Combat
 
         public Transform GetAimTransform()
         {
-            return null;
+            return transform;
         }
 
         public override void PerformAbilityBehavior()

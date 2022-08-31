@@ -4,6 +4,9 @@ using TMPro;
 
 namespace RPGProject.Inventories
 {
+    /// <summary>
+    /// The image that represents an inventory item and the amount of that item.
+    /// </summary>
     [RequireComponent(typeof(Image))]
     public class InventoryItemIcon : MonoBehaviour
     {

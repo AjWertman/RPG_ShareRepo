@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace RPGProject.Core
 {
+    /// <summary>
+    /// Scriptable object containing information for player characters
+    /// </summary>
     [CreateAssetMenu(fileName = "New Playable Character", menuName = "Character/Create New Playable Character", order = 1)]
     public class PlayableCharacter : ScriptableObject
     {

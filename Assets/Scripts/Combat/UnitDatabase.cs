@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// A database containing the scriptable objects for units and their respective keys.
+    /// </summary>
     public class UnitDatabase : MonoBehaviour
     {
         [SerializeField] Unit[] units = null;
