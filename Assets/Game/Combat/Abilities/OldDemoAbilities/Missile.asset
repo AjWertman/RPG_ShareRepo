@@ -15,7 +15,7 @@ MonoBehaviour:
   abilityName: Missle
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -7.7
+  baseAbilityAmount: -100
   description: 
   shouldExpand: 0
   buttonColor: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
@@ -28,8 +28,10 @@ MonoBehaviour:
     abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 0
-  attackRange: 10
-  actionPointsCost: 2
+  requiredTargetAmount: 1
+  attackRange: 7
+  energyPointsCost: 20
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
+  amountOfNeighborBlocksAffected: 0

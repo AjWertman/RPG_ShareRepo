@@ -6,20 +6,18 @@ namespace RPGProject.Combat
     public enum AbilityObjectKey
     {
         None = 0,
-        Fireball = 1,
+        ShootingStar = 1,
         Heal = 2,
-        ForestsWrath = 3,
-        Poison = 4,
-        Discharge = 5,
-        Silence = 6,
-        HumanFlame = 7,
-        Nuke = 8,
-        ShieldWall = 9,
+        OnFire_DOT = 3,
+        Repairs = 4,
+        Silence = 5,
+        Teleporter = 6,
+        Turret = 7,
+        BlasterBullet = 8,
+        Grenade = 9,
         Missile = 10,
 
-        Teleporter = 11,
-        Turret = 12,
-        BlasterBullet = 13,
-        Grenade =14,
+
+        Nuke = 99,
     }
 }

@@ -8,14 +8,21 @@ namespace RPGProject.Combat
         public override void OnTurnAdvance()
         {
             if (GetTargetFighter() == null) return;
-            GetTargetFighter().GetHealth().ChangeHealth(changeAmount, false, true);
+            DealDamage();
             base.OnTurnAdvance();
         }
 
         public override void PerformAbilityBehavior()
         {
             if (GetTargetFighter() == null) return;
-            targetStatus.ApplyActiveAbilityBehavior(this);
+            DealDamage();
+
+            if(targetStatus!=null) targetStatus.ApplyActiveAbilityBehavior(this);
+        }
+
+        public void DealDamage()
+        {
+            GetTargetFighter().GetHealth().ChangeHealth(changeAmount, false, true);
         }
     }
 }

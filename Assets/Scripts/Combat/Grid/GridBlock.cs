@@ -11,6 +11,7 @@ namespace RPGProject.Combat.Grid
     public class GridBlock : MonoBehaviour, CombatTarget
     {
         [SerializeField] GridBlockMesh[] gridBlockMeshes;
+        [SerializeField] GridBlockEffect[] gridBlockEffects; 
 
         [SerializeField] Image highlightImage = null;
         [SerializeField] TextMeshProUGUI coordinatesText = null;
@@ -57,6 +58,7 @@ namespace RPGProject.Combat.Grid
         public void SetActiveAbility(AbilityBehavior _abilityBehavior)
         { 
             activeAbility = _abilityBehavior;
+            ActivateGridAbility(_abilityBehavior.gridBlockKey);
             onAffectedBlockUpdate(activeAbility, this);
         }
 
@@ -200,6 +202,20 @@ namespace RPGProject.Combat.Grid
             return null;
         }
 
+        private void ActivateGridAbility(GridBlockAbiltyKey _gridBlockAbiltyKey)
+        {
+            DeactiveGridAbilities();
+
+            foreach (GridBlockEffect gridBlockEffect in gridBlockEffects)
+            {
+                if (gridBlockEffect.abiltyKey == GridBlockAbiltyKey.None) continue;
+                if(gridBlockEffect.abiltyKey == _gridBlockAbiltyKey)
+                {
+                    gridBlockEffect.abilityInstance.SetActive(true);
+                }
+            }
+        }
+
         private void DeactivateGridBlockMeshes()
         {
             foreach(GridBlockMesh gridBlockMesh in gridBlockMeshes)
@@ -207,7 +223,15 @@ namespace RPGProject.Combat.Grid
                 gridBlockMesh.mesh.gameObject.SetActive(false);
             }
         }
-        
+
+        private void DeactiveGridAbilities()
+        {
+            foreach(GridBlockEffect gridBlockEffect in gridBlockEffects)
+            {
+                gridBlockEffect.abilityInstance.SetActive(false);
+            }
+        }
+
         /// <summary>
         /// A serializable dictionary of the highlight meshes and their respective keys.
         /// </summary>
@@ -216,6 +240,12 @@ namespace RPGProject.Combat.Grid
         {
             public GridBlockMeshKey meshKey;
             public MeshRenderer mesh;
+        }
+        [Serializable]
+        private struct GridBlockEffect
+        {
+            public GridBlockAbiltyKey abiltyKey;
+            public GameObject abilityInstance;
         }
     }
 

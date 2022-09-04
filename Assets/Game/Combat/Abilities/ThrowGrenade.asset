@@ -30,7 +30,7 @@ MonoBehaviour:
   targetingType: 0
   requiredTargetAmount: 1
   attackRange: 10
-  energyPointsCost: -1
+  energyPointsCost: 20
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0

@@ -207,6 +207,8 @@ namespace RPGProject.Combat.Grid
         /// </summary>
         private IEnumerable<GridBlock> CalculateNeighborBlocks(GridBlock _gridBlock, int _amount)
         {
+            if (_gridBlock == null) yield break;
+
             int myX = _gridBlock.gridCoordinates.x;
             int myZ = _gridBlock.gridCoordinates.z;
 

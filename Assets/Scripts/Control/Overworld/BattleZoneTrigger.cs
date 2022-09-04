@@ -26,14 +26,14 @@ namespace RPGProject.Control.Combat
         private void Start()
         {
             playerTeam = FindObjectOfType<PlayerTeamManager>();
+            StartCoroutine(BeginTestBattle());
         }
 
-        private void Update()
+        private IEnumerator BeginTestBattle()
         {
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                CallStartBattle();
-            }
+            yield return new WaitForSeconds(1f);
+
+            CallStartBattle();
         }
 
         public void BattleCheck()

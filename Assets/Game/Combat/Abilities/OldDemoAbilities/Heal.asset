@@ -28,8 +28,10 @@ MonoBehaviour:
     abilityClip: {fileID: 0}
   abilityType: 4
   targetingType: 1
+  requiredTargetAmount: 1
   attackRange: 5
-  actionPointsCost: 0
+  energyPointsCost: 20
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
+  amountOfNeighborBlocksAffected: 0

@@ -13,9 +13,12 @@ namespace RPGProject.Combat
         [SerializeField] protected AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
         [SerializeField] protected SpawnLocation spawnLocation = SpawnLocation.None;
         [SerializeField] protected HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
+        public GridBlockAbiltyKey gridBlockKey = GridBlockAbiltyKey.None;
 
         public Fighter caster = null;
         public CombatTarget target = null;
+
+        public AbilityBehavior childBehavior = null;
 
         protected UnitStatus targetStatus = null;
         protected float changeAmount = 0f;
@@ -24,6 +27,7 @@ namespace RPGProject.Combat
         protected HitFXPrefab hitFXPrefab = null;
 
         protected int abilityLifetime = 0;
+        protected int numberOfBlocksAffected = 0;
 
         public event Action<AbilityBehavior> onAbilityDeath;
         
@@ -48,6 +52,7 @@ namespace RPGProject.Combat
             isCritical = _isCritical;
             abilityLifetime = _lifeTime;
 
+            if (caster == null) return;
             SetSpawnLocation(spawnLocation);
         }
 
@@ -144,4 +149,6 @@ namespace RPGProject.Combat
             abilityLifetime = 0;
         }
     }
+
+    public enum GridBlockAbiltyKey {  None, Fire, }
 }

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: SolarBall
+  m_Name: ShootingStar
   m_EditorClassIdentifier: 
-  abilityName: Solar Ball
+  abilityName: Shooting Star
   requiredLevel: 0
   abilityLifetime: 1
-  baseAbilityAmount: -40
+  baseAbilityAmount: -25
   description: Fireball
   shouldExpand: 0
   buttonColor: {r: 0.8584906, g: 0.33752984, b: 0, a: 1}
@@ -30,8 +30,8 @@ MonoBehaviour:
   targetingType: 0
   requiredTargetAmount: 1
   attackRange: 7
-  energyPointsCost: -1
+  energyPointsCost: 20
   cooldown: 0
   requiresTarget: 1
   canTargetAll: 0
-  amountOfNeighborBlocksAffected: 0
+  amountOfNeighborBlocksAffected: 1

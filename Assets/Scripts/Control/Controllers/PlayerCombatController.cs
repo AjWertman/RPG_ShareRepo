@@ -49,7 +49,7 @@ namespace RPGProject.Control.Combat
             battleCamera = FindObjectOfType<BattleCamera>();
 
             battleHandler.onUnitTurnUpdate += UpdateCurrentUnitTurn;
-            battleHandler.onPlayerMoveCompletion += OnPlayerMoveCompletion;
+            battleHandler.onPlayerMoveCompletion += OnMoveCompletion;
         }
 
         private void Start()
@@ -133,7 +133,6 @@ namespace RPGProject.Control.Combat
             {
                 if (!hasHighlightedNeighbors)
                 {
-                    Debug.Log("Selecting neighbors");
                     hasHighlightedNeighbors = true;
                     neighborBlocks = gridSystem.HighlightNeighbors(blockToSelectFrom, 1, true);
                 }
@@ -307,11 +306,7 @@ namespace RPGProject.Control.Combat
                     gridSystem.UnhighlightBlocks(tempPath);
                     isPathfinding = false;
 
-                    //for (int i = 0; i < path.Count; i++)
-                    //{
-                    //    GridCoordinates coords = path[i].gridCoordinates;
-                    //    print("path[" + i.ToString() + "] =  " + coords.x.ToString() + "," + coords.z.ToString());
-                    //}
+                    battleCamera.SetFollowTarget(currentUnitTurn.GetCharacterMesh().aimTransform);
 
                     yield return currentUnitTurn.PathExecution(path);
 
@@ -486,6 +481,9 @@ namespace RPGProject.Control.Combat
             currentUnitTurn = _unitController;
             gridSystem.UnhighlightBlocks(tempPath);
 
+            selectedTargets = new List<CombatTarget>();
+            selectedAbility = null;
+
             if (currentUnitTurn.unitInfo.isPlayer)
             {
                 raycaster.isRaycasting = true;
@@ -507,10 +505,13 @@ namespace RPGProject.Control.Combat
             selectedAbility = _selectedAbility;
         }
 
-        private void OnPlayerMoveCompletion()
+        private void OnMoveCompletion()
         {
-            raycaster.isRaycasting = true;
-            canAdvanceTurn = true;
+            if (currentUnitTurn.unitInfo.isPlayer)
+            {
+                raycaster.isRaycasting = true;
+                canAdvanceTurn = true;
+            }
         }
 
         private GridBlock GetTargetBlock(CombatTarget _combatTarget)

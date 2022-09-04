@@ -19,7 +19,8 @@ MonoBehaviour:
   unitResources:
     healthPoints: 0
     maxHealthPoints: 0
-    actionPoints: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
     gCostMoveAllowance: 0
   stats:
     stamina: 20

@@ -20,7 +20,7 @@ namespace RPGProject.Control.Combat
         GridBlock[] gridBlocks = null;
 
         Dictionary<Fighter, GridBlock> occupiedBlocksDict = new Dictionary<Fighter, GridBlock>();
-        Dictionary<AbilityBehavior, GridBlock> affectedBlocksDict = new Dictionary<AbilityBehavior, GridBlock>();
+        Dictionary<GridBlock, AbilityBehavior> affectedBlocksDict = new Dictionary<GridBlock, AbilityBehavior>();
         Dictionary<GridBlock, GridBlockStatus> gridBlockStatusDict = new Dictionary<GridBlock, GridBlockStatus>();
 
         public void InitializeBattleGridManager()
@@ -51,11 +51,12 @@ namespace RPGProject.Control.Combat
         {
             occupiedBlocksDict[_fighter] = _gridBlock;
             UpdateCenter(_fighter.unitInfo.isPlayer);
+            OnGridBlockEnter(_fighter, _gridBlock);
         }
 
         public void SetNewAbilityBlock(AbilityBehavior _abilityBehavior, GridBlock _gridBlock)
-        {
-            affectedBlocksDict[_abilityBehavior] = _gridBlock;
+        {         
+            affectedBlocksDict[_gridBlock] = _abilityBehavior;
         }
 
         private void UpdateCenter(bool _isPlayerTeam)
@@ -80,13 +81,12 @@ namespace RPGProject.Control.Combat
 
         public void OnGridBlockEnter(Fighter _newFighter, GridBlock _gridBlockToTest)
         {
-            GridBlockStatus gridBlockStatus = gridBlockStatusDict[_gridBlockToTest];
+            if (!affectedBlocksDict.ContainsKey(_gridBlockToTest)) return;
+            AbilityBehavior currentEffect = affectedBlocksDict[_gridBlockToTest];
 
-            gridBlockStatus.contestedFighter = _newFighter;
-
-            if (gridBlockStatus.currentEffect != null)
+            if(currentEffect != null)
             {
-                PerformAbility(gridBlockStatus.currentEffect, gridBlockStatus.contestedFighter);
+                PerformAbility(currentEffect, _newFighter);
             }
 
             //if (_newFighter.hasGridBlockTrigger)
@@ -104,28 +104,25 @@ namespace RPGProject.Control.Combat
 
         public void OnFighterTurnAdvance(Fighter _contestedFighter)
         {
-            GridBlockStatus contestedStatus = new GridBlockStatus();
-            foreach (GridBlockStatus gridBlockStatus in gridBlockStatusDict.Values)
-            {
-                if (gridBlockStatus.contestedFighter == _contestedFighter)
-                {
-                    contestedStatus = gridBlockStatus;
-                }
-            }
+            //GridBlockStatus contestedStatus = new GridBlockStatus();
+            //foreach (GridBlockStatus gridBlockStatus in gridBlockStatusDict.Values)
+            //{
+            //    if (gridBlockStatus.contestedFighter == _contestedFighter)
+            //    {
+            //        contestedStatus = gridBlockStatus;
+            //    }
+            //}
 
-            if (contestedStatus.currentEffect != null)
-            {
-                PerformAbility(contestedStatus.currentEffect, contestedStatus.contestedFighter);
-            }
+            //if (contestedStatus.currentEffect != null)
+            //{
+            //    PerformAbility(contestedStatus.currentEffect, contestedStatus.contestedFighter);
+            //}
         }
 
-        public void PerformAbility(Ability _currentEffect, Fighter _contestFighter)
+        public void PerformAbility(AbilityBehavior _currentEffect, Fighter _contestedFighter)
         {
-            //Perform Ability
-            ///Damage?
-            ///Poision/Radiation
-            ///Gravity
-            ///
+            _currentEffect.target = _contestedFighter;
+            _currentEffect.PerformAbilityBehavior();
         }
 
         public GridBlock GetGridBlockByFighter(Fighter _fighter)
@@ -135,7 +132,12 @@ namespace RPGProject.Control.Combat
 
         public GridBlock GetGridBlockByAbility(AbilityBehavior _abilityBehavior)
         {
-            return affectedBlocksDict[_abilityBehavior];
+            foreach(GridBlock gridBlock in affectedBlocksDict.Keys)
+            {
+                AbilityBehavior abilityBehavior = affectedBlocksDict[gridBlock];
+                if (abilityBehavior != null && abilityBehavior == _abilityBehavior) return gridBlock;
+            }
+            return null;
         }
 
         public Vector3 GetTeamCenterPoint(bool _isPlayer, bool _wantsOwnTeam)

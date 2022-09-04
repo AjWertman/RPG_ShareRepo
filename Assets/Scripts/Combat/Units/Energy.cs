@@ -12,7 +12,6 @@ namespace RPGProject.GameResources
         public int maxEnergyPoints = 100;
 
         public event Action onEnergyChange;
-        public event Action onZeroEnergy;
 
         public void InitializeEnergy()
         {

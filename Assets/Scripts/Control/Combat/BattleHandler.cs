@@ -22,6 +22,9 @@ namespace RPGProject.Control.Combat
         UnitManager unitManager = null;
         TurnManager turnManager = null;
 
+        BattleManagersPool battleManagersPool = null;
+        AbilityObjectPool abilityObjectPool = null;
+
         PlayerTeamManager playerTeamManager = null;
         GridSystem gridSystem = null;
         Pathfinder pathfinder = null;
@@ -32,7 +35,12 @@ namespace RPGProject.Control.Combat
         UnitController currentUnitTurn = null;
         IEnumerator currentAttack = null;
 
+        MusicOverride musicOverride = null;
+
+        bool isBattleOver = true;
         bool isBattling = false;
+
+        Dictionary<UnitController, Fighter> combatantDict = new Dictionary<UnitController, Fighter>();
 
         public event Action<UnitController> onUnitTurnUpdate;
         public event Action onPlayerMoveCompletion;
@@ -61,20 +69,17 @@ namespace RPGProject.Control.Combat
         private void Update()
         {
             //Refactor - testing
-            //if (Input.GetKeyDown(KeyCode.L))
-            //{
-            //    aiBrain.GetViableActions(unitManager.enemyUnits[1], unitManager.unitControllers);
-            //}
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                aiBrain.GetBestAction(unitManager.enemyUnits[0], unitManager.unitControllers);
+            }
         }
 
         public IEnumerator StartBattle(PlayerTeamManager _playerTeamManager, UnitStartingPosition[] _enemyTeam)
         {
             isBattleOver = false;
-
             playerTeamManager = _playerTeamManager;
-
             SetupManagers(_enemyTeam);
-
             SetCurrentUnitTurn(turnManager.GetFirstMoveUnit());
 
             //musicOverride.OverrideMusic();
@@ -101,8 +106,48 @@ namespace RPGProject.Control.Combat
 
             unitManager.onMoveCompletion += OnMoveCompletion;
             unitManager.onTeamWipe += EndBattle;
-            unitManager.onUnitDeath += OnUnitDeath;
+
+            foreach(UnitController unitController in unitManager.unitControllers)
+            {
+                unitController.onMoveCompletion += OnMoveCompletion;
+                unitController.GetHealth().onAnimDeath += OnUnitDeath;
+
+                unitController.GetFighter().onAffectNeighborBlocks += AffectNeighborBlocks;
+            }
         }
+
+        private void AffectNeighborBlocks(int _amountOfNeighbors, AbilityBehavior _gridBehavior, CombatTarget _mainTarget, float _baseAbilityAmount)
+        {
+            GridBlock centerBlock = null;
+            if (_mainTarget.GetType() == typeof(GridBlock)) centerBlock = (GridBlock)_mainTarget;
+            else if(_mainTarget.GetType() == typeof(Fighter))
+            {
+                Fighter _target = (Fighter)_mainTarget;
+                centerBlock = _target.currentBlock;
+            }
+            List<GridBlock> neighbors = pathfinder.GetNeighbors(centerBlock, _amountOfNeighbors);
+
+            _gridBehavior.SetupAbility(null, null, _baseAbilityAmount, false, 3);
+
+            foreach(GridBlock gridBlock in neighbors)
+            {
+                Fighter contestedFighter = gridBlock.contestedFighter;
+                if (contestedFighter!= null)
+                {
+                    bool isMeleeDamage = _gridBehavior == null;
+                    contestedFighter.GetHealth().ChangeHealth(_baseAbilityAmount, false, !isMeleeDamage);
+                    contestedFighter.unitStatus.ApplyActiveAbilityBehavior(_gridBehavior);
+                }
+
+                if(_gridBehavior != null)
+                {
+                    gridBlock.SetActiveAbility(_gridBehavior);
+                }
+            }
+
+            centerBlock.SetActiveAbility(_gridBehavior);
+        }
+
         public void SetupTurnManager()
         {
             turnManager.SetUpTurns(unitManager.unitControllers, unitManager.playerUnits, unitManager.enemyUnits);
@@ -118,7 +163,6 @@ namespace RPGProject.Control.Combat
             battleUIManager.onEscape += Escape;
             battleUIManager.onEndTurn += () => AdvanceTurn();
         }
-
 
         public void OnPlayerMove(List<CombatTarget> _targets, Ability _selectedAbility)
         {
@@ -148,21 +192,18 @@ namespace RPGProject.Control.Combat
             bool isPlayer = currentUnitTurn.unitInfo.isPlayer;
             float currentEnergy = currentUnitTurn.GetEnergy().energyPoints;
 
-            if (isPlayer)
+            if (currentEnergy <= 0)
             {
-                if(currentEnergy <= 0)
-                {
-                    AdvanceTurn();
-                }
-                else
-                {
-                    onPlayerMoveCompletion();
-                }
+                AdvanceTurn();
             }
             else
-            {  
-                //Refactor - Enemies only get one move (FIX THAT)
-                AdvanceTurn();
+            {
+                if (isPlayer) onPlayerMoveCompletion();
+                else
+                {
+                    AIBattleAction bestAction = aiBrain.GetBestAction(currentUnitTurn, unitManager.unitControllers);
+                    StartCoroutine(AIUseAbility(bestAction));
+                }
             }
         }
 
@@ -173,6 +214,7 @@ namespace RPGProject.Control.Combat
             if (turnManager.currentUnitTurn != null) turnManager.currentUnitTurn.GetUnitUI().ActivateUnitIndicator(false);
 
             turnManager.AdvanceTurn();
+
 
             if (isBattling)
             {
@@ -192,7 +234,7 @@ namespace RPGProject.Control.Combat
 
             if (!turnManager.IsPlayerTurn())
             {
-                AIBattleAction bestAction = aiBrain.GetViableAction(currentUnitTurn, unitManager.unitControllers);
+                AIBattleAction bestAction = aiBrain.GetBestAction(currentUnitTurn, unitManager.unitControllers);
                 StartCoroutine(AIUseAbility(bestAction));
             }
         }
@@ -231,6 +273,8 @@ namespace RPGProject.Control.Combat
                     singleCombatTarget.Add((CombatTarget)actionTarget);
                     UseAbility(singleCombatTarget, actionAbility);
                 }
+
+                yield return new WaitForSeconds(.5f);
             }
             else
             {
@@ -275,46 +319,6 @@ namespace RPGProject.Control.Combat
         {
             return battleUIManager;
         }
-
-        private void OnUnitDeath(UnitController _unitThatCausedUpdate)
-        {
-            List<Fighter> playerCombatants = GetUnitFighters(unitManager.playerUnits);
-            List<Fighter> enemyCombatants = GetUnitFighters(unitManager.enemyUnits);
-
-            battleUIManager.UpdateUnitLists(playerCombatants, enemyCombatants);
-            turnManager.UpdateTurnOrder(_unitThatCausedUpdate);
-            List<Fighter> unitFighters = GetUnitFighters(turnManager.turnOrder);
-            battleUIManager.GetBattleHUD().UpdateTurnOrderUIItems(unitFighters, currentUnitTurn.GetFighter());
-        }
-
-        private void ResetManagers()
-        {
-            unitManager.onMoveCompletion -= AdvanceTurn;
-            unitManager.onTeamWipe -= EndBattle;
-            unitManager.onUnitDeath -= OnUnitDeath;
-
-            battleUIManager.onEscape -= Escape;
-
-            turnManager.onTurnChange -= SetCurrentUnitTurn;
-
-            unitManager = null;
-            battleUIManager = null;
-            turnManager = null;
-
-            battleManagersPool.ResetManagersPool();
-            abilityObjectPool.ResetAbilityObjectPool();
-        }
-        /// <summary>
-        /// //
-        /// </summary>
-
-        BattleManagersPool battleManagersPool = null;
-        AbilityObjectPool abilityObjectPool = null;
-
-        MusicOverride musicOverride = null;
-
-        bool isBattleOver = true;
-
         private void EndBattle(bool? _won)
         {
             if (isBattleOver) return;
@@ -374,6 +378,7 @@ namespace RPGProject.Control.Combat
         {
 
         }
+
         private void UpdateTeamResources(List<UnitController> _playerUnits)
         {
             foreach (UnitController unit in _playerUnits)
@@ -424,6 +429,43 @@ namespace RPGProject.Control.Combat
             {
                 abilityBehavior.OnTurnAdvance();
             }
+        }
+
+        private void OnUnitDeath(Health _deadUnitHealth)
+        {
+            UnitController deadUnit = _deadUnitHealth.GetComponent<UnitController>();
+
+            deadUnit.GetUnitUI().ActivateResourceSliders(false);
+
+            bool? wonBattle = unitManager.TeamWipeCheck();
+            if (wonBattle != null) EndBattle(wonBattle); 
+
+            deadUnit.UpdateCurrentBlock(null);
+            deadUnit.gameObject.SetActive(false);
+            List<Fighter> playerCombatants = GetUnitFighters(unitManager.playerUnits);
+            List<Fighter> enemyCombatants = GetUnitFighters(unitManager.enemyUnits);
+
+            battleUIManager.UpdateUnitLists(playerCombatants, enemyCombatants);
+            turnManager.UpdateTurnOrder(deadUnit);
+            List<Fighter> unitFighters = GetUnitFighters(turnManager.turnOrder);
+            battleUIManager.GetBattleHUD().UpdateTurnOrderUIItems(unitFighters, currentUnitTurn.GetFighter());
+        }
+
+        private void ResetManagers()
+        {
+            unitManager.onMoveCompletion -= AdvanceTurn;
+            unitManager.onTeamWipe -= EndBattle;
+
+            battleUIManager.onEscape -= Escape;
+
+            turnManager.onTurnChange -= SetCurrentUnitTurn;
+
+            unitManager = null;
+            battleUIManager = null;
+            turnManager = null;
+
+            battleManagersPool.ResetManagersPool();
+            abilityObjectPool.ResetAbilityObjectPool();
         }
     }
 }

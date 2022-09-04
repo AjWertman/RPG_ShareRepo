@@ -32,7 +32,7 @@ namespace RPGProject.Control.Combat
             playerTeamManager = FindObjectOfType<PlayerTeamManager>();
             unitPool = FindObjectOfType<UnitPool>();
             characterMeshPool = FindObjectOfType<CharacterMeshPool>();
-            SetupEvents();
+
         }
 
         public void SetUpUnits(Dictionary<GridBlock, Unit> _playerStartingPositions, Dictionary<GridBlock, Unit> _enemyStartingPositions)
@@ -92,8 +92,6 @@ namespace RPGProject.Control.Combat
             if (_isPlayerTeam)
             {
                 PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
-
-                print(playerTeamManager == null);
                 TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
                 unitResources = teamInfo.unitResources;
                 unitInfo.unitLevel = teamInfo.level;
@@ -160,32 +158,16 @@ namespace RPGProject.Control.Combat
             return enemyUnits[randomInt];
         }
 
-        public UnitController GetRandomAlivePlayerUnit()
+        /// <summary>
+        /// false = Player team was wiped, 
+        /// true = Enemy team was wiped,
+        /// null = neither team was wiped
+        /// </summary>
+        public bool? TeamWipeCheck()
         {
-            List<UnitController> livingPlayerUnits = new List<UnitController>();
-            foreach (UnitController playerUnit in playerUnits)
-            {
-                if (playerUnit.GetHealth().isDead) continue;
-
-                livingPlayerUnits.Add(playerUnit);
-            }
-
-            int randomInt = RandomGenerator.GetRandomNumber(0, livingPlayerUnits.Count - 1);
-            return playerUnits[randomInt];
-        }
-
-        public UnitController GetRandomAliveEnemyUnit()
-        {
-            List<UnitController> livingEnemyUnits = new List<UnitController>();
-            foreach (UnitController enemyUnit in enemyUnits)
-            {
-                if (enemyUnit.GetHealth().isDead) continue;
-
-                livingEnemyUnits.Add(enemyUnit);
-            }
-
-            int randomInt = RandomGenerator.GetRandomNumber(0, livingEnemyUnits.Count - 1);
-            return playerUnits[randomInt];
+            if (GetDeadPlayerUnits().Count == startingPlayerTeamSize) return false;
+            else if (GetDeadEnemyUnits().Count == startingEnemyTeamSize) return true;
+            else return null;
         }
 
         private List<Fighter> GetOpposingFighters(bool _isPlayerTeam)
@@ -239,33 +221,13 @@ namespace RPGProject.Control.Combat
             deadUnit.gameObject.SetActive(false);
         }
 
-        private void TeamWipeCheck()
-        {
-            if (GetDeadPlayerUnits().Count == startingPlayerTeamSize)
-            {
-                onTeamWipe(false);
-            }
-            else if (GetDeadEnemyUnits().Count == startingEnemyTeamSize)
-            {
-                onTeamWipe(true);
-            }
-        }
+
 
         private void ResetLists()
         {
             unitControllers.Clear();
             playerUnits.Clear();
             enemyUnits.Clear();
-        }
-
-        private void SetupEvents()
-        {
-            foreach (UnitController unit in unitPool.GetAllUnits())
-            {
-                unit.onMoveCompletion += () => onMoveCompletion();
-                unit.GetHealth().onHealthDeath += TestQuestCompletion;
-                unit.GetHealth().onAnimDeath += OnUnitDeath;
-            }
         }
 
         //Refactor
@@ -277,6 +239,16 @@ namespace RPGProject.Control.Combat
             {
                 myQuestCompletion.CompleteObjective();
             }
-        } 
+        }
+
+        //private void SetupEvents()
+        //{
+        //    foreach (UnitController unit in unitPool.GetAllUnits())
+        //    {
+        //        unit.onMoveCompletion += () => onMoveCompletion();
+        //        unit.GetHealth().onHealthDeath += TestQuestCompletion;
+        //        unit.GetHealth().onAnimDeath += OnUnitDeath;
+        //    }
+        //}
     }
 }

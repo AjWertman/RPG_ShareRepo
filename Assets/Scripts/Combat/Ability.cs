@@ -12,11 +12,23 @@ namespace RPGProject.Combat
         [Header("AbilityInfo")]
         public string abilityName = "";
         public int requiredLevel = 1;
+
+        /// <summary>
+        /// Amount of turns does this ability will live before dissipating.
+        /// </summary>
         public int abilityLifetime = 1;
+
+        /// <summary>
+        /// Amount the ability will affect a target when behavior is executed
+        /// before other modifications are applied.
+        /// </summary>
         public float baseAbilityAmount = 40;
         [TextArea(10, 10)] public string description = "";
 
-        [Header("Design")]
+        [Header("Design")]     
+        ///<summary>
+        /// If true, the ability behavior will scale to the target
+        /// </summary>
         public bool shouldExpand = false;
         public Color buttonColor = Color.white;
         public Color textColor = Color.black;
@@ -36,7 +48,7 @@ namespace RPGProject.Combat
     }
 
     /// <summary>
-    /// The type of an ability which changes how an ability is initialized.
+    /// The type of an ability which changes how an ability is initialized and performed.
     /// </summary>
     public enum AbilityType { Melee, Cast, Copy, Buff, InstaHit }
 

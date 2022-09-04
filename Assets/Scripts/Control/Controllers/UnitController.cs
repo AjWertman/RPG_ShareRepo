@@ -62,7 +62,6 @@ namespace RPGProject.Control.Combat
             mover.InitalizeCombatMover();
             unitUI.InitializeUnitUI();
 
-            //fighter.onAPUpdate += SetActionPoints;
             mover.onBlockReached += UseMovementResources;
         }
 
@@ -82,26 +81,17 @@ namespace RPGProject.Control.Combat
             if (_isPlayer) SetUnitResources(_unitResources);
             else CalculateResources();
 
-            currentBlock = _startingBlock;
+            UpdateCurrentBlock(_startingBlock);
+
             unitUI.SetupUnitUI();
-        }
-
-        public float GetTotalPossibleGCostAllowance()
-        {
-            float totalPossibleGCostAllowance = 0f;
-
-            float energyPoints = energy.energyPoints;
-
-            totalPossibleGCostAllowance += unitResources.gCostMoveAllowance;
-            totalPossibleGCostAllowance += mover.gCostPerAP * energyPoints;
-
-            return totalPossibleGCostAllowance;
         }
 
         public void UpdateCurrentBlock(GridBlock _newBlock)
         { 
-            currentBlock.SetContestedFighter(null);
+            if(currentBlock !=null) currentBlock.SetContestedFighter(null);
+
             currentBlock = _newBlock;
+            fighter.currentBlock = currentBlock;
 
             if (currentBlock == null) return;
             currentBlock.SetContestedFighter(fighter);
@@ -157,8 +147,10 @@ namespace RPGProject.Control.Combat
 
                 yield return UseAbilityBehavior(singleTarget, fighter.GetBasicAttack());
             }
-
-            if (unitInfo.isPlayer) onMoveCompletion();
+            else
+            {
+                onMoveCompletion();
+            }
         }
 
         public IEnumerator FollowPath(List<GridBlock> _path)
@@ -248,11 +240,6 @@ namespace RPGProject.Control.Combat
             }
 
             energy.SpendEnergyPoints(_energyCost);
-
-            if(energy.energyPoints == 0)
-            {
-                onMoveCompletion();
-            }
         }
         
 

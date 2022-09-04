@@ -1,4 +1,5 @@
-﻿using RPGProject.Core;
+﻿using RPGProject.Combat.Grid;
+using RPGProject.Core;
 using RPGProject.GameResources;
 using RPGProject.Sound;
 using System;
@@ -22,6 +23,7 @@ namespace RPGProject.Combat
 
         public Ability selectedAbility = null;
         public CombatTarget selectedTarget = null;
+        public GridBlock currentBlock = null;
 
         Animator animator = null;
         ComboLinker comboLinker = null;
@@ -41,8 +43,7 @@ namespace RPGProject.Combat
         float strength = 0f;
         float skill = 0f;
         float luck = 0f;
-
-        bool isPlayerFighter = false;
+        
         bool isHighlighted = false;
 
         Dictionary<Ability, int> abilityCooldowns = new Dictionary<Ability, int>();
@@ -52,6 +53,13 @@ namespace RPGProject.Combat
         /// or decreases their agro percentage of the opposing team.
         /// </summary>
         public event Action<Fighter, float> onAgroAction;
+
+        /// <summary>
+        /// An event to notify the BattleHandler that the neighbor blocks should be affected because of an ability.
+        ///int = amount of blocks affected; AbilityBehavior = the grid behavior to apply;
+        ///CombatTarget = main target; float = base damage amount. 
+        /// </summary>
+        public event Action<int, AbilityBehavior, CombatTarget, float> onAffectNeighborBlocks;
         public event Action<bool> onHighlight;
 
         public void InitalizeFighter()
@@ -108,7 +116,8 @@ namespace RPGProject.Combat
         {
             _abilityBehavior.gameObject.SetActive(true);
             _abilityBehavior.PerformAbilityBehavior();
-            //
+
+            //Refactor - turret
             if (_abilityBehavior.GetType() == typeof(Turret))
             {
                 Turret turret = (Turret)_abilityBehavior;
@@ -159,7 +168,6 @@ namespace RPGProject.Combat
 
             UpdateAttributes(10f, 10f, 10f);
 
-            isPlayerFighter = false;
             unitInfo = new UnitInfo();
             unitResources = new UnitResources();
 
@@ -238,31 +246,15 @@ namespace RPGProject.Combat
             float calculatedAmount = CombatAssistant.GetCalculatedAmount(selectedAbility.baseAbilityAmount, isCriticalHit);
 
             AbilityBehavior abilityBehavior = null;
-            Fighter targetFighter = selectedTarget.GetComponent<Fighter>();
+            Fighter targetFighter = selectedTarget as Fighter;
+            bool hasTarget = targetFighter != null;
 
             if (currentAbilityObjectKey != AbilityObjectKey.None)
             {
-                abilityBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
-                abilityBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit, selectedAbility.abilityLifetime);
-
-                if (currentComboLink != null)
-                {
-                    if (currentComboLink.spawnLocationOverride != SpawnLocation.None)
-                    {
-                        abilityBehavior.SetSpawnLocation(currentComboLink.spawnLocationOverride);
-                    }
-                }
-            }
-
-            if (selectedAbility.canTargetAll)
-            {
-                TargetAllTargets(abilityBehavior, calculatedAmount, isCriticalHit);
-                return;
+                abilityBehavior = GetAbilityBehavior(isCriticalHit, calculatedAmount, abilityBehavior);
             }
 
             Health targetHealth = null;
-            bool hasTarget = targetFighter != null;
-
             if (hasTarget)
             {
                 targetHealth = targetFighter.health;
@@ -274,9 +266,11 @@ namespace RPGProject.Combat
                 case AbilityType.Melee:
 
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
+                    AffectNeighborBlocks(abilityBehavior);
                     if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior);
                     float reflectionAmount = -targetFighter.unitStatus.physicalReflectionDamage;
                     if (reflectionAmount > 0) health.ChangeHealth(reflectionAmount, false, false);
+
                     break;
 
                 case AbilityType.Copy:
@@ -288,16 +282,57 @@ namespace RPGProject.Combat
                 case AbilityType.Cast:
 
                     ActivateAbilityBehavior(abilityBehavior);
+                    abilityBehavior.onAbilityDeath += AffectNeighborBlocks;
                     break;
 
                 case AbilityType.InstaHit:
 
                     ActivateAbilityBehavior(abilityBehavior);
                     if (calculatedAmount != 0) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
+                    abilityBehavior.onAbilityDeath += AffectNeighborBlocks;
                     break;
             }
 
-            if(hasTarget) targetHealth.onHealthChange -= ApplyAgro;
+
+            if (hasTarget) targetHealth.onHealthChange -= ApplyAgro;
+
+            //if (selectedAbility.canTargetAll)
+            //{
+            //    TargetAllTargets(abilityBehavior, calculatedAmount, isCriticalHit);
+            //    return;
+            //}
+        }
+
+        private void AffectNeighborBlocks(AbilityBehavior _abilityBehavior)
+        {
+            if (selectedAbility.amountOfNeighborBlocksAffected <= 0) return;
+
+            AbilityBehavior blockBehavior = null;
+            if (_abilityBehavior != null)
+            {
+                blockBehavior = _abilityBehavior.childBehavior;               
+            }
+ 
+            int amountToAffect = selectedAbility.amountOfNeighborBlocksAffected;
+            _abilityBehavior.onAbilityDeath -= AffectNeighborBlocks;
+
+            onAffectNeighborBlocks(amountToAffect, blockBehavior, selectedTarget, selectedAbility.baseAbilityAmount);
+        }
+
+        private AbilityBehavior GetAbilityBehavior(bool isCriticalHit, float calculatedAmount, AbilityBehavior abilityBehavior)
+        {    
+            abilityBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
+            abilityBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit, selectedAbility.abilityLifetime);
+
+            if (currentComboLink != null)
+            {
+                if (currentComboLink.spawnLocationOverride != SpawnLocation.None)
+                {
+                    abilityBehavior.SetSpawnLocation(currentComboLink.spawnLocationOverride);
+                }
+            }
+
+            return abilityBehavior;
         }
 
         private void DecrementCooldowns()

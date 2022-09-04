@@ -1,21 +1,34 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum AssetBundlePath { None, abilities}
 
-public class AssetBundleLoader : MonoBehaviour
+public class AssetBundleLoader : MonoBehaviour 
 {
+    Dictionary<AssetBundlePath, AssetBundle> assetBundles = new Dictionary<AssetBundlePath, AssetBundle>();
     const string bundlePath = "Assets/Game/AssetBundles";
 
-    private void Update()
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        CreateAssetBundles();
+    }
+
+    private void CreateAssetBundles()
+    {
+        int bundlePathLength = Enum.GetValues(typeof(AssetBundlePath)).Length;
+        for (int i = 0; i < bundlePathLength; i++)
         {
-            print(GetAssetFromBundle("Turret", AssetBundlePath.abilities));
-            //var prefab = myLoadedAssetBundle.LoadAsset<GameObject>(_assetBundle);
+            AssetBundlePath assetBundlePath = (AssetBundlePath)i;
+            if (assetBundlePath == AssetBundlePath.None) continue;
+
+            AssetBundle assetBundle= GetAssetBundle(assetBundlePath);
+
+            if (assetBundle != null) assetBundles.Add(assetBundlePath, assetBundle);
         }
     }
 
-    public object GetAssetFromBundle(string _assetName, AssetBundlePath _assetBundlePath)
+    public object GetAssetFromBundle(Type _type, string _assetName, AssetBundlePath _assetBundlePath)
     {
         AssetBundle loadedAssetBundle = GetAssetBundle(_assetBundlePath);
 
@@ -29,6 +42,8 @@ public class AssetBundleLoader : MonoBehaviour
 
     private AssetBundle GetAssetBundle(AssetBundlePath _assetBundlePath)
     {
+        if (assetBundles.ContainsKey(_assetBundlePath)) return assetBundles[_assetBundlePath];
+
         AssetBundle loadedAssetBundle = AssetBundle.LoadFromFile(GetPath(_assetBundlePath));
         if (loadedAssetBundle == null)
         {

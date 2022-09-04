@@ -14,7 +14,6 @@ namespace RPGProject.Combat
         Animator animator = null;
         SoundFXManager soundFXManager = null;
 
-        int comboIndex = 0;
         bool isExecutingCombo = false;
 
         /// <summary>
@@ -56,8 +55,7 @@ namespace RPGProject.Combat
         public IEnumerator ExecuteCombo(List<ComboLink> _combo)
         {
             isExecutingCombo = true;
-            comboIndex = 0;
-
+   
             int comboCount = _combo.Count;
             while (isExecutingCombo)
             {
@@ -73,7 +71,6 @@ namespace RPGProject.Combat
                     onComboLinkExecution(currentLink);
                     animator.CrossFadeInFixedTime(animationID, .1f);            
                     
-
                     yield return new WaitForSeconds(animationTime);
                 }
 

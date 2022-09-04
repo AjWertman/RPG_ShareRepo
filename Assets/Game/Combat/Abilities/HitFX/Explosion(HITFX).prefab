@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 3117234226802967895, guid: a81fbc0d0b124a0498584443e2651e89,
         type: 3}
       propertyPath: m_Name
-      value: Explosion
+      value: Explosion(HITFX)
       objectReference: {fileID: 0}
     - target: {fileID: 3848213452539174241, guid: a81fbc0d0b124a0498584443e2651e89,
         type: 3}
@@ -104,15 +104,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4085816057360858, guid: 65932b7368590234d8163da03c2055d8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4085816057360858, guid: 65932b7368590234d8163da03c2055d8, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4085816057360858, guid: 65932b7368590234d8163da03c2055d8, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4085816057360858, guid: 65932b7368590234d8163da03c2055d8, type: 3}
       propertyPath: m_LocalPosition.x

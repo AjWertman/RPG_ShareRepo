@@ -74,8 +74,7 @@ namespace RPGProject.Combat
                 }
 
                 SpawnHitFX(aimTransform.position);                                
-                OnAbilityDeath();
-                
+                OnAbilityDeath();              
             }
             else if(hitSpellReflector != null)
             {

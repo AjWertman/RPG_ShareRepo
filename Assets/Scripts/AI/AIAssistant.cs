@@ -19,14 +19,14 @@ namespace RPGProject.Combat.AI
             if (_energyCost == 0) return AIRanking.Great;
             if (_currentEnergy > _energyCost)
             {
-                float percentageOfAP = _currentEnergy / _energyCost;
+                float percentageOfEnergyUsed = (float)_energyCost / (float)_currentEnergy;
 
-                if (percentageOfAP <= .25f) return AIRanking.Great;
-                else if (percentageOfAP > .25f && percentageOfAP <= .50f) return AIRanking.Good;
-                else if (percentageOfAP > .50f && percentageOfAP <= .75f) return AIRanking.Mediocre;
+                if (MathAssistant.IsBetween(percentageOfEnergyUsed, 0, .15f)) return AIRanking.Great;
+                else if (MathAssistant.IsBetween(percentageOfEnergyUsed, .15f, .25f)) return AIRanking.Good;
+                else if (MathAssistant.IsBetween(percentageOfEnergyUsed, .25f, .50f)) return AIRanking.Mediocre;
                 else return AIRanking.Bad;
             }
-            else return AIRanking.Mediocre;
+            else return AIRanking.Bad;
         }
 
         /// <summary>
@@ -62,9 +62,13 @@ namespace RPGProject.Combat.AI
             }
             else if(!isDamage && isTeammate)
             {
-                if (percentageAfterAbility >= .75) impactScore += 25f;
-                else if (MathAssistant.IsBetween(percentageAfterAbility, .49f, .74f)) impactScore += 15f;
-                else impactScore += 5f;
+                if (currentHealthPercentage == 1) impactScore = 0;
+                else
+                {
+                    if (percentageAfterAbility >= .75) impactScore += 25f;
+                    else if (MathAssistant.IsBetween(percentageAfterAbility, .49f, .74f)) impactScore += 15f;
+                    else impactScore += 5f;
+                }
             }
 
             if (impactScore >= 40) return AIRanking.Great;
@@ -167,26 +171,6 @@ namespace RPGProject.Combat.AI
         }
 
         /// <summary>
-        /// Returns a "score" based on the ranking. 
-        /// </summary>
-        public static float GetModifier(AIRanking _ranking)
-        {
-            switch (_ranking)
-            {
-                case AIRanking.Bad:
-                    return -10f;
-                case AIRanking.Mediocre:
-                    return 0f;
-                case AIRanking.Good:
-                    return 15f;
-                case AIRanking.Great:
-                    return 25f;
-            }
-
-            return 0;
-        }
-
-        /// <summary>
         /// Returns the average ranking from the list of rankings.
         /// </summary>
         public static AIRanking GetRankAverage(List<AIRanking> _rankings)
@@ -211,11 +195,60 @@ namespace RPGProject.Combat.AI
             return averageRank;
         }
 
+        public static bool IsHigherRanking(AIRanking _myRanking, AIRanking _rankingToTest)
+        {
+            if (_myRanking == _rankingToTest) return false;
+
+            int myRankingIndex = (int)_myRanking;
+            int testRankingIndex = (int)_rankingToTest;
+
+            if (myRankingIndex > testRankingIndex) return false;
+            else return true;
+        }
+
+        public static float GetScore(List<AIRanking> _aiRankings)
+        {
+            float score = 0;
+
+            foreach (AIRanking aiRanking in _aiRankings)
+            {
+                float modifier = GetModifier(aiRanking);
+                score += modifier;
+            }
+
+            return score;
+        }
+
         public static float GetDistance(Vector3 _currentPosition, Vector3 _testPosition)
         {
             Vector3 myPosition = new Vector3(_currentPosition.x, 0, _currentPosition.z);
             Vector3 targetPosition = new Vector3(_testPosition.x, 0, _testPosition.z);
             return Vector3.Distance(myPosition, targetPosition);
+        }
+
+        public static bool IsTeammate(bool _isPlayerA, bool _isPlayerB)
+        {
+            return _isPlayerA == _isPlayerB;
+        }
+
+        /// <summary>
+        /// Returns a "score" based on the ranking. 
+        /// </summary>
+        private static float GetModifier(AIRanking _ranking)
+        {
+            switch (_ranking)
+            {
+                case AIRanking.Bad:
+                    return -10f;
+                case AIRanking.Mediocre:
+                    return 0f;
+                case AIRanking.Good:
+                    return 15f;
+                case AIRanking.Great:
+                    return 25f;
+            }
+
+            return 0;
         }
     }
 }

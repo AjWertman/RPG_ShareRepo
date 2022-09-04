@@ -21,48 +21,22 @@ namespace RPGProject.Control.Combat
             pathfinder = GetComponentInChildren<Pathfinder>();
         }
 
-        public List<AIBattleAction> GetViableActions(UnitController _currentUnitTurn, List<UnitController> _allUnits)
+        public AIBattleAction GetBestAction(UnitController _currentUnitTurn, List<UnitController> _allUnits)
         {
             Fighter currentFighter = _currentUnitTurn.GetFighter();
             AIBattleType combatAIType = _currentUnitTurn.aiType;
-
-            //Refactor - set Energy somewhere else;
-            currentFighter.GetEnergy().RestoreEnergyPoints(40);
-
+   
             List<Ability> usableAbilities = GetUsableAbilities(currentFighter, currentFighter.GetKnownAbilities());
-            //Dictionary<UnitController, AIRanking> targetPreferences = SetTargetRankings(_currentUnitTurn, _allUnits);
-
-            int preferredDistance = GetPreferredDistance(_currentUnitTurn, usableAbilities);
-            //float currentPositionScore = GetPositionStrengthRanking(_currentUnitTurn, targetPreferences);
-
-            Dictionary<AIBattleAction, float> possibleActions = GetPossibleActions(_currentUnitTurn, usableAbilities, _allUnits);          
-            List<AIBattleAction> viableActions = new List<AIBattleAction>();
-
-            return viableActions;
-        }
-
-        //Refactor - for testing purposes. Simply gets the best action
-        public AIBattleAction GetViableAction(UnitController _currentUnitTurn, List<UnitController> _allUnits)
-        {
-            Fighter currentFighter = _currentUnitTurn.GetFighter();
-            AIBattleType combatAIType = _currentUnitTurn.aiType;
-
-            //Refactor - set Energy somewhere else;
-            currentFighter.GetEnergy().RestoreEnergyPoints(40);
-
-            List<Ability> usableAbilities = GetUsableAbilities(currentFighter, currentFighter.GetKnownAbilities());
-            //Dictionary<UnitController, AIRanking> targetPreferences = SetTargetRankings(_currentUnitTurn, _allUnits);
-
-            int preferredDistance = GetPreferredDistance(_currentUnitTurn, usableAbilities);
-            //float currentPositionScore = GetPositionStrengthRanking(_currentUnitTurn, targetPreferences);
 
             Dictionary<AIBattleAction, float> possibleActions = GetPossibleActions(_currentUnitTurn, usableAbilities, _allUnits);
 
-            return GetBestAction(possibleActions);
+            AIBattleAction bestAction = CalculateBestAction(possibleActions);
+            return bestAction;
         }
 
-        private AIBattleAction GetBestAction(Dictionary<AIBattleAction, float> _possibleActions)
+        private AIBattleAction CalculateBestAction(Dictionary<AIBattleAction, float> _possibleActions)
         {
+            AIBattleAction bestAction = new AIBattleAction();
             List<AIBattleAction> bestActions = new List<AIBattleAction>();
             float highestScore = 0;
 
@@ -82,8 +56,19 @@ namespace RPGProject.Control.Combat
                 }
             }
 
-            int randomIndex = RandomGenerator.GetRandomNumber(0, bestActions.Count - 1);
-            return bestActions[randomIndex]; 
+            if(bestActions.Count > 0)
+            {
+                int randomIndex = RandomGenerator.GetRandomNumber(0, bestActions.Count - 1);
+                bestAction = bestActions[randomIndex];
+            }
+            else
+            {
+                bestAction = GetLastResortAction();
+            }
+
+            print(BattleActionToString(bestAction, highestScore));
+
+            return bestAction;
         }
 
         private Dictionary<AIBattleAction, float> GetPossibleActions(UnitController _currentUnitTurn,
@@ -93,9 +78,11 @@ namespace RPGProject.Control.Combat
             AIBattleType aiType = _currentUnitTurn.aiType;
 
             AIBattleBehavior battleBehavior = GetBehaviorPreset(aiType);
+            Dictionary<Fighter, AIRanking> preferredTargets = GetPreferredTargets(_currentUnitTurn, _allUnits);
 
             foreach (Ability ability in _usableAbilities)
             {
+                if (_currentUnitTurn.GetFighter().GetCooldown(ability) > 0) continue;
                 int currentEnergy = _currentUnitTurn.GetEnergy().energyPoints;
                 int costToUseAbility = ability.energyPointsCost;
 
@@ -119,34 +106,39 @@ namespace RPGProject.Control.Combat
                         GridBlock targetBlock = GetTargetBlock(_currentUnitTurn, unit, ability);
                         if (targetBlock == null) continue;
 
-                        int gCost = GetGCost(_currentUnitTurn.currentBlock, targetBlock);
-
                         combatAction.targetBlock = targetBlock;
                     }
 
-                    int totalAPCost = GetActionPointsCost(_currentUnitTurn, combatAction);
+                    int totalAPCost = GetFullEnergyCost(_currentUnitTurn, combatAction);
+                    //print(unit.name + " total cost = " + totalAPCost.ToString());
                     if (currentEnergy < totalAPCost) continue;
 
-                    //Agro -- Used to calculate preferred target? Or what?
-
                     ///SCORES////////////////////////////////////////////////////////////////////////
-                    AIRanking apCostRanking = AIAssistant.GetEnergyCostRanking(currentEnergy, totalAPCost);
-                    score += AIAssistant.GetModifier(apCostRanking);
-                  
 
+                    List<AIRanking> moveRankings = new List<AIRanking>();
+
+                    AIRanking apCostRanking = AIAssistant.GetEnergyCostRanking(currentEnergy, totalAPCost);
+                    //print(unit.name + " " + apCostRanking.ToString());
+                    moveRankings.Add(apCostRanking);
+    
                     //Refactor - take into account current position score vs new position score;
                     AIRanking impactRanking = AIAssistant.GetImpactRanking(combatAction, _currentUnitTurn.unitInfo.isPlayer);
-                    score += AIAssistant.GetModifier(impactRanking);
-
+                    moveRankings.Add(impactRanking);
 
                     AIActionType actionType = GetActionType(battleBehavior, _currentUnitTurn.GetFighter(), combatAction);
                     AIRanking behaviorRanking = AIAssistant.GetBehaviorRanking(GetBehaviorPreset(aiType), actionType);
-                    score += AIAssistant.GetModifier(behaviorRanking);
+                    moveRankings.Add(behaviorRanking);
+  
+                    AIRanking targetPreferrenceRanking = preferredTargets[unit.GetFighter()];
+                    moveRankings.Add(targetPreferrenceRanking);
 
-                    Fighter preferredTarget = GetPreferredTarget(_currentUnitTurn, _allUnits);
-                    //AIRanking positionRanking = GetPositionStrengthRanking(_currentUnitTurn, preferredTarget)
+                    score += AIAssistant.GetScore(moveRankings);
+
+                    //AIRanking positionRanking = GetPositionStrengthRanking(_currentUnitTurn, preferredTarget);
                     //score += AIAssistant.GetModifier(positionRanking);
 
+                    ////////////////////////////////////////////////////////////////////////////////
+                    
                     bool isTeammate = _currentUnitTurn.unitInfo.isPlayer == unit.unitInfo.isPlayer;
                     if (isTeammate)
                     {
@@ -159,9 +151,9 @@ namespace RPGProject.Control.Combat
                         if (isHeal) score -= 50f;
                     }
 
-                    if (score < 0) continue;
+                    //if (score < 0) continue;
 
-                    PrintCombatAction(combatAction, score);
+                    //print(CombatActionToString(combatAction, score));
                     if (!possibleActions.ContainsKey(combatAction))
                     {
                         possibleActions.Add(combatAction, score);
@@ -172,7 +164,7 @@ namespace RPGProject.Control.Combat
             return possibleActions;
         }
 
-        private Fighter GetPreferredTarget(UnitController _currentUnitTurn, List<UnitController> _allUnits)
+        private Dictionary<Fighter, AIRanking> GetPreferredTargets(UnitController _currentUnitTurn, List<UnitController> _allUnits)
         {
             AIBattleType aiType = _currentUnitTurn.aiType;
             bool isPlayer = _currentUnitTurn.unitInfo.isPlayer;
@@ -180,29 +172,65 @@ namespace RPGProject.Control.Combat
 
             Dictionary<Fighter, AIRanking> fightersDict = new Dictionary<Fighter, AIRanking>();
 
+            UnitAgro unitAgro = _currentUnitTurn.GetUnitAgro();
+
             foreach (UnitController unit in _allUnits)
             {
                 List<AIRanking> unitRanking = new List<AIRanking>();
                 Fighter unitFighter = unit.GetFighter();
-                bool isTeammate = isPlayer == unit.unitInfo.isPlayer;
-
+                bool isTeammate = AIAssistant.IsTeammate(isPlayer, unit.unitInfo.isPlayer);
                 unitRanking.Add(AIAssistant.GetRankingByTargetStatus(unitFighter));
 
-                UnitAgro unitAgro = unit.GetUnitAgro();
                 if (!isTeammate)
                 {
                     foreach (Agro agro in unitAgro.agros)
                     {
                         if (agro.fighter != unitFighter) continue;
-                        unitRanking.Add(AIAssistant.GetRankingByAgro(aiType, agro));
+                        
+                        AIRanking agroRanking = AIAssistant.GetRankingByAgro(aiType, agro);
+                        unitRanking.Add(agroRanking);
                     }
+
+                    if (isDamageOrTank) unitRanking.Add(AIRanking.Good);
+                    else unitRanking.Add(AIRanking.Mediocre);
+                }
+                else
+                {
+                    if (isDamageOrTank) unitRanking.Add(AIRanking.Mediocre);
+                    else unitRanking.Add(AIRanking.Good);
                 }
                 AIRanking averageRank = AIAssistant.GetRankAverage(unitRanking);
-                fightersDict.Add(unitFighter, averageRank);
-                
+                fightersDict.Add(unitFighter, averageRank);               
             }
 
-            return null;
+            //AIRanking highestRank = AIRanking.Bad;
+            //foreach(Fighter fighter in fightersDict.Keys)
+            //{
+            //    AIRanking currentRank = fightersDict[fighter];
+            //    int currentRankIndex = (int)currentRank;
+
+            //    bool isTeammate = AIAssistant.IsTeammate(isPlayer, fighter.unitInfo.isPlayer);
+            //    if (isTeammate)
+            //    {
+            //        if (isDamageOrTank) currentRankIndex--;
+            //        else currentRankIndex++;
+            //    }
+            //    else
+            //    {
+            //        if (isDamageOrTank) currentRankIndex++;
+            //        else  currentRankIndex--;
+            //    }
+
+            //    currentRank = (AIRanking)currentRankIndex;
+
+            //    if (AIAssistant.IsHigherRanking(highestRank, currentRank))
+            //    {
+            //        highestRank = currentRank;
+            //        preferredTarget = fighter;
+            //    }
+            //}
+
+            return fightersDict;
         }
 
         private AIActionType GetActionType(AIBattleBehavior _combatAIBehavior, Fighter _currentFighter, AIBattleAction _action)
@@ -266,26 +294,21 @@ namespace RPGProject.Control.Combat
             else return AIRanking.Bad;
         }
 
-        private int GetActionPointsCost(UnitController _currentUnit, AIBattleAction _aiCombatAction)
+        private int GetFullEnergyCost(UnitController _currentUnit, AIBattleAction _aiCombatAction)
         {
-            int actionPointsCost = 0;
-            int currentAP = _currentUnit.GetEnergy().energyPoints;
+            int fullEnergyCost = 0;
+            int currentEnergy = _currentUnit.GetEnergy().energyPoints;
 
             if (_aiCombatAction.targetBlock != null)
             {
-                int gCostToGetInRange = GetGCost(_currentUnit.currentBlock, _aiCombatAction.targetBlock);
-                int remainingGCost = gCostToGetInRange;
-
-                int currentGCostAllowance = _currentUnit.unitResources.gCostMoveAllowance;
-                int gCostAllowancePerAP = _currentUnit.GetMover().gCostPerAP;
-
-                remainingGCost -= currentGCostAllowance;
-                currentGCostAllowance = 0;
+                int energyToGetInRange = GetMovementEnergyCost(_currentUnit.currentBlock, _aiCombatAction.targetBlock);
+                //print(_aiCombatAction.target.name + " energycost = " + energyToGetInRange.ToString());
+                fullEnergyCost += energyToGetInRange;
             }
 
-            if (_aiCombatAction.selectedAbility != null) actionPointsCost += _aiCombatAction.selectedAbility.energyPointsCost;
+            if (_aiCombatAction.selectedAbility != null && _aiCombatAction.selectedAbility.energyPointsCost > 0) fullEnergyCost += _aiCombatAction.selectedAbility.energyPointsCost;
 
-            return actionPointsCost;
+            return fullEnergyCost;
         }
 
         private bool IsInRange(GridBlock _currentBlock, GridBlock _targetBlock, Ability _ability)
@@ -296,7 +319,7 @@ namespace RPGProject.Control.Combat
             if (attackRange > 0) return attackRange > distance;
             else
             {
-                int gCost = GetGCost(_currentBlock, _targetBlock);
+                int gCost = Pathfinder.CalculateDistance(_currentBlock, _targetBlock);
 
                 if (gCost == 0 || gCost == 10 || gCost == 14) return true;
                 return false;
@@ -331,10 +354,12 @@ namespace RPGProject.Control.Combat
             return null;
         }
 
-        private int GetGCost(GridBlock _blockA, GridBlock _blockB)
+        private int GetMovementEnergyCost(GridBlock _blockA, GridBlock _blockB)
         {
             if (_blockA == null || _blockB == null) return int.MaxValue;
-            return Pathfinder.CalculateDistance(_blockA, _blockB);
+            List<GridBlock> path = pathfinder.FindOptimalPath(_blockA, _blockB);
+
+            return (path.Count -1 ) * BattleHandler.energyCostPerBlock;
         }
 
         private AIBattleBehavior GetBehaviorPreset(AIBattleType _aiType)
@@ -355,6 +380,7 @@ namespace RPGProject.Control.Combat
 
         private AIBattleAction GetLastResortAction()
         {
+            print("getting last resort");
             //Am I in a decent position? if not find a better one
 
             //An empty AICombatAction will signify an end of turn
@@ -386,7 +412,7 @@ namespace RPGProject.Control.Combat
             return usableAbilities;
         }     
 
-        private void PrintCombatAction(AIBattleAction _aiCombatAction, float _score)
+        private string BattleActionToString(AIBattleAction _aiCombatAction, float _score)
         {
             Fighter target = _aiCombatAction.target;
             GridBlock blockToMoveTo = _aiCombatAction.targetBlock;
@@ -404,7 +430,7 @@ namespace RPGProject.Control.Combat
             }
             if (abilityToUse != null) abilityName = abilityToUse.abilityName;
 
-            //print("Target = " + targetName + ", Coords = " + blockCoordinates + ", Ability = " + abilityName + ", Score = " + _score.ToString());
+            return "Target = " + targetName + ", Coords = " + blockCoordinates + ", Ability = " + abilityName + ", Score = " + _score.ToString();
         }
     }
 }
