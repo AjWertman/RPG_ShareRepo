@@ -78,17 +78,18 @@ namespace RPGProject.Control.Combat
                 if (isSelectingFaceDirection) ClearNeighborSelection();
                 else gridSystem.UnhighlightBlocks(tempPath);
 
-                battleUIManager.ActivateAbilitySelectMenu();
+                battleUIManager.OnAbilitySelectKey();
             }
 
             if (Input.GetKeyDown(KeyCode.Return) && canAdvanceTurn)
             {
                 gridSystem.UnhighlightBlocks(tempPath);
+                battleUIManager.DeactivateAbilitySelectMenu();
                 ClearNeighborSelection();
                 battleHandler.AdvanceTurn();
             }
 
-            if(Input.GetKeyDown(KeyCode.Escape) && selectedAbility != null)
+            if(Input.GetKeyDown(KeyCode.Escape) && HasAbility())
             {
                 selectedAbility = null;
                 currentUnitTurn.GetAimLine().ResetLine();
@@ -110,11 +111,14 @@ namespace RPGProject.Control.Combat
             if (Input.GetKey(KeyCode.Q)) battleCamera.RotateCamera(true);
             else if (Input.GetKey(KeyCode.E)) battleCamera.RotateCamera(false);
 
-            float scrollWheelInput = Input.GetAxisRaw("Mouse ScrollWheel");
-            if (scrollWheelInput > 0) battleCamera.Zoom(true);
-            else if(scrollWheelInput < 0) battleCamera.Zoom(false);
+            if (!battleUIManager.isSelectingAbility)
+            {
+                float scrollWheelInput = Input.GetAxisRaw("Mouse ScrollWheel");
+                if (scrollWheelInput > 0) battleCamera.Zoom(true);
+                else if (scrollWheelInput < 0) battleCamera.Zoom(false);
 
-            
+            }
+
             if (Input.GetKeyDown(KeyCode.R))
             {
                 battleCamera.RecenterCamera();
@@ -125,7 +129,8 @@ namespace RPGProject.Control.Combat
         private void HandleRaycasting()
         {
             RaycastHit hit = raycaster.GetRaycastHit();
-            
+            bool canUseAbility = true;
+
             if (hit.collider == null) return;
             CombatTarget combatTarget = hit.collider.GetComponent<CombatTarget>();
 
@@ -138,29 +143,28 @@ namespace RPGProject.Control.Combat
                 }
             }
             else
-            {
+            {               
                 bool isBasicAttack = false;
                 bool canAimLine = true;
 
-                if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
-                else if (selectedAbility != null && IsBasicAttack(selectedAbility)) isBasicAttack = true;
+                if (!HasAbility() && currentUnitTurn.unitInfo.basicAttack.attackRange > 0) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
+                else if (HasAbility() && IsBasicAttack(selectedAbility)) isBasicAttack = true;
 
                 if (isBasicAttack && (combatTarget == null || combatTarget.GetType() != typeof(Fighter))) canAimLine = false;
-
+ 
                 AimLine currentAimLine = currentUnitTurn.GetAimLine();
 
                 if (canAimLine)
                 {
-                    if (selectedAbility != null && selectedAbility.attackRange > 0)
+                    if (HasAbility() && selectedAbility.attackRange > 0)
                     {
-                        if (!isBasicAttack)
+                        bool canDrawLine = DrawAimLine(hit, selectedAbility);
+                        canUseAbility = canDrawLine;
+
+                        if (isBasicAttack)
                         {
-                            DrawAimLine(hit, selectedAbility);
-                        }
-                        else
-                        {
-                            if (DrawAimLine(hit, currentUnitTurn.unitInfo.basicAttack)) gridSystem.UnhighlightBlocks(tempPath);
-                            else currentAimLine.ResetLine();
+                            if (canDrawLine) gridSystem.UnhighlightBlocks(tempPath);
+                            // else currentAimLine.ResetLine();
                         }
 
                         if (currentAimLine.hitFighter != null) combatTarget = currentAimLine.hitFighter;
@@ -175,7 +179,7 @@ namespace RPGProject.Control.Combat
 
                 if (targetBlock == null || targetBlock == currentUnitTurn.currentBlock || !targetBlock.IsMovable(currentUnitTurn.currentBlock, targetBlock))
                 {
-                    if (!isSelectingFaceDirection)
+                    if (!isSelectingFaceDirection && !HasAbility()) 
                     {
                         gridSystem.UnhighlightBlocks(tempPath);
                         return;
@@ -189,6 +193,11 @@ namespace RPGProject.Control.Combat
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (tempPath == null) return;
+                    if (!canUseAbility)
+                    {
+                        battleHandler.CantUseAbility("Cannot target that unit");
+                        return;
+                    }
                     battleUIManager.UnhighlightTarget();
                     path = GetFurthestPath(tempPath);
                     StartCoroutine(OnPlayerClick(combatTarget));
@@ -210,33 +219,6 @@ namespace RPGProject.Control.Combat
                     tempPath.Clear();
                 }
             }
-        }
-
-        private bool DrawAimLine(RaycastHit _hit, Ability _selectedAbility)
-        {
-            if (_hit.collider == null || _selectedAbility == null) return false;
-            AimLine aimLine = currentUnitTurn.GetAimLine();
-
-            Transform startTransform = null;
-            Transform aimTransform = null;
-            Vector3 aimPosition = Vector3.zero;
-
-            startTransform = currentUnitTurn.GetCharacterMesh().rHandTransform;
-            bool isRightHand = _selectedAbility.combo[0].spawnLocationOverride == SpawnLocation.RHand;
-            if (!isRightHand) startTransform = currentUnitTurn.GetCharacterMesh().lHandTransform;
-
-            Fighter fighter = _hit.collider.GetComponent<Fighter>();
-            if (fighter != null)
-            {
-                aimTransform = fighter.characterMesh.aimTransform;
-                aimPosition = aimTransform.position;
-            }
-            else
-            {
-                aimPosition = _hit.point;
-            }
-
-            return aimLine.DrawAimLine(startTransform, aimPosition, _selectedAbility.attackRange);
         }
 
         private void HandlePhysicalHighlighting(CombatTarget _combatTarget, GridBlock _targetBlock)
@@ -271,15 +253,14 @@ namespace RPGProject.Control.Combat
 
             if (!isSelectingFaceDirection)
             {              
-                if (selectedAbility == null && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
+                if (!HasAbility() && currentUnitTurn.unitInfo.basicAttack.attackRange > 0)
                 {
                     if(trueTarget.GetType() == typeof(Fighter)) selectedAbility = currentUnitTurn.unitInfo.basicAttack;
                 }
 
-                bool isSelectedAbilityNull = selectedAbility == null;
                 bool isValidBasicAttackTarget = (IsBasicAttack(selectedAbility) && trueTarget.GetType() == typeof(Fighter));
 
-                if ((!isSelectedAbilityNull && !IsBasicAttack(selectedAbility)) || isValidBasicAttackTarget)
+                if ((HasAbility() && !IsBasicAttack(selectedAbility)) || isValidBasicAttackTarget)
                 {
                     if (CanTarget(selectedAbility, trueTarget))
                     {
@@ -300,7 +281,7 @@ namespace RPGProject.Control.Combat
                     }
                 }
                 else
-                {              
+                {
                     raycaster.isRaycasting = false;
                     canAdvanceTurn = false;
                     gridSystem.UnhighlightBlocks(tempPath);
@@ -509,8 +490,11 @@ namespace RPGProject.Control.Combat
         {
             if (currentUnitTurn.unitInfo.isPlayer)
             {
+                currentUnitTurn.GetAimLine().ResetLine();
+                selectedAbility = null;
                 raycaster.isRaycasting = true;
                 canAdvanceTurn = true;
+                
             }
         }
 
@@ -599,10 +583,46 @@ namespace RPGProject.Control.Combat
             return canTarget;
         }
 
+        private bool DrawAimLine(RaycastHit _hit, Ability _selectedAbility)
+        {
+            if (_hit.collider == null || _selectedAbility == null) return false;
+
+            bool isInstaHit = selectedAbility.abilityType == AbilityType.InstaHit;
+
+            AimLine aimLine = currentUnitTurn.GetAimLine();
+
+            Transform startTransform = null;
+            Transform aimTransform = null;
+            Vector3 aimPosition = Vector3.zero;
+
+            startTransform = currentUnitTurn.GetCharacterMesh().rHandTransform;
+            bool isRightHand = _selectedAbility.combo[0].spawnLocationOverride == SpawnLocation.RHand;
+            if (!isRightHand) startTransform = currentUnitTurn.GetCharacterMesh().lHandTransform;
+
+            Fighter fighter = _hit.collider.GetComponent<Fighter>();
+            if (fighter != null)
+            {
+                if (fighter == currentUnitTurn.GetFighter()) return false;
+                aimTransform = fighter.characterMesh.aimTransform;
+                aimPosition = aimTransform.position;
+            }
+            else
+            {
+                aimPosition = _hit.point;
+            }
+
+            return aimLine.DrawAimLine(startTransform, aimPosition, _selectedAbility);
+        }
+
         private bool IsBasicAttack(Ability _selectedAbility)
         {
             if (_selectedAbility == null) return false;
             return (_selectedAbility == currentUnitTurn.unitInfo.basicAttack);
+        }
+
+        private bool HasAbility()
+        {
+            return selectedAbility != null;
         }
     }
 }

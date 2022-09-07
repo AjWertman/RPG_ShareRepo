@@ -10,27 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: Heal
+  m_Name: Repair
   m_EditorClassIdentifier: 
-  abilityName: Heal
+  abilityName: Discharge
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: 40
-  description: Heals the targeted player
+  baseAbilityAmount: -1033.4
+  baseAgroPercentageAmount: 5
+  description: 
   shouldExpand: 0
-  buttonColor: {r: 0, g: 1, b: 0, a: 1}
+  buttonColor: {r: 1, g: 0, b: 0, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    abilityObjectKey: 2
+    abilityObjectKey: 5
+    hitFXObjectKey: 0
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
   abilityType: 4
-  targetingType: 1
+  targetingType: 0
   requiredTargetAmount: 1
-  attackRange: 5
-  energyPointsCost: 20
+  attackRange: 4
+  energyPointsCost: -1
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0

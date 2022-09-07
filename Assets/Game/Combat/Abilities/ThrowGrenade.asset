@@ -16,6 +16,7 @@ MonoBehaviour:
   requiredLevel: 1
   abilityLifetime: 1
   baseAbilityAmount: -40
+  baseAgroPercentageAmount: 5
   description: 
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
@@ -23,7 +24,8 @@ MonoBehaviour:
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    abilityObjectKey: 14
+    abilityObjectKey: 9
+    hitFXObjectKey: 0
     spawnLocationOverride: 1
     abilityClip: {fileID: 0}
   abilityType: 1
@@ -34,4 +36,4 @@ MonoBehaviour:
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
-  amountOfNeighborBlocksAffected: 0
+  amountOfNeighborBlocksAffected: 1

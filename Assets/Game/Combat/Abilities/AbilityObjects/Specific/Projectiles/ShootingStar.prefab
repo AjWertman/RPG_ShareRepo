@@ -214,12 +214,12 @@ PrefabInstance:
     - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
         type: 3}
       propertyPath: launchForce
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
         type: 3}
       propertyPath: gridBlockKey
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
         type: 3}

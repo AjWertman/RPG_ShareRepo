@@ -17,6 +17,7 @@ namespace RPGProject.Combat
 
         public void ApplyActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
+            if (_abilityBehavior == null) return;
             bool isAlreadyEffected = CombatAssistant.IsAlreadyEffected(_abilityBehavior.GetAbilityName(), this);
             if (isAlreadyEffected) return;
             _abilityBehavior.onAbilityDeath += RemoveActiveAbilityBehavior;

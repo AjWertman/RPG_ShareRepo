@@ -30,7 +30,6 @@ MonoBehaviour:
     resistance: 30
     speed: 30
     luck: 30
-  basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
+  basicAttack: {fileID: 11400000, guid: 91f034325d0a43c4a9387f0b4415cd84, type: 2}
   abilities:
   - {fileID: 11400000, guid: 14c67d1c4d72dc64ba518eebd47e1f97, type: 2}
-  - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}

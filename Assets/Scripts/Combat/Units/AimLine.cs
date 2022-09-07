@@ -33,14 +33,17 @@ namespace RPGProject.Combat
         /// Activates the aim line, setting its start and end position, and updating the color 
         /// to represent if the combatant is in range or not.
         /// </summary>
-        public bool DrawAimLine(Transform _origin, Vector3 _targetPostion, float _attackRange)
+        public bool DrawAimLine(Transform _origin, Vector3 _targetPostion, Ability _selectedAbility)
         {
-            if (_origin == null || _attackRange == 0)
+            float attackRange = _selectedAbility.attackRange;
+            if (_origin == null || attackRange == 0)
             {
                 print("origin is null or is not range spell");
                 ResetLine();
                 return false;
             }
+
+            bool isInstaHit = _selectedAbility.abilityType == AbilityType.InstaHit;
 
             if (currentTarget != _targetPostion)
             {
@@ -66,18 +69,22 @@ namespace RPGProject.Combat
                 lineRenderer.SetPosition(1, hit.point);
             }
 
-            if (Vector3.Distance(_origin.position, hit.point) > _attackRange) lineRenderer.material = notInRangeMaterial;
-            else lineRenderer.material = inRangeMaterial;
-
             Fighter fighter = hit.collider.GetComponent<Fighter>();
             if (fighter == null || fighter.unitInfo.isPlayer)
             {
                 hitFighter = null;
-                return false;
+                if (RequiresFighter(_selectedAbility.targetingType))
+                {
+                    lineRenderer.material = notInRangeMaterial;
+                    return false;
+                }
             }
             else
             {
-                hitFighter = fighter;
+                if (Vector3.Distance(_origin.position, hit.point) > attackRange) lineRenderer.material = notInRangeMaterial;
+                else lineRenderer.material = inRangeMaterial;
+
+                if (!isInstaHit) hitFighter = fighter;
             }
 
             return true;
@@ -91,6 +98,12 @@ namespace RPGProject.Combat
             currentTarget = Vector3.zero;
             hitFighter = null;
             gameObject.SetActive(false);
+        }
+
+        private bool RequiresFighter(TargetingType _targetingType)
+        {
+            if (_targetingType == TargetingType.GridBlocksOnly || _targetingType == TargetingType.Everything) return false;
+            return true;
         }
     }
 }

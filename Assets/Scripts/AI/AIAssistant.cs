@@ -167,7 +167,6 @@ namespace RPGProject.Combat.AI
                 else if (MathAssistant.IsBetween(agroPercentage, 60f, 75f)) return AIRanking.Mediocre;
                 else return AIRanking.Bad;
             }
-
         }
 
         /// <summary>

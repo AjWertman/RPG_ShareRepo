@@ -14,6 +14,7 @@ namespace RPGProject.Combat
         public int comboPointCost = 1;
 
         public AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
+        public HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
         public SpawnLocation spawnLocationOverride = SpawnLocation.None;
         public AudioClip abilityClip = null;
 

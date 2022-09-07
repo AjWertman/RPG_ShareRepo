@@ -51,6 +51,11 @@ namespace RPGProject.Combat
             return availableAbilityBehavior;
         }
 
+        public GameObject GetHitFX(HitFXObjectKey _hitFXObjectKey)
+        {
+            return hitFXPool[_hitFXObjectKey];
+        }
+
         private void CreateAbilityPool()
         {
             foreach(AbilityPrefab abilityPrefab in abilityPrefabs)

@@ -16,6 +16,7 @@ MonoBehaviour:
   requiredLevel: 1
   abilityLifetime: 1
   baseAbilityAmount: -20
+  baseAgroPercentageAmount: 5
   description: 
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
@@ -24,6 +25,7 @@ MonoBehaviour:
   - animationID: Attack0
     comboPointCost: 0
     abilityObjectKey: 0
+    hitFXObjectKey: 0
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
   abilityType: 0

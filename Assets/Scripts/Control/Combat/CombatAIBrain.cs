@@ -14,9 +14,11 @@ namespace RPGProject.Control.Combat
 
         BattleGridManager battleGridManager = null;
         Pathfinder pathfinder = null;
+        Raycaster raycaster = null;
 
         private void Awake()
         {
+            raycaster = GetComponent<Raycaster>();
             battleGridManager = GetComponentInChildren<BattleGridManager>();
             pathfinder = GetComponentInChildren<Pathfinder>();
         }
@@ -66,7 +68,7 @@ namespace RPGProject.Control.Combat
                 bestAction = GetLastResortAction();
             }
 
-            print(BattleActionToString(bestAction, highestScore));
+            //print(BattleActionToString(bestAction, highestScore));
 
             return bestAction;
         }
@@ -100,8 +102,11 @@ namespace RPGProject.Control.Combat
                     combatAction.target = unit.GetFighter();
                     combatAction.selectedAbility = ability;
                     float score = 0;
-                   
-                    if(!IsInRange(_currentUnitTurn.currentBlock, unit.currentBlock, ability))
+
+                    bool isInRange = IsInRange(_currentUnitTurn.currentBlock, unit.currentBlock, ability);
+                    bool canTarget = CanTarget(_currentUnitTurn.transform.position, unit.GetFighter(), ability);
+
+                    if (!isInRange || !canTarget)
                     {                       
                         GridBlock targetBlock = GetTargetBlock(_currentUnitTurn, unit, ability);
                         if (targetBlock == null) continue;
@@ -188,9 +193,11 @@ namespace RPGProject.Control.Combat
                         if (agro.fighter != unitFighter) continue;
                         
                         AIRanking agroRanking = AIAssistant.GetRankingByAgro(aiType, agro);
+
+                        if (agroRanking == AIRanking.Great) unitRanking.Add(agroRanking);
                         unitRanking.Add(agroRanking);
                     }
-
+                    
                     if (isDamageOrTank) unitRanking.Add(AIRanking.Good);
                     else unitRanking.Add(AIRanking.Mediocre);
                 }
@@ -202,6 +209,8 @@ namespace RPGProject.Control.Combat
                 AIRanking averageRank = AIAssistant.GetRankAverage(unitRanking);
                 fightersDict.Add(unitFighter, averageRank);               
             }
+
+            return fightersDict;
 
             //AIRanking highestRank = AIRanking.Bad;
             //foreach(Fighter fighter in fightersDict.Keys)
@@ -229,8 +238,6 @@ namespace RPGProject.Control.Combat
             //        preferredTarget = fighter;
             //    }
             //}
-
-            return fightersDict;
         }
 
         private AIActionType GetActionType(AIBattleBehavior _combatAIBehavior, Fighter _currentFighter, AIBattleAction _action)
@@ -342,9 +349,15 @@ namespace RPGProject.Control.Combat
 
             if (path == null || path.Count <= 1) return null;
 
+            Vector3 currentPosition = _unitController.transform.position;
+
             foreach (GridBlock gridBlock in path)
             {
-                if (IsInRange(gridBlock, targetBlock, _ability))
+                Vector3 blockPosition= gridBlock.travelDestination.position;
+                Vector3 newTravelPosition = new Vector3(blockPosition.x, currentPosition.y, blockPosition.z);
+                bool isInRange = IsInRange(gridBlock, targetBlock, _ability);
+                bool canTarget = CanTarget(newTravelPosition, _target.GetFighter(), _ability);
+                if (isInRange && canTarget)
                 {
                     _unitController.GetFighter().selectedTarget = null;                  
                     return gridBlock;
@@ -380,7 +393,7 @@ namespace RPGProject.Control.Combat
 
         private AIBattleAction GetLastResortAction()
         {
-            print("getting last resort");
+            //print("getting last resort");
             //Am I in a decent position? if not find a better one
 
             //An empty AICombatAction will signify an end of turn
@@ -410,7 +423,26 @@ namespace RPGProject.Control.Combat
             }
 
             return usableAbilities;
-        }     
+        }
+
+        private bool CanTarget(Vector3 _currentPosition, Fighter _target, Ability _ability)
+        {
+            bool isMeleeAttack = _ability.attackRange == 0;
+            if (isMeleeAttack) return true;
+
+            Vector3 targetPosition = _target.transform.position;
+            Vector3 targetPositionOffset = new Vector3(targetPosition.x, _currentPosition.y, targetPosition.z);
+
+            RaycastHit hit = raycaster.GetRaycastHit(_currentPosition, targetPositionOffset);
+
+            if (hit.collider == null) return false;
+
+            Fighter hitFighter = hit.collider.GetComponent<Fighter>();
+            if (hitFighter == null) return false;
+            if (hitFighter != _target) return false;
+            
+            return true;          
+        }
 
         private string BattleActionToString(AIBattleAction _aiCombatAction, float _score)
         {

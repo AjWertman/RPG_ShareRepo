@@ -41,6 +41,7 @@ namespace RPGProject.GameResources
         /// </summary>
         public event Action<Health> onAnimDeath;
 
+        //Refactor - Not being used currently
         /// <summary>
         /// Called when healthpoints = 0.
         /// </summary>
@@ -128,7 +129,7 @@ namespace RPGProject.GameResources
                 isDead = true;
                 animator.Play("Die");
                 soundFXManager.CreateSoundFX(deathClip, transform, .75f);
-                onHealthDeath(this);
+                //onHealthDeath(this);
             }
         }
 

@@ -55,6 +55,18 @@ namespace RPGProject.Combat
                 if (!IsInRange(_caster.transform.position, aimTransform.position, attackRange)) return "Target is too far away";
             }
 
+            CharacterBiology requiredBiology = _selectedAbility.requiredBiology;
+            if (requiredBiology != CharacterBiology.None)
+            {
+                if (_target.GetType() == typeof(Fighter))
+                {
+                    Fighter targetFighter = (Fighter)_target;
+                    CharacterBiology targetBiology = targetFighter.characterMesh.characterBiology;
+                    if (requiredBiology != targetBiology) return "Not a compatable target";
+                }
+                else return "Not a compatable target";
+            }
+
             return "";
         }
 

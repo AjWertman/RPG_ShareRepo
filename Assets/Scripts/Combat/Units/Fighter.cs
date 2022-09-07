@@ -52,14 +52,14 @@ namespace RPGProject.Combat
         /// Called whenever the current Fighter does something that increases
         /// or decreases their agro percentage of the opposing team.
         /// </summary>
-        public event Action<Fighter, float> onAgroAction;
+        public event Action<Fighter, int> onAgroAction;
 
         /// <summary>
         /// An event to notify the BattleHandler that the neighbor blocks should be affected because of an ability.
-        ///int = amount of blocks affected; AbilityBehavior = the grid behavior to apply;
+        ///Fighter = attacker, int = amount of blocks affected; AbilityBehavior = the grid behavior to apply;
         ///CombatTarget = main target; float = base damage amount. 
         /// </summary>
-        public event Action<int, AbilityBehavior, CombatTarget, float> onAffectNeighborBlocks;
+        public event Action<Fighter, int, AbilityBehavior, CombatTarget, float> onAffectNeighborBlocks;
         public event Action<bool> onHighlight;
 
         public void InitalizeFighter()
@@ -68,9 +68,8 @@ namespace RPGProject.Combat
             comboLinker = GetComponent<ComboLinker>();
             comboLinker.InitializeComboLinker();
             comboLinker.onComboStarted += SetCurrentAbilityInstance;
-            comboLinker.onComboLinkExecution += SetCurrentComboLink;
+            comboLinker.onComboLinkExecution += OnComboLinkUpdate;
 
-            abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
             health = GetComponent<Health>();
             energy = GetComponent<Energy>();
             unitStatus = GetComponent<UnitStatus>();
@@ -114,24 +113,23 @@ namespace RPGProject.Combat
 
         public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
+            if (_abilityBehavior == null) return;
             _abilityBehavior.gameObject.SetActive(true);
             _abilityBehavior.PerformAbilityBehavior();
 
-            //Refactor - turret
             if (_abilityBehavior.GetType() == typeof(Turret))
             {
                 Turret turret = (Turret)_abilityBehavior;
 
-                List<Grid.GridBlock> attackRadius = new List<Grid.GridBlock>();
-                Grid.Pathfinder pathfinder = FindObjectOfType<Grid.Pathfinder>();
+                List<GridBlock> attackRadius = new List<GridBlock>();
+                Pathfinder pathfinder = FindObjectOfType<Pathfinder>();
 
-                foreach (Grid.GridBlock gridBlock in pathfinder.GetNeighbors(turret.myBlock, 3))
+                foreach (GridBlock gridBlock in pathfinder.GetNeighbors(turret.myBlock, selectedAbility.amountOfNeighborBlocksAffected))
                 {
                     attackRadius.Add(gridBlock);
                 }
                 turret.SetupAttackRadius(attackRadius);
             }
-            //
         }
 
         public void LookAtTarget(Transform _target)
@@ -144,7 +142,7 @@ namespace RPGProject.Combat
             currentAbilityObjectKey = _abilityObjectKey;
         }
 
-        public void SetCurrentComboLink(ComboLink _comboLink)
+        public void OnComboLinkUpdate(ComboLink _comboLink)
         {
             currentComboLink = _comboLink;
         }
@@ -251,19 +249,27 @@ namespace RPGProject.Combat
 
             if (currentAbilityObjectKey != AbilityObjectKey.None)
             {
-                abilityBehavior = GetAbilityBehavior(isCriticalHit, calculatedAmount, abilityBehavior);
+                abilityBehavior = GetAbilityBehavior(isCriticalHit, calculatedAmount);
             }
 
             Health targetHealth = null;
             if (hasTarget)
             {
                 targetHealth = targetFighter.health;
-                targetHealth.onHealthChange += ApplyAgro;
+                ApplyAgro(false, selectedAbility.baseAgroPercentageAmount);
             }
 
             switch (abilityType)
             {
                 case AbilityType.Melee:
+
+                    GameObject hitFX = null;
+                    if (currentComboLink.hitFXObjectKey != HitFXObjectKey.None)
+                    {
+                        hitFX = abilityObjectPool.GetHitFX(currentComboLink.hitFXObjectKey);
+                        hitFX.transform.position = targetFighter.transform.position;
+                        hitFX.SetActive(true);
+                    }
 
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
                     AffectNeighborBlocks(abilityBehavior);
@@ -289,50 +295,42 @@ namespace RPGProject.Combat
 
                     ActivateAbilityBehavior(abilityBehavior);
                     if (calculatedAmount != 0) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
-                    abilityBehavior.onAbilityDeath += AffectNeighborBlocks;
+                    if(abilityBehavior != null) abilityBehavior.onAbilityDeath += AffectNeighborBlocks;
                     break;
             }
-
-
-            if (hasTarget) targetHealth.onHealthChange -= ApplyAgro;
-
-            //if (selectedAbility.canTargetAll)
-            //{
-            //    TargetAllTargets(abilityBehavior, calculatedAmount, isCriticalHit);
-            //    return;
-            //}
         }
 
         private void AffectNeighborBlocks(AbilityBehavior _abilityBehavior)
         {
+            if (selectedAbility == null) return;
             if (selectedAbility.amountOfNeighborBlocksAffected <= 0) return;
 
             AbilityBehavior blockBehavior = null;
             if (_abilityBehavior != null)
             {
-                blockBehavior = _abilityBehavior.childBehavior;               
+                blockBehavior = _abilityBehavior.childBehavior;
+                _abilityBehavior.onAbilityDeath -= AffectNeighborBlocks;
             }
  
             int amountToAffect = selectedAbility.amountOfNeighborBlocksAffected;
-            _abilityBehavior.onAbilityDeath -= AffectNeighborBlocks;
 
-            onAffectNeighborBlocks(amountToAffect, blockBehavior, selectedTarget, selectedAbility.baseAbilityAmount);
+            onAffectNeighborBlocks(this, amountToAffect, blockBehavior, selectedTarget, selectedAbility.baseAbilityAmount);
         }
 
-        private AbilityBehavior GetAbilityBehavior(bool isCriticalHit, float calculatedAmount, AbilityBehavior abilityBehavior)
+        private AbilityBehavior GetAbilityBehavior(bool isCriticalHit, float calculatedAmount)
         {    
-            abilityBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
-            abilityBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit, selectedAbility.abilityLifetime);
+            AbilityBehavior newBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
+            newBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit, selectedAbility.abilityLifetime);
 
             if (currentComboLink != null)
             {
                 if (currentComboLink.spawnLocationOverride != SpawnLocation.None)
                 {
-                    abilityBehavior.SetSpawnLocation(currentComboLink.spawnLocationOverride);
+                    newBehavior.SetSpawnLocation(currentComboLink.spawnLocationOverride);
                 }
             }
 
-            return abilityBehavior;
+            return newBehavior;
         }
 
         private void DecrementCooldowns()
@@ -381,7 +379,7 @@ namespace RPGProject.Combat
             return newChangeAmount;
         }
 
-        private void ApplyAgro(bool _isCritical, float _changeAmount)
+        private void ApplyAgro(bool _NA, int _changeAmount)
         {
             onAgroAction(this, _changeAmount);
         }

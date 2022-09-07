@@ -7,5 +7,6 @@ namespace RPGProject.Combat
     {
         None = 0,
         Explosion = 1,
+        SonicBoom = 2,
     }
 }

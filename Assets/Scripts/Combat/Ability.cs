@@ -22,12 +22,13 @@ namespace RPGProject.Combat
         /// Amount the ability will affect a target when behavior is executed
         /// before other modifications are applied.
         /// </summary>
-        public float baseAbilityAmount = 40;
+        public float baseAbilityAmount = 40f;
+        public int baseAgroPercentageAmount = 40;
         [TextArea(10, 10)] public string description = "";
 
         [Header("Design")]     
         ///<summary>
-        /// If true, the ability behavior will scale to the target
+        /// If true, the ability behavior will scale to the target.
         /// </summary>
         public bool shouldExpand = false;
         public Color buttonColor = Color.white;
@@ -37,6 +38,7 @@ namespace RPGProject.Combat
         public List<ComboLink> combo = new List<ComboLink>();
         public AbilityType abilityType = AbilityType.Melee;
         public TargetingType targetingType = TargetingType.Everyone;
+        public CharacterBiology requiredBiology = CharacterBiology.None;
         public int requiredTargetAmount = 1;
         public float attackRange = 5f;
         public int energyPointsCost = -1;
@@ -44,7 +46,7 @@ namespace RPGProject.Combat
         public bool requiresTarget = false;
         public bool canTargetAll = false;
 
-        public int amountOfNeighborBlocksAffected = 0;          
+        public int amountOfNeighborBlocksAffected = 0;
     }
 
     /// <summary>

@@ -10,6 +10,7 @@ namespace RPGProject.Combat
     public class CharacterMesh : MonoBehaviour
     {
         public CharacterKey characterKey = CharacterKey.None;
+        public CharacterBiology characterBiology = CharacterBiology.None;
         public Sprite faceImage = null;
 
         public AnimatorOverrideController animatorController = null;
@@ -18,6 +19,7 @@ namespace RPGProject.Combat
         public Transform aimTransform = null;
         public Transform rHandTransform = null;
         public Transform lHandTransform = null;
+        public Transform headTransform = null;
 
         public Transform particleExpander = null;
 
@@ -40,4 +42,6 @@ namespace RPGProject.Combat
             return animator;
         }
     }
+
+    public enum CharacterBiology { None, Biological, Technological, Astrological}
 }

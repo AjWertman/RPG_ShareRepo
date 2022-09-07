@@ -21,7 +21,6 @@ MonoBehaviour:
     maxHealthPoints: 0
     energyPoints: 0
     maxEnergyPoints: 0
-    gCostMoveAllowance: 0
   stats:
     stamina: 20
     spirit: 10
@@ -37,3 +36,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 27e123f48ae737348b5d5251d3a4fa8d, type: 2}
   - {fileID: 11400000, guid: 9c05218009d6fc64c83c7deb6f636910, type: 2}
   - {fileID: 11400000, guid: 8237811f0d2470e44b04fc238826604b, type: 2}
+  - {fileID: 11400000, guid: 3d76ffa7c24a9684c932fd00f826f91d, type: 2}
+  - {fileID: 11400000, guid: 14c67d1c4d72dc64ba518eebd47e1f97, type: 2}

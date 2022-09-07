@@ -69,9 +69,12 @@ namespace RPGProject.Control.Combat
         private void Update()
         {
             //Refactor - testing
+            if (!isBattling) return;
             if (Input.GetKeyDown(KeyCode.J))
             {
-                aiBrain.GetBestAction(unitManager.enemyUnits[0], unitManager.unitControllers);
+                UnitController testUnit = unitManager.enemyUnits[0];
+                if (testUnit == null) return;
+                aiBrain.GetBestAction(testUnit, unitManager.unitControllers);
             }
         }
 
@@ -116,7 +119,7 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        private void AffectNeighborBlocks(int _amountOfNeighbors, AbilityBehavior _gridBehavior, CombatTarget _mainTarget, float _baseAbilityAmount)
+        private void AffectNeighborBlocks(Fighter _attacker, int _amountOfNeighbors, AbilityBehavior _gridBehavior, CombatTarget _mainTarget, float _baseAbilityAmount)
         {
             GridBlock centerBlock = null;
             if (_mainTarget.GetType() == typeof(GridBlock)) centerBlock = (GridBlock)_mainTarget;
@@ -127,13 +130,14 @@ namespace RPGProject.Control.Combat
             }
             List<GridBlock> neighbors = pathfinder.GetNeighbors(centerBlock, _amountOfNeighbors);
 
-            _gridBehavior.SetupAbility(null, null, _baseAbilityAmount, false, 3);
+            if(_gridBehavior != null) _gridBehavior.SetupAbility(null, null, _baseAbilityAmount, false, 3);
 
-            foreach(GridBlock gridBlock in neighbors)
+            foreach (GridBlock gridBlock in neighbors)
             {
                 Fighter contestedFighter = gridBlock.contestedFighter;
                 if (contestedFighter!= null)
                 {
+                    if (contestedFighter == _attacker) continue;
                     bool isMeleeDamage = _gridBehavior == null;
                     contestedFighter.GetHealth().ChangeHealth(_baseAbilityAmount, false, !isMeleeDamage);
                     contestedFighter.unitStatus.ApplyActiveAbilityBehavior(_gridBehavior);
@@ -145,7 +149,7 @@ namespace RPGProject.Control.Combat
                 }
             }
 
-            centerBlock.SetActiveAbility(_gridBehavior);
+            if (_gridBehavior != null) centerBlock.SetActiveAbility(_gridBehavior);
         }
 
         public void SetupTurnManager()
@@ -176,9 +180,14 @@ namespace RPGProject.Control.Combat
             }
             else
             {
-                StartCoroutine(battleUIManager.GetBattleHUD().ActivateCantUseAbilityUI(cantUseAbilityReason));
-                OnMoveCompletion();
+                CantUseAbility(cantUseAbilityReason);
             }
+        }
+
+        public void CantUseAbility(string _reason)
+        {
+            StartCoroutine(battleUIManager.GetBattleHUD().ActivateCantUseAbilityUI(_reason));
+            OnMoveCompletion();
         }
 
         public void UseAbility(List<CombatTarget> _targets, Ability _selectedAbility)

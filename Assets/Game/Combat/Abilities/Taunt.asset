@@ -10,30 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: ShootingStar
+  m_Name: Taunt
   m_EditorClassIdentifier: 
-  abilityName: Shooting Star
-  requiredLevel: 0
+  abilityName: Heckle
+  requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -25
-  baseAgroPercentageAmount: 5
-  description: Fireball
+  baseAbilityAmount: 0
+  baseAgroPercentageAmount: 100
+  description: PDR heckles the target angering them into attacking him.
   shouldExpand: 0
-  buttonColor: {r: 0.8584906, g: 0.33752984, b: 0, a: 1}
+  buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    abilityObjectKey: 1
+    abilityObjectKey: 12
     hitFXObjectKey: 0
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
-  abilityType: 1
+  abilityType: 4
   targetingType: 0
+  requiredBiology: 0
   requiredTargetAmount: 1
-  attackRange: 20
-  energyPointsCost: 20
+  attackRange: 15
+  energyPointsCost: 0
   cooldown: 0
-  requiresTarget: 1
+  requiresTarget: 0
   canTargetAll: 0
-  amountOfNeighborBlocksAffected: 1
+  amountOfNeighborBlocksAffected: 0

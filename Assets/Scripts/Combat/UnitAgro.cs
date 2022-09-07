@@ -37,22 +37,20 @@ namespace RPGProject.Combat
         /// Changes the agro percentage for a specific fighter, then adds/subtracts that agro amount
         /// equally from the other fighters on the opposing team.
         /// </summary>
-        public void UpdateAgro(Fighter _agressor, float _changeAmount)
+        public void UpdateAgro(Fighter _agressor, int _changeAmount)
         {
+            //Refactor - should work properly, just changed int to float so be wary        
             Fighter agressorTarget = (Fighter)_agressor.selectedTarget;
             if (myFighter != agressorTarget) return;
 
-            int percentageChange = GetPercentageOfHealthChange(myFighter.GetHealth(), _changeAmount);
-
-            int agroPercentage = percentageChange * agroPercentagePerDamagePercentage;
-
-            int agroToTakeFromOthers = GetEvenAgroSplit(percentageChange);
-            //print("agro to take from others " + agroToTakeFromOthers.ToString());
+            //int percentageChange = GetPercentageOfHealthChange(myFighter.GetHealth(), _changeAmount);
+            //int agroPercentage = percentageChange * agroPercentagePerDamagePercentage;
+            int agroToTakeFromOthers = GetEvenAgroSplit(_changeAmount);
 
             for (int i = 0; i < agros.Count; i++)
             {
                 Agro agro = agros[i];
-                if (agro.fighter == _agressor) agro.percentageOfAgro += percentageChange;
+                if (agro.fighter == _agressor) agro.percentageOfAgro += _changeAmount;
                 else agro.percentageOfAgro -= agroToTakeFromOthers;
 
                 agro.percentageOfAgro = Mathf.Clamp(agro.percentageOfAgro, 0, 100);

@@ -297,15 +297,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b85cea0385b8e4042b7934a45e6c2d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityObjectKey: 0
+  abilityObjectKey: 7
   spawnLocation: 3
   hitFXObjectKey: 0
+  gridBlockKey: 0
   caster: {fileID: 0}
+  childBehavior: {fileID: 0}
   testTarget: {fileID: 0}
   gunTransform: {fileID: 4340339582551274063}
   bulletLaunchTransform: {fileID: 0}
   lookTransform: {fileID: 0}
-  projectileKey: 13
+  projectileKey: 8
+  myBlock: {fileID: 0}
+  attackRadius: []
+  fightersInRange: []
 --- !u!1 &4340339582551274060
 GameObject:
   m_ObjectHideFlags: 0

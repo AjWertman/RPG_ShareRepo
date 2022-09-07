@@ -58,29 +58,35 @@ namespace RPGProject.Control
             battleHUD.SetupTeammemberIndicators(_playerCombatants);
         }
 
-        public void ActivateAbilitySelectMenu()
+        public void OnAbilitySelectKey()
         {
             bool shouldActivate = !abilitySelectMenu.gameObject.activeSelf;
-            
-            if (shouldActivate)
-            {
-                abilitySelectMenu.PopulateAbilitiesList(currentCombatantTurn, currentCombatantTurn.GetKnownAbilities());
-                isSelectingAbility = true;
-            }
-            else
-            {
-                abilitySelectMenu.ResetAbilitySelectMenu();
-                isSelectingAbility = false;
-            }
 
-            abilitySelectMenu.gameObject.SetActive(shouldActivate);
+            if (shouldActivate) ActivateAbilitySelectMenu();
+            else DeactivateAbilitySelectMenu();
+        }
+
+        public void ActivateAbilitySelectMenu()
+        {
+            if (abilitySelectMenu.gameObject.activeSelf) return;
+            abilitySelectMenu.PopulateAbilitiesList(currentCombatantTurn, currentCombatantTurn.GetKnownAbilities());
+            abilitySelectMenu.gameObject.SetActive(true);
+            isSelectingAbility = true;
+        }
+
+        public void DeactivateAbilitySelectMenu()
+        {
+            if (!abilitySelectMenu.gameObject.activeSelf) return;
+            abilitySelectMenu.ResetAbilitySelectMenu();
+            abilitySelectMenu.gameObject.SetActive(false);
+            isSelectingAbility = false;
         }
 
         public void OnAbilitySelect(Ability _ability)
         {
             selectedAbility = _ability;
             isSelectingAbility = false;
-            ActivateAbilitySelectMenu();
+            DeactivateAbilitySelectMenu();
             onAbilitySelect(selectedAbility);
         }
 

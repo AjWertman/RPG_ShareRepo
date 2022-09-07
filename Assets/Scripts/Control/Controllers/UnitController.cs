@@ -142,15 +142,16 @@ namespace RPGProject.Control.Combat
 
             if (isContested)
             {
-                List<CombatTarget> singleTarget = new List<CombatTarget>();
-                singleTarget.Add(contestedFighter);
+                if (contestedFighter != null)
+                {
+                    List<CombatTarget> singleTarget = new List<CombatTarget>();
+                    singleTarget.Add(contestedFighter);
+                    yield return UseAbilityBehavior(singleTarget, fighter.GetBasicAttack());
+                    yield break;
+                }
+            }
 
-                yield return UseAbilityBehavior(singleTarget, fighter.GetBasicAttack());
-            }
-            else
-            {
-                onMoveCompletion();
-            }
+            onMoveCompletion();
         }
 
         public IEnumerator FollowPath(List<GridBlock> _path)

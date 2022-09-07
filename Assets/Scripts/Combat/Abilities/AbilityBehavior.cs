@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
-    public enum SpawnLocation { None, LHand, RHand, Target, Target_Parent, Caster, Caster_Parent, Weapon}
+    public enum SpawnLocation { None, LHand, RHand, Target, Target_Parent, Caster, Caster_Parent, TargetHead, Weapon}
 
     /// <summary>
     /// Base class for an instance of an ability.
@@ -17,6 +17,7 @@ namespace RPGProject.Combat
 
         public Fighter caster = null;
         public CombatTarget target = null;
+        Fighter targetFighter = null;
 
         public AbilityBehavior childBehavior = null;
 
@@ -43,9 +44,13 @@ namespace RPGProject.Combat
 
             if(_target != null)
             {
-                Fighter targetFighter = _target.GetComponent<Fighter>();
+                Fighter fighter = _target.GetComponent<Fighter>();
 
-                if (targetFighter != null) targetStatus = targetFighter.unitStatus;
+                if (fighter != null)
+                {
+                    targetFighter = fighter;
+                    targetStatus = targetFighter.unitStatus;
+                }
             }
 
             changeAmount = _changeAmount;
@@ -61,6 +66,9 @@ namespace RPGProject.Combat
             if (_spawnLocation == SpawnLocation.None) return;
 
             CharacterMesh casterMesh = caster.characterMesh;
+            CharacterMesh targetMesh = null;
+            if (targetFighter != null) targetMesh = targetFighter.characterMesh;
+
             Transform aimTransform = target.GetAimTransform();
 
             switch (_spawnLocation)
@@ -89,6 +97,10 @@ namespace RPGProject.Combat
                 case SpawnLocation.Target_Parent:
                     transform.position = aimTransform.position;
                     transform.parent = aimTransform;
+                    break;
+
+                case SpawnLocation.TargetHead:
+                    transform.position = targetMesh.headTransform.position;
                     break;
 
                 case SpawnLocation.Weapon:
