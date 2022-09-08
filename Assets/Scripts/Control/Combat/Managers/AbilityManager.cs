@@ -1,5 +1,7 @@
 using RPGProject.Combat;
 using RPGProject.Combat.Grid;
+using RPGProject.GameResources;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,16 +13,26 @@ namespace RPGProject.Control.Combat
         Pathfinder pathfinder = null;
         AbilityObjectPool abilityObjectPool = null;
 
+        Fighter currentFighter = null;
+        AbilityObjectKey currentAbilityKey = AbilityObjectKey.None;
 
-        private void Awake()
+        /// <summary>
+        /// An event to notify the BattleHandler that the neighbor blocks should be affected because of an ability.
+        ///Fighter = attacker, int = amount of blocks affected; AbilityBehavior = the grid behavior to apply;
+        ///CombatTarget = main target; float = base damage amount. 
+        /// </summary>
+        public event Action<Fighter, int, AbilityBehavior, CombatTarget, float> onAffectNeighborBlocks;
+
+        public void InitalizeAbilityManager()
         {
             pathfinder = FindObjectOfType<Pathfinder>();
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
         }
 
-        public void SetupAbility(Ability _selectedAbility)
+        public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
-            AbilityBehavior _abilityBehavior = null;
+            Ability selectedAbility = currentFighter.selectedAbility;
+
             if (_abilityBehavior == null) return;
             _abilityBehavior.gameObject.SetActive(true);
             _abilityBehavior.PerformAbilityBehavior();
@@ -32,7 +44,7 @@ namespace RPGProject.Control.Combat
                 List<GridBlock> attackRadius = new List<GridBlock>();
                 Pathfinder pathfinder = FindObjectOfType<Pathfinder>();
 
-                foreach (GridBlock gridBlock in pathfinder.GetNeighbors(turret.myBlock, _selectedAbility.amountOfNeighborBlocksAffected))
+                foreach (GridBlock gridBlock in pathfinder.GetNeighbors(turret.myBlock, selectedAbility.amountOfNeighborBlocksAffected))
                 {
                     attackRadius.Add(gridBlock);
                 }
@@ -40,20 +52,192 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        //private AbilityBehavior GetAbilityBehavior(bool isCriticalHit, float calculatedAmount)
+        private AbilityBehavior GetAbilityBehavior(bool _isCritical, float _changeAmount)
+        {
+            AbilityBehavior newBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityKey);
+            ComboLink currentComboLink = currentFighter.currentComboLink;
+            if (newBehavior != null)
+            {
+                newBehavior.SetupAbility(currentFighter, currentFighter.selectedTarget, _changeAmount, _isCritical, currentFighter.selectedAbility.abilityLifetime);
+            }
+            if (currentComboLink != null)
+            {
+                if (currentComboLink.spawnLocationOverride != SpawnLocation.None)
+                {
+                    newBehavior.SetSpawnLocation(currentComboLink.spawnLocationOverride);
+                }
+            }
+
+            return newBehavior;
+        }
+
+        public void SetCurrentCombatantTurn(Fighter _newFighter)
+        {
+            currentFighter = _newFighter;
+        }
+
+        public void SetCurrentAbilityKey(AbilityObjectKey _abilityObjectKey)
+        {
+            currentAbilityKey = _abilityObjectKey;
+        }
+
+        public void PerformAbility()
+        {
+            Ability selectedAbility = currentFighter.selectedAbility;
+            ComboLink currentComboLink = currentFighter.currentComboLink;
+            AbilityType abilityType = selectedAbility.abilityType;
+            bool isCriticalHit = CombatAssistant.CriticalHitCheck(currentFighter.luck);
+
+            float abilityAmountWStatModifier = GetStatsModifier(currentFighter, selectedAbility.abilityType,selectedAbility.baseAbilityAmount);
+            float calculatedAmount = CombatAssistant.GetCalculatedAmount(selectedAbility.baseAbilityAmount, isCriticalHit);
+
+            AbilityBehavior abilityBehavior = null;
+            Fighter targetFighter = currentFighter.selectedTarget as Fighter;
+            bool hasTarget = targetFighter != null;
+
+            if (currentAbilityKey != AbilityObjectKey.None)
+            {
+                abilityBehavior = GetAbilityBehavior(isCriticalHit, calculatedAmount);
+            }
+
+            Health targetHealth = null;
+            if (hasTarget)
+            {
+                targetHealth = targetFighter.GetHealth();
+                currentFighter.ApplyAgro(false, selectedAbility.baseAgroPercentageAmount);
+            }
+
+            switch (abilityType)
+            {
+                case AbilityType.Melee:
+
+                    GameObject hitFX = null;
+                    if (currentComboLink.hitFXObjectKey != HitFXObjectKey.None)
+                    {
+                        hitFX = abilityObjectPool.GetHitFX(currentComboLink.hitFXObjectKey);
+                        hitFX.transform.position = targetFighter.transform.position;
+                        hitFX.SetActive(true);
+                    }
+
+                    targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
+                    AffectNeighborBlocks(abilityBehavior);
+                    if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior);
+                    float reflectionAmount = -targetFighter.unitStatus.physicalReflectionDamage;
+                    if (reflectionAmount > 0) currentFighter.GetHealth().ChangeHealth(reflectionAmount, false, false);
+
+                    break;
+
+                case AbilityType.Copy:
+
+                    //onCopyAbilitySelected
+                    /// Open ability menu with copy list
+                    break;
+
+                case AbilityType.Cast:
+
+                    ActivateAbilityBehavior(abilityBehavior);
+                    abilityBehavior.onAbilityDeath += AffectNeighborBlocks;
+                    break;
+
+                case AbilityType.InstaHit:
+
+                    ActivateAbilityBehavior(abilityBehavior);
+                    if (calculatedAmount != 0) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
+                    if (abilityBehavior != null) abilityBehavior.onAbilityDeath += AffectNeighborBlocks;
+                    break;
+            }
+        }
+
+        private void AffectNeighborBlocks(AbilityBehavior _abilityBehavior)
+        {
+            Ability selectedAbility = currentFighter.selectedAbility;
+            if (selectedAbility == null) return;
+            if (selectedAbility.amountOfNeighborBlocksAffected <= 0) return;
+
+            AbilityBehavior childBehavior = null;
+            if (_abilityBehavior != null)
+            {
+                if (_abilityBehavior.GetType() != typeof(Turret))
+                {
+                    childBehavior = _abilityBehavior.childBehavior;
+                }
+
+                _abilityBehavior.onAbilityDeath -= AffectNeighborBlocks;
+            }
+
+            int amountToAffect = selectedAbility.amountOfNeighborBlocksAffected;
+
+            AffectNeighborBehavior(currentFighter, amountToAffect, childBehavior, currentFighter.selectedTarget, selectedAbility.baseAbilityAmount);
+        }
+
+        private void AffectNeighborBehavior(Fighter _attacker, int _amountOfNeighbors, AbilityBehavior _childBehavior, CombatTarget _mainTarget, float _baseAbilityAmount)
+        {
+            GridBlock centerBlock = null;
+            if (_mainTarget.GetType() == typeof(GridBlock)) centerBlock = (GridBlock)_mainTarget;
+            else if (_mainTarget.GetType() == typeof(Fighter))
+            {
+                Fighter _target = (Fighter)_mainTarget;
+                centerBlock = _target.currentBlock;
+            }
+            List<GridBlock> neighbors = pathfinder.GetNeighbors(centerBlock, _amountOfNeighbors);
+
+            if (_childBehavior != null)
+            {
+                _childBehavior.SetupAbility(null, null, _baseAbilityAmount, false, 3);
+            }
+            foreach (GridBlock gridBlock in neighbors)
+            {
+                Fighter contestedFighter = gridBlock.contestedFighter;
+                if (contestedFighter != null)
+                {
+                    if (contestedFighter == _attacker) continue;
+                    bool isMeleeDamage = _childBehavior == null;
+                    contestedFighter.GetHealth().ChangeHealth(_baseAbilityAmount, false, !isMeleeDamage);
+
+                    if(!isMeleeDamage) contestedFighter.unitStatus.ApplyActiveAbilityBehavior(_childBehavior);
+                }
+
+                if (_childBehavior != null)
+                {
+                    gridBlock.SetActiveAbility(_childBehavior);
+                }
+            }
+
+            if (_childBehavior != null) centerBlock.SetActiveAbility(_childBehavior);
+        }
+
+        private float GetStatsModifier(Fighter _caster, AbilityType _abilityType, float _changeAmount)
+        {
+            float newChangeAmount = _changeAmount;
+            float statsModifier = 0f;
+
+            if (_abilityType == AbilityType.Melee)
+            {
+                statsModifier = _caster.strength - 10f;
+            }
+            else if (_abilityType == AbilityType.Cast)
+            {
+                statsModifier = _caster.skill - 10f;
+            }
+
+            if (statsModifier > 0)
+            {
+                float offensivePercentage = statsModifier * .1f;
+                newChangeAmount += (_changeAmount * offensivePercentage);
+            }
+
+            return newChangeAmount;
+        }
+
+        //private void TargetAllTargets(AbilityBehavior _abilityBehavior, float _changeAmount, bool _isCritical)
         //{
-        //    AbilityBehavior newBehavior = abilityObjectPool.GetAbilityInstance(currentAbilityObjectKey);
-        //    newBehavior.SetupAbility(this, selectedTarget, calculatedAmount, isCriticalHit, selectedAbility.abilityLifetime);
-
-        //    if (currentComboLink != null)
+        //    TargetAll targetAll = _abilityBehavior.GetComponent<TargetAll>();
+        //    targetAll.transform.position = targetAll.GetCenterOfTargetsPoint(selectedTargets);
+        //    //ActivateAbilityBehavior(_abilityBehavior);
+        //    foreach (Fighter fighter in selectedTargets)
         //    {
-        //        if (currentComboLink.spawnLocationOverride != SpawnLocation.None)
-        //        {
-        //            newBehavior.SetSpawnLocation(currentComboLink.spawnLocationOverride);
-        //        }
+        //        fighter.health.ChangeHealth(_changeAmount, _isCritical, true);
         //    }
-
-        //    return newBehavior;
         //}
     }
 }

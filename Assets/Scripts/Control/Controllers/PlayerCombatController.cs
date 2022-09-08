@@ -77,8 +77,8 @@ namespace RPGProject.Control.Combat
             {
                 if (isSelectingFaceDirection) ClearNeighborSelection();
                 else gridSystem.UnhighlightBlocks(tempPath);
-
                 battleUIManager.OnAbilitySelectKey();
+                currentUnitTurn.GetAimLine().ResetLine();
             }
 
             if (Input.GetKeyDown(KeyCode.Return) && canAdvanceTurn)

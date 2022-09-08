@@ -71,17 +71,25 @@ namespace RPGProject.Combat
 
                     abilityBehaviorInstances.Add(abilityBehavior);
 
-                    //if(abilityBehavior.GetType() == typeof(Turret))
-                    //{
-                    //    Turret turret = (Turret)abilityBehavior;
-                    //    turret.SetProjectile(GetAbilityInstance(turret.projectileKey));
-                    //}
+                    CreateChildBehaviors(abilityBehavior);
                 }
 
                 abilityPool.Add(abilityPrefab.abilityObjectKey, abilityBehaviorInstances);
             }
 
             ResetAbilityObjectPool();
+        }
+
+        private void CreateChildBehaviors(AbilityBehavior _abilityBehavior)
+        {
+            if(_abilityBehavior.childBehavior != null)
+            {
+                AbilityBehavior childBehavior = Instantiate(_abilityBehavior.childBehavior, _abilityBehavior.transform);
+                childBehavior.hitFXSpawnRequest += SpawnHitFX;
+
+                _abilityBehavior.SetChildAbilityBehavior(childBehavior);
+                childBehavior.gameObject.SetActive(false);
+            }
         }
 
         private void CreateHitFXPool()

@@ -17,6 +17,8 @@ namespace RPGProject.Control.Combat
         public static int energyCostPerBlock = 5;
 
         CombatAIBrain aiBrain = null;
+
+        AbilityManager abilityManager = null;
         BattleUIManager battleUIManager = null;
         BattleGridManager battleGridManager = null;
         UnitManager unitManager = null;
@@ -49,6 +51,8 @@ namespace RPGProject.Control.Combat
         private void Awake()
         {
             aiBrain = GetComponent<CombatAIBrain>();
+
+            abilityManager = GetComponentInChildren<AbilityManager>();
             battleUIManager = GetComponentInChildren<BattleUIManager>();
             battleGridManager = GetComponentInChildren<BattleGridManager>();
             unitManager = GetComponentInChildren<UnitManager>();
@@ -61,6 +65,7 @@ namespace RPGProject.Control.Combat
 
         private void Start()
         {
+            abilityManager.InitalizeAbilityManager();
             battleUIManager.InitalizeBattleUIManager();
             battleGridManager.InitializeBattleGridManager();
             unitManager.InitalizeUnitManager();
@@ -99,8 +104,10 @@ namespace RPGProject.Control.Combat
             SetupUnitManager();
             SetupTurnManager();
             SetupUIManager();
+            SetupAbilityManager();
         }
-        public void SetupUnitManager()
+
+        private void SetupUnitManager()
         {
             Dictionary<GridBlock, Unit> playerStartingPositions = battleGridManager.playerStartingPositionsDict;
             Dictionary<GridBlock, Unit> enemyStartingPositions = battleGridManager.enemyStartingPositionsDict;
@@ -114,42 +121,7 @@ namespace RPGProject.Control.Combat
             {
                 unitController.onMoveCompletion += OnMoveCompletion;
                 unitController.GetHealth().onAnimDeath += OnUnitDeath;
-
-                unitController.GetFighter().onAffectNeighborBlocks += AffectNeighborBlocks;
             }
-        }
-
-        private void AffectNeighborBlocks(Fighter _attacker, int _amountOfNeighbors, AbilityBehavior _gridBehavior, CombatTarget _mainTarget, float _baseAbilityAmount)
-        {
-            GridBlock centerBlock = null;
-            if (_mainTarget.GetType() == typeof(GridBlock)) centerBlock = (GridBlock)_mainTarget;
-            else if(_mainTarget.GetType() == typeof(Fighter))
-            {
-                Fighter _target = (Fighter)_mainTarget;
-                centerBlock = _target.currentBlock;
-            }
-            List<GridBlock> neighbors = pathfinder.GetNeighbors(centerBlock, _amountOfNeighbors);
-
-            if(_gridBehavior != null) _gridBehavior.SetupAbility(null, null, _baseAbilityAmount, false, 3);
-
-            foreach (GridBlock gridBlock in neighbors)
-            {
-                Fighter contestedFighter = gridBlock.contestedFighter;
-                if (contestedFighter!= null)
-                {
-                    if (contestedFighter == _attacker) continue;
-                    bool isMeleeDamage = _gridBehavior == null;
-                    contestedFighter.GetHealth().ChangeHealth(_baseAbilityAmount, false, !isMeleeDamage);
-                    contestedFighter.unitStatus.ApplyActiveAbilityBehavior(_gridBehavior);
-                }
-
-                if(_gridBehavior != null)
-                {
-                    gridBlock.SetActiveAbility(_gridBehavior);
-                }
-            }
-
-            if (_gridBehavior != null) centerBlock.SetActiveAbility(_gridBehavior);
         }
 
         public void SetupTurnManager()
@@ -157,6 +129,7 @@ namespace RPGProject.Control.Combat
             turnManager.SetUpTurns(unitManager.unitControllers, unitManager.playerUnits, unitManager.enemyUnits);
             turnManager.onTurnChange += SetCurrentUnitTurn;
         }
+
         public void SetupUIManager()
         {
             List<Fighter> _playerCombatants = GetUnitFighters(unitManager.playerUnits);
@@ -166,6 +139,17 @@ namespace RPGProject.Control.Combat
             battleUIManager.SetUILookAts(Camera.main.transform);
             battleUIManager.onEscape += Escape;
             battleUIManager.onEndTurn += () => AdvanceTurn();
+        }
+
+        public void SetupAbilityManager()
+        {            
+            foreach (Fighter fighter in GetUnitFighters(unitManager.unitControllers))
+            {
+                fighter.onAbilityUse += abilityManager.PerformAbility;
+
+                ComboLinker comboLinker = fighter.GetComboLinker();
+                comboLinker.onComboStarted += abilityManager.SetCurrentAbilityKey;
+            }
         }
 
         public void OnPlayerMove(List<CombatTarget> _targets, Ability _selectedAbility)
@@ -305,6 +289,7 @@ namespace RPGProject.Control.Combat
             currentUnitTurn.SetIsTurn(true);
             onUnitTurnUpdate(_currentUnitTurn);
             battleUIManager.SetCurrentCombatantTurn(currentUnitTurn.GetFighter());
+            abilityManager.SetCurrentCombatantTurn(currentUnitTurn.GetFighter());
         }
 
         public List<Fighter> GetUnitFighters(List<UnitController> _unitControllers)

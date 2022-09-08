@@ -13,7 +13,7 @@ namespace RPGProject.Combat
         public bool isSilenced = false;
         public bool hasSubstitute = false;
 
-        List<AbilityBehavior> activeAbilityBehaviors = new List<AbilityBehavior>();
+        public List<AbilityBehavior> activeAbilityBehaviors = new List<AbilityBehavior>();
 
         public void ApplyActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
         {

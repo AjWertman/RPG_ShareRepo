@@ -3989,12 +3989,12 @@ PrefabInstance:
     - target: {fileID: 4662755111146009985, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000008344259
+      value: -0.000000008331435
       objectReference: {fileID: 0}
     - target: {fileID: 4662755111146009985, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000021418718
+      value: 0.0000000021452526
       objectReference: {fileID: 0}
     - target: {fileID: 4690810693775387508, guid: d5e55f2105cb48040a821387a81a7e1e,
         type: 3}
@@ -6777,15 +6777,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.2317505
+      value: 0.23175052
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000014496112
+      value: 6.2892e-13
       objectReference: {fileID: 0}
     - target: {fileID: 1989736354, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000003450697
+      value: 2.655437e-12
       objectReference: {fileID: 0}
     - target: {fileID: 1999198496, guid: 2f17807c10561384ea07ef28bb66d773, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
@@ -8221,11 +8221,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6062565237304835480, guid: 2f17807c10561384ea07ef28bb66d773,
-        type: 3}
-      propertyPath: m_ScrollSensitivity
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 6319647751680848022, guid: 2f17807c10561384ea07ef28bb66d773,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -8474,7 +8469,7 @@ PrefabInstance:
     - target: {fileID: 7199314905329140087, guid: 2f17807c10561384ea07ef28bb66d773,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000015657395
+      value: -0.000017277896
       objectReference: {fileID: 0}
     - target: {fileID: 7407283268081426703, guid: 2f17807c10561384ea07ef28bb66d773,
         type: 3}
@@ -9672,6 +9667,16 @@ MonoBehaviour:
   characterMesh: {fileID: 0}
   selectedAbility: {fileID: 0}
   currentBlock: {fileID: 0}
+  currentComboLink:
+    animationID: 
+    comboPointCost: 1
+    abilityObjectKey: 0
+    hitFXObjectKey: 0
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  strength: 0
+  skill: 0
+  luck: 0
 --- !u!114 &1240160874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9684,6 +9689,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40cb835813c545247b00559e72e8c3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1240160877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240160870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 941839d2438e89d49926bfe1a43d9b2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitInfo:
+    unitName: 
+    characterKey: 0
+    unitLevel: 0
+    stats:
+      stamina: 0
+      spirit: 0
+      strength: 0
+      skill: 0
+      armor: 0
+      resistance: 0
+      speed: 0
+      luck: 0
+    basicAttack: {fileID: 0}
+    abilities: []
+    isPlayer: 0
+  unitResources:
+    healthPoints: 0
+    maxHealthPoints: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
+  startingStats:
+    stamina: 0
+    spirit: 0
+    strength: 0
+    skill: 0
+    armor: 0
+    resistance: 0
+    speed: 0
+    luck: 0
+  aiType: 1
+  currentBlock: {fileID: 0}
 --- !u!1001 &1248613125
 PrefabInstance:
   m_ObjectHideFlags: 0

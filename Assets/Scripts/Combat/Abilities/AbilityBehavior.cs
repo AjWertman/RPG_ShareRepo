@@ -114,6 +114,13 @@ namespace RPGProject.Combat
         /// </summary>
         public abstract void PerformAbilityBehavior();
 
+        public virtual void SetChildAbilityBehavior(AbilityBehavior _childBehavior)
+        {
+            if (_childBehavior == null) return;
+
+            childBehavior = _childBehavior;
+        }
+
         public virtual void OnAbilityDeath()
         {
             ResetAbilityBehavior();

@@ -302,12 +302,12 @@ MonoBehaviour:
   hitFXObjectKey: 0
   gridBlockKey: 0
   caster: {fileID: 0}
-  childBehavior: {fileID: 0}
+  childBehavior: {fileID: 8531145619475649434, guid: 67ec53e34e08bd44fb28280f774cef46,
+    type: 3}
   testTarget: {fileID: 0}
   gunTransform: {fileID: 4340339582551274063}
-  bulletLaunchTransform: {fileID: 0}
+  bulletLaunchTransform: {fileID: 1327434757675462792}
   lookTransform: {fileID: 0}
-  projectileKey: 8
   myBlock: {fileID: 0}
   attackRadius: []
   fightersInRange: []
@@ -399,7 +399,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8729988059926942953}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
   m_LocalPosition: {x: 0, y: 2.11, z: -0.35}
   m_LocalScale: {x: 1.4, y: 1.3999999, z: 1.3999999}
   m_ConstrainProportionsScale: 0
@@ -407,7 +407,7 @@ Transform:
   - {fileID: 2235588117616200508}
   m_Father: {fileID: 4340339582551274063}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 180, z: 0}
 --- !u!33 &672039646178439131
 MeshFilter:
   m_ObjectHideFlags: 0

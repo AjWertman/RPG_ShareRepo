@@ -164,6 +164,7 @@ namespace RPGProject.Control.Combat
                 yield return mover.MoveToDestination(travelDestinations);
                 UpdateCurrentBlock(goalBlock);
             }
+            yield return new WaitForSeconds(1f);
         }
 
         public IEnumerator UseAbilityBehavior(List<CombatTarget> _targets, Ability _ability)

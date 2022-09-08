@@ -17,8 +17,6 @@ namespace RPGProject.Combat
         [SerializeField] Transform bulletLaunchTransform = null;
         [SerializeField] Transform lookTransform = null;
 
-        public AbilityObjectKey projectileKey = AbilityObjectKey.Missile;
-
         Fighter fighter = null;
         Projectile bulletProjectile = null;
         public GridBlock myBlock = null;
@@ -42,8 +40,10 @@ namespace RPGProject.Combat
 
             if (!_isTurn)
             {
-                if (fightersInRange.Contains(_target)) return;
-                fightersInRange.Add(_target);
+                if (!fightersInRange.Contains(_target))
+                {
+                    fightersInRange.Add(_target);
+                }
             }
             else
             {
@@ -54,6 +54,7 @@ namespace RPGProject.Combat
 
             LookAtTarget(_target.transform);
             bulletProjectile.target = _target;
+            bulletProjectile.gameObject.SetActive(true);
             bulletProjectile.PerformAbilityBehavior();
         }
 
@@ -90,18 +91,19 @@ namespace RPGProject.Combat
             gunTransform.LookAt(lookPosition);
         }
 
-        /// <summary>
-        /// Sets up the bullet projectile of this turret.
-        /// </summary>
-        public void SetProjectile(AbilityBehavior _newProjectile)
+        public override void SetChildAbilityBehavior(AbilityBehavior _childBehavior)
         {
-            _newProjectile.SetupAbility(fighter, null, changeAmount, false, abilityLifetime);
-            bulletProjectile = _newProjectile as Projectile;
+            //Refactor - change amount is not able to be set using AbilitySO variable;
+            changeAmount = -30;
+
+            _childBehavior.SetupAbility(fighter, null, changeAmount, false, abilityLifetime);
+            bulletProjectile = _childBehavior as Projectile;
             bulletProjectile.transform.parent = bulletLaunchTransform;
             bulletProjectile.onAbilityDeath += ResetProjectile;
-            ResetProjectile(_newProjectile);
+            ResetProjectile(_childBehavior);
+            base.SetChildAbilityBehavior(_childBehavior);
         }
-        
+
         /// <summary>
         /// Resets the bullet projectile of this turret.
         /// </summary>
@@ -111,6 +113,10 @@ namespace RPGProject.Combat
             projectile.gameObject.SetActive(false);
             projectile.transform.localPosition = Vector3.zero;
             projectile.target = null;
+
+            //Refactor - error on after first shot, changeAmount gets reset;
+            changeAmount = -30;
+            projectile.SetupAbility(fighter, null, changeAmount, false, abilityLifetime);
         }
 
         /// <summary>
