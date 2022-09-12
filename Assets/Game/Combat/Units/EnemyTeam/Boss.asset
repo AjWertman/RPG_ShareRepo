@@ -26,10 +26,11 @@ MonoBehaviour:
     spirit: 30
     strength: 30
     skill: 30
-    armor: 30
-    resistance: 30
+    armor: 10
+    resistance: 10
     speed: 30
     luck: 30
   basicAttack: {fileID: 11400000, guid: 91f034325d0a43c4a9387f0b4415cd84, type: 2}
   abilities:
   - {fileID: 11400000, guid: 14c67d1c4d72dc64ba518eebd47e1f97, type: 2}
+  - {fileID: 11400000, guid: 9c05218009d6fc64c83c7deb6f636910, type: 2}

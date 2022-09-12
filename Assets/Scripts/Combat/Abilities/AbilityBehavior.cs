@@ -10,9 +10,10 @@ namespace RPGProject.Combat
     /// </summary>
     public abstract class AbilityBehavior : MonoBehaviour
     {
-        [SerializeField] protected AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
         [SerializeField] protected SpawnLocation spawnLocation = SpawnLocation.None;
         [SerializeField] protected HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
+
+        public AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
         public GridBlockAbiltyKey gridBlockKey = GridBlockAbiltyKey.None;
 
         public Fighter caster = null;

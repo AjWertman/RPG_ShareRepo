@@ -19,15 +19,15 @@ MonoBehaviour:
   unitResources:
     healthPoints: 0
     maxHealthPoints: 0
-    actionPoints: 0
-    gCostMoveAllowance: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
   stats:
     stamina: 15
     spirit: 10
     strength: 12
     skill: 30
-    armor: 15
-    resistance: 30
+    armor: 10
+    resistance: 10
     speed: 20
     luck: 12
   basicAttack: {fileID: 11400000, guid: a9436425e25928f408448c735287e0e8, type: 2}

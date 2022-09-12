@@ -11,7 +11,7 @@ public class AssetBundleLoader : MonoBehaviour
 
     private void Awake()
     {
-        CreateAssetBundles();
+        //CreateAssetBundles();
     }
 
     private void CreateAssetBundles()

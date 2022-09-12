@@ -10,26 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
-  m_Name: RangeEnemy
+  m_Name: OPProtagonist
   m_EditorClassIdentifier: 
-  unitName: Ranged Enemy
+  unitName: Protagonist
   baseLevel: 10
-  characterKey: 5
-  combatAIType: 2
+  characterKey: 1
+  combatAIType: 1
   unitResources:
     healthPoints: 0
     maxHealthPoints: 0
     energyPoints: 0
     maxEnergyPoints: 0
   stats:
-    stamina: 10
+    stamina: 20
     spirit: 10
-    strength: 12
-    skill: 20
+    strength: 25
+    skill: 25
     armor: 10
     resistance: 10
-    speed: 20
-    luck: 15
-  basicAttack: {fileID: 11400000, guid: a9436425e25928f408448c735287e0e8, type: 2}
+    speed: 30
+    luck: 30
+  basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
   abilities:
+  - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}
+  - {fileID: 11400000, guid: 27e123f48ae737348b5d5251d3a4fa8d, type: 2}
+  - {fileID: 11400000, guid: 9c05218009d6fc64c83c7deb6f636910, type: 2}
+  - {fileID: 11400000, guid: 8237811f0d2470e44b04fc238826604b, type: 2}
+  - {fileID: 11400000, guid: 3d76ffa7c24a9684c932fd00f826f91d, type: 2}
   - {fileID: 11400000, guid: 14c67d1c4d72dc64ba518eebd47e1f97, type: 2}

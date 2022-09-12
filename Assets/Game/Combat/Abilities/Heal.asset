@@ -15,7 +15,7 @@ MonoBehaviour:
   abilityName: Heal
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: 40
+  baseAbilityAmount: 30
   baseAgroPercentageAmount: 5
   description: Heals the targeted player
   shouldExpand: 0
@@ -24,7 +24,8 @@ MonoBehaviour:
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    abilityObjectKey: 2
+    abilityBehavior: {fileID: 134299638234612493, guid: 94fd42d0f42933b418d55184598334ff,
+      type: 3}
     hitFXObjectKey: 0
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
@@ -33,7 +34,7 @@ MonoBehaviour:
   requiredBiology: 1
   requiredTargetAmount: 1
   attackRange: 5
-  energyPointsCost: 20
+  energyPointsCost: 30
   cooldown: 0
   requiresTarget: 0
   canTargetAll: 0

@@ -262,13 +262,15 @@ GameObject:
   m_Component:
   - component: {fileID: 4340339581996811134}
   - component: {fileID: 4340339581996811135}
+  - component: {fileID: 7333651417747364962}
+  - component: {fileID: 1065893413318535997}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4340339581996811134
 Transform:
   m_ObjectHideFlags: 0
@@ -297,9 +299,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b85cea0385b8e4042b7934a45e6c2d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityObjectKey: 7
   spawnLocation: 3
   hitFXObjectKey: 0
+  abilityObjectKey: 7
   gridBlockKey: 0
   caster: {fileID: 0}
   childBehavior: {fileID: 8531145619475649434, guid: 67ec53e34e08bd44fb28280f774cef46,
@@ -311,6 +313,97 @@ MonoBehaviour:
   myBlock: {fileID: 0}
   attackRadius: []
   fightersInRange: []
+--- !u!114 &7333651417747364962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4340339581996811132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4ff99147c9681f48aaa9a8cae376f13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitStatus: {fileID: 0}
+  unitInfo:
+    unitName: 
+    characterKey: 0
+    unitLevel: 0
+    stats:
+      stamina: 0
+      spirit: 0
+      strength: 0
+      skill: 0
+      armor: 0
+      resistance: 0
+      speed: 0
+      luck: 0
+    basicAttack: {fileID: 0}
+    abilities: []
+    isPlayer: 0
+  unitResources:
+    healthPoints: 0
+    maxHealthPoints: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
+  characterMesh: {fileID: 0}
+  selectedAbility: {fileID: 0}
+  currentBlock: {fileID: 0}
+  currentComboLink:
+    animationID: 
+    comboPointCost: 1
+    abilityBehavior: {fileID: 0}
+    hitFXObjectKey: 0
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  strength: 0
+  skill: 0
+  luck: 0
+--- !u!114 &1065893413318535997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4340339581996811132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 941839d2438e89d49926bfe1a43d9b2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitInfo:
+    unitName: 
+    characterKey: 0
+    unitLevel: 0
+    stats:
+      stamina: 0
+      spirit: 0
+      strength: 0
+      skill: 0
+      armor: 0
+      resistance: 0
+      speed: 0
+      luck: 0
+    basicAttack: {fileID: 0}
+    abilities: []
+    isPlayer: 0
+  unitResources:
+    healthPoints: 0
+    maxHealthPoints: 0
+    energyPoints: 0
+    maxEnergyPoints: 0
+  startingStats:
+    stamina: 10
+    spirit: 10
+    strength: 10
+    skill: 10
+    armor: 10
+    resistance: 10
+    speed: 10
+    luck: 10
+  aiType: 1
+  currentBlock: {fileID: 0}
 --- !u!1 &4340339582551274060
 GameObject:
   m_ObjectHideFlags: 0

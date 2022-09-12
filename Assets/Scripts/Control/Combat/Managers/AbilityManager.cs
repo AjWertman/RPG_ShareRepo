@@ -29,6 +29,11 @@ namespace RPGProject.Control.Combat
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
         }
 
+        public void SetupAbilityManager(List<Fighter> _allFighters)
+        {
+            abilityObjectPool.CreateAbilityObjects(_allFighters);
+        }
+
         public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
             Ability selectedAbility = currentFighter.selectedAbility;
@@ -114,9 +119,7 @@ namespace RPGProject.Control.Combat
                     GameObject hitFX = null;
                     if (currentComboLink.hitFXObjectKey != HitFXObjectKey.None)
                     {
-                        hitFX = abilityObjectPool.GetHitFX(currentComboLink.hitFXObjectKey);
-                        hitFX.transform.position = targetFighter.transform.position;
-                        hitFX.SetActive(true);
+                        abilityObjectPool.SpawnHitFX(currentComboLink.hitFXObjectKey, targetFighter.transform.position);
                     }
 
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
@@ -146,6 +149,8 @@ namespace RPGProject.Control.Combat
                     if (abilityBehavior != null) abilityBehavior.onAbilityDeath += AffectNeighborBlocks;
                     break;
             }
+
+            currentAbilityKey = AbilityObjectKey.None;
         }
 
         private void AffectNeighborBlocks(AbilityBehavior _abilityBehavior)

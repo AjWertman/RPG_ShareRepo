@@ -62,7 +62,12 @@ namespace RPGProject.Combat
                 for (int i = 0; i < comboCount; i++)
                 { 
                     ComboLink currentLink = _combo[i];
-                    onComboStarted(currentLink.abilityObjectKey);
+                    AbilityBehavior currentAbilityBehavior = currentLink.abilityBehavior;
+                    if (currentAbilityBehavior != null)
+                    {
+                        AbilityObjectKey abilityObjectKey = currentAbilityBehavior.abilityObjectKey;
+                        onComboStarted(abilityObjectKey);
+                    }
 
                     string animationID = currentLink.animationID;           
                     float animationTime = animationTimesDictionary[animationID];

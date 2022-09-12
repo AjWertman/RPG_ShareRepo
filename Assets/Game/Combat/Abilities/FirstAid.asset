@@ -10,32 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: ShootingStar
+  m_Name: FirstAid
   m_EditorClassIdentifier: 
-  abilityName: Shooting Star
-  requiredLevel: 0
+  abilityName: First Aid
+  requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -40
+  baseAbilityAmount: 30
   baseAgroPercentageAmount: 5
-  description: Fireball
+  description: Heals biological combatants.
   shouldExpand: 0
-  buttonColor: {r: 0.8584906, g: 0.33752984, b: 0, a: 1}
+  buttonColor: {r: 0, g: 1, b: 0, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    abilityBehavior: {fileID: 4469161402492852781, guid: 235763ff3593b65459bb40600f242a8b,
+    abilityBehavior: {fileID: 134299638234612493, guid: 94fd42d0f42933b418d55184598334ff,
       type: 3}
     hitFXObjectKey: 0
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
-  abilityType: 1
-  targetingType: 0
-  requiredBiology: 0
+  abilityType: 4
+  targetingType: 1
+  requiredBiology: 1
   requiredTargetAmount: 1
-  attackRange: 20
-  energyPointsCost: 40
+  attackRange: 5
+  energyPointsCost: 30
   cooldown: 0
-  requiresTarget: 1
+  requiresTarget: 0
   canTargetAll: 0
-  amountOfNeighborBlocksAffected: 1
+  amountOfNeighborBlocksAffected: 0

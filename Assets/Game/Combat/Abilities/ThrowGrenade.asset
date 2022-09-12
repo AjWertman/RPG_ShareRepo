@@ -15,7 +15,7 @@ MonoBehaviour:
   abilityName: Grenade
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -40
+  baseAbilityAmount: -20
   baseAgroPercentageAmount: 5
   description: 
   shouldExpand: 0
@@ -24,15 +24,17 @@ MonoBehaviour:
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    abilityObjectKey: 9
+    abilityBehavior: {fileID: 3953754931869277081, guid: 5b155c7e3fcc0754fb009b9741b2f4a0,
+      type: 3}
     hitFXObjectKey: 0
     spawnLocationOverride: 1
     abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 0
+  requiredBiology: 0
   requiredTargetAmount: 1
   attackRange: 10
-  energyPointsCost: 20
+  energyPointsCost: 30
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0

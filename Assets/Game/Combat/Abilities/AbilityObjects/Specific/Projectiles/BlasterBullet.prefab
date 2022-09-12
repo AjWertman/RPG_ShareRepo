@@ -5010,6 +5010,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlasterBullet
       objectReference: {fileID: 0}
+    - target: {fileID: 5490296437756197594, guid: daa23738cfcb2484aa4edbc2a9beaadd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
         type: 3}
       propertyPath: launchForce

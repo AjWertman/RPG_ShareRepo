@@ -15,7 +15,7 @@ MonoBehaviour:
   abilityName: Attack
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -20
+  baseAbilityAmount: -30
   baseAgroPercentageAmount: 5
   description: 
   shouldExpand: 0
@@ -24,15 +24,16 @@ MonoBehaviour:
   combo:
   - animationID: Attack0
     comboPointCost: 0
-    abilityObjectKey: 0
-    hitFXObjectKey: 2
+    abilityBehavior: {fileID: 0}
+    hitFXObjectKey: 1
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
   abilityType: 0
   targetingType: 0
+  requiredBiology: 0
   requiredTargetAmount: 1
   attackRange: 0
-  energyPointsCost: 20
+  energyPointsCost: 35
   cooldown: 0
   requiresTarget: 0
   canTargetAll: 0

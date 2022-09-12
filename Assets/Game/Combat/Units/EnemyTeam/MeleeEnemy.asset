@@ -21,15 +21,15 @@ MonoBehaviour:
     maxHealthPoints: 0
     energyPoints: 0
     maxEnergyPoints: 0
-    gCostMoveAllowance: 0
   stats:
     stamina: 20
     spirit: 10
     strength: 20
     skill: 10
-    armor: 20
+    armor: 10
     resistance: 10
     speed: 15
     luck: 15
   basicAttack: {fileID: 11400000, guid: 9e5a5458a3d271441b85e5d779ed088c, type: 2}
-  abilities: []
+  abilities:
+  - {fileID: 11400000, guid: 9c05218009d6fc64c83c7deb6f636910, type: 2}

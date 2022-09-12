@@ -458,6 +458,8 @@ namespace RPGProject.Control.Combat
 
         private void UpdateCurrentUnitTurn(UnitController _unitController)
         { 
+            if(currentUnitTurn != null) currentUnitTurn.GetAimLine().ResetLine();
+
             battleUIManager.UnhighlightTarget();
             currentUnitTurn = _unitController;
             gridSystem.UnhighlightBlocks(tempPath);
@@ -493,8 +495,7 @@ namespace RPGProject.Control.Combat
                 currentUnitTurn.GetAimLine().ResetLine();
                 selectedAbility = null;
                 raycaster.isRaycasting = true;
-                canAdvanceTurn = true;
-                
+                canAdvanceTurn = true;             
             }
         }
 

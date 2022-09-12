@@ -10,36 +10,89 @@ namespace RPGProject.Combat
     /// </summary>
     public class AbilityObjectPool : MonoBehaviour
     {
-        [SerializeField] AbilityPrefab[] abilityPrefabs = null;
         [SerializeField] int amountOfAbilityObjects = 4;
 
         [SerializeField] HitFXPrefab[] hitFXPrefabs = null;
 
-        Dictionary<AbilityObjectKey, List<AbilityBehavior>> abilityPool = new Dictionary<AbilityObjectKey, List<AbilityBehavior>>();
+        Dictionary<AbilityObjectKey, List<AbilityBehavior>> abilityPoolDict = new Dictionary<AbilityObjectKey, List<AbilityBehavior>>();
         Dictionary<HitFXObjectKey, GameObject> hitFXPool = new Dictionary<HitFXObjectKey, GameObject>();
 
         private void Start()
         {
-            CreateAbilityPool();
             CreateHitFXPool();
         }
 
-        public void ResetAbilityObjectPool()
+        public void CreateAbilityObjects(List<Fighter> _allFighters)
         {
-            foreach (List<AbilityBehavior> abilityBehaviors in abilityPool.Values)
+            
+            foreach (AbilityBehavior abilityBehavior in GetAbilityPrefabs(_allFighters))
             {
-                foreach (AbilityBehavior abilityBehavior in abilityBehaviors)
+                List<AbilityBehavior> behaviorInstances = new List<AbilityBehavior>();
+                AbilityObjectKey abilityObjectKey = abilityBehavior.abilityObjectKey;
+
+                if (abilityObjectKey == AbilityObjectKey.None) continue;
+                if (abilityPoolDict.ContainsKey(abilityObjectKey)) continue;
+
+                int abiltyBehaviorCount = GetAmountToSpawn(_allFighters.Count +1, abilityBehavior.GetType());
+                for (int i = 0; i < abiltyBehaviorCount; i++)
                 {
-                    ResetAbilityBehavior(abilityBehavior);
+                    AbilityBehavior abilityBehaviorInstance = Instantiate(abilityBehavior, transform);
+
+                    abilityBehaviorInstance.onAbilityDeath += ResetAbilityBehavior;
+                    abilityBehaviorInstance.hitFXSpawnRequest += SpawnHitFX;
+
+                    behaviorInstances.Add(abilityBehaviorInstance);
+                    abilityBehavior.gameObject.SetActive(false);
+                }
+
+                if(behaviorInstances.Count <= 0) continue;
+
+                abilityPoolDict.Add(abilityObjectKey, behaviorInstances);
+            }
+        }
+
+        private int GetAmountToSpawn(int _amountOfFighters, Type _abilityType)
+        {
+            int amountToSpawn = amountOfAbilityObjects;
+
+            if (_abilityType == typeof(Turret) || _abilityType == typeof(JustPlayEffect)) amountToSpawn = 1;
+            else if (_abilityType == typeof(EffectOverTime)) amountToSpawn = _amountOfFighters;
+            else if (_abilityType == typeof(BattleTeleporter)) amountToSpawn = 2;
+
+            return amountToSpawn;
+        }
+
+        private List<AbilityBehavior> GetAbilityPrefabs(List<Fighter> _allFighters)
+        {
+            List<AbilityBehavior> abilityBehaviorPrefabs = new List<AbilityBehavior>();
+            foreach(Fighter fighter in _allFighters)
+            {
+                foreach (Ability ability in fighter.GetKnownAbilities())
+                {
+                    if (ability.combo == null || ability.combo.Count <= 0) continue;
+                    foreach (ComboLink comboLink in ability.combo)
+                    {
+                        AbilityBehavior behaviorPrefab = comboLink.abilityBehavior;
+                        if (comboLink.abilityBehavior == null || abilityBehaviorPrefabs.Contains(behaviorPrefab)) continue;
+
+                        abilityBehaviorPrefabs.Add(comboLink.abilityBehavior);
+
+                        AbilityBehavior childPrefab = behaviorPrefab.childBehavior;
+                        if (childPrefab == null || abilityBehaviorPrefabs.Contains(childPrefab)) continue;
+
+                        abilityBehaviorPrefabs.Add(childPrefab);
+                    }
                 }
             }
+
+            return abilityBehaviorPrefabs;
         }
 
         public AbilityBehavior GetAbilityInstance(AbilityObjectKey _abilityObjectKey)
         {
             AbilityBehavior availableAbilityBehavior = null;
 
-            foreach (AbilityBehavior abilityBehavior in abilityPool[_abilityObjectKey])
+            foreach (AbilityBehavior abilityBehavior in abilityPoolDict[_abilityObjectKey])
             {
                 if (!abilityBehavior.gameObject.activeSelf)
                 {
@@ -51,34 +104,47 @@ namespace RPGProject.Combat
             return availableAbilityBehavior;
         }
 
+        ///
+
+        public void ResetAbilityObjectPool()
+        {
+            foreach (List<AbilityBehavior> abilityBehaviors in abilityPoolDict.Values)
+            {
+                foreach (AbilityBehavior abilityBehavior in abilityBehaviors)
+                {
+                    ResetAbilityBehavior(abilityBehavior);
+                }
+            }
+        }
+
         public GameObject GetHitFX(HitFXObjectKey _hitFXObjectKey)
         {
             return hitFXPool[_hitFXObjectKey];
         }
 
-        private void CreateAbilityPool()
-        {
-            foreach(AbilityPrefab abilityPrefab in abilityPrefabs)
-            {
-                List<AbilityBehavior> abilityBehaviorInstances = new List<AbilityBehavior>();
+        //private void CreateAbilityPool()
+        //{
+        //    foreach(AbilityPrefab abilityPrefab in abilityPrefabs)
+        //    {
+        //        List<AbilityBehavior> abilityBehaviorInstances = new List<AbilityBehavior>();
 
-                for (int i = 0; i < 4; i++)
-                {
-                    GameObject abilityInstance = Instantiate(abilityPrefab.abilityPrefab, transform);
-                    AbilityBehavior abilityBehavior = abilityInstance.GetComponent<AbilityBehavior>();
-                    abilityBehavior.onAbilityDeath += ResetAbilityBehavior;
-                    abilityBehavior.hitFXSpawnRequest += SpawnHitFX;
+        //        for (int i = 0; i < 4; i++)
+        //        {
+        //            GameObject abilityInstance = Instantiate(abilityPrefab.abilityPrefab, transform);
+        //            AbilityBehavior abilityBehavior = abilityInstance.GetComponent<AbilityBehavior>();
+        //            abilityBehavior.onAbilityDeath += ResetAbilityBehavior;
+        //            abilityBehavior.hitFXSpawnRequest += SpawnHitFX;
 
-                    abilityBehaviorInstances.Add(abilityBehavior);
+        //            abilityBehaviorInstances.Add(abilityBehavior);
 
-                    CreateChildBehaviors(abilityBehavior);
-                }
+        //            CreateChildBehaviors(abilityBehavior);
+        //        }
 
-                abilityPool.Add(abilityPrefab.abilityObjectKey, abilityBehaviorInstances);
-            }
+        //        oldAbilityPoolDict.Add(abilityPrefab.abilityObjectKey, abilityBehaviorInstances);
+        //    }
 
-            ResetAbilityObjectPool();
-        }
+        //    ResetAbilityObjectPool();
+        //}
 
         private void CreateChildBehaviors(AbilityBehavior _abilityBehavior)
         {
@@ -105,10 +171,9 @@ namespace RPGProject.Combat
             }
         }
 
-        private void SpawnHitFX(HitFXObjectKey _hitFXObjectKey, Vector3 _position)
+        public void SpawnHitFX(HitFXObjectKey _hitFXObjectKey, Vector3 _position)
         {
             GameObject hitFX = hitFXPool[_hitFXObjectKey];
-
             hitFX.transform.position = _position;
 
             hitFX.gameObject.SetActive(true);
@@ -126,13 +191,6 @@ namespace RPGProject.Combat
             _returnAfterEffect.transform.localPosition = Vector3.zero;
             _returnAfterEffect.gameObject.SetActive(false);
         }
-    }
-
-    [Serializable]
-    public class AbilityPrefab
-    {
-        public AbilityObjectKey abilityObjectKey = AbilityObjectKey.None;
-        public GameObject abilityPrefab = null;
     }
 
     [Serializable]

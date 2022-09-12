@@ -24,15 +24,17 @@ MonoBehaviour:
   combo:
   - animationID: Cast0
     comboPointCost: 0
-    abilityObjectKey: 6
+    abilityBehavior: {fileID: 8292564950464179593, guid: 90e3255d68ad1c8448b016b84b57c140,
+      type: 3}
     hitFXObjectKey: 0
     spawnLocationOverride: 3
     abilityClip: {fileID: 0}
   abilityType: 1
   targetingType: 4
+  requiredBiology: 0
   requiredTargetAmount: 2
   attackRange: 10
-  energyPointsCost: 20
+  energyPointsCost: 30
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0

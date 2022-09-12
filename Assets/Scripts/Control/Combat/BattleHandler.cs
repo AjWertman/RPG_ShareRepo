@@ -142,8 +142,12 @@ namespace RPGProject.Control.Combat
         }
 
         public void SetupAbilityManager()
-        {            
-            foreach (Fighter fighter in GetUnitFighters(unitManager.unitControllers))
+        {
+            List<Fighter> allFighters = GetUnitFighters(unitManager.unitControllers);
+
+            abilityManager.SetupAbilityManager(allFighters);
+
+            foreach (Fighter fighter in allFighters)
             {
                 fighter.onAbilityUse += abilityManager.PerformAbility;
 
