@@ -5022,6 +5022,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
         type: 3}
+      propertyPath: spawnLocation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7635179751645545566, guid: daa23738cfcb2484aa4edbc2a9beaadd,
+        type: 3}
       propertyPath: abilityObjectKey
       value: 8
       objectReference: {fileID: 0}

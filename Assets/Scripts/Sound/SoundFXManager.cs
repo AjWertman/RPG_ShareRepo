@@ -32,6 +32,7 @@ namespace RPGProject.Sound
 
         public void CreateSoundFX(AudioClip _clip, Transform _clipLocation, float _volume)
         {
+            if (_clip == null) return;
             StartCoroutine(CreateSoundFXCoroutine(_clip, _clipLocation, _volume));
         }
 

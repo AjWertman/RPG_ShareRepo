@@ -458,7 +458,7 @@ namespace RPGProject.Control.Combat
 
         private void UpdateCurrentUnitTurn(UnitController _unitController)
         { 
-            if(currentUnitTurn != null) currentUnitTurn.GetAimLine().ResetLine();
+            if(currentUnitTurn != null && currentUnitTurn.GetAimLine() != null) currentUnitTurn.GetAimLine().ResetLine();
 
             battleUIManager.UnhighlightTarget();
             currentUnitTurn = _unitController;
@@ -467,7 +467,7 @@ namespace RPGProject.Control.Combat
             selectedTargets = new List<CombatTarget>();
             selectedAbility = null;
 
-            if (currentUnitTurn.unitInfo.isPlayer)
+            if (currentUnitTurn.unitInfo.isPlayer && !currentUnitTurn.unitInfo.isAI)
             {
                 raycaster.isRaycasting = true;
                 canAdvanceTurn = true;
@@ -490,10 +490,13 @@ namespace RPGProject.Control.Combat
 
         private void OnMoveCompletion()
         {
-            if (currentUnitTurn.unitInfo.isPlayer)
+            if (currentUnitTurn.unitInfo.isPlayer && !currentUnitTurn.unitInfo.isAI)
             {
                 currentUnitTurn.GetAimLine().ResetLine();
                 selectedAbility = null;
+
+                //Refactor - testing - find better way to determine if currentunit is AI
+                if (currentUnitTurn.GetComponent<Turret>()) return;
                 raycaster.isRaycasting = true;
                 canAdvanceTurn = true;             
             }

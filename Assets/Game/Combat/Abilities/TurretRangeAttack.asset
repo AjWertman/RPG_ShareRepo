@@ -10,33 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: Repair
+  m_Name: TurretRangeAttack
   m_EditorClassIdentifier: 
-  abilityName: Charge
+  abilityName: Turret Attack
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: 40
+  baseAbilityAmount: -30
   baseAgroPercentageAmount: 5
-  description: Repairs lost health of technological characters but damages everyone
-    else.
+  description: 
   shouldExpand: 0
-  buttonColor: {r: 1, g: 0.93361855, b: 0, a: 1}
+  buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   combo:
-  - animationID: Cast0
+  - animationID: Attack1
     comboPointCost: 0
-    abilityBehavior: {fileID: 4193246015725559977, guid: ab645bd9c45ccc54c9b207bff8e6dca9,
+    abilityBehavior: {fileID: 8531145619475649434, guid: 67ec53e34e08bd44fb28280f774cef46,
       type: 3}
     hitFXObjectKey: 0
-    spawnLocationOverride: 0
+    spawnLocationOverride: 2
     abilityClip: {fileID: 0}
-  abilityType: 4
-  targetingType: 3
-  requiredBiology: 2
+  abilityType: 1
+  targetingType: 0
+  requiredBiology: 0
   requiredTargetAmount: 1
-  attackRange: 6
-  energyPointsCost: 7
-  cooldown: 2
+  attackRange: 8
+  energyPointsCost: 30
+  cooldown: 0
   requiresTarget: 0
   canTargetAll: 0
   amountOfNeighborBlocksAffected: 0

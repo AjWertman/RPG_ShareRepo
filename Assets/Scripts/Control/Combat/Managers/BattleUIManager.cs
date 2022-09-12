@@ -108,7 +108,7 @@ namespace RPGProject.Control
             UnitUI unitUI = GetUnitUI(highlightedTarget);
 
             unitUI.ActivateUnitIndicator(true);
-            unitUI.ActivateResourceSliders(true);
+
             battleHUD.SetupUnitResourcesIndicator(highlightedTarget);
         }
 
@@ -119,7 +119,6 @@ namespace RPGProject.Control
             if (highlightedTarget != currentCombatantTurn)
             {
                 unitUI.ActivateUnitIndicator(false);
-                unitUI.ActivateResourceSliders(false);
             }
 
             if (highlightedTarget.unitInfo.isPlayer) battleHUD.GetTeamMemberIndicator(highlightedTarget).HideIndicator(false);
@@ -138,9 +137,7 @@ namespace RPGProject.Control
         public void ActivateUnitTurnUI(Fighter _fighter, bool _shouldActivate)
         {
             UnitUI unitUI = GetUnitUI(_fighter);
-            if (unitUI == null) return;
 
-            unitUI.ActivateResourceSliders(_shouldActivate);
             unitUI.ActivateUnitIndicator(_shouldActivate);
         }
 
@@ -151,10 +148,41 @@ namespace RPGProject.Control
 
         public void UpdateUnitLists(List<Fighter> _playerUnits, List<Fighter> _enemyUnits)
         {
-            playerCombatants = _playerUnits;
-            enemyCombatants = _enemyUnits;
+            playerCombatants = CompareLists(playerCombatants, _playerUnits, true);
+            enemyCombatants = CompareLists(enemyCombatants, _enemyUnits, false);
 
             UpdateUnitUIDict(_playerUnits, _enemyUnits);
+        }
+
+        private List<Fighter> CompareLists(List<Fighter> _oldList, List<Fighter> _newList, bool _isPlayer)
+        {
+            List<Fighter> updatedList = new List<Fighter>();
+
+            foreach(Fighter oldFighter in _oldList)
+            {
+                if (_newList.Contains(oldFighter))
+                {
+                    updatedList.Add(oldFighter);
+                }
+                else
+                {
+                    if (_isPlayer) battleHUD.UpdateNewTeamMember(oldFighter, false);
+                }
+            }
+
+            foreach (Fighter newFighter in _newList)
+            {
+                if (updatedList.Contains(newFighter)) continue;
+
+                if (!_oldList.Contains(newFighter))
+                {
+                    updatedList.Add(newFighter);
+
+                    if (_isPlayer) battleHUD.UpdateNewTeamMember(newFighter, true);
+                }
+            }
+
+            return updatedList;
         }
 
         private void UpdateUnitUIDict(List<Fighter> _playerUnits, List<Fighter> _enemyUnits)
@@ -178,6 +206,7 @@ namespace RPGProject.Control
                 if (fighterUIDict.ContainsKey(fighter)) continue;
 
                 UnitUI unitUI = fighter.GetComponent<UnitUI>();
+                if (unitUI == null) continue;
                 fighterUIDict.Add(fighter, unitUI);
             }
         }

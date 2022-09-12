@@ -64,9 +64,12 @@ namespace RPGProject.Combat
         {
             //animator = GetComponentInChildren<Animator>();
             comboLinker = GetComponent<ComboLinker>();
-            comboLinker.InitializeComboLinker();
 
-            comboLinker.onComboLinkExecution += OnComboLinkUpdate;
+            if (comboLinker != null)
+            {
+                comboLinker.InitializeComboLinker();
+                comboLinker.onComboLinkExecution += OnComboLinkUpdate;
+            }
 
             health = GetComponent<Health>();
             energy = GetComponent<Energy>();
@@ -95,6 +98,7 @@ namespace RPGProject.Combat
             selectedAbility = _selectedAbility;
 
             if(!abilityCooldowns.ContainsKey(_selectedAbility)) abilityCooldowns.Add(_selectedAbility, _selectedAbility.cooldown);
+
             yield return comboLinker.ExecuteCombo(selectedAbility.combo);
         }
 
@@ -155,7 +159,7 @@ namespace RPGProject.Combat
             List<Ability> knownAbilities = new List<Ability>();
 
             Ability basicAttack = unitInfo.basicAttack;
-            knownAbilities.Add(basicAttack);
+            if(basicAttack != null) knownAbilities.Add(basicAttack);
 
             Ability[] abilities = unitInfo.abilities;
 
@@ -232,7 +236,6 @@ namespace RPGProject.Combat
                 }
             }
         }
-
 
         //Animation Events
         public void Hit()

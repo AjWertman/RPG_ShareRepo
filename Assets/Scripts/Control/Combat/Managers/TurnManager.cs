@@ -16,9 +16,6 @@ namespace RPGProject.Control.Combat
         List<UnitController> playerUnits = new List<UnitController>();
         List<UnitController> enemyUnits = new List<UnitController>();
 
-        UnitTurnState unitTurnState = UnitTurnState.Null;
-        UnitTurnState firstUnitTurnState = UnitTurnState.Null;
-
         public event Action<UnitController> onTurnChange;
 
         int turn = 0;
@@ -32,8 +29,6 @@ namespace RPGProject.Control.Combat
             SetTurnOrder();
 
             SetCurrentUnitTurn(0);
-            unitTurnState = GetUnitTurnState();
-            firstUnitTurnState = unitTurnState;
         }
 
         public void SetTurnOrder()
@@ -67,12 +62,10 @@ namespace RPGProject.Control.Combat
 
             if (currentTurnIndex + 1 < turnOrder.Count)
             {
-                unitTurnState = GetNextUnitTurnState();
                 currentTurnIndex++;
             }
             else
             {
-                unitTurnState = firstUnitTurnState;
                 currentTurnIndex = 0;
             }
 
@@ -88,12 +81,10 @@ namespace RPGProject.Control.Combat
             int currentTurnIndex = GetTurnIndex(currentUnitTurn);
             if (currentTurnIndex + 1 < turnOrder.Count)
             {
-                unitTurnState = GetNextUnitTurnState();
                 currentTurnIndex++;
             }
             else
             {
-                unitTurnState = firstUnitTurnState;
                 currentTurnIndex = 0;
             }
 
@@ -103,8 +94,9 @@ namespace RPGProject.Control.Combat
         public void AddUnitToTurnOrder(UnitController _unit)
         {
             if (turnOrder.Contains(_unit)) return;
-            
-            turnOrder.Add(_unit);
+
+            //turnOrder.Add(_unit);
+            turnOrder[2] = _unit;
 
             //Refactor
             //Calculate new order position for turn order
@@ -132,9 +124,6 @@ namespace RPGProject.Control.Combat
             turnOrder.Clear();
 
             currentUnitTurn = null;
-
-            unitTurnState = UnitTurnState.Null;
-            firstUnitTurnState = UnitTurnState.Null;
         }
 
         public UnitController GetUnitTurn()
@@ -168,30 +157,9 @@ namespace RPGProject.Control.Combat
             return turnOrder[0];
         }
 
-        public UnitTurnState GetUnitTurnState()
-        {
-            bool isPlayer = GetUnitTurn().unitInfo.isPlayer;
-
-            if (isPlayer) return UnitTurnState.Player;
-            else return UnitTurnState.Enemy;
-        }
-
-        public UnitTurnState GetNextUnitTurnState()
-        {
-            bool isPlayer = GetNextUnitTurn().unitInfo.isPlayer;
-
-            if (isPlayer) return UnitTurnState.Player;
-            else return UnitTurnState.Enemy;
-        }
-
         private int GetTurnIndex(UnitController _unit)
         {
             return turnOrder.IndexOf(_unit);
-        }
-
-        public bool IsPlayerTurn()
-        {
-            return (GetUnitTurnState() == UnitTurnState.Player);
         }
     }
 }

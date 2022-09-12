@@ -72,7 +72,7 @@ namespace RPGProject.UI
                 Destroy(existingIndicator.gameObject);
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 6; i++)
             {
                 TeamMemberIndicator teamMemberIndicator = Instantiate(teamMemberIndicatorPrefab, teamMemberContent);
                 teamMemberIndicator.onHighlight += OnFighterHighlight;
@@ -99,6 +99,22 @@ namespace RPGProject.UI
             }
         }
 
+        public void UpdateNewTeamMember(Fighter _teamMember, bool _isAdding)
+        {
+            TeamMemberIndicator indicator = null;
+            if (_isAdding)
+            {
+                indicator = GetAvailableTeamMemberIndicator();
+                indicator.SetupIndicator(_teamMember);
+            }
+            else
+            {
+                indicator = GetTeamMemberIndicator(_teamMember);
+            }
+
+            indicator.gameObject.SetActive(_isAdding);
+        }
+
         public void SetupTurnOrderUIItems()
         {
             for (int i = 0; i < amountOfTurnOrderUIItems; i++)
@@ -123,11 +139,6 @@ namespace RPGProject.UI
             }
 
             selectedUnitIndicator.gameObject.SetActive(true);
-        }
-
-        public void IssueCheck()
-        {
-
         }
 
         public TeamMemberIndicator GetTeamMemberIndicator(Fighter _fighter)
@@ -180,6 +191,16 @@ namespace RPGProject.UI
         public SelectedUnitIndicator GetSelectedTargetIndicator()
         {
             return selectedUnitIndicator;
+        }
+
+        private TeamMemberIndicator GetAvailableTeamMemberIndicator()
+        {
+            foreach(TeamMemberIndicator teamMemberIndicator in teamMemberIndicators)
+            {
+                if (!teamMemberIndicator.gameObject.activeSelf) return teamMemberIndicator;
+            }
+
+            return null;
         }
 
         private int UpdateIndex(int _index, int _turnOrderCount)

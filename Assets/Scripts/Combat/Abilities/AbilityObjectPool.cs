@@ -23,8 +23,7 @@ namespace RPGProject.Combat
         }
 
         public void CreateAbilityObjects(List<Fighter> _allFighters)
-        {
-            
+        {           
             foreach (AbilityBehavior abilityBehavior in GetAbilityPrefabs(_allFighters))
             {
                 List<AbilityBehavior> behaviorInstances = new List<AbilityBehavior>();
@@ -41,6 +40,7 @@ namespace RPGProject.Combat
                     abilityBehaviorInstance.onAbilityDeath += ResetAbilityBehavior;
                     abilityBehaviorInstance.hitFXSpawnRequest += SpawnHitFX;
 
+                    CreateChildBehaviors(abilityBehaviorInstance);
                     behaviorInstances.Add(abilityBehaviorInstance);
                     abilityBehavior.gameObject.SetActive(false);
                 }
@@ -122,35 +122,12 @@ namespace RPGProject.Combat
             return hitFXPool[_hitFXObjectKey];
         }
 
-        //private void CreateAbilityPool()
-        //{
-        //    foreach(AbilityPrefab abilityPrefab in abilityPrefabs)
-        //    {
-        //        List<AbilityBehavior> abilityBehaviorInstances = new List<AbilityBehavior>();
-
-        //        for (int i = 0; i < 4; i++)
-        //        {
-        //            GameObject abilityInstance = Instantiate(abilityPrefab.abilityPrefab, transform);
-        //            AbilityBehavior abilityBehavior = abilityInstance.GetComponent<AbilityBehavior>();
-        //            abilityBehavior.onAbilityDeath += ResetAbilityBehavior;
-        //            abilityBehavior.hitFXSpawnRequest += SpawnHitFX;
-
-        //            abilityBehaviorInstances.Add(abilityBehavior);
-
-        //            CreateChildBehaviors(abilityBehavior);
-        //        }
-
-        //        oldAbilityPoolDict.Add(abilityPrefab.abilityObjectKey, abilityBehaviorInstances);
-        //    }
-
-        //    ResetAbilityObjectPool();
-        //}
-
         private void CreateChildBehaviors(AbilityBehavior _abilityBehavior)
         {
             if(_abilityBehavior.childBehavior != null)
             {
                 AbilityBehavior childBehavior = Instantiate(_abilityBehavior.childBehavior, _abilityBehavior.transform);
+
                 childBehavior.hitFXSpawnRequest += SpawnHitFX;
 
                 _abilityBehavior.SetChildAbilityBehavior(childBehavior);

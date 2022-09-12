@@ -23,6 +23,8 @@ namespace RPGProject.Control.Combat
         /// </summary>
         public event Action<Fighter, int, AbilityBehavior, CombatTarget, float> onAffectNeighborBlocks;
 
+        public event Action<AbilityBehavior> onCombatantAbilitySpawn;
+
         public void InitalizeAbilityManager()
         {
             pathfinder = FindObjectOfType<Pathfinder>();
@@ -39,11 +41,11 @@ namespace RPGProject.Control.Combat
             Ability selectedAbility = currentFighter.selectedAbility;
 
             if (_abilityBehavior == null) return;
-            _abilityBehavior.gameObject.SetActive(true);
             _abilityBehavior.PerformAbilityBehavior();
 
             if (_abilityBehavior.GetType() == typeof(Turret))
             {
+                onCombatantAbilitySpawn(_abilityBehavior);
                 Turret turret = (Turret)_abilityBehavior;
 
                 List<GridBlock> attackRadius = new List<GridBlock>();
@@ -63,6 +65,7 @@ namespace RPGProject.Control.Combat
             ComboLink currentComboLink = currentFighter.currentComboLink;
             if (newBehavior != null)
             {
+                newBehavior.gameObject.SetActive(true);
                 newBehavior.SetupAbility(currentFighter, currentFighter.selectedTarget, _changeAmount, _isCritical, currentFighter.selectedAbility.abilityLifetime);
             }
             if (currentComboLink != null)
@@ -71,7 +74,7 @@ namespace RPGProject.Control.Combat
                 {
                     newBehavior.SetSpawnLocation(currentComboLink.spawnLocationOverride);
                 }
-            }
+            }         
 
             return newBehavior;
         }
@@ -100,23 +103,29 @@ namespace RPGProject.Control.Combat
             Fighter targetFighter = currentFighter.selectedTarget as Fighter;
             bool hasTarget = targetFighter != null;
 
-            if (currentAbilityKey != AbilityObjectKey.None)
-            {
-                abilityBehavior = GetAbilityBehavior(isCriticalHit, calculatedAmount);
-            }
-
             Health targetHealth = null;
             if (hasTarget)
             {
                 targetHealth = targetFighter.GetHealth();
                 currentFighter.ApplyAgro(false, selectedAbility.baseAgroPercentageAmount);
+
+                CharacterBiology targetBiology = targetFighter.characterMesh.characterBiology;
+                CharacterBiology abilityRequiredBiology = selectedAbility.requiredBiology;
+                if (abilityRequiredBiology != CharacterBiology.None && targetBiology != abilityRequiredBiology)
+                {
+                    calculatedAmount = -calculatedAmount;
+                }
+            }
+
+            if (currentAbilityKey != AbilityObjectKey.None)
+            {
+                abilityBehavior = GetAbilityBehavior(isCriticalHit, calculatedAmount);
             }
 
             switch (abilityType)
             {
                 case AbilityType.Melee:
 
-                    GameObject hitFX = null;
                     if (currentComboLink.hitFXObjectKey != HitFXObjectKey.None)
                     {
                         abilityObjectPool.SpawnHitFX(currentComboLink.hitFXObjectKey, targetFighter.transform.position);
@@ -125,8 +134,12 @@ namespace RPGProject.Control.Combat
                     targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
                     AffectNeighborBlocks(abilityBehavior);
                     if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior);
-                    float reflectionAmount = -targetFighter.unitStatus.physicalReflectionDamage;
-                    if (reflectionAmount > 0) currentFighter.GetHealth().ChangeHealth(reflectionAmount, false, false);
+
+                    if(targetFighter.unitStatus != null)
+                    {
+                        float reflectionAmount = -targetFighter.unitStatus.physicalReflectionDamage;
+                        if (reflectionAmount > 0) currentFighter.GetHealth().ChangeHealth(reflectionAmount, false, false);
+                    }
 
                     break;
 
@@ -196,10 +209,10 @@ namespace RPGProject.Control.Combat
                 if (contestedFighter != null)
                 {
                     if (contestedFighter == _attacker) continue;
-                    bool isMeleeDamage = _childBehavior == null;
-                    contestedFighter.GetHealth().ChangeHealth(_baseAbilityAmount, false, !isMeleeDamage);
+                    bool isChildBehaviorNull = _childBehavior == null;
+                    contestedFighter.GetHealth().ChangeHealth(_baseAbilityAmount, false, !isChildBehaviorNull);
 
-                    if(!isMeleeDamage) contestedFighter.unitStatus.ApplyActiveAbilityBehavior(_childBehavior);
+                    if (!isChildBehaviorNull) contestedFighter.unitStatus.ApplyActiveAbilityBehavior(_childBehavior);
                 }
 
                 if (_childBehavior != null)

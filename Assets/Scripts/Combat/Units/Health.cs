@@ -1,6 +1,5 @@
 ﻿using RPGProject.Sound;
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace RPGProject.GameResources
@@ -119,7 +118,10 @@ namespace RPGProject.GameResources
             }
 
             if (DeathCheck()) Die();
-            else animator.Play("TakeDamage");       
+            else
+            {
+                if(animator != null) animator.Play("TakeDamage");
+            }
         }
 
         public void Die()

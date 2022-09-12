@@ -11,7 +11,6 @@ namespace RPGProject.Combat
     /// </summary>
     public class Turret : AbilityBehavior, CombatTarget
     {
-        [SerializeField] Fighter testTarget = null;
         //Had to place the TurretGun into an empty parent object to have better look at functionality
         [SerializeField] Transform gunTransform = null;
         [SerializeField] Transform bulletLaunchTransform = null;
@@ -37,25 +36,28 @@ namespace RPGProject.Combat
         public void Shoot(Fighter _target, bool _isTurn)
         {
             //Refactor - range obstructions?
-
             if (!_isTurn)
             {
                 if (!fightersInRange.Contains(_target))
                 {
                     fightersInRange.Add(_target);
                 }
+                else return;
             }
             else
             {
-                target = GetRandomTarget();
+                _target = GetRandomTarget();
             }
 
             if (_target == null) return;
+
+            fighter.selectedTarget = _target;
 
             LookAtTarget(_target.transform);
             bulletProjectile.target = _target;
             bulletProjectile.gameObject.SetActive(true);
             bulletProjectile.PerformAbilityBehavior();
+            fighter.ApplyAgro(false, 15);
         }
 
         /// <summary>
@@ -141,13 +143,10 @@ namespace RPGProject.Combat
         public override void PerformAbilityBehavior()
         {
             myBlock = (GridBlock)target;
-            myBlock.isMovable = false;
         }
 
         public override void OnAbilityDeath()
         {
-            myBlock.isMovable = true;
-
             foreach (GridBlock gridBlock in attackRadius)
             {
                 gridBlock.onContestedFighterUpdate -= ShootNewContester;

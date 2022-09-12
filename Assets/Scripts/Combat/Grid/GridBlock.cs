@@ -158,7 +158,7 @@ namespace RPGProject.Combat.Grid
         public bool IsContested(Fighter _currentFighter)
         {
             if (contestedFighter != null && contestedFighter != _currentFighter) return true;
-            else if (activeAbility != null && activeAbility.GetType() == typeof(BattleTeleporter)) return true;
+            //else if (activeAbility != null && activeAbility.GetType() == typeof(BattleTeleporter)) return true;
             return false;
         }
 

@@ -34,7 +34,9 @@ namespace RPGProject.Combat
 
         public void InitalizeMesh(GameObject _parent)
         {
-            GetComponent<AnimationEventCaller>().InitalizeAnimationCaller(_parent);
+            AnimationEventCaller animationEventCaller = GetComponent<AnimationEventCaller>();
+            
+            if(animationEventCaller != null) animationEventCaller.InitalizeAnimationCaller(_parent);
         }
 
         public Animator GetAnimator()

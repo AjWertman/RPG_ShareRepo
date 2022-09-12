@@ -20,13 +20,15 @@ namespace RPGProject.Combat
         public Ability[] abilities;
 
         public bool isPlayer;
+        public bool isAI;
 
-        public UnitInfo(string _unitName, CharacterKey _characterKey, int _unitLevel, bool _isPlayer,
+        public UnitInfo(string _unitName, CharacterKey _characterKey, int _unitLevel, bool _isPlayer, bool _isAI,
             Stats _stats, Ability _basicAttack, Ability[] _abilities)
         {
             unitName = _unitName;
             characterKey = _characterKey;
             unitLevel = _unitLevel;
+            isAI = _isAI;
             isPlayer = _isPlayer;
             stats = _stats;
             basicAttack = _basicAttack;

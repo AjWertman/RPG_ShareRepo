@@ -2,6 +2,7 @@
 using RPGProject.Combat.Grid;
 using RPGProject.Core;
 using RPGProject.GameResources;
+using RPGProject.Progression;
 using RPGProject.Sound;
 using System;
 using System.Collections;
@@ -146,6 +147,7 @@ namespace RPGProject.Control.Combat
             List<Fighter> allFighters = GetUnitFighters(unitManager.unitControllers);
 
             abilityManager.SetupAbilityManager(allFighters);
+            abilityManager.onCombatantAbilitySpawn += OnCombatantAbilitySpawn;
 
             foreach (Fighter fighter in allFighters)
             {
@@ -186,7 +188,7 @@ namespace RPGProject.Control.Combat
 
         private void OnMoveCompletion()
         {
-            bool isPlayer = currentUnitTurn.unitInfo.isPlayer;
+            bool isAI = currentUnitTurn.unitInfo.isAI;
             float currentEnergy = currentUnitTurn.GetEnergy().energyPoints;
 
             if (currentEnergy <= 0)
@@ -195,7 +197,7 @@ namespace RPGProject.Control.Combat
             }
             else
             {
-                if (isPlayer) onPlayerMoveCompletion();
+                if (!isAI) onPlayerMoveCompletion();
                 else
                 {
                     AIBattleAction bestAction = aiBrain.GetBestAction(currentUnitTurn, unitManager.unitControllers);
@@ -211,7 +213,6 @@ namespace RPGProject.Control.Combat
             if (turnManager.currentUnitTurn != null) turnManager.currentUnitTurn.GetUnitUI().ActivateUnitIndicator(false);
 
             turnManager.AdvanceTurn();
-
 
             if (isBattling)
             {
@@ -229,7 +230,16 @@ namespace RPGProject.Control.Combat
 
             currentUnitTurn.GetEnergy().RestoreEnergyPoints(amountOfEnergyPointsPerTurn);
 
-            if (!turnManager.IsPlayerTurn())
+            if(currentUnitTurn.GetComponent<Turret>())
+            {
+                currentUnitTurn.GetComponent<Turret>().Shoot(null, true);
+                yield return new WaitForSeconds(1f);
+                AdvanceTurn();
+                
+                yield break;
+            }
+
+            if (currentUnitTurn.unitInfo.isAI)
             {
                 AIBattleAction bestAction = aiBrain.GetBestAction(currentUnitTurn, unitManager.unitControllers);
                 StartCoroutine(AIUseAbility(bestAction));
@@ -423,30 +433,70 @@ namespace RPGProject.Control.Combat
 
         private void ApplyActiveAbilitys(Fighter _fighter)
         {
+            if (_fighter.unitStatus == null || _fighter.unitStatus == new UnitStatus()) return;
             foreach (AbilityBehavior abilityBehavior in _fighter.unitStatus.GetActiveAbilityBehaviors())
             {
                 abilityBehavior.OnTurnAdvance();
             }
         }
 
+        private void OnNewUnit(UnitController _newUnit)
+        {
+            turnManager.UpdateTurnOrder(_newUnit);
+            unitManager.OnUnitAdd(_newUnit);
+            UpdateUIManager();
+        }
+
+        private void OnCombatantAbilitySpawn(AbilityBehavior _combatantAbiility)
+        {
+            UnitController unitController = _combatantAbiility.GetComponent<UnitController>();
+            if (unitController == null) return;
+
+            Fighter caster = _combatantAbiility.caster;
+            Stats stats = caster.unitInfo.stats;
+            unitController.InitalizeUnitController();
+
+            GridBlock gridBlock = (GridBlock)_combatantAbiility.target;
+            bool isPlayerAbility = _combatantAbiility.caster.unitInfo.isPlayer;
+
+            UnitInfo unitInfo = new UnitInfo("Turret", CharacterKey.None, caster.unitInfo.unitLevel, isPlayerAbility, true, stats, null, null);
+            UnitResources unitResources = new UnitResources();
+            unitController.SetupUnitController(unitInfo, unitResources, gridBlock, unitController.GetComponent<CharacterMesh>(), false);
+
+            gridBlock.SetContestedFighter(unitController.GetFighter());
+
+            OnNewUnit(unitController);
+
+            _combatantAbiility.onAbilityDeath += RemoveCombatantAbility;
+        }
+
+        private void UpdateUIManager()
+        {
+            List<Fighter> playerCombatants = GetUnitFighters(unitManager.playerUnits);
+            List<Fighter> enemyCombatants = GetUnitFighters(unitManager.enemyUnits);
+            List<Fighter> unitFighters = GetUnitFighters(turnManager.turnOrder);
+
+            battleUIManager.UpdateUnitLists(playerCombatants, enemyCombatants);
+            battleUIManager.GetBattleHUD().UpdateTurnOrderUIItems(unitFighters, currentUnitTurn.GetFighter());
+        }
+
+        private void RemoveCombatantAbility(AbilityBehavior _combatantAbiility)
+        {
+            OnUnitDeath(_combatantAbiility.GetComponent<Health>());
+        }
+
         private void OnUnitDeath(Health _deadUnitHealth)
         {
             UnitController deadUnit = _deadUnitHealth.GetComponent<UnitController>();
-
-            deadUnit.GetUnitUI().ActivateResourceSliders(false);
 
             bool? wonBattle = unitManager.TeamWipeCheck();
             if (wonBattle != null) EndBattle(wonBattle); 
 
             deadUnit.UpdateCurrentBlock(null);
             deadUnit.gameObject.SetActive(false);
-            List<Fighter> playerCombatants = GetUnitFighters(unitManager.playerUnits);
-            List<Fighter> enemyCombatants = GetUnitFighters(unitManager.enemyUnits);
 
-            battleUIManager.UpdateUnitLists(playerCombatants, enemyCombatants);
             turnManager.UpdateTurnOrder(deadUnit);
-            List<Fighter> unitFighters = GetUnitFighters(turnManager.turnOrder);
-            battleUIManager.GetBattleHUD().UpdateTurnOrderUIItems(unitFighters, currentUnitTurn.GetFighter());
+            UpdateUIManager();
         }
 
         private void ResetManagers()

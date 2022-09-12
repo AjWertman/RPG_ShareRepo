@@ -54,36 +54,41 @@ namespace RPGProject.Control.Combat
             unitUI = GetComponent<UnitUI>();
 
             aimLine = GetComponentInChildren<AimLine>();
-            aimLine.ResetLine();
 
-            health.InitalizeHealth();
-            energy.InitializeEnergy();
-            fighter.InitalizeFighter();
-            mover.InitalizeCombatMover();
-            unitUI.InitializeUnitUI();
+            if(aimLine != null) aimLine.ResetLine();
 
-            mover.onBlockReached += UseMovementResources;
+            if (health != null) health.InitalizeHealth();
+            if (energy != null) energy.InitializeEnergy();
+            if (fighter != null) fighter.InitalizeFighter();
+            if(unitUI != null) unitUI.InitializeUnitUI();
+
+            if (mover != null)
+            {
+                mover.InitalizeCombatMover();
+                mover.onBlockReached += UseMovementResources;
+            }
         }
 
         public void SetupUnitController(UnitInfo _unitInfo, UnitResources _unitResources,
-            GridBlock _startingBlock, bool _isPlayer, CharacterMesh _characterMesh)
+            GridBlock _startingBlock, CharacterMesh _characterMesh, bool _isCharacterUnit)
         {
             SetName(_unitInfo.unitName);
-            SetCharacterMesh(_characterMesh);
+            SetCharacterMesh(_characterMesh, _isCharacterUnit);
 
-            comboLinker.SetupComboLinker();
+            if(comboLinker != null) comboLinker.SetupComboLinker();
 
             unitInfo = _unitInfo;
             startingStats = unitInfo.stats;
 
+            fighter.unitInfo = unitInfo;
+            fighter.unitResources = unitResources;
+
             UpdateComponentStats(true);
 
-            if (_isPlayer) SetUnitResources(_unitResources);
+            if (unitInfo.isPlayer && _isCharacterUnit) SetUnitResources(_unitResources);
             else CalculateResources();
 
             UpdateCurrentBlock(_startingBlock);
-
-            unitUI.SetupUnitUI();
         }
 
         public void UpdateCurrentBlock(GridBlock _newBlock)
@@ -102,22 +107,6 @@ namespace RPGProject.Control.Combat
             int energyCost = BattleHandler.energyCostPerBlock;
 
             energy.SpendEnergyPoints(energyCost);
-
-            //if (_gCost > unitResources.gCostMoveAllowance)
-            //{
-            //    _gCost -= unitResources.gCostMoveAllowance;
-            //    unitResources.gCostMoveAllowance = 0;
-
-            //    energy.SpendEnergyPoints(1);
-            //    unitResources.gCostMoveAllowance = mover.gCostPerAP;
-            //}
-
-            //unitResources.gCostMoveAllowance -= _gCost;
-
-            ////if(energy.energyPoints == 0 && unitResources.gCostMoveAllowance < 10)
-            ////{
-            ////    onMoveCompletion();
-            ////}
         }
 
         public IEnumerator PathExecution(List<GridBlock> _path)
@@ -247,7 +236,6 @@ namespace RPGProject.Control.Combat
 
         public void UseAbility(CombatTarget _target, Ability _selectedAbility)
         {
-            //mana.SpendManaPoints(_selectedAbility.GetManaCost());
             StartCoroutine(fighter.Attack(_target, _selectedAbility));
             SpendEnergyPoints(_selectedAbility.energyPointsCost); 
         }
@@ -258,17 +246,25 @@ namespace RPGProject.Control.Combat
             name = filteredName;
         }
 
-        public void SetCharacterMesh(CharacterMesh _characterMesh)
+        public void SetCharacterMesh(CharacterMesh _characterMesh, bool _isCharacterUnit)
         {
             characterMesh = _characterMesh;
-            characterMesh.transform.parent = transform;
-            characterMesh.transform.localPosition = Vector3.zero;
-            characterMesh.transform.localRotation = Quaternion.identity;
 
-            SetupAnimator(characterMesh.GetAnimator());
+            if(_isCharacterUnit)
+            {
+                characterMesh.transform.parent = transform;
+                characterMesh.transform.localPosition = Vector3.zero;
+                characterMesh.transform.localRotation = Quaternion.identity;
+            }
 
-            animator.runtimeAnimatorController = characterMesh.animatorController;
-            animator.avatar = _characterMesh.avatar;
+            Animator animator = characterMesh.GetAnimator();
+            if(animator != null)
+            {
+                SetupAnimator(animator);
+
+                animator.runtimeAnimatorController = characterMesh.animatorController;
+                animator.avatar = _characterMesh.avatar;
+            }
 
             fighter.characterMesh = characterMesh;
 

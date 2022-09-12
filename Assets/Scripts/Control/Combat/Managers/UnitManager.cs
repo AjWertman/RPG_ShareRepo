@@ -23,6 +23,8 @@ namespace RPGProject.Control.Combat
         int startingPlayerTeamSize = 0;
         int startingEnemyTeamSize = 0;
 
+        Dictionary<Fighter, UnitAgro> agrosDict = new Dictionary<Fighter, UnitAgro>();
+
         public event Action onMoveCompletion;
         public event Action<bool?> onTeamWipe;
         public event Action<UnitController> onUnitDeath;
@@ -32,7 +34,6 @@ namespace RPGProject.Control.Combat
             playerTeamManager = FindObjectOfType<PlayerTeamManager>();
             unitPool = FindObjectOfType<UnitPool>();
             characterMeshPool = FindObjectOfType<CharacterMeshPool>();
-
         }
 
         public void SetUpUnits(Dictionary<GridBlock, Unit> _playerStartingPositions, Dictionary<GridBlock, Unit> _enemyStartingPositions)
@@ -50,6 +51,7 @@ namespace RPGProject.Control.Combat
                 List<Fighter> opposingFighters = GetOpposingFighters(isPlayerUnit);
 
                 unit.GetUnitAgro().InitalizeAgros(fighter, GetOpposingFighters(isPlayerUnit));
+                agrosDict.Add(fighter, unit.GetUnitAgro());
             }
         }
 
@@ -80,9 +82,10 @@ namespace RPGProject.Control.Combat
 
             SetUnitTransform(unitController, _startingBlock, _isPlayerTeam);
 
+            bool isAI = !_isPlayerTeam;
             UnitInfo unitInfo = unitController.unitInfo;
             unitInfo = new UnitInfo(_unit.unitName, characterKey, _unit.baseLevel,
-                _isPlayerTeam, _unit.stats, _unit.basicAttack, _unit.abilities);
+                _isPlayerTeam, isAI, _unit.stats, _unit.basicAttack, _unit.abilities);
 
             UnitResources unitResources = unitController.unitResources;
             unitResources = new UnitResources(unitController.GetHealth().maxHealthPoints, unitController.GetEnergy().maxEnergyPoints);
@@ -92,6 +95,7 @@ namespace RPGProject.Control.Combat
             if (_isPlayerTeam)
             {
                 PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
+
                 TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
                 unitResources = teamInfo.unitResources;
                 unitInfo.unitLevel = teamInfo.level;
@@ -103,11 +107,8 @@ namespace RPGProject.Control.Combat
                 //unitController.SetUnitXPAward(unit.GetXPAward());
             }
 
-            unitController.SetupUnitController(unitInfo, unitResources, _startingBlock, _isPlayerTeam, newMesh);
+            unitController.SetupUnitController(unitInfo, unitResources, _startingBlock, newMesh, true);
             unitController.aiType = _unit.combatAIType;
-
-            fighter.unitInfo = unitInfo;
-            fighter.unitResources = unitResources;
 
             unitController.gameObject.SetActive(true);
 
@@ -170,17 +171,21 @@ namespace RPGProject.Control.Combat
             else return null;
         }
 
-        private List<Fighter> GetOpposingFighters(bool _isPlayerTeam)
+        private List<UnitController> GetOpposingUnits(bool _isPlayerTeam)
         {
             List<UnitController> opposingUnits = new List<UnitController>();
-            List<Fighter> opposingFighters = new List<Fighter>();
 
             if (_isPlayerTeam) opposingUnits = enemyUnits;
             else opposingUnits = playerUnits;
 
-            foreach(UnitController unit in opposingUnits)
+            return opposingUnits;
+        }
+        private List<Fighter> GetOpposingFighters(bool _isPlayerTeam)
+        {
+            List<Fighter> opposingFighters = new List<Fighter>();
+            foreach(UnitController opposingUnit in GetOpposingUnits(_isPlayerTeam))
             {
-                opposingFighters.Add(unit.GetFighter());
+                opposingFighters.Add(opposingUnit.GetFighter());
             }
 
             return opposingFighters;
@@ -195,8 +200,10 @@ namespace RPGProject.Control.Combat
             if (!_isPlayer) _unit.transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
-        private void AddUnitToLists(UnitController _unit, bool _isPlayer)
+        public void AddUnitToLists(UnitController _unit, bool _isPlayer)
         {
+            if (unitControllers.Contains(_unit)) return;
+
             if (_isPlayer)
             {
                 playerUnits.Add(_unit);
@@ -209,19 +216,27 @@ namespace RPGProject.Control.Combat
             unitControllers.Add(_unit);
         }
 
+        public void OnUnitAdd(UnitController _newUnit)
+        {
+            bool isPlayer = _newUnit.unitInfo.isPlayer;
+            AddUnitToLists(_newUnit, isPlayer);
+
+            foreach(UnitController opposingUnit in GetOpposingUnits(isPlayer))
+            {
+                opposingUnit.GetUnitAgro().AddToAgrosList(_newUnit.GetFighter());
+            }
+        }
+
         private void OnUnitDeath(Health _deadUnitHealth)
         {
             UnitController deadUnit = _deadUnitHealth.GetComponent<UnitController>();
 
-            deadUnit.GetUnitUI().ActivateResourceSliders(false);
             TeamWipeCheck();
             onUnitDeath(deadUnit);
 
             deadUnit.UpdateCurrentBlock(null);
             deadUnit.gameObject.SetActive(false);
         }
-
-
 
         private void ResetLists()
         {

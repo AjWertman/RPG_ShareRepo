@@ -109,13 +109,15 @@ namespace RPGProject.Control.Combat
                     if (!isInRange || !canTarget)
                     {                       
                         GridBlock targetBlock = GetTargetBlock(_currentUnitTurn, unit, ability);
-                        if (targetBlock == null) continue;
+                        if (targetBlock == null)
+                        {
+                            continue;
+                        }
 
                         combatAction.targetBlock = targetBlock;
                     }
 
                     int totalAPCost = GetFullEnergyCost(_currentUnitTurn, combatAction);
-                    //print(unit.name + " total cost = " + totalAPCost.ToString());
                     if (currentEnergy < totalAPCost) continue;
 
                     ///SCORES////////////////////////////////////////////////////////////////////////
@@ -156,12 +158,10 @@ namespace RPGProject.Control.Combat
                         if (isHeal) score -= 50f;
                     }
 
-                    //if (score < 0) continue;
-
-                    //print(CombatActionToString(combatAction, score));
                     if (!possibleActions.ContainsKey(combatAction))
                     {
                         possibleActions.Add(combatAction, score);
+                        print(BattleActionToString(combatAction, score));
                     }
                 }
             }
@@ -181,6 +181,8 @@ namespace RPGProject.Control.Combat
 
             foreach (UnitController unit in _allUnits)
             {
+                if (unit.GetHealth().isDead) continue;
+
                 List<AIRanking> unitRanking = new List<AIRanking>();
                 Fighter unitFighter = unit.GetFighter();
                 bool isTeammate = AIAssistant.IsTeammate(isPlayer, unit.unitInfo.isPlayer);
@@ -207,37 +209,11 @@ namespace RPGProject.Control.Combat
                     else unitRanking.Add(AIRanking.Good);
                 }
                 AIRanking averageRank = AIAssistant.GetRankAverage(unitRanking);
+
                 fightersDict.Add(unitFighter, averageRank);               
             }
 
             return fightersDict;
-
-            //AIRanking highestRank = AIRanking.Bad;
-            //foreach(Fighter fighter in fightersDict.Keys)
-            //{
-            //    AIRanking currentRank = fightersDict[fighter];
-            //    int currentRankIndex = (int)currentRank;
-
-            //    bool isTeammate = AIAssistant.IsTeammate(isPlayer, fighter.unitInfo.isPlayer);
-            //    if (isTeammate)
-            //    {
-            //        if (isDamageOrTank) currentRankIndex--;
-            //        else currentRankIndex++;
-            //    }
-            //    else
-            //    {
-            //        if (isDamageOrTank) currentRankIndex++;
-            //        else  currentRankIndex--;
-            //    }
-
-            //    currentRank = (AIRanking)currentRankIndex;
-
-            //    if (AIAssistant.IsHigherRanking(highestRank, currentRank))
-            //    {
-            //        highestRank = currentRank;
-            //        preferredTarget = fighter;
-            //    }
-            //}
         }
 
         private AIActionType GetActionType(AIBattleBehavior _combatAIBehavior, Fighter _currentFighter, AIBattleAction _action)
@@ -337,8 +313,11 @@ namespace RPGProject.Control.Combat
         {
             GridBlock currentBlock = _unitController.currentBlock;
             GridBlock targetBlock = _target.currentBlock;
-            if (currentBlock == null || targetBlock == null) return null;
 
+            if (currentBlock == null || targetBlock == null)
+            {
+                return null;
+            }
             if (_target != null)
             {
                 Fighter tenativeTarget = _target.GetFighter();
@@ -431,7 +410,7 @@ namespace RPGProject.Control.Combat
             if (isMeleeAttack) return true;
 
             Vector3 targetPosition = _target.transform.position;
-            Vector3 targetPositionOffset = new Vector3(targetPosition.x, _currentPosition.y, targetPosition.z);
+            Vector3 targetPositionOffset = new Vector3(targetPosition.x, _target.GetAimTransform().position.y, targetPosition.z);
 
             RaycastHit hit = raycaster.GetRaycastHit(_currentPosition, targetPositionOffset);
 

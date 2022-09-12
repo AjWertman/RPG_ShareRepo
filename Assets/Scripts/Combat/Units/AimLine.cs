@@ -38,7 +38,6 @@ namespace RPGProject.Combat
             float attackRange = _selectedAbility.attackRange;
             if (_origin == null || attackRange == 0)
             {
-                print("origin is null or is not range spell");
                 ResetLine();
                 return false;
             }
@@ -70,7 +69,7 @@ namespace RPGProject.Combat
             }
 
             Fighter fighter = hit.collider.GetComponent<Fighter>();
-            if (fighter == null || fighter.unitInfo.isPlayer)
+            if (fighter == null)
             {
                 hitFighter = null;
                 if (RequiresFighter(_selectedAbility.targetingType))
@@ -83,8 +82,7 @@ namespace RPGProject.Combat
             {
                 if (Vector3.Distance(_origin.position, hit.point) > attackRange) lineRenderer.material = notInRangeMaterial;
                 else lineRenderer.material = inRangeMaterial;
-
-                if (!isInstaHit) hitFighter = fighter;
+                hitFighter = fighter;
             }
 
             return true;

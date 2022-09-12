@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Combat
@@ -70,7 +71,9 @@ namespace RPGProject.Combat
             CharacterMesh targetMesh = null;
             if (targetFighter != null) targetMesh = targetFighter.characterMesh;
 
-            Transform aimTransform = target.GetAimTransform();
+            Transform aimTransform = null;
+
+            if(target!= null) aimTransform = target.GetAimTransform();
 
             switch (_spawnLocation)
             {

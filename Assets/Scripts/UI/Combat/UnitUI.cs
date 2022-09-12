@@ -10,9 +10,6 @@ namespace RPGProject.UI
     /// </summary>
     public class UnitUI : MonoBehaviour
     {
-        [SerializeField] ResourceSlider healthSlider = null;
-        [SerializeField] ResourceSlider energySlider = null;
-
         [SerializeField] UnitIndicatorUI unitIndicator = null;
         [SerializeField] UIHealthChange uiHealthChange = null;
 
@@ -32,12 +29,6 @@ namespace RPGProject.UI
             //energy.onEnergyChange += UpdateEnergyUI;
         }
 
-        public void SetupUnitUI()
-        {
-            healthSlider.UpdateSliderValue(health.healthPercentage);
-            ActivateResourceSliders(false);
-        }
-
         public void ActivateUnitIndicator(bool _shouldActivate)
         {
             if (_shouldActivate) unitIndicator.ActivateIndicator(fighter.unitInfo.isPlayer);
@@ -51,11 +42,6 @@ namespace RPGProject.UI
             StartCoroutine(UIHealthChange(_isCritical, _changeAmount));
         }
 
-        private void UpdateEnergyUI()
-        {
-            energySlider.UpdateSliderValue(energy.GetEnergyPercentage());
-        }
-
         public IEnumerator UIHealthChange(bool _isCritical, float _changeAmount)
         {
             uiHealthChange.ActivateHealthChange(_isCritical, _changeAmount);
@@ -63,12 +49,6 @@ namespace RPGProject.UI
             yield return new WaitForSeconds(1f);
 
             uiHealthChange.DeactivateHealthChange();
-        }
-
-        public void ActivateResourceSliders(bool _shouldActivate)
-        {
-            healthSlider.gameObject.SetActive(false);
-            energySlider.gameObject.SetActive(false);
         }
 
         public UnitIndicatorUI GetUnitIndicator()

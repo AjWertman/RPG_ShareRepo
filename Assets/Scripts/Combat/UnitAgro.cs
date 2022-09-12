@@ -1,4 +1,3 @@
-using RPGProject.Core;
 using RPGProject.GameResources;
 using System;
 using System.Collections.Generic;
@@ -33,6 +32,14 @@ namespace RPGProject.Combat
             }
         }
 
+        public void AddToAgrosList(Fighter _newFighter)
+        {
+            Agro newAgro = new Agro(_newFighter, 0);
+            agros.Add(newAgro);
+
+            _newFighter.onAgroAction += UpdateAgro;
+        }
+
         /// <summary>
         /// Changes the agro percentage for a specific fighter, then adds/subtracts that agro amount
         /// equally from the other fighters on the opposing team.
@@ -43,14 +50,15 @@ namespace RPGProject.Combat
             Fighter agressorTarget = (Fighter)_agressor.selectedTarget;
             if (myFighter != agressorTarget) return;
 
-            //int percentageChange = GetPercentageOfHealthChange(myFighter.GetHealth(), _changeAmount);
-            //int agroPercentage = percentageChange * agroPercentagePerDamagePercentage;
             int agroToTakeFromOthers = GetEvenAgroSplit(_changeAmount);
 
             for (int i = 0; i < agros.Count; i++)
             {
                 Agro agro = agros[i];
-                if (agro.fighter == _agressor) agro.percentageOfAgro += _changeAmount;
+                if (agro.fighter == _agressor)
+                {
+                    agro.percentageOfAgro += _changeAmount;
+                }
                 else agro.percentageOfAgro -= agroToTakeFromOthers;
 
                 agro.percentageOfAgro = Mathf.Clamp(agro.percentageOfAgro, 0, 100);
@@ -144,6 +152,15 @@ namespace RPGProject.Combat
             }
 
             return agroToGet;
+        }
+
+        private bool AlreadyContainsAgro(Fighter _fighter)
+        {
+            foreach(Agro agro in agros)
+            {
+                if (agro.fighter != null && agro.fighter == _fighter) return true;
+            }
+            return false;
         }
 
         /// <summary>

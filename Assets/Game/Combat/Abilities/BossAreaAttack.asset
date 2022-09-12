@@ -25,7 +25,7 @@ MonoBehaviour:
   - animationID: Attack0
     comboPointCost: 0
     abilityBehavior: {fileID: 0}
-    hitFXObjectKey: 1
+    hitFXObjectKey: 2
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
   abilityType: 0
