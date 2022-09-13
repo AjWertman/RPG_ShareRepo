@@ -52,6 +52,11 @@ namespace RPGProject.Control.Combat
 
                 unit.GetUnitAgro().InitalizeAgros(fighter, GetOpposingFighters(isPlayerUnit));
                 agrosDict.Add(fighter, unit.GetUnitAgro());
+
+                foreach(IUniqueUnit uniqueUnitBehavior in unit.GetComponentsInChildren<IUniqueUnit>())
+                {
+                    uniqueUnitBehavior.Initialize();
+                }
             }
         }
 

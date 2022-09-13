@@ -143,12 +143,12 @@ MonoBehaviour:
     basicAttack: {fileID: 0}
     abilities: []
     isPlayer: 0
+    isAI: 0
   unitResources:
     healthPoints: 0
     maxHealthPoints: 100
     energyPoints: 0
     maxEnergyPoints: 0
-    gCostMoveAllowance: 0
   startingStats:
     stamina: 10
     spirit: 10
@@ -191,8 +191,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footstepsSound: {fileID: 8300000, guid: 9993e4a45f4c5a24699fe278ca426350, type: 3}
-  distanceTolerance: 0.3
-  gCostPerAP: 24
+  distanceTolerance: 0.5
+  baseMovementSpeed: 6
+  modifierPercentage: 0.1
+  maxMovementSpeed: 15
+  speed: 0
   isMoving: 0
 --- !u!114 &-3233447754243240660
 MonoBehaviour:
@@ -223,14 +226,25 @@ MonoBehaviour:
     basicAttack: {fileID: 0}
     abilities: []
     isPlayer: 0
+    isAI: 0
   unitResources:
     healthPoints: 0
     maxHealthPoints: 0
     energyPoints: 0
     maxEnergyPoints: 0
-    gCostMoveAllowance: 0
   characterMesh: {fileID: 0}
   selectedAbility: {fileID: 0}
+  currentBlock: {fileID: 0}
+  currentComboLink:
+    animationID: 
+    comboPointCost: 1
+    abilityBehavior: {fileID: 0}
+    hitFXObjectKey: 0
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  strength: 0
+  skill: 0
+  luck: 0
 --- !u!114 &3504165519863861257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,8 +269,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b70116c4ce79d45afb1c055e659cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthSlider: {fileID: 6282102614987267205}
-  energySlider: {fileID: 6604942465199965555}
   unitIndicator: {fileID: 7379268148205648341}
   uiHealthChange: {fileID: 2475244755357701700}
 --- !u!114 &2304397834848362312
@@ -275,6 +287,7 @@ MonoBehaviour:
   isReflectingSpells: 0
   isSilenced: 0
   hasSubstitute: 0
+  activeAbilityBehaviors: []
 --- !u!114 &4136358189517395625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,30 +717,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 973990107538531443}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6282102614987267205 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6533260558497118454, guid: e06bb727acc25fe4aac7e0255ee9bf73,
-    type: 3}
-  m_PrefabInstance: {fileID: 973990107538531443}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8b09044c5d82084bb3a986dab665476, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6604942465199965555 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6209679912320049408, guid: e06bb727acc25fe4aac7e0255ee9bf73,
-    type: 3}
-  m_PrefabInstance: {fileID: 973990107538531443}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8b09044c5d82084bb3a986dab665476, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2517270746810083568
 PrefabInstance:
   m_ObjectHideFlags: 0

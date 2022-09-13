@@ -224,20 +224,7 @@ namespace RPGProject.Combat.Grid
             }
 
             //Queen(Chess) movement
-            //if(_amount >= 1)
-            //{
-            //    for (int i = 1; i < _amount + 1; i++)
-            //    {
-            //        yield return GetGridBlock(x + i, z);
-            //        yield return GetGridBlock(x - i, z);
-            //        yield return GetGridBlock(x, z + i);
-            //        yield return GetGridBlock(x, z - i);
-            //        yield return GetGridBlock(x + i, z + i);
-            //        yield return GetGridBlock(x - i, z + i);
-            //        yield return GetGridBlock(x + i, z - i);
-            //        yield return GetGridBlock(x - i, z - i);
-            //    }
-            //}
+            
             
         }
     }

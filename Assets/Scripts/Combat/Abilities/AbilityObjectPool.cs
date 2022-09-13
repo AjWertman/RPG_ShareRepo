@@ -83,6 +83,15 @@ namespace RPGProject.Combat
                         abilityBehaviorPrefabs.Add(childPrefab);
                     }
                 }
+
+                foreach(IUniqueUnit uniqueUnit in fighter.GetComponentsInChildren<IUniqueUnit>())
+                {
+                    foreach(AbilityBehavior abilityBehavior in uniqueUnit.GetAbilityBehaviors())
+                    {
+                        if (abilityBehavior == null || abilityBehaviorPrefabs.Contains(abilityBehavior)) continue;
+                        abilityBehaviorPrefabs.Add(abilityBehavior);
+                    }
+                }
             }
 
             return abilityBehaviorPrefabs;

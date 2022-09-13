@@ -40,9 +40,13 @@ namespace RPGProject.Combat
         {
             if (currentTarget == followTarget) return;
 
-            if (followTarget.position != currentTarget.position)
+            Vector3 currentPosition = followTarget.position;
+            Vector3 currentTargetPosition = currentTarget.position;
+            Vector3 trueAimPosition = new Vector3(currentTargetPosition.x, 1, currentTargetPosition.z);
+
+            if (currentPosition != trueAimPosition)
             {
-                followTarget.position = currentTarget.position;
+                followTarget.position = trueAimPosition;
             }
         }
 

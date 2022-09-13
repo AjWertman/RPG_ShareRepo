@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
+  m_Name: BossExplosion
+  m_EditorClassIdentifier: 
+  abilityName: Explosion
+  requiredLevel: 1
+  abilityLifetime: 0
+  baseAbilityAmount: -50
+  baseAgroPercentageAmount: 0
+  description: 
+  shouldExpand: 0
+  buttonColor: {r: 1, g: 1, b: 1, a: 1}
+  textColor: {r: 0, g: 0, b: 0, a: 1}
+  combo:
+  - animationID: Cast0
+    comboPointCost: 0
+    abilityBehavior: {fileID: 3729869944017905928, guid: ba3fbf429f50e6442afa1dd967070cf1,
+      type: 3}
+    hitFXObjectKey: 0
+    spawnLocationOverride: 0
+    abilityClip: {fileID: 0}
+  abilityType: 4
+  targetingType: 0
+  requiredBiology: 0
+  requiredTargetAmount: 1
+  attackRange: 0
+  energyPointsCost: 0
+  cooldown: 2
+  requiresTarget: 0
+  canTargetAll: 0
+  amountOfNeighborBlocksAffected: 2

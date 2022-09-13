@@ -11,8 +11,13 @@ namespace RPGProject.Movement
     public class CombatMover : AIMover
     {
         [SerializeField] float distanceTolerance = .3f;
+            
+        [SerializeField] float baseMovementSpeed = 6f;
+        [SerializeField] float modifierPercentage = .2f;
+        [SerializeField] float maxMovementSpeed = 15f;
 
-        public int gCostPerAP = 24;
+        public float speed = 0f;
+
         public bool isMoving = false;
 
         float startStoppingDistance = 0;
@@ -24,6 +29,12 @@ namespace RPGProject.Movement
         public void InitalizeCombatMover()
         {
             isCombatMover = true;
+        }
+
+        public void SetSpeed(float _speed)
+        {
+            speed = _speed;
+            navMeshAgent.speed = CalculateMoveSpeed(speed);
         }
 
         public IEnumerator MoveToDestination(List<Transform> _path)
@@ -113,6 +124,22 @@ namespace RPGProject.Movement
         private void UpdateAnimator(bool _isMoving)
         {
             animator.SetBool("isMoving", _isMoving);
+        }
+
+        private float CalculateMoveSpeed(float _speed)
+        {
+            float speedModifier = _speed - 10;
+            if (speedModifier <= 0) return baseMovementSpeed;
+
+            float speedPerModPoint = baseMovementSpeed * modifierPercentage;
+
+            float totalSpeed = baseMovementSpeed;
+            for (int i = 0; i < speedModifier; i++)
+            {
+                totalSpeed += speedPerModPoint;
+            }
+            totalSpeed = Mathf.Clamp(totalSpeed, baseMovementSpeed, maxMovementSpeed);
+            return totalSpeed;
         }
 
         private bool IsAtPosition(Transform _gridBlock, Transform _goalBlock)

@@ -14,7 +14,8 @@ namespace RPGProject.Combat
         //Had to place the TurretGun into an empty parent object to have better look at functionality
         [SerializeField] Transform gunTransform = null;
         [SerializeField] Transform bulletLaunchTransform = null;
-        [SerializeField] Transform lookTransform = null;
+
+        public float damage = 0;
 
         Fighter fighter = null;
         Projectile bulletProjectile = null;
@@ -95,10 +96,7 @@ namespace RPGProject.Combat
 
         public override void SetChildAbilityBehavior(AbilityBehavior _childBehavior)
         {
-            //Refactor - change amount is not able to be set using AbilitySO variable;
-            changeAmount = -30;
-
-            _childBehavior.SetupAbility(fighter, null, changeAmount, false, abilityLifetime);
+            _childBehavior.SetupAbility(fighter, null, damage, false, abilityLifetime);
             bulletProjectile = _childBehavior as Projectile;
             bulletProjectile.transform.parent = bulletLaunchTransform;
             bulletProjectile.onAbilityDeath += ResetProjectile;
@@ -116,9 +114,7 @@ namespace RPGProject.Combat
             projectile.transform.localPosition = Vector3.zero;
             projectile.target = null;
 
-            //Refactor - error on after first shot, changeAmount gets reset;
-            changeAmount = -30;
-            projectile.SetupAbility(fighter, null, changeAmount, false, abilityLifetime);
+            projectile.SetupAbility(fighter, null, damage, false, abilityLifetime);
         }
 
         /// <summary>
@@ -142,7 +138,9 @@ namespace RPGProject.Combat
 
         public override void PerformAbilityBehavior()
         {
-            myBlock = (GridBlock)target;
+            GridBlock currentBlock = (GridBlock)target;
+            myBlock = currentBlock;
+            currentBlock.SetContestedFighter(fighter);
         }
 
         public override void OnAbilityDeath()

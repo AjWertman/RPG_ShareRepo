@@ -109,7 +109,7 @@ namespace RPGProject.Control.Combat
             energy.SpendEnergyPoints(energyCost);
         }
 
-        public IEnumerator PathExecution(List<GridBlock> _path)
+        public IEnumerator PathExecution(List<GridBlock> _path, bool _canAttack)
         {
             if (_path == null || _path.Count <= 0) yield break;
 
@@ -131,7 +131,7 @@ namespace RPGProject.Control.Combat
 
             if (isContested)
             {
-                if (contestedFighter != null)
+                if (contestedFighter != null && _canAttack)
                 {
                     List<CombatTarget> singleTarget = new List<CombatTarget>();
                     singleTarget.Add(contestedFighter);
@@ -314,6 +314,8 @@ namespace RPGProject.Control.Combat
         {
             UpdateFighterStats();
             UpdateHealthStats(_isInitialUpdated);
+
+            mover.SetSpeed(unitInfo.stats.GetStatLevel(StatType.Speed));
         }
 
         private void UpdateFighterStats()

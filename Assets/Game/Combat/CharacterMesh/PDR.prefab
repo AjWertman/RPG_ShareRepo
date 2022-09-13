@@ -1872,6 +1872,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1e365463d4e79c47919e9fbd09557e8, type: 3}
+--- !u!1 &2551069260144154628 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 740264589965979556, guid: c1e365463d4e79c47919e9fbd09557e8,
+    type: 3}
+  m_PrefabInstance: {fileID: 2964148388481169312}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2844102215278273112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2551069260144154628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4a466db721f21d41b42bd1a2a8d4e59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  percentageThatCausesRage: 0.25
+  abilityBehaviorPrefab: {fileID: 513317501551577524, guid: f4205812941151846a2b6d49bd65690f,
+    type: 3}
+  meshRenderer: {fileID: 3625118588858229027}
+  normalMaterial: {fileID: 2100000, guid: a32e3c98b46c23b409c23175f5ff3100, type: 2}
+  enragedMaterial: {fileID: 2100000, guid: ed76cc35303409048b4acabd8496338e, type: 2}
 --- !u!4 &6985223238736633729 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5319519476176398369, guid: c1e365463d4e79c47919e9fbd09557e8,

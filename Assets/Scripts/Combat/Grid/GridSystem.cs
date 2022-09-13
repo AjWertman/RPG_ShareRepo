@@ -32,8 +32,6 @@ namespace RPGProject.Combat.Grid
 
         Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
 
-        bool isNormalized = true;
-
         private void Awake()
         {
             pathfinder = GetComponent<Pathfinder>();
@@ -96,22 +94,45 @@ namespace RPGProject.Combat.Grid
                 gridBlock.HighlightBlock(currentHighlightMaterial, GridBlockMeshKey.Path);
             }
 
-            if (goalBlockFighter!= null) goalBlockFighter.HighlightFighter(true);
+            if (goalBlockFighter != null) goalBlockFighter.HighlightFighter(true);
 
             isPathHighlighted = true;
         }
 
-        public List<GridBlock> HighlightNeighbors(GridBlock _centerBlock, int _radius, bool _isSelectingDirection)
+        public List<GridBlock> HighlightPatternOfBlocks(GridBlock _centerBlock, HighlightPattern _highlightPattern, int _radius)
         {
-            List<GridBlock>neighborBlocks = pathfinder.GetNeighbors(_centerBlock, _radius);
+            List<GridBlock> blocksToHighlight = new List<GridBlock>();
+
+            if (_highlightPattern == HighlightPattern.None) return null;
+
+            if (_highlightPattern == HighlightPattern.Neighbors)
+            {
+                blocksToHighlight = HighlightNeighbors(_centerBlock, _radius, false);
+            }
+            else if (_highlightPattern == HighlightPattern.DirectionSelection)
+            {
+                blocksToHighlight = HighlightNeighbors(_centerBlock, _radius, true);
+            }
+            else
+            {
+                blocksToHighlight = GetChessPattern(_centerBlock, _highlightPattern, _radius);
+                HighlightBlocks(blocksToHighlight, GridBlockMeshKey.Path, highlightMaterial);
+            }
+
+            return blocksToHighlight;
+        }
+
+        private List<GridBlock> HighlightNeighbors(GridBlock _centerBlock, int _radius, bool _isSelectingDirection)
+        {
+            List<GridBlock> neighborBlocks = pathfinder.GetNeighbors(_centerBlock, _radius);
             GridBlockMeshKey meshKey = GridBlockMeshKey.None;
             if (_isSelectingDirection) meshKey = GridBlockMeshKey.Arrow;
 
-            HighlightBlocks(neighborBlocks,meshKey, neutralMaterial);
+            HighlightBlocks(neighborBlocks, meshKey, neutralMaterial);
 
             if (_isSelectingDirection)
             {
-                foreach(GridBlock gridBlock in neighborBlocks)
+                foreach (GridBlock gridBlock in neighborBlocks)
                 {
                     gridBlock.RotateGridArrowMesh(_centerBlock);
                 }
@@ -120,10 +141,49 @@ namespace RPGProject.Combat.Grid
             return neighborBlocks;
         }
 
+        private List<GridBlock> GetChessPattern(GridBlock _centerBlock, HighlightPattern _highlightPattern, int _radius)
+        {
+            if (_radius <= 0) return null;
+               
+            List<GridBlock> chessPattern = new List<GridBlock>();
+
+            GridCoordinates centerCoordinates = _centerBlock.gridCoordinates;
+            int x = centerCoordinates.x;
+            int z = centerCoordinates.z;
+
+            bool isQueen = _highlightPattern == HighlightPattern.Queen;
+
+            if (isQueen || _highlightPattern == HighlightPattern.Rook)
+            {                
+                for (int i = 1; i < _radius + 1; i++)
+                {
+                    chessPattern.Add(GetGridBlock(x + i, z));
+                    chessPattern.Add(GetGridBlock(x - i, z));
+                    chessPattern.Add(GetGridBlock(x, z + i));
+                    chessPattern.Add(GetGridBlock(x, z - i));
+                }
+            }
+
+            if (isQueen || _highlightPattern == HighlightPattern.Bishop)
+            {
+                for (int i = 1; i < _radius + 1; i++)
+                {
+                    chessPattern.Add(GetGridBlock(x + i, z + i));
+                    chessPattern.Add(GetGridBlock(x - i, z + i));
+                    chessPattern.Add(GetGridBlock(x + i, z - i));
+                    chessPattern.Add(GetGridBlock(x - i, z - i));
+                }
+            }
+
+            return chessPattern;
+        }
+
+
         private void HighlightBlocks(List<GridBlock> _gridBlocks, GridBlockMeshKey _meshKey, Material _highlightMaterial)
         {
             foreach (GridBlock gridBlock in _gridBlocks)
             {
+                if (gridBlock == null) continue;
                 gridBlock.HighlightBlock(_highlightMaterial, _meshKey);
             }
         }
@@ -132,6 +192,7 @@ namespace RPGProject.Combat.Grid
         {
             foreach (GridBlock gridBlock in _gridBlocks)
             {
+                if (gridBlock == null) continue;
                 if (gridBlock == _gridBlocks[_gridBlocks.Count - 1])
                 {
                     Fighter tempFighter = gridBlock.contestedFighter;
@@ -213,4 +274,6 @@ namespace RPGProject.Combat.Grid
             else return false;
         }
     }
+
+    public enum HighlightPattern { None, Neighbors, DirectionSelection, Queen, Rook, Bishop, }
 }

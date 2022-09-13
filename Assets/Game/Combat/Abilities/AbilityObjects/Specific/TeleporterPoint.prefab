@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnLocation: 3
   hitFXObjectKey: 0
-  abilityObjectKey: 11
+  abilityObjectKey: 6
   gridBlockKey: 0
   caster: {fileID: 0}
   childBehavior: {fileID: 0}

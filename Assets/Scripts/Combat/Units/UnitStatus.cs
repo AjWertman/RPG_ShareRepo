@@ -18,13 +18,19 @@ namespace RPGProject.Combat
         public void ApplyActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
         {
             if (_abilityBehavior == null) return;
-            print(_abilityBehavior.name);
-            bool isAlreadyEffected = CombatAssistant.IsAlreadyEffected(_abilityBehavior.GetAbilityName(), this);
-            if (isAlreadyEffected) return;
+            if (IsAlreadyAffected(_abilityBehavior)) return;
             _abilityBehavior.onAbilityDeath += RemoveActiveAbilityBehavior;
 
             if (activeAbilityBehaviors.Contains(_abilityBehavior)) return;
             activeAbilityBehaviors.Add(_abilityBehavior);
+        }
+
+        public void RemoveActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
+        {
+            _abilityBehavior.onAbilityDeath -= RemoveActiveAbilityBehavior;
+
+            if (!activeAbilityBehaviors.Contains(_abilityBehavior)) return;
+            activeAbilityBehaviors.Remove(_abilityBehavior);
         }
 
         public void ResetUnitStatus()
@@ -50,12 +56,9 @@ namespace RPGProject.Combat
             }
         }
 
-        private void RemoveActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
+        public bool IsAlreadyAffected(AbilityBehavior _abilityBehavior)
         {
-            _abilityBehavior.onAbilityDeath -= RemoveActiveAbilityBehavior;
-
-            if (!activeAbilityBehaviors.Contains(_abilityBehavior)) return;
-            activeAbilityBehaviors.Remove(_abilityBehavior);
+            return CombatAssistant.IsAlreadyEffected(_abilityBehavior.GetAbilityName(), this);
         }
     }
 }

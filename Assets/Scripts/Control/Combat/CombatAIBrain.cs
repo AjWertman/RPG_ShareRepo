@@ -27,13 +27,58 @@ namespace RPGProject.Control.Combat
         {
             Fighter currentFighter = _currentUnitTurn.GetFighter();
             AIBattleType combatAIType = _currentUnitTurn.aiType;
-   
-            List<Ability> usableAbilities = GetUsableAbilities(currentFighter, currentFighter.GetKnownAbilities());
+            AIBattleAction bestAction = new AIBattleAction();
 
-            Dictionary<AIBattleAction, float> possibleActions = GetPossibleActions(_currentUnitTurn, usableAbilities, _allUnits);
+            if (currentFighter.selectedAbility == null)
+            {
+                List<Ability> usableAbilities = GetUsableAbilities(currentFighter, currentFighter.GetKnownAbilities());
+                Dictionary<AIBattleAction, float> possibleActions = GetPossibleActions(_currentUnitTurn, usableAbilities, _allUnits);
+                bestAction = CalculateBestAction(possibleActions);
+            }
+            else
+            {
+                bestAction = CalculateSetAbilityAction(_currentUnitTurn, _allUnits);
+            }
 
-            AIBattleAction bestAction = CalculateBestAction(possibleActions);
             return bestAction;
+        }
+
+        private AIBattleAction CalculateSetAbilityAction(UnitController _currentUnitTurn, List<UnitController> _allUnits)
+        {
+            AIBattleAction setAbilityAction = new AIBattleAction();
+            Ability selectedAbility = _currentUnitTurn.GetFighter().selectedAbility;
+            setAbilityAction.selectedAbility = selectedAbility;
+
+            bool isPlayer = _currentUnitTurn.unitInfo.isPlayer;
+            bool isDamage = selectedAbility.baseAbilityAmount < 0f;
+
+            Dictionary<Fighter, AIRanking> preferredTargets = GetPreferredTargets(_currentUnitTurn, _allUnits);
+
+            Fighter highestRankedFighter = null;
+            foreach(Fighter fighter in preferredTargets.Keys)
+            {
+                if (AIAssistant.IsTeammate(isPlayer, fighter.unitInfo.isPlayer) == isDamage) continue;
+
+                if (highestRankedFighter == null) highestRankedFighter = fighter;
+
+                int currentRanking = (int)preferredTargets[highestRankedFighter];
+                int testRanking = (int)preferredTargets[fighter];
+
+                if (currentRanking > testRanking) continue;
+                else if (currentRanking < testRanking) highestRankedFighter = fighter;
+                else
+                {
+                    bool coinFlip = RandomGenerator.GetRandomBool();
+                    if (coinFlip) highestRankedFighter = fighter;
+                }
+            }
+
+            setAbilityAction.target = highestRankedFighter;
+
+            GridBlock targetBlock= GetTargetBlock(_currentUnitTurn, highestRankedFighter, selectedAbility);
+            setAbilityAction.targetBlock = targetBlock;
+
+            return setAbilityAction;
         }
 
         private AIBattleAction CalculateBestAction(Dictionary<AIBattleAction, float> _possibleActions)
@@ -107,8 +152,8 @@ namespace RPGProject.Control.Combat
                     bool canTarget = CanTarget(_currentUnitTurn.transform.position, unit.GetFighter(), ability);
 
                     if (!isInRange || !canTarget)
-                    {                       
-                        GridBlock targetBlock = GetTargetBlock(_currentUnitTurn, unit, ability);
+                    {
+                        GridBlock targetBlock = GetTargetBlock(_currentUnitTurn, unit.GetFighter(), ability);
                         if (targetBlock == null)
                         {
                             continue;
@@ -161,7 +206,7 @@ namespace RPGProject.Control.Combat
                     if (!possibleActions.ContainsKey(combatAction))
                     {
                         possibleActions.Add(combatAction, score);
-                        print(BattleActionToString(combatAction, score));
+                        //print(BattleActionToString(combatAction, score));
                     }
                 }
             }
@@ -309,7 +354,7 @@ namespace RPGProject.Control.Combat
             }
         }
 
-        private GridBlock GetTargetBlock(UnitController _unitController, UnitController _target, Ability _ability)
+        private GridBlock GetTargetBlock(UnitController _unitController, Fighter _target, Ability _ability)
         {
             GridBlock currentBlock = _unitController.currentBlock;
             GridBlock targetBlock = _target.currentBlock;
@@ -320,8 +365,7 @@ namespace RPGProject.Control.Combat
             }
             if (_target != null)
             {
-                Fighter tenativeTarget = _target.GetFighter();
-                _unitController.GetFighter().selectedTarget = tenativeTarget;
+                _unitController.GetFighter().selectedTarget = _target;
             }
 
             List<GridBlock> path = pathfinder.FindOptimalPath(currentBlock, targetBlock);
@@ -335,7 +379,7 @@ namespace RPGProject.Control.Combat
                 Vector3 blockPosition= gridBlock.travelDestination.position;
                 Vector3 newTravelPosition = new Vector3(blockPosition.x, currentPosition.y, blockPosition.z);
                 bool isInRange = IsInRange(gridBlock, targetBlock, _ability);
-                bool canTarget = CanTarget(newTravelPosition, _target.GetFighter(), _ability);
+                bool canTarget = CanTarget(newTravelPosition, _target, _ability);
                 if (isInRange && canTarget)
                 {
                     _unitController.GetFighter().selectedTarget = null;                  

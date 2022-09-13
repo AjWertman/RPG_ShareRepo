@@ -191,6 +191,8 @@ namespace RPGProject.Control.Combat
             bool isAI = currentUnitTurn.unitInfo.isAI;
             float currentEnergy = currentUnitTurn.GetEnergy().energyPoints;
 
+            currentUnitTurn.GetFighter().selectedAbility = null;
+
             if (currentEnergy <= 0)
             {
                 AdvanceTurn();

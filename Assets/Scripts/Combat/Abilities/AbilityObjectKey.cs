@@ -16,9 +16,8 @@ namespace RPGProject.Combat
         BlasterBullet = 8,
         Grenade = 9,
         Missile = 10,
-        SonicBoom = 11,
+        LargeSonicBoom = 11,
         Taunt = 12,
-
 
         Nuke = 99,
     }

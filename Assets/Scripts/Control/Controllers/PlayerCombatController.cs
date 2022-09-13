@@ -36,6 +36,8 @@ namespace RPGProject.Control.Combat
 
         public bool canAdvanceTurn = true;
 
+        IEnumerator currentClickCoroutine = null;
+
         private void Awake()
         {
             battleHandler = GetComponent<BattleHandler>();
@@ -75,7 +77,7 @@ namespace RPGProject.Control.Combat
         {
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                if (isSelectingFaceDirection) ClearNeighborSelection();
+                if (isSelectingFaceDirection) ResetPathfinding();
                 else gridSystem.UnhighlightBlocks(tempPath);
                 battleUIManager.OnAbilitySelectKey();
                 currentUnitTurn.GetAimLine().ResetLine();
@@ -85,7 +87,7 @@ namespace RPGProject.Control.Combat
             {
                 gridSystem.UnhighlightBlocks(tempPath);
                 battleUIManager.DeactivateAbilitySelectMenu();
-                ClearNeighborSelection();
+                ResetPathfinding();
                 battleHandler.AdvanceTurn();
             }
 
@@ -139,7 +141,7 @@ namespace RPGProject.Control.Combat
                 if (!hasHighlightedNeighbors)
                 {
                     hasHighlightedNeighbors = true;
-                    neighborBlocks = gridSystem.HighlightNeighbors(blockToSelectFrom, 1, true);
+                    neighborBlocks = gridSystem.HighlightPatternOfBlocks(blockToSelectFrom, HighlightPattern.DirectionSelection, 1);
                 }
             }
             else
@@ -200,7 +202,8 @@ namespace RPGProject.Control.Combat
                     }
                     battleUIManager.UnhighlightTarget();
                     path = GetFurthestPath(tempPath);
-                    StartCoroutine(OnPlayerClick(combatTarget));
+                    currentClickCoroutine = OnPlayerClick(combatTarget);
+                    StartCoroutine(currentClickCoroutine);
                 }
                 else if (Input.GetMouseButtonDown(1))
                 {
@@ -289,7 +292,14 @@ namespace RPGProject.Control.Combat
 
                     battleCamera.SetFollowTarget(currentUnitTurn.GetCharacterMesh().aimTransform);
 
-                    yield return currentUnitTurn.PathExecution(path);
+                    string cantCastReason = CombatAssistant.CanUseAbilityCheck(currentUnitTurn.GetFighter(), currentUnitTurn.GetFighter().GetBasicAttack());
+                    bool canAttack = cantCastReason == "";
+
+                    GridBlock goalBlock = tempPath[tempPath.Count - 1];
+
+                    yield return currentUnitTurn.PathExecution(path, canAttack);
+
+                    if (!canAttack && goalBlock.IsContested(currentUnitTurn.GetFighter())) battleHandler.CantUseAbility(cantCastReason);
 
                     bool isTeleporter = targetType == typeof(BattleTeleporter) && (BattleTeleporter)_selectedTarget != null;
                     bool isFighter = (targetType == typeof(Fighter) && (Fighter)_selectedTarget != null);
@@ -344,11 +354,11 @@ namespace RPGProject.Control.Combat
                     currentUnitTurn.transform.LookAt(lookPosition);
                 }
 
-                ClearNeighborSelection();
+                ResetPathfinding();
             }
         }
 
-        private void ClearNeighborSelection()
+        private void ResetPathfinding()
         {
             isSelectingFaceDirection = false;
             isPathfinding = true;
@@ -457,8 +467,13 @@ namespace RPGProject.Control.Combat
         }
 
         private void UpdateCurrentUnitTurn(UnitController _unitController)
-        { 
-            if(currentUnitTurn != null && currentUnitTurn.GetAimLine() != null) currentUnitTurn.GetAimLine().ResetLine();
+        {
+            if (currentClickCoroutine != null)
+            {
+                StopCoroutine(currentClickCoroutine);
+                currentClickCoroutine = null;
+            }
+            if (currentUnitTurn != null && currentUnitTurn.GetAimLine() != null) currentUnitTurn.GetAimLine().ResetLine();
 
             battleUIManager.UnhighlightTarget();
             currentUnitTurn = _unitController;
@@ -479,6 +494,8 @@ namespace RPGProject.Control.Combat
                 canAdvanceTurn = false;
                 isPathfinding = false;
             }
+
+            ResetPathfinding();
 
             battleCamera.SetFollowTarget(_unitController.GetCharacterMesh().aimTransform);
         }

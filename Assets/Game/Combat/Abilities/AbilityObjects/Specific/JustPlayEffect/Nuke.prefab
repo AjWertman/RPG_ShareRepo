@@ -20,7 +20,7 @@ PrefabInstance:
     - target: {fileID: 602582725718345184, guid: fb427ef052d9ca144b3526ddcb33687c,
         type: 3}
       propertyPath: abilityObjectKey
-      value: 8
+      value: 99
       objectReference: {fileID: 0}
     - target: {fileID: 4534993582596305775, guid: fb427ef052d9ca144b3526ddcb33687c,
         type: 3}

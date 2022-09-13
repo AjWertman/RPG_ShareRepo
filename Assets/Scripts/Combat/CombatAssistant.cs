@@ -20,22 +20,22 @@ namespace RPGProject.Combat
             {
                 float energyPoints = _caster.GetEnergy().energyPoints;
                 bool hasEnoughAP = energyPoints >= energyCost;
-                if (!hasEnoughAP) return "Not enough Action Points";
+                if (!hasEnoughAP) return "Not enough energy!";
             }
 
-            if (_caster.GetCooldown(_selectedAbility) > 0) return "Ability is cooling down";
+            if (_caster.GetCooldown(_selectedAbility) > 0) return "Ability is cooling down!";
 
             bool isCopyAbility = _selectedAbility.abilityType == AbilityType.Copy;
             if (isCopyAbility)
             {
                 List<Ability> copyList = new List<Ability>();
                 bool isCopyListNullOrEmpty = (copyList.Count == 0 || copyList == null);
-                if (isCopyAbility && isCopyListNullOrEmpty) return "No copyable abilities used";
+                if (isCopyAbility && isCopyListNullOrEmpty) return "No copyable abilities used!";
             }
 
             bool isAbilityMagic = (_selectedAbility.abilityType!= AbilityType.Melee);
             bool isFighterSilenced = _caster.unitStatus.isSilenced;
-            if (isAbilityMagic && isFighterSilenced) return "Caster is silenced";
+            if (isAbilityMagic && isFighterSilenced) return "Caster is silenced!";
 
             return "";
         }
@@ -52,7 +52,7 @@ namespace RPGProject.Combat
             if(attackRange != 0)
             {
                 Transform aimTransform = _target.GetAimTransform();
-                if (!IsInRange(_caster.transform.position, aimTransform.position, attackRange)) return "Target is too far away";
+                if (!IsInRange(_caster.transform.position, aimTransform.position, attackRange)) return "Target is too far away!";
             }
 
             //CharacterBiology requiredBiology = _selectedAbility.requiredBiology;

@@ -43,20 +43,22 @@ namespace RPGProject.Control.Combat
             if (_abilityBehavior == null) return;
             _abilityBehavior.PerformAbilityBehavior();
 
-            if (_abilityBehavior.GetType() == typeof(Turret))
+            if (_abilityBehavior.GetType() == typeof(Turret)) SetupTurret(_abilityBehavior, selectedAbility);
+        }
+
+        private void SetupTurret(AbilityBehavior _abilityBehavior, Ability _selectedAbility)
+        {
+            onCombatantAbilitySpawn(_abilityBehavior);
+            Turret turret = (Turret)_abilityBehavior;
+
+            List<GridBlock> attackRadius = new List<GridBlock>();
+
+            foreach (GridBlock gridBlock in pathfinder.GetNeighbors(turret.myBlock, _selectedAbility.amountOfNeighborBlocksAffected))
             {
-                onCombatantAbilitySpawn(_abilityBehavior);
-                Turret turret = (Turret)_abilityBehavior;
-
-                List<GridBlock> attackRadius = new List<GridBlock>();
-                Pathfinder pathfinder = FindObjectOfType<Pathfinder>();
-
-                foreach (GridBlock gridBlock in pathfinder.GetNeighbors(turret.myBlock, selectedAbility.amountOfNeighborBlocksAffected))
-                {
-                    attackRadius.Add(gridBlock);
-                }
-                turret.SetupAttackRadius(attackRadius);
+                attackRadius.Add(gridBlock);
             }
+            turret.SetupAttackRadius(attackRadius);
+            turret.damage = _selectedAbility.baseAbilityAmount;
         }
 
         private AbilityBehavior GetAbilityBehavior(bool _isCritical, float _changeAmount)
