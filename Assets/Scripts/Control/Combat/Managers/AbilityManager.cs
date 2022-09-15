@@ -10,7 +10,7 @@ namespace RPGProject.Control.Combat
 {
     public class AbilityManager : MonoBehaviour
     {
-        Pathfinder pathfinder = null;
+        GridPatternHandler patternHandler = null;
         AbilityObjectPool abilityObjectPool = null;
 
         Fighter currentFighter = null;
@@ -27,7 +27,7 @@ namespace RPGProject.Control.Combat
 
         public void InitalizeAbilityManager()
         {
-            pathfinder = FindObjectOfType<Pathfinder>();
+            patternHandler = FindObjectOfType<GridPatternHandler>();
             abilityObjectPool = FindObjectOfType<AbilityObjectPool>();
         }
 
@@ -53,7 +53,8 @@ namespace RPGProject.Control.Combat
 
             List<GridBlock> attackRadius = new List<GridBlock>();
 
-            foreach (GridBlock gridBlock in pathfinder.GetNeighbors(turret.myBlock, _selectedAbility.amountOfNeighborBlocksAffected))
+            List<GridBlock> neighbors = patternHandler.GetPattern(turret.myBlock, null, GridPattern.Neighbors, _selectedAbility.amountOfNeighborBlocksAffected);
+            foreach (GridBlock gridBlock in neighbors)
             {
                 attackRadius.Add(gridBlock);
             }
@@ -96,10 +97,10 @@ namespace RPGProject.Control.Combat
             Ability selectedAbility = currentFighter.selectedAbility;
             ComboLink currentComboLink = currentFighter.currentComboLink;
             AbilityType abilityType = selectedAbility.abilityType;
-            bool isCriticalHit = CombatAssistant.CriticalHitCheck(currentFighter.luck);
+            bool isCriticalHit = CombatAssistant.CriticalHitCheck(currentFighter.unitInfo.stats.luck);
 
             float abilityAmountWStatModifier = GetStatsModifier(currentFighter, selectedAbility.abilityType,selectedAbility.baseAbilityAmount);
-            float calculatedAmount = CombatAssistant.GetCalculatedAmount(selectedAbility.baseAbilityAmount, isCriticalHit);
+            float calculatedAmount = CombatAssistant.GetCalculatedAmount(abilityAmountWStatModifier, isCriticalHit);
 
             AbilityBehavior abilityBehavior = null;
             Fighter targetFighter = currentFighter.selectedTarget as Fighter;
@@ -137,7 +138,7 @@ namespace RPGProject.Control.Combat
                     AffectNeighborBlocks(abilityBehavior);
                     if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior);
 
-                    if(targetFighter.unitStatus != null)
+                    if(!targetFighter.unitStatus.Equals(new UnitStatus()))
                     {
                         float reflectionAmount = -targetFighter.unitStatus.physicalReflectionDamage;
                         if (reflectionAmount > 0) currentFighter.GetHealth().ChangeHealth(reflectionAmount, false, false);
@@ -174,6 +175,8 @@ namespace RPGProject.Control.Combat
             if (selectedAbility == null) return;
             if (selectedAbility.amountOfNeighborBlocksAffected <= 0) return;
 
+            float damageMod = GetStatsModifier(currentFighter, selectedAbility.abilityType, selectedAbility.baseAbilityAmount);
+
             AbilityBehavior childBehavior = null;
             if (_abilityBehavior != null)
             {
@@ -187,7 +190,7 @@ namespace RPGProject.Control.Combat
 
             int amountToAffect = selectedAbility.amountOfNeighborBlocksAffected;
 
-            AffectNeighborBehavior(currentFighter, amountToAffect, childBehavior, currentFighter.selectedTarget, selectedAbility.baseAbilityAmount);
+            AffectNeighborBehavior(currentFighter, amountToAffect, childBehavior, currentFighter.selectedTarget, damageMod);
         }
 
         private void AffectNeighborBehavior(Fighter _attacker, int _amountOfNeighbors, AbilityBehavior _childBehavior, CombatTarget _mainTarget, float _baseAbilityAmount)
@@ -199,7 +202,7 @@ namespace RPGProject.Control.Combat
                 Fighter _target = (Fighter)_mainTarget;
                 centerBlock = _target.currentBlock;
             }
-            List<GridBlock> neighbors = pathfinder.GetNeighbors(centerBlock, _amountOfNeighbors);
+            List<GridBlock> neighbors = patternHandler.GetPattern(centerBlock, null, currentFighter.selectedAbility.patternOfBlocksAffected, _amountOfNeighbors);
 
             if (_childBehavior != null)
             {
@@ -207,6 +210,7 @@ namespace RPGProject.Control.Combat
             }
             foreach (GridBlock gridBlock in neighbors)
             {
+                if (gridBlock == null) continue;
                 Fighter contestedFighter = gridBlock.contestedFighter;
                 if (contestedFighter != null)
                 {
@@ -233,11 +237,11 @@ namespace RPGProject.Control.Combat
 
             if (_abilityType == AbilityType.Melee)
             {
-                statsModifier = _caster.strength - 10f;
+                statsModifier = _caster.unitInfo.stats.strength - 10f;
             }
             else if (_abilityType == AbilityType.Cast)
             {
-                statsModifier = _caster.skill - 10f;
+                statsModifier = _caster.unitInfo.stats.skill - 10f;
             }
 
             if (statsModifier > 0)

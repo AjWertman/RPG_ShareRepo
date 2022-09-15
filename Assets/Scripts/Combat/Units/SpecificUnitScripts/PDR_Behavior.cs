@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RPGProject.Combat
 {
-    public class PDR_Behavior : MonoBehaviour, IUniqueUnit
+    public class PDR_Behavior : UniqueUnitBehavior
     {
         [SerializeField] float percentageThatCausesRage = .25f;
         [SerializeField] AbilityBehavior abilityBehaviorPrefab = null;
@@ -16,20 +16,17 @@ namespace RPGProject.Combat
 
         AbilityBehavior abilityBehaviorInstance = null;
 
-        Fighter myFighter = null;
-        UnitStatus myStatus = null;
+        UnitStatus myStatus = new UnitStatus();
 
         Fighter protagonistFighter = null;
         Health protagonistHealth = null;
 
-        float startingStrength = 0f;
-
-        public void Initialize()
+        public override void Initialize()
         {
-            myFighter = GetComponentInParent<Fighter>();
-            myStatus = myFighter.unitStatus;
+            base.Initialize();
 
-            startingStrength = myFighter.strength;
+            myStatus = fighter.unitStatus;
+
             CharacterKey protagonistKey = CharacterKey.Protagonist;
             foreach(Fighter fighter in FindObjectsOfType<Fighter>())
             {
@@ -44,8 +41,8 @@ namespace RPGProject.Combat
                 }
             }
 
-            abilityBehaviorInstance = Instantiate(abilityBehaviorPrefab,myFighter.characterMesh.headTransform);
-            abilityBehaviorInstance.SetupAbility(myFighter, myFighter, 0, false, 99);
+            abilityBehaviorInstance = Instantiate(abilityBehaviorPrefab,fighter.characterMesh.headTransform);
+            abilityBehaviorInstance.SetupAbility(fighter, fighter, 0, false, 99);
             abilityBehaviorInstance.gameObject.SetActive(false);
         }
 
@@ -57,22 +54,21 @@ namespace RPGProject.Combat
             if(protagonistHealthPercentage <= percentageThatCausesRage)
             {
                 if (isAlreadyEnraged) return;
-                myFighter.unitStatus.ApplyActiveAbilityBehavior(abilityBehaviorInstance);
-                myFighter.strength *= 1.5f;
+                fighter.unitStatus.ApplyActiveAbilityBehavior(abilityBehaviorInstance);
+                abilityBehaviorInstance.PerformAbilityBehavior();
                 abilityBehaviorInstance.gameObject.SetActive(true);
                 meshRenderer.material = enragedMaterial;
             }
             else
             {
                 if (!isAlreadyEnraged) return;
-                myFighter.unitStatus.RemoveActiveAbilityBehavior(abilityBehaviorInstance);
-                myFighter.strength = startingStrength;
+                fighter.unitStatus.RemoveActiveAbilityBehavior(abilityBehaviorInstance);
                 abilityBehaviorInstance.gameObject.SetActive(false);
                 meshRenderer.material = normalMaterial;
             }
         }
 
-        public List<AbilityBehavior> GetAbilityBehaviors()
+        public override List<AbilityBehavior> GetAbilityBehaviors()
         {
             return new List<AbilityBehavior>();
         }

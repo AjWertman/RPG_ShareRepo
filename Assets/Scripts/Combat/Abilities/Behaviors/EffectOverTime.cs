@@ -17,7 +17,7 @@ namespace RPGProject.Combat
             if (GetTargetFighter() == null) return;
             DealDamage();
 
-            if(targetStatus!=null) targetStatus.ApplyActiveAbilityBehavior(this);
+            if(!targetStatus.Equals(new UnitStatus())) targetStatus.ApplyActiveAbilityBehavior(this);
         }
 
         public void DealDamage()

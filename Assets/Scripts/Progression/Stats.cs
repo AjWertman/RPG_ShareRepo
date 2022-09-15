@@ -35,6 +35,38 @@ namespace RPGProject.Progression
             luck = _stats.luck;
         }
 
+        public void BuffStat(StatType _statType, int _amountToChange)
+        {
+            switch (_statType)
+            {
+                case StatType.Stamina:
+                    stamina += _amountToChange;
+                    break;
+                case StatType.Spirit:
+                    spirit += _amountToChange;
+                    break;
+                case StatType.Strength:
+                    strength += _amountToChange;
+                    break;
+                case StatType.Skill:
+                    skill += _amountToChange;
+                    break;
+                case StatType.Armor:
+                    armor += _amountToChange;
+                    break;
+                case StatType.Resistance:
+                    resistance += _amountToChange;
+                    break;
+                case StatType.Speed:
+                    speed += _amountToChange;
+                    break;
+                case StatType.Luck:
+                    luck += _amountToChange;
+                    break;
+            }
+        }
+
+
         public int GetStatLevel(StatType _statType)
         {
             switch (_statType)

@@ -76,7 +76,7 @@ namespace RPGProject.Combat
         /// </summary>
         public static bool IsAlreadyEffected(string _abilityName, UnitStatus _targetStatus)
         {
-            if (_abilityName == null || _abilityName == "" || _targetStatus == null) return false;
+            if (_abilityName == null || _abilityName == "" || _targetStatus.Equals(new UnitStatus())) return false;
 
             foreach (AbilityBehavior abilityBehavior in _targetStatus.GetActiveAbilityBehaviors())
             {

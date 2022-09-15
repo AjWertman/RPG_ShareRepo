@@ -84,7 +84,7 @@ namespace RPGProject.Combat
                     }
                 }
 
-                foreach(IUniqueUnit uniqueUnit in fighter.GetComponentsInChildren<IUniqueUnit>())
+                foreach(UniqueUnitBehavior uniqueUnit in fighter.GetComponentsInChildren<UniqueUnitBehavior>())
                 {
                     foreach(AbilityBehavior abilityBehavior in uniqueUnit.GetAbilityBehaviors())
                     {

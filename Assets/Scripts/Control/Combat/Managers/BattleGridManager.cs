@@ -1,6 +1,5 @@
 using RPGProject.Combat;
 using RPGProject.Combat.Grid;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ namespace RPGProject.Control.Combat
     {
         public Dictionary<GridBlock, Unit> playerStartingPositionsDict = new Dictionary<GridBlock, Unit>();
         public Dictionary<GridBlock, Unit> enemyStartingPositionsDict = new Dictionary<GridBlock, Unit>();
-
+    
         public Vector3 playerTeamCenterPoint = Vector3.zero;
         public Vector3 enemyTeamCenterPoint = Vector3.zero;
 

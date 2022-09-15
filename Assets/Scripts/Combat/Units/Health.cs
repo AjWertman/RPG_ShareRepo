@@ -105,6 +105,8 @@ namespace RPGProject.GameResources
         public void ChangeHealth(float _changeAmount, bool _isCritical, bool _isChangeMagical)
         {
             if (isDead) return;
+            if (_changeAmount == 0) return;
+
             float calculatedAmount = CalculateChange(_changeAmount, _isChangeMagical);
 
             healthPoints += calculatedAmount;

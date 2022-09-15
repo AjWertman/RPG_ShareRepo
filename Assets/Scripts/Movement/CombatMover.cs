@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPGProject.Combat.Grid;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace RPGProject.Movement
 
         IEnumerator currentPath = null;
 
-        public event Action onBlockReached;
+        public event Action<GridBlock> onBlockReached;
 
         public void InitalizeCombatMover()
         {

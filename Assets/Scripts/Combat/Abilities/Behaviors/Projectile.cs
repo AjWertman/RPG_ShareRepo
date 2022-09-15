@@ -8,7 +8,6 @@ namespace RPGProject.Combat
     /// </summary>
     public class Projectile : AbilityBehavior
     {
-        [SerializeField] GameObject affectorTrigger = null;
         [SerializeField] float launchForce = 10f;
         [SerializeField] bool isParabolaThrow = false;
 
@@ -129,6 +128,11 @@ namespace RPGProject.Combat
                 if (hitSpellReflector.caster != targetFighter) return;
                 ReflectProjectile();
             }
+        }
+
+        public void ManuallySetIsSetup(bool _isSetup)
+        {
+            isSetup = _isSetup;
         }
     }
 }

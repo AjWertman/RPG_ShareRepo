@@ -17,9 +17,8 @@ namespace RPGProject.Control.Combat
     /// </summary>
     public class UnitController : MonoBehaviour
     {
-        public UnitInfo unitInfo = new UnitInfo();
+        public UnitInfo unitInfo = null;
         public UnitResources unitResources = new UnitResources();
-        public Stats startingStats = new Stats();
 
         public AIBattleType aiType = AIBattleType.mDamage;
 
@@ -78,7 +77,6 @@ namespace RPGProject.Control.Combat
             if(comboLinker != null) comboLinker.SetupComboLinker();
 
             unitInfo = _unitInfo;
-            startingStats = unitInfo.stats;
 
             fighter.unitInfo = unitInfo;
             fighter.unitResources = unitResources;
@@ -315,7 +313,7 @@ namespace RPGProject.Control.Combat
             UpdateFighterStats();
             UpdateHealthStats(_isInitialUpdated);
 
-            mover.SetSpeed(unitInfo.stats.GetStatLevel(StatType.Speed));
+            if(mover!= null)mover.SetSpeed(unitInfo.stats.GetStatLevel(StatType.Speed));
         }
 
         private void UpdateFighterStats()
@@ -357,7 +355,6 @@ namespace RPGProject.Control.Combat
             unitInfo.ResetUnitInfo();
             unitResources.ResetUnitResources();
             ResetComponents();
-            startingStats.ResetStats();
         }
 
         private void ResetComponents()

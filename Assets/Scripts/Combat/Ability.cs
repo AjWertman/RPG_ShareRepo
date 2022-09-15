@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RPGProject.Combat.Grid;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Combat
@@ -46,13 +47,14 @@ namespace RPGProject.Combat
         public bool requiresTarget = false;
         public bool canTargetAll = false;
 
+        public GridPattern patternOfBlocksAffected = GridPattern.None;
         public int amountOfNeighborBlocksAffected = 0;
     }
 
     /// <summary>
     /// The type of an ability which changes how an ability is initialized and performed.
     /// </summary>
-    public enum AbilityType { Melee, Cast, Copy, Buff, InstaHit }
+    public enum AbilityType { Melee, Cast, Copy, InstaHit }
 
     /// <summary>
     /// The type of CombatTarget that an ability can target

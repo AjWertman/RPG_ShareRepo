@@ -49,7 +49,6 @@ GameObject:
   - component: {fileID: -3233447754243240660}
   - component: {fileID: 3504165519863861257}
   - component: {fileID: 4292025080150459303}
-  - component: {fileID: 2304397834848362312}
   - component: {fileID: 4136358189517395625}
   - component: {fileID: 6885921623392347808}
   m_Layer: 0
@@ -149,15 +148,6 @@ MonoBehaviour:
     maxHealthPoints: 100
     energyPoints: 0
     maxEnergyPoints: 0
-  startingStats:
-    stamina: 10
-    spirit: 10
-    strength: 10
-    skill: 10
-    armor: 10
-    resistance: 10
-    speed: 10
-    luck: 10
   aiType: 1
   currentBlock: {fileID: 0}
 --- !u!114 &4170302240818230691
@@ -193,7 +183,7 @@ MonoBehaviour:
   footstepsSound: {fileID: 8300000, guid: 9993e4a45f4c5a24699fe278ca426350, type: 3}
   distanceTolerance: 0.5
   baseMovementSpeed: 6
-  modifierPercentage: 0.1
+  modifierPercentage: 0.02
   maxMovementSpeed: 15
   speed: 0
   isMoving: 0
@@ -209,7 +199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ff99147c9681f48aaa9a8cae376f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitStatus: {fileID: 0}
   unitInfo:
     unitName: 
     characterKey: 0
@@ -227,6 +216,12 @@ MonoBehaviour:
     abilities: []
     isPlayer: 0
     isAI: 0
+  unitStatus:
+    physicalReflectionDamage: 0
+    isReflectingSpells: 0
+    isSilenced: 0
+    hasSubstitute: 0
+    activeAbilityBehaviors: []
   unitResources:
     healthPoints: 0
     maxHealthPoints: 0
@@ -271,23 +266,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitIndicator: {fileID: 7379268148205648341}
   uiHealthChange: {fileID: 2475244755357701700}
---- !u!114 &2304397834848362312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642788015177014662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13f08b736e5df8a4f9c93bcdeb13840e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  physicalReflectionDamage: 0
-  isReflectingSpells: 0
-  isSilenced: 0
-  hasSubstitute: 0
-  activeAbilityBehaviors: []
 --- !u!114 &4136358189517395625
 MonoBehaviour:
   m_ObjectHideFlags: 0

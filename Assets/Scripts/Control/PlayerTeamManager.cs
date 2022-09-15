@@ -227,7 +227,7 @@ namespace RPGProject.Control
     {
         public PlayerKey playerKey = PlayerKey.None;
 
-        public UnitInfo unitInfo = new UnitInfo();
+        public UnitInfo unitInfo = null;
         public UnitResources unitResources = new UnitResources();
         public Stats stats = new Stats();
 

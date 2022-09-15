@@ -268,10 +268,14 @@ namespace RPGProject.Control.Combat
                 if (actionBlock != null)
                 {
                     path = pathfinder.FindOptimalPath(currentUnitTurn.currentBlock, actionBlock);
-                    if (actionBlock.contestedFighter != null) path.Remove(actionBlock);
 
-                    yield return currentUnitTurn.FollowPath(path);
+                    bool isPathNullOrEmpty = (path == null || path.Count <= 0);
+                    if (!isPathNullOrEmpty)
+                    {
+                        if (actionBlock.contestedFighter != null) path.Remove(actionBlock);
 
+                        yield return currentUnitTurn.FollowPath(path);
+                    }
                 }
                 if (actionAbility != null)
                 {
@@ -435,7 +439,7 @@ namespace RPGProject.Control.Combat
 
         private void ApplyActiveAbilitys(Fighter _fighter)
         {
-            if (_fighter.unitStatus == null || _fighter.unitStatus == new UnitStatus()) return;
+            if (_fighter.unitStatus.Equals(new UnitStatus())) return;
             foreach (AbilityBehavior abilityBehavior in _fighter.unitStatus.GetActiveAbilityBehaviors())
             {
                 abilityBehavior.OnTurnAdvance();

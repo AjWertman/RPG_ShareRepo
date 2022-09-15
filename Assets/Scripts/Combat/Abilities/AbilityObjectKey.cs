@@ -18,6 +18,7 @@ namespace RPGProject.Combat
         Missile = 10,
         LargeSonicBoom = 11,
         Taunt = 12,
+        Supernova = 13,
 
         Nuke = 99,
     }

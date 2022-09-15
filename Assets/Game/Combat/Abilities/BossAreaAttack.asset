@@ -37,4 +37,5 @@ MonoBehaviour:
   cooldown: 0
   requiresTarget: 0
   canTargetAll: 0
+  patternOfBlocksAffected: 1
   amountOfNeighborBlocksAffected: 1

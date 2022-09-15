@@ -1,19 +1,29 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace RPGProject.Combat
 {
     /// <summary>
     /// Data of a combatant and the abilities that are currently affecting them.
     /// </summary>
-    public class UnitStatus : MonoBehaviour
+    [Serializable]
+    public struct UnitStatus
     {
-        public float physicalReflectionDamage = 0f;
-        public bool isReflectingSpells = false;
-        public bool isSilenced = false;
-        public bool hasSubstitute = false;
+        public float physicalReflectionDamage;
+        public bool isReflectingSpells;
+        public bool isSilenced;
+        public bool hasSubstitute;
 
-        public List<AbilityBehavior> activeAbilityBehaviors = new List<AbilityBehavior>();
+        public List<AbilityBehavior> activeAbilityBehaviors;
+
+        public UnitStatus(bool _isInitialization)
+        {
+            physicalReflectionDamage = 0;
+            isReflectingSpells = false;
+            isSilenced = false;
+            hasSubstitute = false;
+            activeAbilityBehaviors = new List<AbilityBehavior>();
+        }
 
         public void ApplyActiveAbilityBehavior(AbilityBehavior _abilityBehavior)
         {

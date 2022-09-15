@@ -53,7 +53,7 @@ namespace RPGProject.Control.Combat
                 unit.GetUnitAgro().InitalizeAgros(fighter, GetOpposingFighters(isPlayerUnit));
                 agrosDict.Add(fighter, unit.GetUnitAgro());
 
-                foreach(IUniqueUnit uniqueUnitBehavior in unit.GetComponentsInChildren<IUniqueUnit>())
+                foreach(UniqueUnitBehavior uniqueUnitBehavior in unit.GetComponentsInChildren<UniqueUnitBehavior>())
                 {
                     uniqueUnitBehavior.Initialize();
                 }
@@ -85,11 +85,8 @@ namespace RPGProject.Control.Combat
 
             CharacterKey characterKey = _unit.characterKey;
 
-            SetUnitTransform(unitController, _startingBlock, _isPlayerTeam);
-
             bool isAI = !_isPlayerTeam;
-            UnitInfo unitInfo = unitController.unitInfo;
-            unitInfo = new UnitInfo(_unit.unitName, characterKey, _unit.baseLevel,
+            UnitInfo unitInfo = new UnitInfo(_unit.unitName, characterKey, _unit.baseLevel,
                 _isPlayerTeam, isAI, _unit.stats, _unit.basicAttack, _unit.abilities);
 
             UnitResources unitResources = unitController.unitResources;
@@ -115,6 +112,7 @@ namespace RPGProject.Control.Combat
             unitController.SetupUnitController(unitInfo, unitResources, _startingBlock, newMesh, true);
             unitController.aiType = _unit.combatAIType;
 
+            SetUnitTransform(unitController, _startingBlock, _isPlayerTeam);
             unitController.gameObject.SetActive(true);
 
             return unitController;

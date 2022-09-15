@@ -19,11 +19,11 @@ namespace RPGProject.Combat
 
         public Fighter caster = null;
         public CombatTarget target = null;
-        Fighter targetFighter = null;
+        protected Fighter targetFighter = null;
 
         public AbilityBehavior childBehavior = null;
 
-        protected UnitStatus targetStatus = null;
+        protected UnitStatus targetStatus = new UnitStatus();
         protected float changeAmount = 0f;
         protected bool isCritical = false;
 

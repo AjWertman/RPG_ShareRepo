@@ -1,31 +1,25 @@
-using System;
 using System.Collections.Generic;
-using RPGProject.GameResources;
 using UnityEngine;
 
 namespace RPGProject.Combat
 {
-    public class Boss0Behavior : MonoBehaviour, IUniqueUnit
+    public class Boss0Behavior : UniqueUnitBehavior
     {
         [SerializeField] Ability explosionAbility = null;
         [SerializeField] float percentageOfHealthUntilExplosion = .25f;
 
-        Fighter myFighter = null;
-        Health myHealth = null;
         float damageTaken = 0f;
         float damageUntilExplosion = 0f;
 
         bool hasExplosionQueued = false;
 
-        public void Initialize()
+        public override void Initialize()
         {
-            myFighter = GetComponentInParent<Fighter>();
-            myHealth = GetComponentInParent<Health>();
-            myHealth.onHealthChange += RecordDamageTaken;
+            base.Initialize();
 
-            myFighter.onAbilityUse += ResetExplosionBehavior;
-
-            damageUntilExplosion = myHealth.maxHealthPoints * percentageOfHealthUntilExplosion;
+            health.onHealthChange += RecordDamageTaken;
+            fighter.onAbilityUse += ResetExplosionBehavior;       
+            damageUntilExplosion = health.maxHealthPoints * percentageOfHealthUntilExplosion;
         }
 
         private void RecordDamageTaken(bool NaN, float _damage)
@@ -38,7 +32,7 @@ namespace RPGProject.Combat
 
             if(damageTaken > damageUntilExplosion)
             {
-                myFighter.selectedAbility = explosionAbility;
+                fighter.selectedAbility = explosionAbility;
                 damageTaken = 0;
                 hasExplosionQueued = true;
             }
@@ -50,7 +44,7 @@ namespace RPGProject.Combat
             hasExplosionQueued = false;
         }
 
-        public List<AbilityBehavior> GetAbilityBehaviors()
+        public override List<AbilityBehavior> GetAbilityBehaviors()
         {
             List<AbilityBehavior> abilityBehaviors = new List<AbilityBehavior>();
             foreach(ComboLink comboLink in explosionAbility.combo)

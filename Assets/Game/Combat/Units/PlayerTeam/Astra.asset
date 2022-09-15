@@ -22,7 +22,7 @@ MonoBehaviour:
     energyPoints: 0
     maxEnergyPoints: 0
   stats:
-    stamina: 15
+    stamina: 20
     spirit: 10
     strength: 12
     skill: 30
@@ -33,3 +33,4 @@ MonoBehaviour:
   basicAttack: {fileID: 11400000, guid: a9436425e25928f408448c735287e0e8, type: 2}
   abilities:
   - {fileID: 11400000, guid: 9ff55998e31a3e245aded2fd0b7934aa, type: 2}
+  - {fileID: 11400000, guid: bb92158daa5cb7040a42b40b59c4192c, type: 2}

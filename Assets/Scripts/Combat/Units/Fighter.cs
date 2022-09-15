@@ -1,5 +1,6 @@
 ﻿using RPGProject.Combat.Grid;
 using RPGProject.GameResources;
+using RPGProject.Progression;
 using RPGProject.Sound;
 using System;
 using System.Collections;
@@ -13,8 +14,8 @@ namespace RPGProject.Combat
     /// </summary>
     public class Fighter : MonoBehaviour, CombatTarget
     {
-        public UnitStatus unitStatus = null;
-        public UnitInfo unitInfo = new UnitInfo();
+        public UnitInfo unitInfo = null;
+        public UnitStatus unitStatus = new UnitStatus();
         public UnitResources unitResources = new UnitResources();
 
         public CharacterMesh characterMesh = null;
@@ -24,10 +25,6 @@ namespace RPGProject.Combat
         public GridBlock currentBlock = null;
         public ComboLink currentComboLink = null;
 
-        public float strength = 0f;
-        public float skill = 0f;
-        public float luck = 0f;
-        
         Animator animator = null;
         ComboLinker comboLinker = null;
         SoundFXManager soundFXManager = null;
@@ -73,7 +70,7 @@ namespace RPGProject.Combat
 
             health = GetComponent<Health>();
             energy = GetComponent<Energy>();
-            unitStatus = GetComponent<UnitStatus>();
+            unitStatus = new UnitStatus(true);
 
             ResetFighter();
         }
@@ -87,9 +84,9 @@ namespace RPGProject.Combat
 
         public void UpdateAttributes(float _strength, float _skill, float _luck)
         {
-            strength = _strength;
-            skill = _skill;
-            luck = _luck;
+            //strength = _strength;
+            //skill = _skill;
+            //luck = _luck;
         }
 
         public IEnumerator Attack(CombatTarget _selectedTarget, Ability _selectedAbility)
@@ -139,7 +136,7 @@ namespace RPGProject.Combat
 
             UpdateAttributes(10f, 10f, 10f);
 
-            unitInfo = new UnitInfo();
+            unitInfo = null;
             unitResources = new UnitResources();
             
             characterMesh = null;
@@ -161,14 +158,13 @@ namespace RPGProject.Combat
             Ability basicAttack = unitInfo.basicAttack;
             if(basicAttack != null) knownAbilities.Add(basicAttack);
 
-            Ability[] abilities = unitInfo.abilities;
+            List<Ability> abilities = unitInfo.abilities;
 
             foreach(Ability ability in abilities)
             {
                 if (ability == null) continue;
-                //Refactor
-                //int unitLevel = unitInfo.GetUnitLevel();
-                int unitLevel = 1000;
+
+                int unitLevel = unitInfo.unitLevel;
                 if (unitLevel >= ability.requiredLevel)
                 {
                     knownAbilities.Add(ability);
@@ -237,7 +233,7 @@ namespace RPGProject.Combat
             }
         }
 
-        //Animation Events
+        //Animation Events///////////////////////////////////////////////////
         public void Hit()
         {
             onAbilityUse();
@@ -247,7 +243,5 @@ namespace RPGProject.Combat
         {
             onAbilityUse();
         }
-        //////////
-
     }
 }

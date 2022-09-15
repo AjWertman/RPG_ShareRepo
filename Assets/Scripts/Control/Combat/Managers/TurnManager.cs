@@ -95,8 +95,7 @@ namespace RPGProject.Control.Combat
         {
             if (turnOrder.Contains(_unit)) return;
 
-            //turnOrder.Add(_unit);
-            turnOrder[2] = _unit;
+            turnOrder.Add(_unit);
 
             //Refactor
             //Calculate new order position for turn order

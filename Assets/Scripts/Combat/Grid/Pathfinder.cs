@@ -9,6 +9,8 @@ namespace RPGProject.Combat.Grid
     /// </summary>
     public class Pathfinder : MonoBehaviour
     {
+        GridPatternHandler patternHandler = null;
+
         const int straightCost = 10;
         const int diagonalCost = 14;
 
@@ -27,6 +29,7 @@ namespace RPGProject.Combat.Grid
         {
             gridDictionary.Clear();
             gridDictionary = _gridDictionary;
+            patternHandler = GetComponent<GridPatternHandler>();
         }
       
        /// <summary>
@@ -58,7 +61,7 @@ namespace RPGProject.Combat.Grid
                 openList.Remove(currentBlock);
                 closedList.Add(currentBlock);
 
-                foreach (GridBlock neighborBlock in GetNeighbors(currentBlock,1))
+                foreach (GridBlock neighborBlock in patternHandler.GetPattern(currentBlock,null, GridPattern.Neighbors, 1))
                 {
                     if (neighborBlock == null) continue;
                     if (closedList.Contains(neighborBlock)) continue;
@@ -117,23 +120,13 @@ namespace RPGProject.Combat.Grid
 
         public bool IsNeighborBlock(GridBlock _targetBlock, GridBlock _possibleNeighbor)
         {
-            foreach (GridBlock gridBlock in GetNeighbors(_targetBlock, 1))
+            foreach (GridBlock gridBlock in patternHandler.GetPattern(_targetBlock, null, GridPattern.Neighbors, 1))
             {
                 if (gridBlock == _possibleNeighbor) return true;
             }
 
             return false;
-        }
-
-        public List<GridBlock> GetNeighbors(GridBlock _centerBlock, int _amount)
-        {
-            List<GridBlock> neighborBlocks = new List<GridBlock>();
-            foreach(GridBlock neighbor in CalculateNeighborBlocks(_centerBlock, _amount))
-            {
-                if (neighbor != null && neighbor != _centerBlock) neighborBlocks.Add(neighbor);
-            }
-            return neighborBlocks;
-        }
+        }    
 
         public bool ArePathsEqual(List<GridBlock> _pathA, List<GridBlock> _pathB)
         {
@@ -200,32 +193,6 @@ namespace RPGProject.Combat.Grid
             {
                 gridBlock.pathfindingCostValues.ResetValues();
             }
-        }
-
-        /// <summary>
-        /// Returns all the neighbor blocks by the specified amount of neighbors
-        /// </summary>
-        private IEnumerable<GridBlock> CalculateNeighborBlocks(GridBlock _gridBlock, int _amount)
-        {
-            if (_gridBlock == null) yield break;
-
-            int myX = _gridBlock.gridCoordinates.x;
-            int myZ = _gridBlock.gridCoordinates.z;
-
-            for (int newX = -_amount; newX < _amount + 1; newX++)
-            {
-                int x = myX - newX;
-                for (int newZ = -_amount; newZ < _amount + 1; newZ++)
-                {
-                    int z = myZ - newZ; ;
-                    GridBlock newBlock = GetGridBlock(x, z);
-                    if(newBlock != null) yield return newBlock;
-                }
-            }
-
-            //Queen(Chess) movement
-            
-            
         }
     }
 

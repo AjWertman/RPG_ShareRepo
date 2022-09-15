@@ -15,6 +15,7 @@ namespace RPGProject.Control.Combat
         BattleGridManager battleGridManager = null;
         GridSystem gridSystem = null;
         Pathfinder pathfinder = null;
+        GridPatternHandler gridPatternHandler = null;
 
         BattleCamera battleCamera = null;
         Raycaster raycaster = null;
@@ -47,6 +48,7 @@ namespace RPGProject.Control.Combat
             battleGridManager = GetComponentInChildren<BattleGridManager>();
             gridSystem = GetComponentInChildren<GridSystem>();
             pathfinder = GetComponentInChildren<Pathfinder>();
+            gridPatternHandler = FindObjectOfType<GridPatternHandler>();
 
             battleCamera = FindObjectOfType<BattleCamera>();
 
@@ -88,6 +90,7 @@ namespace RPGProject.Control.Combat
                 gridSystem.UnhighlightBlocks(tempPath);
                 battleUIManager.DeactivateAbilitySelectMenu();
                 ResetPathfinding();
+                currentUnitTurn.GetAimLine().ResetLine();
                 battleHandler.AdvanceTurn();
             }
 
@@ -130,6 +133,7 @@ namespace RPGProject.Control.Combat
 
         private void HandleRaycasting()
         {
+            if (currentUnitTurn != null && currentUnitTurn.unitInfo.isAI) return;
             RaycastHit hit = raycaster.GetRaycastHit();
             bool canUseAbility = true;
 
@@ -141,7 +145,7 @@ namespace RPGProject.Control.Combat
                 if (!hasHighlightedNeighbors)
                 {
                     hasHighlightedNeighbors = true;
-                    neighborBlocks = gridSystem.HighlightPatternOfBlocks(blockToSelectFrom, HighlightPattern.DirectionSelection, 1);
+                    neighborBlocks = gridSystem.HighlightPatternOfBlocks(blockToSelectFrom, GridPattern.DirectionSelection, 1);
                 }
             }
             else
@@ -503,6 +507,13 @@ namespace RPGProject.Control.Combat
         private void SetSelectedAbility(Ability _selectedAbility)
         {
             selectedAbility = _selectedAbility;
+            if (selectedAbility == null) return;
+            if(selectedAbility.targetingType == TargetingType.SelfOnly)
+            {
+                List<CombatTarget> selfList = new List<CombatTarget>();
+                selfList.Add(currentUnitTurn.GetFighter());
+                battleHandler.OnPlayerMove(selfList, selectedAbility);
+            }
         }
 
         private void OnMoveCompletion()
@@ -512,8 +523,6 @@ namespace RPGProject.Control.Combat
                 currentUnitTurn.GetAimLine().ResetLine();
                 selectedAbility = null;
 
-                //Refactor - testing - find better way to determine if currentunit is AI
-                if (currentUnitTurn.GetComponent<Turret>()) return;
                 raycaster.isRaycasting = true;
                 canAdvanceTurn = true;             
             }
@@ -607,6 +616,11 @@ namespace RPGProject.Control.Combat
         private bool DrawAimLine(RaycastHit _hit, Ability _selectedAbility)
         {
             if (_hit.collider == null || _selectedAbility == null) return false;
+            if(currentUnitTurn != null && currentUnitTurn.unitInfo.isAI)
+            {
+                if (currentUnitTurn.GetAimLine() != null) currentUnitTurn.GetAimLine().ResetLine();
+                return false;
+            }
 
             bool isInstaHit = selectedAbility.abilityType == AbilityType.InstaHit;
 

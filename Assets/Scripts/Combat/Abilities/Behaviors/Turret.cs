@@ -55,7 +55,8 @@ namespace RPGProject.Combat
             fighter.selectedTarget = _target;
 
             LookAtTarget(_target.transform);
-            bulletProjectile.target = _target;
+            //bulletProjectile.target = _target;
+            bulletProjectile.SetupAbility(fighter, _target, damage, false, abilityLifetime);
             bulletProjectile.gameObject.SetActive(true);
             bulletProjectile.PerformAbilityBehavior();
             fighter.ApplyAgro(false, 15);
@@ -113,8 +114,7 @@ namespace RPGProject.Combat
             projectile.gameObject.SetActive(false);
             projectile.transform.localPosition = Vector3.zero;
             projectile.target = null;
-
-            projectile.SetupAbility(fighter, null, damage, false, abilityLifetime);
+            projectile.ManuallySetIsSetup(false);
         }
 
         /// <summary>

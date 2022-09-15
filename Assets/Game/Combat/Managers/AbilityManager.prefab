@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7026297764476949391}
   - component: {fileID: 3403091041427055984}
+  - component: {fileID: 2833568062983161920}
   m_Layer: 0
   m_Name: AbilityManager
   m_TagString: Untagged
@@ -44,3 +45,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e25af318566fb4f8ab5d657c023c0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2833568062983161920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3180715004347574653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06fda64ccec9ee44f92774406f38b7f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountOfAbilityObjects: 4
+  hitFXPrefabs:
+  - hitFXObjectKey: 1
+    hitFXPrefab: {fileID: 2729780067887716723, guid: 3c2e3770131081b48b99d684d0eaee7b,
+      type: 3}
+  - hitFXObjectKey: 2
+    hitFXPrefab: {fileID: 8585623655841407186, guid: bfac00cbb356d994e9ca0e7bed0b67d7,
+      type: 3}

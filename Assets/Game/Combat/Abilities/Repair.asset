@@ -30,7 +30,7 @@ MonoBehaviour:
     hitFXObjectKey: 0
     spawnLocationOverride: 0
     abilityClip: {fileID: 0}
-  abilityType: 4
+  abilityType: 3
   targetingType: 3
   requiredBiology: 2
   requiredTargetAmount: 1
@@ -39,4 +39,5 @@ MonoBehaviour:
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
+  patternOfBlocksAffected: 0
   amountOfNeighborBlocksAffected: 0

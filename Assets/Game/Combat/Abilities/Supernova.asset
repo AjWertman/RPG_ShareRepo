@@ -10,32 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
-  m_Name: TurretRangeAttack
+  m_Name: Supernova
   m_EditorClassIdentifier: 
-  abilityName: Turret Attack
+  abilityName: Supernova
   requiredLevel: 1
   abilityLifetime: 1
-  baseAbilityAmount: -30
-  baseAgroPercentageAmount: 5
-  description: 
+  baseAbilityAmount: -40
+  baseAgroPercentageAmount: 40
+  description: Astra explodes into a strengthened state, damaging those around her.
   shouldExpand: 0
-  buttonColor: {r: 1, g: 1, b: 1, a: 1}
+  buttonColor: {r: 1, g: 0.42728096, b: 0, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
   combo:
-  - animationID: Attack1
+  - animationID: Cast0
     comboPointCost: 0
-    abilityBehavior: {fileID: 8531145619475649434, guid: 67ec53e34e08bd44fb28280f774cef46,
+    abilityBehavior: {fileID: 5367249859230901469, guid: 27c0e1253f5054d4495d774309185c5a,
       type: 3}
     hitFXObjectKey: 0
-    spawnLocationOverride: 2
+    spawnLocationOverride: 0
     abilityClip: {fileID: 0}
-  abilityType: 1
-  targetingType: 0
+  abilityType: 0
+  targetingType: 2
   requiredBiology: 0
   requiredTargetAmount: 1
-  attackRange: 8
-  energyPointsCost: 30
-  cooldown: 0
+  attackRange: 5
+  energyPointsCost: -1
+  cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
-  amountOfNeighborBlocksAffected: 0
+  patternOfBlocksAffected: 3
+  amountOfNeighborBlocksAffected: 2
