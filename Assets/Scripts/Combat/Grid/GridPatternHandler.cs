@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Combat.Grid
 {
-    public enum GridPattern { None, Neighbors, DirectionSelection, Queen, Rook, Bishop, StraightLine}
-
+    /// <summary>
+    /// Calculates different patterns for the grid.
+    /// </summary>
     public class GridPatternHandler : MonoBehaviour
     {
         Dictionary<GridCoordinates, GridBlock> gridDictionary = new Dictionary<GridCoordinates, GridBlock>();
@@ -171,4 +172,6 @@ namespace RPGProject.Combat.Grid
             return false;
         }
     }
+
+    public enum GridPattern { None, Neighbors, DirectionSelection, Queen, Rook, Bishop, StraightLine }
 }

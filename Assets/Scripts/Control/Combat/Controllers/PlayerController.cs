@@ -11,7 +11,7 @@ namespace RPGProject.Control
 {
     public class PlayerController : MonoBehaviour, IOverworld
     {
-        [SerializeField] List<PlayerKey> playerTeam = new List<PlayerKey>();
+        [SerializeField] List<CharacterKey> playerTeam = new List<CharacterKey>();
 
         [SerializeField] GameObject playerMesh = null;
         [SerializeField] GameObject camLookObject = null;
@@ -296,12 +296,12 @@ namespace RPGProject.Control
             return camLookObject.transform;
         }
 
-        public void AddTeammate(PlayerKey _playerKey)
-        {
+        public void AddTeammate(CharacterKey _playerKey)
+        { 
             playerTeamManager.AddTeammate(_playerKey);
         }
 
-        public void RemoveTeammate(PlayerKey _playerKey)
+        public void RemoveTeammate(CharacterKey _playerKey)
         {
             playerTeamManager.RemoveTeammate(_playerKey);
         }

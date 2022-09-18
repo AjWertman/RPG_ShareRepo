@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AssetBundlePath { None, abilities}
+public enum AssetBundlePath { None, units}
 
 public class AssetBundleLoader : MonoBehaviour 
 {
@@ -11,7 +11,7 @@ public class AssetBundleLoader : MonoBehaviour
 
     private void Awake()
     {
-        //CreateAssetBundles();
+        CreateAssetBundles();
     }
 
     private void CreateAssetBundles()
@@ -28,7 +28,7 @@ public class AssetBundleLoader : MonoBehaviour
         }
     }
 
-    public object GetAssetFromBundle(Type _type, string _assetName, AssetBundlePath _assetBundlePath)
+    public object GetAssetFromBundle(string _assetName, AssetBundlePath _assetBundlePath)
     {
         AssetBundle loadedAssetBundle = GetAssetBundle(_assetBundlePath);
 
@@ -40,7 +40,7 @@ public class AssetBundleLoader : MonoBehaviour
         return loadedAssetBundle.LoadAsset(_assetName);
     }
 
-    private AssetBundle GetAssetBundle(AssetBundlePath _assetBundlePath)
+    public AssetBundle GetAssetBundle(AssetBundlePath _assetBundlePath)
     {
         if (assetBundles.ContainsKey(_assetBundlePath)) return assetBundles[_assetBundlePath];
 

@@ -13,25 +13,13 @@ namespace RPGProject.Combat
         [Header("AbilityInfo")]
         public string abilityName = "";
         public int requiredLevel = 1;
-
-        /// <summary>
-        /// Amount of turns does this ability will live before dissipating.
-        /// </summary>
-        public int abilityLifetime = 1;
-
-        /// <summary>
-        /// Amount the ability will affect a target when behavior is executed
-        /// before other modifications are applied.
-        /// </summary>
-        public float baseAbilityAmount = 40f;
-        public int baseAgroPercentageAmount = 40;
+        public int abilityLifetime = 1;// Amount of turns does this ability will live before dissipating.
+        public float baseAbilityAmount = 40f; //Amount the ability will affect a target when behavior is executed before other modifications are applied.
+        public int baseAgroPercentageAmount = 40; //Amount of agro this move will generate.
         [TextArea(10, 10)] public string description = "";
 
         [Header("Design")]     
-        ///<summary>
-        /// If true, the ability behavior will scale to the target.
-        /// </summary>
-        public bool shouldExpand = false;
+        public bool shouldExpand = false; // If true, the ability behavior will scale to the target.
         public Color buttonColor = Color.white;
         public Color textColor = Color.black;
 
@@ -39,7 +27,7 @@ namespace RPGProject.Combat
         public List<ComboLink> combo = new List<ComboLink>();
         public AbilityType abilityType = AbilityType.Melee;
         public TargetingType targetingType = TargetingType.Everyone;
-        public CharacterBiology requiredBiology = CharacterBiology.None;
+        public CharacterBiology requiredBiology = CharacterBiology.None; //Allows a move to behave differently depending on the units biology.
         public int requiredTargetAmount = 1;
         public float attackRange = 5f;
         public int energyPointsCost = -1;
@@ -47,7 +35,7 @@ namespace RPGProject.Combat
         public bool requiresTarget = false;
         public bool canTargetAll = false;
 
-        public GridPattern patternOfBlocksAffected = GridPattern.None;
+        public GridPattern patternOfBlocksAffected = GridPattern.None; //Determines the behavior of the ability will affect the grid.
         public int amountOfNeighborBlocksAffected = 0;
     }
 

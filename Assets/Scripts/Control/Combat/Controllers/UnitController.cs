@@ -39,8 +39,10 @@ namespace RPGProject.Control.Combat
 
         bool isTurn = false;
 
+        IEnumerator currentPath = null;
+
         public event Action onMoveCompletion;
-        public event Action<Fighter, GridBlock> onCurrentBlockUpdate;
+        public event Action<Fighter, GridBlock> onGridBlockEnter;
 
         public void InitalizeUnitController()
         {
@@ -65,6 +67,7 @@ namespace RPGProject.Control.Combat
             {
                 mover.InitalizeCombatMover();
                 mover.onBlockReached += UseMovementResources;
+                mover.onBlockReached += ApplyGridAbility;
             }
         }
 
@@ -100,11 +103,16 @@ namespace RPGProject.Control.Combat
             currentBlock.SetContestedFighter(fighter);
         }
 
-        private void UseMovementResources()
+        private void UseMovementResources(GridBlock _NaN)
         {
             int energyCost = BattleHandler.energyCostPerBlock;
 
             energy.SpendEnergyPoints(energyCost);
+        }
+
+        private void ApplyGridAbility(GridBlock _blockToTest)
+        {
+            onGridBlockEnter(fighter, _blockToTest);
         }
 
         public IEnumerator PathExecution(List<GridBlock> _path, bool _canAttack)
@@ -123,9 +131,9 @@ namespace RPGProject.Control.Combat
                 goalBlock = _path[_path.Count - 1];
             }
 
-            IEnumerator followPath = FollowPath(_path);
+            currentPath = FollowPath(_path);
 
-            yield return followPath;
+            yield return currentPath;
 
             if (isContested)
             {
@@ -147,8 +155,7 @@ namespace RPGProject.Control.Combat
 
             if (_path.Count > 1)
             {
-                List<Transform> travelDestinations = GridSystem.GetTravelDestinations(_path);
-                yield return mover.MoveToDestination(travelDestinations);
+                yield return mover.MoveToDestination(_path);
                 UpdateCurrentBlock(goalBlock);
             }
             if(!unitInfo.isPlayer) yield return new WaitForSeconds(1f);
@@ -280,6 +287,14 @@ namespace RPGProject.Control.Combat
             health.SetAnimator(animator);
         }
 
+        public void StopMovement()
+        {
+            if (currentPath != null)
+            {
+                StopCoroutine(currentPath);
+            }
+        }
+
         public void SetUnitResources(UnitResources _unitResources)
         {
             unitResources = _unitResources;
@@ -309,22 +324,10 @@ namespace RPGProject.Control.Combat
         }
 
         public void UpdateComponentStats(bool _isInitialUpdated)
-        {
-            UpdateFighterStats();
+        { 
             UpdateHealthStats(_isInitialUpdated);
 
             if(mover!= null)mover.SetSpeed(unitInfo.stats.GetStatLevel(StatType.Speed));
-        }
-
-        private void UpdateFighterStats()
-        {
-            Stats stats = unitInfo.stats;
-            fighter.UpdateAttributes
-                (
-                stats.GetStatLevel(StatType.Strength),
-                stats.GetStatLevel(StatType.Skill),
-                stats.GetStatLevel(StatType.Luck)
-                );
         }
 
         private void UpdateHealthStats(bool _isInitialUpdate)

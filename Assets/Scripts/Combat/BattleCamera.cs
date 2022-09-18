@@ -12,7 +12,7 @@ namespace RPGProject.Combat
         [SerializeField] float zoomSensitivity = 125f;
         [SerializeField] float moveSpeed = 12f;
 
-        [SerializeField] float fieldOfViewMin, fieldOfViewMax;
+        [SerializeField] float fieldOfViewMin, fieldOfViewMax; //The boundaries for zooming in.
         [SerializeField] float fieldOfViewDefault = 40f;
 
         CinemachineFreeLook freeLook = null;
@@ -22,14 +22,9 @@ namespace RPGProject.Combat
 
         float turnSmoothVelocity;
 
-        int minX, minZ, maxX, maxZ;
+        int minX, minZ, maxX, maxZ; //The boundaries in which the camera is able to move.
 
         bool canMove = true;
-
-        //Future ideas
-        //1. have a recenter button
-        //2. possibly a way to have it lock on a character so the camera movement will follow the character while still being able to rotate
-        //3. a way to increase speed of the camera controls in the menu
 
         private void Awake()
         {

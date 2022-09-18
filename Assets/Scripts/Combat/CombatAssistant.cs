@@ -86,9 +86,6 @@ namespace RPGProject.Combat
             return false;       
         }
 
-        /// <summary>
-        /// Calculation for critical hits.
-        /// </summary>
         public static bool CriticalHitCheck(float _critChance)
         {
             float randomFloat = RandomGenerator.GetRandomNumber(0, 99);
@@ -97,9 +94,7 @@ namespace RPGProject.Combat
             return isCriticalHit;
         }
 
-        /// <summary>
-        /// Calculation for applying buff.
-        /// </summary>
+
         public static bool ApplyBuffCheck(float _applyChance)
         {
             float randomFloat = RandomGenerator.GetRandomNumber(0, 99);
@@ -142,5 +137,24 @@ namespace RPGProject.Combat
 
             return Vector3.Distance(myPosition, targetPosition);
         }
+
+        public static bool IsNegatedBehavior(Fighter _fighter, AbilityBehavior _abilityBehavior)
+        {
+            if (_fighter == null) return false;
+            if (_abilityBehavior == null) return false;
+
+            List<AbilityBehavior> abilityBehaviors = _fighter.negatedBehaviors;
+
+            foreach (AbilityBehavior abilityBehavior in abilityBehaviors)
+            {
+                if (abilityBehavior.GetAbilityName() == _abilityBehavior.GetAbilityName())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
     }
 }

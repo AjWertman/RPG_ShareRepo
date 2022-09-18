@@ -31,7 +31,7 @@ namespace RPGProject.Combat
 
         /// <summary>
         /// Activates the aim line, setting its start and end position, and updating the color 
-        /// to represent if the combatant is in range or not.
+        /// to represent if the combatant is in range or not. Returns true if the aim line can be drawn.
         /// </summary>
         public bool DrawAimLine(Transform _origin, Vector3 _targetPostion, Ability _selectedAbility)
         {

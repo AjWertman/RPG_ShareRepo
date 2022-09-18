@@ -4,7 +4,7 @@ namespace RPGProject.Combat
 {
     /// <summary>
     /// The resources that a combatant can use in combat. 
-    /// Also used to save the state of resources when combat is over.
+    /// Also used to save the state of resources for player characters when combat is over.
     /// </summary>
     [Serializable]
     public struct UnitResources

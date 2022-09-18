@@ -68,7 +68,12 @@ namespace RPGProject.Combat
             }
         }
 
-        public override List<AbilityBehavior> GetAbilityBehaviors()
+        public override List<AbilityBehavior> GetUniqueAbilityBehaviors()
+        {
+            return new List<AbilityBehavior>();
+        }
+
+        public override List<AbilityBehavior> GetNegatedBehaviors()
         {
             return new List<AbilityBehavior>();
         }

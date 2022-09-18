@@ -51,6 +51,9 @@ namespace RPGProject.Combat
             }
         }
 
+        /// <summary>
+        /// Determines the amount of ability instances to spawn based on their type.
+        /// </summary>
         private int GetAmountToSpawn(int _amountOfFighters, Type _abilityType)
         {
             int amountToSpawn = amountOfAbilityObjects;
@@ -62,6 +65,10 @@ namespace RPGProject.Combat
             return amountToSpawn;
         }
 
+        /// <summary>
+        /// Returns a list of all abilities a fighter knows and their child behaviors.
+        /// Also returns the unqiue unit abilities they may only learn under certain circumstances.
+        /// </summary>
         private List<AbilityBehavior> GetAbilityPrefabs(List<Fighter> _allFighters)
         {
             List<AbilityBehavior> abilityBehaviorPrefabs = new List<AbilityBehavior>();
@@ -86,7 +93,7 @@ namespace RPGProject.Combat
 
                 foreach(UniqueUnitBehavior uniqueUnit in fighter.GetComponentsInChildren<UniqueUnitBehavior>())
                 {
-                    foreach(AbilityBehavior abilityBehavior in uniqueUnit.GetAbilityBehaviors())
+                    foreach(AbilityBehavior abilityBehavior in uniqueUnit.GetUniqueAbilityBehaviors())
                     {
                         if (abilityBehavior == null || abilityBehaviorPrefabs.Contains(abilityBehavior)) continue;
                         abilityBehaviorPrefabs.Add(abilityBehavior);
@@ -113,8 +120,6 @@ namespace RPGProject.Combat
             return availableAbilityBehavior;
         }
 
-        ///
-
         public void ResetAbilityObjectPool()
         {
             foreach (List<AbilityBehavior> abilityBehaviors in abilityPoolDict.Values)
@@ -124,6 +129,14 @@ namespace RPGProject.Combat
                     ResetAbilityBehavior(abilityBehavior);
                 }
             }
+        }
+
+        public void SpawnHitFX(HitFXObjectKey _hitFXObjectKey, Vector3 _position)
+        {
+            GameObject hitFX = hitFXPool[_hitFXObjectKey];
+            hitFX.transform.position = _position;
+
+            hitFX.gameObject.SetActive(true);
         }
 
         public GameObject GetHitFX(HitFXObjectKey _hitFXObjectKey)
@@ -155,14 +168,6 @@ namespace RPGProject.Combat
                 hitFXPool.Add(hitFXObjectKey, hitFXInstance);
                 hitFXInstance.SetActive(false);
             }
-        }
-
-        public void SpawnHitFX(HitFXObjectKey _hitFXObjectKey, Vector3 _position)
-        {
-            GameObject hitFX = hitFXPool[_hitFXObjectKey];
-            hitFX.transform.position = _position;
-
-            hitFX.gameObject.SetActive(true);
         }
 
         private void ResetAbilityBehavior(AbilityBehavior _abilityToReset)

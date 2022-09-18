@@ -132,7 +132,6 @@ namespace RPGProject.UI
 
         private void ActivateSpellTooltip(Ability _ability)
         {
-            if (_ability.abilityType == AbilityType.Melee) return;
             spellTooltip.SetupTooltip(_ability);
 
             if (unusableAbilities.ContainsKey(_ability))

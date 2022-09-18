@@ -9,10 +9,10 @@ namespace RPGProject.Combat
     [Serializable]
     public struct UnitStatus
     {
-        public float physicalReflectionDamage;
-        public bool isReflectingSpells;
-        public bool isSilenced;
-        public bool hasSubstitute;
+        public float physicalReflectionDamage; //On melee damage, this amount of damage is reflected on the attacker.
+        public bool isReflectingSpells; //If hit by a projectile, it will return it to the caster.
+        public bool isSilenced; //If true, the unit will not be able to use abilities.
+        public bool hasSubstitute; 
 
         public List<AbilityBehavior> activeAbilityBehaviors;
 

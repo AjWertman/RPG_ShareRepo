@@ -38,7 +38,7 @@ namespace RPGProject.Movement
             navMeshAgent.speed = CalculateMoveSpeed(speed);
         }
 
-        public IEnumerator MoveToDestination(List<Transform> _path)
+        public IEnumerator MoveToDestination(List<GridBlock> _path)
         {
             if (_path == null || _path.Count <= 0) yield break;
 
@@ -47,10 +47,14 @@ namespace RPGProject.Movement
             yield return currentPath;
         }
 
-        private IEnumerator FollowPath(List<Transform> _path)
+        private IEnumerator FollowPath(List<GridBlock> _path)
         {
-            Transform previousTransform = _path[0];
-            Transform goalTransform = _path[_path.Count -1];
+            GridBlock previousBlock = _path[0];
+            Transform previousTransform = previousBlock.travelDestination;
+
+            GridBlock goalBlock = _path[_path.Count -1];
+            Transform goalTransform = goalBlock.travelDestination;
+
             isMoving = true;
             UpdateAnimator(true);
             int nextBlockIndex = 1;
@@ -59,7 +63,8 @@ namespace RPGProject.Movement
 
             while (isMoving)
             {
-                Transform nextTransform = _path[nextBlockIndex];
+                GridBlock nextBlock = _path[nextBlockIndex];
+                Transform nextTransform = nextBlock.travelDestination;
 
                 if (nextTransform == null) yield break;
 
@@ -71,7 +76,7 @@ namespace RPGProject.Movement
 
                 if (isAtPosition)
                 {
-                    onBlockReached();
+                    onBlockReached(nextBlock);
 
                     previousTransform = nextTransform;
                     if (!isGoalBlock)
@@ -160,11 +165,5 @@ namespace RPGProject.Movement
         {
             return new Vector3(_transform.position.x, 0, _transform.position.z);
         }
-
-        private int GetGCost(Transform _previousTransform, Transform _nextTransform)
-        {
-            if (_previousTransform.localPosition.x == _nextTransform.localPosition.x || _previousTransform.localPosition.z == _nextTransform.localPosition.z) return 10;
-            else return 14;
-        }      
     }
 }

@@ -3,7 +3,8 @@ using System;
 namespace RPGProject.Combat.AI
 {
     /// <summary>
-    /// Allows for preset priorities of different combat actions based on AI type.
+    /// Allows for preset priorities of different combat actions for different types of AI. 
+    /// Also allows for a Custom preset.
     /// </summary>
     [Serializable]
     public struct AIBattleBehavior
@@ -19,7 +20,7 @@ namespace RPGProject.Combat.AI
     }
 
     /// <summary>
-    /// Type of AI in combat.
+    /// Type of AI in combat that will correspond with different types of actions and how likely an AI is to choose those actions.
     /// Custom is meant for customized AI behaviors for the player or unique enemies that require different behaviors.
     /// </summary>
     public enum AIBattleType { Tank, mDamage, rDamage, Healer, Custom }

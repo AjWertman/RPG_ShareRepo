@@ -89,6 +89,9 @@ namespace RPGProject.Combat.Grid
             highlightMesh.transform.parent.localEulerAngles = newEulers;
         }
 
+        /// <summary>
+        /// Returns the proper Y rotation for the direction selection arrows.
+        /// </summary>
         private float GetArrowYEuler(int _x, int _z)
         {
             if(_x == -1)

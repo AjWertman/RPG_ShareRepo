@@ -1,10 +1,12 @@
 using RPGProject.GameResources;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Combat
 {
+    /// <summary>
+    /// Base class to implement unique behaviors for specific combatants.
+    /// </summary>
     public abstract class UniqueUnitBehavior: MonoBehaviour
     {
         protected Fighter fighter = null;
@@ -16,6 +18,7 @@ namespace RPGProject.Combat
             health = GetComponentInParent<Health>();
         }
 
-        public abstract List<AbilityBehavior> GetAbilityBehaviors();
+        public abstract List<AbilityBehavior> GetUniqueAbilityBehaviors();
+        public abstract List<AbilityBehavior> GetNegatedBehaviors();
     }
 }

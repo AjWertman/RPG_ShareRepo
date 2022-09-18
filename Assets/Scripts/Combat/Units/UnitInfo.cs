@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace RPGProject.Combat
 {
     /// <summary>
-    /// Information about a combatant
+    /// Information about a combatant.
     /// </summary>
     [Serializable]
     public class UnitInfo

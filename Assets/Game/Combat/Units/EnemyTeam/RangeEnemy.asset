@@ -24,7 +24,7 @@ MonoBehaviour:
   stats:
     stamina: 10
     spirit: 10
-    strength: 12
+    strength: 20
     skill: 20
     armor: 10
     resistance: 10

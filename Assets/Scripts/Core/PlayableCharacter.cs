@@ -10,7 +10,7 @@ namespace RPGProject.Core
     {
         [Header("Character Design")]
         public string characterName = "";
-        public PlayerKey playerKey = PlayerKey.None;
+        public CharacterKey playerKey = CharacterKey.None;
         public int age = 0;
         [TextArea (10,10)] public string summaryText = "";
         

@@ -96,9 +96,7 @@ namespace RPGProject.Control.Combat
 
             if (_isPlayerTeam)
             {
-                PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
-
-                TeamInfo teamInfo = playerTeamManager.GetTeamInfo(playerKey);
+                TeamInfo teamInfo = playerTeamManager.GetTeamInfo(characterKey);
                 unitResources = teamInfo.unitResources;
                 unitInfo.unitLevel = teamInfo.level;
             }

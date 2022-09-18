@@ -22,7 +22,7 @@ MonoBehaviour:
     energyPoints: 0
     maxEnergyPoints: 0
   stats:
-    stamina: 30
+    stamina: 25
     spirit: 30
     strength: 30
     skill: 30

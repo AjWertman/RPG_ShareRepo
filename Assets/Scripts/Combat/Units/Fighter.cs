@@ -1,6 +1,5 @@
 ﻿using RPGProject.Combat.Grid;
 using RPGProject.GameResources;
-using RPGProject.Progression;
 using RPGProject.Sound;
 using System;
 using System.Collections;
@@ -10,7 +9,7 @@ using UnityEngine;
 namespace RPGProject.Combat
 {
     /// <summary>
-    /// Handles combat for a Unit.
+    /// Handles combat for a Unit and holds important combat data.
     /// </summary>
     public class Fighter : MonoBehaviour, CombatTarget
     {
@@ -21,9 +20,11 @@ namespace RPGProject.Combat
         public CharacterMesh characterMesh = null;
 
         public Ability selectedAbility = null;
-        public CombatTarget selectedTarget = null;
+        public CombatTarget selectedTarget = null; 
         public GridBlock currentBlock = null;
-        public ComboLink currentComboLink = null;
+        public ComboLink currentComboLink = null; //The current index of the combo being executed.
+
+        public List<AbilityBehavior> negatedBehaviors = new List<AbilityBehavior>(); //Behaviors that will not affect this unit.
 
         Animator animator = null;
         ComboLinker comboLinker = null;
@@ -33,8 +34,6 @@ namespace RPGProject.Combat
         Energy energy = null;
 
         List<Fighter> selectedTargets = new List<Fighter>();
-
-        float meleeRange = 0f;
 
         bool isHighlighted = false;
 
@@ -82,13 +81,6 @@ namespace RPGProject.Combat
             comboLinker.SetAnimator(_animator);
         }
 
-        public void UpdateAttributes(float _strength, float _skill, float _luck)
-        {
-            //strength = _strength;
-            //skill = _skill;
-            //luck = _luck;
-        }
-
         public IEnumerator Attack(CombatTarget _selectedTarget, Ability _selectedAbility)
         {
             selectedTarget = _selectedTarget;
@@ -133,8 +125,6 @@ namespace RPGProject.Combat
         {
             selectedTarget = null;
             selectedAbility = null;
-
-            UpdateAttributes(10f, 10f, 10f);
 
             unitInfo = null;
             unitResources = new UnitResources();

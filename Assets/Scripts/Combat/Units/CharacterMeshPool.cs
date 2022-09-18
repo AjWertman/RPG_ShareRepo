@@ -25,14 +25,8 @@ namespace RPGProject.Combat
             CreateCharacterMeshPool();
         }
 
-        private void CreateCharacterMeshPool()
-        {
-            CreateUniqueMeshes();
-            CreateGenericEnemyMeshes();
-        }
-
         public void ResetCharacterMeshPool()
-        {
+        { 
             foreach (CharacterMesh mesh in GetAllMeshes())
             {
                 mesh.transform.parent = transform;
@@ -61,6 +55,12 @@ namespace RPGProject.Combat
             }
 
             return newMesh;
+        }
+
+        private void CreateCharacterMeshPool()
+        {
+            CreateUniqueMeshes();
+            CreateGenericEnemyMeshes();
         }
 
         private void CreateUniqueMeshes()

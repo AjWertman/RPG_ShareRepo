@@ -54,6 +54,16 @@ namespace RPGProject.Control.Combat
 
             battleHandler.onUnitTurnUpdate += UpdateCurrentUnitTurn;
             battleHandler.onPlayerMoveCompletion += OnMoveCompletion;
+            battleHandler.onUnitDeath += OnUnitDeath;
+        }
+
+        private void OnUnitDeath(UnitController _unitDeath)
+        {
+            if (currentClickCoroutine != null)
+            {
+                StopCoroutine(currentClickCoroutine);
+                currentClickCoroutine = null;
+            }
         }
 
         private void Start()

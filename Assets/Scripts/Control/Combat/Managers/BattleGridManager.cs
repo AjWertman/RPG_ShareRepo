@@ -50,7 +50,7 @@ namespace RPGProject.Control.Combat
         {
             occupiedBlocksDict[_fighter] = _gridBlock;
             UpdateCenter(_fighter.unitInfo.isPlayer);
-            OnGridBlockEnter(_fighter, _gridBlock);
+            //OnGridBlockEnter(_fighter, _gridBlock);
         }
 
         public void SetNewAbilityBlock(AbilityBehavior _abilityBehavior, GridBlock _gridBlock)
@@ -83,8 +83,8 @@ namespace RPGProject.Control.Combat
             if (!affectedBlocksDict.ContainsKey(_gridBlockToTest)) return;
             AbilityBehavior currentEffect = affectedBlocksDict[_gridBlockToTest];
 
-            if(currentEffect != null)
-            {
+            if (currentEffect != null && !CombatAssistant.IsNegatedBehavior(_newFighter, currentEffect))
+            {               
                 PerformAbility(currentEffect, _newFighter);
             }
 

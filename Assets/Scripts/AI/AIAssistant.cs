@@ -11,8 +11,7 @@ namespace RPGProject.Combat.AI
     public static class AIAssistant
     {
         /// <summary>
-        /// Returns the ranking of the cost to use an ability.
-        /// This also includes the cost to move in range if necessary.
+        /// Returns the total energy cost of moving in range of a target and using an ability.
         /// </summary>
         public static AIRanking GetEnergyCostRanking(int _currentEnergy, int _energyCost)
         {
@@ -32,7 +31,7 @@ namespace RPGProject.Combat.AI
         /// <summary>
         /// Returns the ranking of the impact/strength of an action. 
         /// Lower health targets are high priority for both damage and healing.
-        /// If the action does a lot of damage or healing, it gets a higher ranking.
+        /// If the action does a lot of damage or healing, it also gets a higher ranking.
         /// </summary>
         public static AIRanking GetImpactRanking(AIBattleAction _combatAction, bool _isPlayer)
         {

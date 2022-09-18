@@ -34,6 +34,15 @@ namespace RPGProject.Control.Combat
         public void SetupAbilityManager(List<Fighter> _allFighters)
         {
             abilityObjectPool.CreateAbilityObjects(_allFighters);
+
+            foreach(Fighter fighter in _allFighters)
+            {
+                UniqueUnitBehavior uniqueUnitBehavior = fighter.characterMesh.GetComponent<UniqueUnitBehavior>();
+                if (uniqueUnitBehavior == null) continue;
+                List<AbilityBehavior> negatedBehaviors = uniqueUnitBehavior.GetNegatedBehaviors();
+
+                fighter.negatedBehaviors = negatedBehaviors;
+            }
         }
 
         public void ActivateAbilityBehavior(AbilityBehavior _abilityBehavior)
@@ -125,6 +134,7 @@ namespace RPGProject.Control.Combat
                 abilityBehavior = GetAbilityBehavior(isCriticalHit, calculatedAmount);
             }
 
+            bool isNegated = CombatAssistant.IsNegatedBehavior(targetFighter, abilityBehavior);
             switch (abilityType)
             {
                 case AbilityType.Melee:
@@ -134,7 +144,7 @@ namespace RPGProject.Control.Combat
                         abilityObjectPool.SpawnHitFX(currentComboLink.hitFXObjectKey, targetFighter.transform.position);
                     }
 
-                    targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
+                    if(!isNegated) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, false);
                     AffectNeighborBlocks(abilityBehavior);
                     if (abilityBehavior != null) ActivateAbilityBehavior(abilityBehavior);
 
@@ -161,6 +171,7 @@ namespace RPGProject.Control.Combat
                 case AbilityType.InstaHit:
 
                     ActivateAbilityBehavior(abilityBehavior);
+                    if (isNegated) break;
                     if (calculatedAmount != 0) targetHealth.ChangeHealth(calculatedAmount, isCriticalHit, true);
                     if (abilityBehavior != null) abilityBehavior.onAbilityDeath += AffectNeighborBlocks;
                     break;
@@ -206,16 +217,22 @@ namespace RPGProject.Control.Combat
 
             if (_childBehavior != null)
             {
-                _childBehavior.SetupAbility(null, null, _baseAbilityAmount, false, 3);
+                float childAbilityAmount = _baseAbilityAmount / 3f;
+                _childBehavior.SetupAbility(null, null, childAbilityAmount, false, 3);
             }
+
             foreach (GridBlock gridBlock in neighbors)
             {
                 if (gridBlock == null) continue;
                 Fighter contestedFighter = gridBlock.contestedFighter;
+                bool isNegated = CombatAssistant.IsNegatedBehavior(contestedFighter, _childBehavior);
                 if (contestedFighter != null)
                 {
                     if (contestedFighter == _attacker) continue;
+                    
                     bool isChildBehaviorNull = _childBehavior == null;
+                    if (isNegated) continue;
+
                     contestedFighter.GetHealth().ChangeHealth(_baseAbilityAmount, false, !isChildBehaviorNull);
 
                     if (!isChildBehaviorNull) contestedFighter.unitStatus.ApplyActiveAbilityBehavior(_childBehavior);
@@ -252,6 +269,7 @@ namespace RPGProject.Control.Combat
 
             return newChangeAmount;
         }
+
 
         //private void TargetAllTargets(AbilityBehavior _abilityBehavior, float _changeAmount, bool _isCritical)
         //{

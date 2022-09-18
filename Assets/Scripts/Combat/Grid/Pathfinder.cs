@@ -5,17 +5,15 @@ using UnityEngine;
 namespace RPGProject.Combat.Grid
 {
     /// <summary>
-    /// Calculates paths and differnet gridblock formations.
+    /// Calculates paths for the grid system.
     /// </summary>
     public class Pathfinder : MonoBehaviour
     {
         GridPatternHandler patternHandler = null;
 
+        //G-Cost values for pathfinding.
         const int straightCost = 10;
         const int diagonalCost = 14;
-
-        int maxXCoordinate = -1;
-        int maxZCoordinate = -1;
 
         GridBlock currentBlock = null;
         GridBlock previousBlock = null;
@@ -169,14 +167,11 @@ namespace RPGProject.Combat.Grid
             return calculatedPath;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private GridBlock GetLowestFCostBlock(List<GridBlock> blockList)
+        private GridBlock GetLowestFCostBlock(List<GridBlock> _blockList)
         {
-            GridBlock lowestFCostBlock = blockList[0];
+            GridBlock lowestFCostBlock = _blockList[0];
 
-            foreach (GridBlock gridBlock in blockList)
+            foreach (GridBlock gridBlock in _blockList)
             {
                 if (gridBlock.pathfindingCostValues.fCost < lowestFCostBlock.pathfindingCostValues.fCost)
                 {

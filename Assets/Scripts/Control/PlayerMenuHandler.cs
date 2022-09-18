@@ -121,7 +121,7 @@ namespace RPGProject.Control
 
         private void OpenCharacterMenu(PlayableCharacter _character)
         {
-            PlayerKey playerKey = _character.playerKey;
+            CharacterKey playerKey = _character.playerKey;
             TeamInfo teamInfo = playerTeam.GetTeamInfo(playerKey);
             Unit unit = playerTeam.GetUnit(playerKey);
 

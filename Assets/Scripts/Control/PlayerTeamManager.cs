@@ -18,37 +18,32 @@ namespace RPGProject.Control
         public UnitStartingPosition[] playerStartingPositions = null;
         public List<PlayableCharacter> playerTeam = new List<PlayableCharacter>();
 
-        List<PlayerKey> currentPlayerKeys = new List<PlayerKey>();
+        List<CharacterKey> currentPlayerKeys = new List<CharacterKey>();
 
-        PlayableCharacterDatabase playableCharacterDatabase = null;
         UnitDatabase unitDatabase = null;
 
         ProgressionHandler progressionHandler = null;
 
         private void Awake()
         {
-            playableCharacterDatabase = FindObjectOfType<PlayableCharacterDatabase>();
             unitDatabase = FindObjectOfType<UnitDatabase>();
 
-            playableCharacterDatabase.PopulateDatabase();
             unitDatabase.PopulateDatabase();
 
             progressionHandler = GetComponentInChildren<ProgressionHandler>();
         }
 
-        public void PopulateTeamInfos(List<PlayerKey> _playerKeys)
+        public void PopulateTeamInfos(List<CharacterKey> _playerKeys)
         {
             teamInfos.Clear();
             currentPlayerKeys.Clear();
             playerTeam.Clear();
-            foreach (PlayerKey playerKey in _playerKeys)
+            foreach (CharacterKey playerKey in _playerKeys)
             {                           
                 currentPlayerKeys.Add(playerKey);
 
-                PlayableCharacter playableCharacter = playableCharacterDatabase.GetPlayableCharacter(playerKey);
-                CharacterKey characterKey = CharacterKeyComparison.GetCharacterKey(playerKey);
-
-                Unit unit = unitDatabase.GetUnit(characterKey);
+                PlayableCharacter playableCharacter = unitDatabase.GetPlayableCharacter(playerKey);
+                Unit unit = unitDatabase.GetUnit(playerKey);
 
                 TeamInfo teamInfo = new TeamInfo();
                 teamInfo.playerKey = playerKey;
@@ -70,7 +65,7 @@ namespace RPGProject.Control
             }
         }
 
-        public void UpdateTeamInfo(PlayerKey _playerKey, UnitResources _unitResources)
+        public void UpdateTeamInfo(CharacterKey _playerKey, UnitResources _unitResources)
         {
             foreach (TeamInfo teamInfo in teamInfos)
             {
@@ -82,13 +77,13 @@ namespace RPGProject.Control
             }
         }
 
-        public void AddTeammate(PlayerKey _playerKey)
+        public void AddTeammate(CharacterKey _playerKey)
         {
-            List<PlayerKey> playerKeys = new List<PlayerKey>();
+            List<CharacterKey> playerKeys = new List<CharacterKey>();
             bool hasKey = false;
             foreach(TeamInfo teamInfo in teamInfos)
             {
-                PlayerKey playerKey = teamInfo.playerKey;
+                CharacterKey playerKey = teamInfo.playerKey;
                 if (playerKey == _playerKey) hasKey = true;
             }
 
@@ -99,14 +94,14 @@ namespace RPGProject.Control
             }
         }
 
-        public void RemoveTeammate(PlayerKey _playerKey)
+        public void RemoveTeammate(CharacterKey _playerKey)
         {
-            List<PlayerKey> playerKeys = new List<PlayerKey>(currentPlayerKeys);
+            List<CharacterKey> playerKeys = new List<CharacterKey>(currentPlayerKeys);
 
             bool hasKey = false;
             foreach (TeamInfo teamInfo in teamInfos)
             {
-                PlayerKey playerKey = teamInfo.playerKey;
+                CharacterKey playerKey = teamInfo.playerKey;
                 if (playerKey == _playerKey) hasKey = true;
             }
 
@@ -147,12 +142,12 @@ namespace RPGProject.Control
             }
         }
 
-        public PlayableCharacter GetPlayableCharacter(PlayerKey _playerKey)
+        public PlayableCharacter GetPlayableCharacter(CharacterKey _playerKey)
         {
-            return playableCharacterDatabase.GetPlayableCharacter(_playerKey);
+            return unitDatabase.GetPlayableCharacter(_playerKey);
         }
 
-        public TeamInfo GetTeamInfo(PlayerKey _playerKey)
+        public TeamInfo GetTeamInfo(CharacterKey _playerKey)
         {
             TeamInfo newInfo = null;
 
@@ -180,10 +175,9 @@ namespace RPGProject.Control
             return playerUnits;
         }
       
-        public Unit GetUnit(PlayerKey _playerKey)
+        public Unit GetUnit(CharacterKey _playerKey)
         {
-            CharacterKey characterKey = CharacterKeyComparison.GetCharacterKey(_playerKey);
-            return unitDatabase.GetUnit(characterKey);
+            return unitDatabase.GetUnit(_playerKey);
         }
 
         private GridCoordinates GetStartingPosition(Unit _unit)
@@ -225,7 +219,7 @@ namespace RPGProject.Control
     [Serializable]
     public class TeamInfo
     {
-        public PlayerKey playerKey = PlayerKey.None;
+        public CharacterKey playerKey = CharacterKey.None;
 
         public UnitInfo unitInfo = null;
         public UnitResources unitResources = new UnitResources();

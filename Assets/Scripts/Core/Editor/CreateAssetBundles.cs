@@ -6,7 +6,6 @@ public class CreateAssetBundles
     [MenuItem("Assets/Build AssetBundles")]
     static void BuildAllAssetBundles()
     {
-        return; 
         string assetBundleDirectory = "Assets/Game/AssetBundles";
         if (!Directory.Exists(assetBundleDirectory))
         {

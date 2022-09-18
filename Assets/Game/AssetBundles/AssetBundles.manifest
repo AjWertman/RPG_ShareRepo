@@ -1,7 +1,11 @@
 ManifestFileVersion: 0
-CRC: 2436304349
+CRC: 1057729586
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: abilities
       Dependencies: {}
+    Info_1:
+      Name: units
+      Dependencies:
+        Dependency_0: abilities

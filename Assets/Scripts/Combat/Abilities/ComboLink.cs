@@ -17,9 +17,5 @@ namespace RPGProject.Combat
         public HitFXObjectKey hitFXObjectKey = HitFXObjectKey.None;
         public SpawnLocation spawnLocationOverride = SpawnLocation.None;
         public AudioClip abilityClip = null;
-
-        //Refactor
-        //[SerializeField] Buff buffToApply = null;
-        //[SerializeField] float chanceToApplyBuff = 0f;
     }
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 namespace RPGProject.Combat.Grid
 {
     /// <summary>
-    /// Controls the basic necessary information for the combat grid.
+    /// Controls the basic necessary information for the combat grid,
+    /// (un)highlights the grid,
     /// </summary>
     [ExecuteAlways]
     public class GridSystem : MonoBehaviour
@@ -207,7 +208,10 @@ namespace RPGProject.Combat.Grid
             _gridBlock.SetupGridBlock(newMaterial, textColor);
         }
 
-        //Sets the boundaries of the grid system to the lowest and highest x and z values.
+        /// <summary>
+        /// Determines if the coordinates have a lower/higher x/z value and 
+        /// will update the current boundary value.
+        /// </summary>
         private void BoundaryCheck(GridCoordinates _gridCoordinates)
         {
             int x = _gridCoordinates.x;

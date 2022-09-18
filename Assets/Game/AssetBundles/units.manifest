@@ -1,0 +1,154 @@
+ManifestFileVersion: 0
+CRC: 726201598
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bb3697ff05ad68297a1e182381faef71
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7f896f13c1964b172e849bfed07f6346
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 96
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fde014f52d1120243aed8ef83d45d13d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9b0143b2a34eb134ab73e623fc1140ed, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 12e316041313ada489ccea81d2bdec58, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: aac6e103ed7b8c6409e96c6018464bbc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e4ff99147c9681f48aaa9a8cae376f13, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b85cea0385b8e4042b7934a45e6c2d96, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f539156083554d44a89e0e24a6ee4766, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 92e454e6482465a46ac1ff4fee81fc41, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 160906daf5fe82143ab7b2414c91ee11, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4adabaeb555a7f54cb8aa5a7c24d525d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 61b70116c4ce79d45afb1c055e659cb5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 013a2c4e78ee67c45a8e2725579a3e33, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b6357a94a53161942a696a0ccd62e6b7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 941839d2438e89d49926bfe1a43d9b2b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: cdbcedb5e4b0be54b807902fd53d5fe8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ce03015cc62a59f479a67cabc6a6e062, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1e1b7a765154da741883ba755b9bfd97, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8566e160b2a768f479c49ee899a6d8c7, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: RPGProject.Combat.Buff/StatBuffInfo
+- AssemblyName: Assembly-CSharp
+  ClassName: RPGProject.Combat.ComboLink
+- AssemblyName: Assembly-CSharp
+  ClassName: RPGProject.Combat.UnitInfo
+- AssemblyName: Assembly-CSharp
+  ClassName: RPGProject.Combat.UnitResources
+- AssemblyName: Assembly-CSharp
+  ClassName: RPGProject.Combat.UnitStatus
+- AssemblyName: Assembly-CSharp
+  ClassName: RPGProject.Progression.Stats
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Character
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphPairAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphValueRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.Glyph
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+Assets:
+- Assets/Game/Combat/Units/PlayerTeam/OPProtagonist.asset
+- Assets/Game/Combat/Units/PlayerTeam/Protagonist.asset
+- Assets/Game/Combat/Units/EnemyTeam/Boss.asset
+- Assets/Game/Combat/Units/PlayerTeam/Astra.asset
+- Assets/Game/Combat/Units/EnemyTeam/RangeEnemy.asset
+- Assets/Game/Combat/Units/PlayerTeam/PDR.asset
+- Assets/Game/PlayerCharacters/Protagonist.asset
+- Assets/Game/PlayerCharacters/Astra.asset
+- Assets/Game/Combat/Units/EnemyTeam/MeleeEnemy.asset
+- Assets/Game/PlayerCharacters/PDR.asset
+- Assets/Game/Combat/Units/EnemyTeam/Officer.asset
+Dependencies:
+- D:/Aj/UnityProjects/TurnBasedRPG/Assets/Game/AssetBundles/abilities

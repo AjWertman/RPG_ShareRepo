@@ -44,7 +44,7 @@ namespace RPGProject.Combat
             hasExplosionQueued = false;
         }
 
-        public override List<AbilityBehavior> GetAbilityBehaviors()
+        public override List<AbilityBehavior> GetUniqueAbilityBehaviors()
         {
             List<AbilityBehavior> abilityBehaviors = new List<AbilityBehavior>();
             foreach(ComboLink comboLink in explosionAbility.combo)
@@ -52,6 +52,11 @@ namespace RPGProject.Combat
                 abilityBehaviors.Add(comboLink.abilityBehavior);
             }
             return abilityBehaviors;
+        }
+
+        public override List<AbilityBehavior> GetNegatedBehaviors()
+        {
+            return new List<AbilityBehavior>();
         }
     }
 }

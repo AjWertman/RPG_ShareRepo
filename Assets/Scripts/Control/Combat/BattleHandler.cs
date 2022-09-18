@@ -47,6 +47,7 @@ namespace RPGProject.Control.Combat
 
         public event Action<UnitController> onUnitTurnUpdate;
         public event Action onPlayerMoveCompletion;
+        public event Action<UnitController> onUnitDeath;
         public event Action onBattleEnd;
 
         private void Awake()
@@ -70,18 +71,6 @@ namespace RPGProject.Control.Combat
             battleUIManager.InitalizeBattleUIManager();
             battleGridManager.InitializeBattleGridManager();
             unitManager.InitalizeUnitManager();
-        }
-
-        private void Update()
-        {
-            //Refactor - testing
-            if (!isBattling) return;
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                UnitController testUnit = unitManager.enemyUnits[0];
-                if (testUnit == null) return;
-                aiBrain.GetBestAction(testUnit, unitManager.unitControllers);
-            }
         }
 
         public IEnumerator StartBattle(PlayerTeamManager _playerTeamManager, UnitStartingPosition[] _enemyTeam)
@@ -121,6 +110,7 @@ namespace RPGProject.Control.Combat
             foreach(UnitController unitController in unitManager.unitControllers)
             {
                 unitController.onMoveCompletion += OnMoveCompletion;
+                unitController.onGridBlockEnter += battleGridManager.OnGridBlockEnter;
                 unitController.GetHealth().onAnimDeath += OnUnitDeath;
             }
         }
@@ -405,8 +395,7 @@ namespace RPGProject.Control.Combat
                 }
 
                 CharacterKey characterKey = unit.unitInfo.characterKey;
-                PlayerKey playerKey = CharacterKeyComparison.GetPlayerKey(characterKey);
-                playerTeamManager.UpdateTeamInfo(playerKey, unitResources);
+                playerTeamManager.UpdateTeamInfo(characterKey, unitResources);
             }
         }
 
@@ -496,7 +485,10 @@ namespace RPGProject.Control.Combat
             UnitController deadUnit = _deadUnitHealth.GetComponent<UnitController>();
 
             bool? wonBattle = unitManager.TeamWipeCheck();
-            if (wonBattle != null) EndBattle(wonBattle); 
+            if (wonBattle != null) EndBattle(wonBattle);
+
+            onUnitDeath(deadUnit);
+            deadUnit.StopMovement();
 
             deadUnit.UpdateCurrentBlock(null);
             deadUnit.gameObject.SetActive(false);
