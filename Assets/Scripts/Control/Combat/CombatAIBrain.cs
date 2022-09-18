@@ -2,12 +2,14 @@ using RPGProject.Combat;
 using RPGProject.Combat.AI;
 using RPGProject.Combat.Grid;
 using RPGProject.Core;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// Handles the selection of a move by an AI combatant.
+    /// </summary>
     public class CombatAIBrain : MonoBehaviour
     {
         [SerializeField] List<AIBattleBehavior> presetBehaviors = new List<AIBattleBehavior>();
@@ -43,6 +45,11 @@ namespace RPGProject.Control.Combat
             return bestAction;
         }
 
+        /// <summary>
+        /// If the current unit turn has a preset ability (queued by various circumstances),
+        /// it will calculate the best way to use that ability (best target to use on, and the block
+        /// they must move to, to get in range).
+        /// </summary>
         private AIBattleAction CalculateSetAbilityAction(UnitController _currentUnitTurn, List<UnitController> _allUnits)
         {
             AIBattleAction setAbilityAction = new AIBattleAction();
@@ -118,6 +125,10 @@ namespace RPGProject.Control.Combat
             return bestAction;
         }
 
+        /// <summary>
+        /// Cycles through all known abilities and how that ability would affect each target.
+        /// Based on that information, it will return a list of AIBattleActions and their scores.
+        /// </summary>
         private Dictionary<AIBattleAction, float> GetPossibleActions(UnitController _currentUnitTurn,
            List<Ability> _usableAbilities, List<UnitController> _allUnits)
         {
@@ -214,6 +225,9 @@ namespace RPGProject.Control.Combat
             return possibleActions;
         }
 
+        /// <summary>
+        /// Determines which units are interesting and ranks them.
+        /// </summary>
         private Dictionary<Fighter, AIRanking> GetPreferredTargets(UnitController _currentUnitTurn, List<UnitController> _allUnits)
         {
             AIBattleType aiType = _currentUnitTurn.aiType;
@@ -261,6 +275,10 @@ namespace RPGProject.Control.Combat
             return fightersDict;
         }
 
+        /// <summary>
+        /// Determines what action type an action is, for example if the 
+        /// health change amount is negative, it is considered a damage.
+        /// </summary>
         private AIActionType GetActionType(AIBattleBehavior _combatAIBehavior, Fighter _currentFighter, AIBattleAction _action)
         {
             List<AIActionType> actionTypes = new List<AIActionType>();
@@ -288,6 +306,9 @@ namespace RPGProject.Control.Combat
             return AIAssistant.GetHighestActionType(_combatAIBehavior, actionTypes);
         }
 
+        /// <summary>
+        /// Calculates the strength of a units block.
+        /// </summary>
         private AIRanking GetPositionStrengthRanking(UnitController _currentUnitTurn, Fighter _preferredTarget)
         {
             GridBlock currentBlock = _currentUnitTurn.currentBlock;
@@ -321,7 +342,11 @@ namespace RPGProject.Control.Combat
             else if (MathAssistant.IsBetween(positionScore, 40f, 60f)) return AIRanking.Mediocre;
             else return AIRanking.Bad;
         }
-
+        
+        /// <summary>
+        /// Returns the cost of an action by calculating the cost to move in range,
+        /// plus the cost to use the ability.
+        /// </summary>
         private int GetFullEnergyCost(UnitController _currentUnit, AIBattleAction _aiCombatAction)
         {
             int fullEnergyCost = 0;
@@ -354,6 +379,10 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Determines the closest possible block that is in the range of a 
+        /// target based on the range of an ability.
+        /// </summary>
         private GridBlock GetTargetBlock(UnitController _unitController, Fighter _target, Ability _ability)
         {
             GridBlock currentBlock = _unitController.currentBlock;
@@ -414,6 +443,10 @@ namespace RPGProject.Control.Combat
             return behaviorPreset;
         }
 
+        /// <summary>
+        /// If there are no other viable actions, this will calculate the
+        /// remaining possible moves.
+        /// </summary>
         private AIBattleAction GetLastResortAction()
         {
             //print("getting last resort");
@@ -448,6 +481,9 @@ namespace RPGProject.Control.Combat
             return usableAbilities;
         }
 
+        /// <summary>
+        /// Determines if there is any obstructions for a ranged ability.
+        /// </summary>
         private bool CanTarget(Vector3 _currentPosition, Fighter _target, Ability _ability)
         {
             bool isMeleeAttack = _ability.attackRange == 0;
@@ -466,7 +502,10 @@ namespace RPGProject.Control.Combat
             
             return true;          
         }
-
+        
+        /// <summary>
+        /// Converts a battle action to a debuggable string. 
+        /// </summary>
         private string BattleActionToString(AIBattleAction _aiCombatAction, float _score)
         {
             Fighter target = _aiCombatAction.target;

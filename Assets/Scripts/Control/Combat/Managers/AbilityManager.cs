@@ -2,12 +2,14 @@ using RPGProject.Combat;
 using RPGProject.Combat.Grid;
 using RPGProject.GameResources;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// Handles the spawning of abilities as well as the behaviors of those abilities.
+    /// </summary>
     public class AbilityManager : MonoBehaviour
     {
         GridPatternHandler patternHandler = null;
@@ -15,13 +17,6 @@ namespace RPGProject.Control.Combat
 
         Fighter currentFighter = null;
         AbilityObjectKey currentAbilityKey = AbilityObjectKey.None;
-
-        /// <summary>
-        /// An event to notify the BattleHandler that the neighbor blocks should be affected because of an ability.
-        ///Fighter = attacker, int = amount of blocks affected; AbilityBehavior = the grid behavior to apply;
-        ///CombatTarget = main target; float = base damage amount. 
-        /// </summary>
-        public event Action<Fighter, int, AbilityBehavior, CombatTarget, float> onAffectNeighborBlocks;
 
         public event Action<AbilityBehavior> onCombatantAbilitySpawn;
 
@@ -101,6 +96,9 @@ namespace RPGProject.Control.Combat
             currentAbilityKey = _abilityObjectKey;
         }
 
+        /// <summary>
+        /// Executes the behavior of a given ability, as well as its related instance.s
+        /// </summary>
         public void PerformAbility()
         {
             Ability selectedAbility = currentFighter.selectedAbility;

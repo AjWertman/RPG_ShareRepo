@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// THe pool for all of the managers that are necessary for combat.
+    /// </summary>
     public class BattleManagersPool : MonoBehaviour
     {
         [SerializeField] GameObject battlePositionManagerPrefab = null;

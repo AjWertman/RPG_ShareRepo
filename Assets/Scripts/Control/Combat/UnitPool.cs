@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// Pools UnitControllers to be used in combat.
+    /// </summary>
     public class UnitPool : MonoBehaviour
     {
         [SerializeField] GameObject unitPrefab = null;

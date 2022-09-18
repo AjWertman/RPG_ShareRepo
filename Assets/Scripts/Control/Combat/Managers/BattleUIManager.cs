@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Handles the UI interactions from the player in combat.
+    /// </summary>
     public class BattleUIManager : MonoBehaviour
     {
         [SerializeField] BattleHUD battleHUD = null;

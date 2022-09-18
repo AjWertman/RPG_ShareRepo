@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Handles the control for the dialogue for the player.
+    /// </summary>
     public class PlayerConversant : MonoBehaviour
     {
         [SerializeField] string playerName = "Conversant";
@@ -61,32 +64,6 @@ namespace RPGProject.Control
             onConversationUpdated();
         }
 
-        private void TriggerEnterAction()
-        {
-            if (currentNode != null && currentNode.onEnterAction != "")
-            {
-                TriggerAction(currentNode.onEnterAction);
-            }
-        }
-
-        private void TriggerExitAction()
-        {
-            if (currentNode != null && currentNode.onExitAction!= "")
-            {
-                TriggerAction(currentNode.onExitAction);
-            }
-        }
-
-        private void TriggerAction(string _actionToTrigger)
-        {
-            if (_actionToTrigger == "") return;
-
-            foreach (DialogueTrigger trigger in currentConversant.GetComponents<DialogueTrigger>())
-            {
-                trigger.Trigger(_actionToTrigger);
-            }
-        }
-
         public void Quit()
         {
             if (currentDialogue == null) return;
@@ -128,18 +105,6 @@ namespace RPGProject.Control
             return FilterOnCondition(currentDialogue.GetPlayerChildren(currentNode));
         }
 
-        private IEnumerable<DialogueNode> FilterOnCondition(IEnumerable<DialogueNode> _inputNode)
-        {
-            foreach (var node in _inputNode)
-            {
-                IEnumerable<IPredicateEvaluator> predicateEvaluators = GetPredicateEvaluators();
-                if (node.CheckCondition(predicateEvaluators))
-                {
-                    yield return node;
-                }
-            }
-        }
-
         public string GetCurrentConversantName()
         {
             if (isChoosing)
@@ -152,9 +117,47 @@ namespace RPGProject.Control
             }
         }
 
+        private IEnumerable<DialogueNode> FilterOnCondition(IEnumerable<DialogueNode> _inputNode)
+        {
+            foreach (var node in _inputNode)
+            {
+                IEnumerable<IPredicateEvaluator> predicateEvaluators = GetPredicateEvaluators();
+                if (node.CheckCondition(predicateEvaluators))
+                {
+                    yield return node;
+                }
+            }
+        }
+
         private IEnumerable<IPredicateEvaluator> GetPredicateEvaluators()
         {
             return GetComponents<IPredicateEvaluator>();
+        }
+
+        private void TriggerEnterAction()
+        {
+            if (currentNode != null && currentNode.onEnterAction != "")
+            {
+                TriggerAction(currentNode.onEnterAction);
+            }
+        }
+
+        private void TriggerExitAction()
+        {
+            if (currentNode != null && currentNode.onExitAction != "")
+            {
+                TriggerAction(currentNode.onExitAction);
+            }
+        }
+
+        private void TriggerAction(string _actionToTrigger)
+        {
+            if (_actionToTrigger == "") return;
+
+            foreach (DialogueTrigger trigger in currentConversant.GetComponents<DialogueTrigger>())
+            {
+                trigger.Trigger(_actionToTrigger);
+            }
         }
     }
 }

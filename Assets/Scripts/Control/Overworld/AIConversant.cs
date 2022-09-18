@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// The conversant the "PlayerConversant" will interact and dialogue with.
+    /// </summary>
     public class AIConversant : MonoBehaviour, IRaycastable
     {
         public string conversantName = "";

@@ -2,7 +2,9 @@
 
 namespace RPGProject.Control
 {
-    //Used as a class reference to pass in "FindObjectsOfType()"
+    /// <summary>
+    /// Used as a class reference to pass in "FindObjectsOfType()" 
+    /// </summary>
     public class OverworldEntity : MonoBehaviour
     {
 

@@ -32,7 +32,6 @@ namespace RPGProject.Control
             foreach(EnemyController enemyController in enemyControllers)
             {            
                 enemyController.ActivateEnemy();
-
             }
 
             isActivated = true;

@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// Sets up and handles all of the Units in combat.
+    /// </summary>
     public class UnitManager : MonoBehaviour
     {
         public List<UnitController> unitControllers = new List<UnitController>();

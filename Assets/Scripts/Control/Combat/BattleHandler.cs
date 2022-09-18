@@ -11,6 +11,10 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// Handles all of the battle behaviors and actions, 
+    /// including all of the sub managers that handle their respective behaviors.
+    /// </summary>
     public class BattleHandler : MonoBehaviour
     {
         [SerializeField] int amountOfEnergyPointsPerTurn = 40;
@@ -319,10 +323,6 @@ namespace RPGProject.Control.Combat
             return isBattling;
         }
 
-        public BattleUIManager GetBattleUIManager()
-        {
-            return battleUIManager;
-        }
         private void EndBattle(bool? _won)
         {
             if (isBattleOver) return;
@@ -383,6 +383,9 @@ namespace RPGProject.Control.Combat
 
         }
 
+        /// <summary>
+        /// Updates the team infos for all player combatants to make health persistent outside of combat.
+        /// </summary>
         private void UpdateTeamResources(List<UnitController> _playerUnits)
         {
             foreach (UnitController unit in _playerUnits)
@@ -399,6 +402,9 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Updates the unit resources of a combatant hold the values of the health and energy components.
+        /// </summary>
         private UnitResources UpdateUnitResources(UnitController _unit)
         {
             UnitResources unitResources = _unit.unitResources;
@@ -435,6 +441,9 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Handles the addition of a new unit to combat.
+        /// </summary>
         private void OnNewUnit(UnitController _newUnit)
         {
             turnManager.UpdateTurnOrder(_newUnit);
@@ -442,6 +451,9 @@ namespace RPGProject.Control.Combat
             UpdateUIManager();
         }
 
+        /// <summary>
+        /// Handles the spawning of an ability that is considered a combatant.
+        /// </summary>
         private void OnCombatantAbilitySpawn(AbilityBehavior _combatantAbiility)
         {
             UnitController unitController = _combatantAbiility.GetComponent<UnitController>();
@@ -480,6 +492,9 @@ namespace RPGProject.Control.Combat
             OnUnitDeath(_combatantAbiility.GetComponent<Health>());
         }
 
+        /// <summary>
+        /// Handles the removal of a unit from combat due to death.
+        /// </summary>
         private void OnUnitDeath(Health _deadUnitHealth)
         {
             UnitController deadUnit = _deadUnitHealth.GetComponent<UnitController>();

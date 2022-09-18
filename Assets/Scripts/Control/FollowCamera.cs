@@ -34,6 +34,9 @@ namespace RPGProject.Control
             ActivateRotatation(canRotate);
         }
 
+        /// <summary>
+        /// If activated, the player will be able to pan around the map using the mouse.
+        /// </summary>
         private void ActivateRotatation(bool _shouldActivate)
         {
             if (_shouldActivate)

@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// The interactable object in the overworld that stores the 
+    /// inventory data of an inventory item.
+    /// </summary>
     public class Pickup : MonoBehaviour, IRaycastable
     {
         public InventoryItem item;

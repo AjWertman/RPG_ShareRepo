@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// Handles the player's interaction with combat.
+    /// </summary>
     public class PlayerCombatController : MonoBehaviour
     {
         BattleHandler battleHandler = null;
@@ -30,7 +33,7 @@ namespace RPGProject.Control.Combat
 
         bool isPathfinding = true;
 
-        GridBlock blockToSelectFrom = null;
+        GridBlock blockToSelectFrom = null; //When selecting neighbor blocks, this is the center of those blocks.
         List<GridBlock> neighborBlocks = new List<GridBlock>();
         bool isSelectingFaceDirection = false;
         bool hasHighlightedNeighbors = false;
@@ -89,7 +92,7 @@ namespace RPGProject.Control.Combat
         {
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                if (isSelectingFaceDirection) ResetPathfinding();
+                if (isSelectingFaceDirection) ResetController();
                 else gridSystem.UnhighlightBlocks(tempPath);
                 battleUIManager.OnAbilitySelectKey();
                 currentUnitTurn.GetAimLine().ResetLine();
@@ -99,7 +102,7 @@ namespace RPGProject.Control.Combat
             {
                 gridSystem.UnhighlightBlocks(tempPath);
                 battleUIManager.DeactivateAbilitySelectMenu();
-                ResetPathfinding();
+                ResetController();
                 currentUnitTurn.GetAimLine().ResetLine();
                 battleHandler.AdvanceTurn();
             }
@@ -111,6 +114,9 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Handles the input from the player and translates that into how the camera is being controlled.
+        /// </summary>
         private void HandleCameraControl()
         {
             float vertical = Input.GetAxisRaw("Vertical");
@@ -141,6 +147,10 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Handles the proper raycasting and behaviors based on the current state of this controller,
+        /// such as highlighting, creating aim lines, etc.
+        /// </summary>
         private void HandleRaycasting()
         {
             if (currentUnitTurn != null && currentUnitTurn.unitInfo.isAI) return;
@@ -238,6 +248,10 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Handles all highlighting of a combatant, both UI and physical highlighting
+        /// when a combatant is being raycasted over in the physical world.
+        /// </summary>
         private void HandlePhysicalHighlighting(CombatTarget _combatTarget, GridBlock _targetBlock)
         {
             if (_combatTarget.GetType() == typeof(Fighter))
@@ -257,6 +271,9 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Handles the proper behavior when the player clicks and executes it.
+        /// </summary>
         private IEnumerator OnPlayerClick(CombatTarget _selectedTarget)
         { 
             if (_selectedTarget == null) yield break;
@@ -351,6 +368,9 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Executes the proper behavior when a neighbor block has been selected.
+        /// </summary>
         private void OnDirectionBlockSelect(CombatTarget _selectedTarget)
         {
             GridBlock selectedDirection = GetTargetBlock(_selectedTarget);
@@ -368,11 +388,11 @@ namespace RPGProject.Control.Combat
                     currentUnitTurn.transform.LookAt(lookPosition);
                 }
 
-                ResetPathfinding();
+                ResetController();
             }
         }
 
-        private void ResetPathfinding()
+        private void ResetController()
         {
             isSelectingFaceDirection = false;
             isPathfinding = true;
@@ -384,6 +404,9 @@ namespace RPGProject.Control.Combat
             raycaster.isRaycasting = true;
         }
 
+        /// <summary>
+        /// Determines the center block the player can select neighbors from based on the selected target.
+        /// </summary>
         private GridBlock GetDirectionSelectionBlock(CombatTarget _combatTarget, Type _targetType)
         {
             GridBlock directionSelectionBlock = null;
@@ -409,6 +432,11 @@ namespace RPGProject.Control.Combat
             return directionSelectionBlock;
         }
 
+        /// <summary>
+        /// Returns the true target of a given target selection.
+        /// For example, if the player selects (clicks on) a block that has a contested fighter,
+        /// it will return the contested fighter of the selected block.
+        /// </summary>
         private CombatTarget GetTrueTarget(CombatTarget _selectedTarget, Type _targetType)
         {
             CombatTarget trueTarget = _selectedTarget;
@@ -435,6 +463,10 @@ namespace RPGProject.Control.Combat
             return trueTarget;
         }
 
+        /// <summary>
+        /// Handles the pathfinding between the current units block, 
+        /// and the selected target block.
+        /// </summary>
         private void HandlePathfinding(GridBlock _targetBlock)
         {
             if (_targetBlock == null) return;
@@ -480,6 +512,9 @@ namespace RPGProject.Control.Combat
             battleCamera.InitalizeBattleCamera(minCoordinates.x, minCoordinates.z, maxCoordinates.x, maxCoordinates.z);
         }
 
+        /// <summary>
+        /// Sets the current unit turn, while executing and ceasing the proper behaviors.
+        /// </summary>
         private void UpdateCurrentUnitTurn(UnitController _unitController)
         {
             if (currentClickCoroutine != null)
@@ -509,11 +544,16 @@ namespace RPGProject.Control.Combat
                 isPathfinding = false;
             }
 
-            ResetPathfinding();
+            ResetController();
 
             battleCamera.SetFollowTarget(_unitController.GetCharacterMesh().aimTransform);
         }
 
+        /// <summary>
+        /// Sets the current selected ability of the player.
+        /// If the ability targeting type is "SelfOnly," it executes
+        /// the ability, using the current unit as the target.
+        /// </summary>
         private void SetSelectedAbility(Ability _selectedAbility)
         {
             selectedAbility = _selectedAbility;
@@ -526,6 +566,9 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Called after a unit has reached their destination or has completed using an ability.
+        /// </summary>
         private void OnMoveCompletion()
         {
             if (currentUnitTurn.unitInfo.isPlayer && !currentUnitTurn.unitInfo.isAI)
@@ -538,6 +581,10 @@ namespace RPGProject.Control.Combat
             }
         }
 
+        /// <summary>
+        /// Determines the target block based on the type of the combat target
+        /// selected by the player.
+        /// </summary>
         private GridBlock GetTargetBlock(CombatTarget _combatTarget)
         {
             GridBlock targetBlock = null;
@@ -545,17 +592,17 @@ namespace RPGProject.Control.Combat
 
             if (targetType == typeof(Fighter))
             {
-                Fighter fighter = _combatTarget.GetComponent<Fighter>();
+                Fighter fighter = (Fighter)_combatTarget;
                 targetBlock = battleGridManager.GetGridBlockByFighter(fighter);
             }
             else if(targetType == typeof(BattleTeleporter))
             {
-                BattleTeleporter battleTeleporter = _combatTarget.GetComponent<BattleTeleporter>();
+                BattleTeleporter battleTeleporter = (BattleTeleporter)_combatTarget;
                 targetBlock = battleTeleporter.myBlock;
             }
             else
             {
-                targetBlock = _combatTarget.GetComponent<GridBlock>();
+                targetBlock = (GridBlock)_combatTarget;
             }
             return targetBlock;
         }
@@ -592,6 +639,9 @@ namespace RPGProject.Control.Combat
             return _path.Count - 1;
         }
 
+        /// <summary>
+        /// Determines if there are any obstrucions for ranged abilities.
+        /// </summary>
         private bool CanTarget(Ability _ability, CombatTarget _target)
         {
             bool canTarget = false;

@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// A location in the overworld that a player can interact with to fast travel
+    /// or any other checkpoint behaviors.
+    /// </summary>
     public class Checkpoint : MonoBehaviour, IRaycastable
     {
         [SerializeField] float activationDistance = 5f;

@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// Handles the grid and stores information in combat, including
+    /// which blocks have players, and which have active abilities.
+    /// </summary>
     public class BattleGridManager : MonoBehaviour
     {
         public Dictionary<GridBlock, Unit> playerStartingPositionsDict = new Dictionary<GridBlock, Unit>();
@@ -20,7 +24,6 @@ namespace RPGProject.Control.Combat
 
         Dictionary<Fighter, GridBlock> occupiedBlocksDict = new Dictionary<Fighter, GridBlock>();
         Dictionary<GridBlock, AbilityBehavior> affectedBlocksDict = new Dictionary<GridBlock, AbilityBehavior>();
-        Dictionary<GridBlock, GridBlockStatus> gridBlockStatusDict = new Dictionary<GridBlock, GridBlockStatus>();
 
         public void InitializeBattleGridManager()
         {

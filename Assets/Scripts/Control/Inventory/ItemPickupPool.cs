@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Pools the pickups and their meshes for use in the overworld.
+    /// </summary>
     public class ItemPickupPool : MonoBehaviour
     {
         [SerializeField] Transform pickupParent = null;
@@ -23,7 +26,6 @@ namespace RPGProject.Control
             CreatePickupsPool();
             CreateItemMeshPool();
         }
-
 
         private void SetupPickup(Pickup pickup, InventoryItem _inventoryItem, int _number)
         {

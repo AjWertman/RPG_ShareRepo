@@ -1,6 +1,8 @@
 namespace RPGProject.Core
 {
-    //Refactor - remove and implement AssetBundles or Addressables
+    /// <summary>
+    /// Key to distinguish Unit (SOs) and PlayableCharacter (SOs).
+    /// </summary>
     public enum CharacterKey
     {
         None = 0,

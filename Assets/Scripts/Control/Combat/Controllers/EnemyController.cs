@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Controls the overworld enemies and how they should behave.
+    /// </summary>
     public class EnemyController : MonoBehaviour, ISaveable, IOverworld
     {
         [SerializeField] GameObject owMeshObject = null;

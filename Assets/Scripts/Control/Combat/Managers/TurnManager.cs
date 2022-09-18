@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
-    public enum UnitTurnState { Null, Player, Enemy }
-
+    /// <summary>
+    /// Handles the current turns in combat.
+    /// </summary>
     public class TurnManager : MonoBehaviour
     {
         public List<UnitController> turnOrder = new List<UnitController>();

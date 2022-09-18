@@ -7,11 +7,16 @@ using UnityEngine;
 
 namespace RPGProject.Control.Combat
 {
+    /// <summary>
+    /// Trigger in the overworld that can start battles. 
+    /// If is an enemy trigger, the battle will start on trigger enter. 
+    /// Else it will run a battle check every footstep the player mesh takes.
+    /// </summary>
     public class BattleZoneTrigger : MonoBehaviour
     {
         [SerializeField] EnemyCluster[] enemyClusters = null;
-        [SerializeField] BattleHandler battleHandlerOverride = null;
-        [Range(0, 99)] [SerializeField] int chanceToStartBattle = 10;
+        [SerializeField] BattleHandler battleHandlerOverride = null; //Will find the closest battle handler unless this is not null.
+        [Range(0, 99)] [SerializeField] int chanceToStartBattle = 10; //The percentage chance a battle will start on each footstep.
 
         public bool isEnemyTrigger = false;
 

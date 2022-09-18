@@ -3,7 +3,7 @@
 namespace RPGProject.Core
 {
     /// <summary>
-    /// Spawns important prefabs and makes them persistent.
+    /// Spawns important prefabs and makes them persistent across scenes.
     /// </summary>
     public class PersistentObjectSpawner : MonoBehaviour
     {

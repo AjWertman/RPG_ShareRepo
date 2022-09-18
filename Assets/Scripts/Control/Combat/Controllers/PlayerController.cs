@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Handles all of the player interactions in the overworld.
+    /// </summary>
     public class PlayerController : MonoBehaviour, IOverworld
     {
         [SerializeField] List<CharacterKey> playerTeam = new List<CharacterKey>();

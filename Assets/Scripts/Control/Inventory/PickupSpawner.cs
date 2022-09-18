@@ -5,6 +5,10 @@ using RPGProject.Inventories;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// Handles the creation of pickups in the overworld and setup their relation with
+    /// items and other inventory behaviors.
+    /// </summary>
     public class PickupSpawner : MonoBehaviour, ISaveable
     {
         ItemPickupPool itemPickupPool = null;

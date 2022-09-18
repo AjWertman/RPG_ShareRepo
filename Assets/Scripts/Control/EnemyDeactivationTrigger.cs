@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 
 namespace RPGProject.Control
-{    /// <summary>
+{    
+     /// <summary>
      /// Trigger that deactivates overworld enemies for specific areas.
      /// </summary>
     public class EnemyDeactivationTrigger : MonoBehaviour

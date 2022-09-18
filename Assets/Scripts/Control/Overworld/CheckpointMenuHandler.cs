@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace RPGProject.Control
 {
+    /// <summary>
+    /// UI that handles how the player interacts with a checkpoint.
+    /// </summary>
     public class CheckpointMenuHandler : MonoBehaviour
     {
         [SerializeField] CheckpointMenu checkpointMenu = null;
