@@ -158,11 +158,11 @@ namespace RPGProject.Combat.Grid
             return true;
         }
 
-        public bool IsContested(Fighter _currentFighter)
+        public bool? IsContested(Fighter _currentFighter)
         {
             if (contestedFighter != null && contestedFighter != _currentFighter) return true;
-            //else if (activeAbility != null && activeAbility.GetType() == typeof(BattleTeleporter)) return true;
-            return false;
+            else if (activeAbility != null && activeAbility.GetType() == typeof(BattleTeleporter)) return false;
+            return null;
         }
 
         public void ActivateMeshRenderer(bool _shouldActivate)

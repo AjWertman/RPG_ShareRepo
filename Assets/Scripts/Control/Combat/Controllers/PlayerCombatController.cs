@@ -62,6 +62,7 @@ namespace RPGProject.Control.Combat
 
         private void OnUnitDeath(UnitController _unitDeath)
         {
+            if (!currentUnitTurn.GetHealth().isDead) return;
             if (currentClickCoroutine != null)
             {
                 StopCoroutine(currentClickCoroutine);
@@ -330,7 +331,7 @@ namespace RPGProject.Control.Combat
 
                     yield return currentUnitTurn.PathExecution(path, canAttack);
 
-                    if (!canAttack && goalBlock.IsContested(currentUnitTurn.GetFighter())) battleHandler.CantUseAbility(cantCastReason);
+                    if (!canAttack && goalBlock.IsContested(currentUnitTurn.GetFighter()) == true) battleHandler.CantUseAbility(cantCastReason);
 
                     bool isTeleporter = targetType == typeof(BattleTeleporter) && (BattleTeleporter)_selectedTarget != null;
                     bool isFighter = (targetType == typeof(Fighter) && (Fighter)_selectedTarget != null);
@@ -379,6 +380,8 @@ namespace RPGProject.Control.Combat
             {
                 if (blockToSelectFrom.activeAbility != null && blockToSelectFrom.activeAbility.GetType() == typeof(BattleTeleporter))
                 {
+                    GridBlock selectedBlock = (GridBlock)_selectedTarget;
+                    if (selectedBlock.IsContested(currentUnitTurn.GetFighter()) == true) return;
                     currentUnitTurn.Teleport(selectedDirection);              
                 }
                 else
@@ -477,7 +480,7 @@ namespace RPGProject.Control.Combat
 
             if (_targetBlock == currentBlock)
             {
-                //Refactor - every frame
+                //Refactor - every frame?
                 gridSystem.UnhighlightBlocks(tempPath);
                 return;
             }
@@ -604,6 +607,7 @@ namespace RPGProject.Control.Combat
             {
                 targetBlock = (GridBlock)_combatTarget;
             }
+
             return targetBlock;
         }
 
@@ -675,7 +679,7 @@ namespace RPGProject.Control.Combat
 
         private bool DrawAimLine(RaycastHit _hit, Ability _selectedAbility)
         {
-            if (_hit.collider == null || _selectedAbility == null) return false;
+            if (_hit.collider == null || _selectedAbility == null) return false; 
             if(currentUnitTurn != null && currentUnitTurn.unitInfo.isAI)
             {
                 if (currentUnitTurn.GetAimLine() != null) currentUnitTurn.GetAimLine().ResetLine();

@@ -15,17 +15,13 @@ namespace RPGProject.Combat
 
         public bool canUse = false;
 
-        public Transform GetAimTransform()
-        {
-            return transform;
-        }
-
         public override void PerformAbilityBehavior()
         {
+            if (linkedTeleporter != null) return;
+
             myBlock = (GridBlock)target;
             myBlock.SetActiveAbility(this);
 
-            if (linkedTeleporter != null) return;
             BattleTeleporter[] battleTeleporters = FindObjectsOfType<BattleTeleporter>();
             int length = battleTeleporters.Length;
 
@@ -53,6 +49,11 @@ namespace RPGProject.Combat
         public string Name()
         {
             return name;
+        }
+
+        public Transform GetAimTransform()
+        {
+            return transform;
         }
     }
 }

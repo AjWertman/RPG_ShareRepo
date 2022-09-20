@@ -22,13 +22,13 @@ MonoBehaviour:
     energyPoints: 0
     maxEnergyPoints: 0
   stats:
-    stamina: 20
+    stamina: 30
     spirit: 10
     strength: 12
     skill: 30
-    armor: 10
-    resistance: 10
-    speed: 100
+    armor: 20
+    resistance: 20
+    speed: 29
     luck: 12
   basicAttack: {fileID: 11400000, guid: a9436425e25928f408448c735287e0e8, type: 2}
   abilities:

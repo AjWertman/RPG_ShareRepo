@@ -207,6 +207,7 @@ namespace RPGProject.Control.Combat
                     {
                         //or debuff
                         if (!isHeal) score -= 50f;
+                        if (isHeal && unit.GetHealth().healthPercentage >= .8f) score -= 50f;
                     }
                     else
                     {

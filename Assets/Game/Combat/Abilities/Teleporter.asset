@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Wormhole Generator
   requiredLevel: 1
-  abilityLifetime: 1
+  abilityLifetime: 3
   baseAbilityAmount: 0
   baseAgroPercentageAmount: 0
-  description: 
+  description: Creates two wormholes that allows the caster's team to travel between
+    them.
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}
@@ -33,9 +34,10 @@ MonoBehaviour:
   targetingType: 4
   requiredBiology: 0
   requiredTargetAmount: 2
-  attackRange: 10
+  attackRange: 20
   energyPointsCost: 30
   cooldown: 2
   requiresTarget: 0
   canTargetAll: 0
+  patternOfBlocksAffected: 0
   amountOfNeighborBlocksAffected: 0

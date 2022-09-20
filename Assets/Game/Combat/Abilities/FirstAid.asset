@@ -17,7 +17,8 @@ MonoBehaviour:
   abilityLifetime: 1
   baseAbilityAmount: 30
   baseAgroPercentageAmount: 5
-  description: Heals biological combatants.
+  description: Heals biological combatants. Ineffective against technological and
+    astrological components.
   shouldExpand: 0
   buttonColor: {r: 0, g: 1, b: 0, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}

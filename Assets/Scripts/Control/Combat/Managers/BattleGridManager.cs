@@ -124,6 +124,7 @@ namespace RPGProject.Control.Combat
         public void PerformAbility(AbilityBehavior _currentEffect, Fighter _contestedFighter)
         {
             _currentEffect.target = _contestedFighter;
+            if (_currentEffect.GetType() == typeof(BattleTeleporter)) return;
             _currentEffect.PerformAbilityBehavior();
         }
 
@@ -166,6 +167,7 @@ namespace RPGProject.Control.Combat
                 GridCoordinates startingCoordinates = unitStartingPosition.startCoordinates;
 
                 GridBlock startingBlock = GetGridBlock(_zeroCoordinates, startingCoordinates);
+
                 startingPositionsDict.Add(startingBlock, unitStartingPosition.unit);
             }
 

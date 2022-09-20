@@ -12,11 +12,6 @@ namespace RPGProject.Core
         Dictionary<AssetBundlePath, AssetBundle> assetBundles = new Dictionary<AssetBundlePath, AssetBundle>();
         const string bundlePath = "Assets/Game/AssetBundles";
 
-        private void Awake()
-        {
-            CreateAssetBundles();
-        }
-
         private void CreateAssetBundles()
         {
             int bundlePathLength = Enum.GetValues(typeof(AssetBundlePath)).Length;
@@ -46,6 +41,7 @@ namespace RPGProject.Core
         public AssetBundle GetAssetBundle(AssetBundlePath _assetBundlePath)
         {
             if (assetBundles.ContainsKey(_assetBundlePath)) return assetBundles[_assetBundlePath];
+            Debug.Log("Does not contain the key and moving forward");
 
             AssetBundle loadedAssetBundle = AssetBundle.LoadFromFile(GetPath(_assetBundlePath));
             if (loadedAssetBundle == null)
@@ -58,7 +54,9 @@ namespace RPGProject.Core
 
         private string GetPath(AssetBundlePath _assetBundlePath)
         {
-            return (bundlePath + "/" + _assetBundlePath.ToString());
+            string path = (bundlePath + "/" + _assetBundlePath.ToString());
+            Debug.Log(path);
+            return path;
         }
     }
 

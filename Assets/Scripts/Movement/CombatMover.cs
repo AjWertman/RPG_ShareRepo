@@ -103,7 +103,7 @@ namespace RPGProject.Movement
         
         public void Teleport(Vector3 _teleportPosition)
         {
-            StopCoroutine(currentPath);
+            if(currentPath!= null) StopCoroutine(currentPath);
 
             navMeshAgent.enabled = false;
             transform.position = _teleportPosition;

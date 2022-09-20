@@ -123,9 +123,9 @@ namespace RPGProject.Control.Combat
             Fighter contestedFighter = goalBlock.contestedFighter;
             AbilityBehavior activeAbility = goalBlock.activeAbility;
 
-            bool isContested = goalBlock.IsContested(fighter);
+            bool? isContested = goalBlock.IsContested(fighter);
 
-            if (isContested)
+            if (isContested != null)
             {
                 _path.Remove(goalBlock);
                 goalBlock = _path[_path.Count - 1];
@@ -135,7 +135,7 @@ namespace RPGProject.Control.Combat
 
             yield return currentPath;
 
-            if (isContested)
+            if (isContested == true)
             {
                 if (contestedFighter != null && _canAttack)
                 {

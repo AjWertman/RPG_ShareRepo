@@ -17,7 +17,8 @@ MonoBehaviour:
   abilityLifetime: 1
   baseAbilityAmount: -30
   baseAgroPercentageAmount: 0
-  description: 
+  description: Places a turret that will attack any enemy combatants that come in
+    range. Will also shoot an enemy on its turn.
   shouldExpand: 0
   buttonColor: {r: 1, g: 1, b: 1, a: 1}
   textColor: {r: 0, g: 0, b: 0, a: 1}

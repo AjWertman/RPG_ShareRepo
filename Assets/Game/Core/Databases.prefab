@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2291830050832072974}
-  - component: {fileID: 2291830050832072972}
   - component: {fileID: 2291830050832072973}
   m_Layer: 0
   m_Name: Databases
@@ -33,22 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2291830050832072972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2291830050832072975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3bd869868a3fe54ba5ff677de31d60d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playableCharacters:
-  - {fileID: 11400000, guid: 8e8167d2e40055c4d9a5fa2cf8124975, type: 2}
-  - {fileID: 11400000, guid: d06b3b54ef820654599c47fc68c53f8a, type: 2}
-  - {fileID: 11400000, guid: 0ae33a2d2bdfe92419e7f47cfd436ac5, type: 2}
 --- !u!114 &2291830050832072973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,3 +52,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 84d90196aedd1c44b9d4543caeffd41c, type: 2}
   - {fileID: 11400000, guid: 2af88666b8413a744a7df7d25de3df0c, type: 2}
   - {fileID: 11400000, guid: 33b61b1866d3c9f44b5d12f68e7283dc, type: 2}
+  playableCharacters:
+  - {fileID: 11400000, guid: 0ae33a2d2bdfe92419e7f47cfd436ac5, type: 2}
+  - {fileID: 11400000, guid: d06b3b54ef820654599c47fc68c53f8a, type: 2}
+  - {fileID: 11400000, guid: 8e8167d2e40055c4d9a5fa2cf8124975, type: 2}
